@@ -4,3 +4,10 @@ dist
 build
 coverage
 *.lock
+public
+test-results
+docs
+.github
+playwright-report
+pnpm-lock.yaml
+pnpm-workspace.yaml
