@@ -1,16 +1,17 @@
 /** @type {import('@commitlint/types').UserConfig} */
-const commitlintConfig =  {
+const commitlintConfig = {
   extends: ['@commitlint/config-conventional'],
   plugins: [
     {
       rules: {
         'header-jira-pattern': ({ header }) => {
-          const RE = /^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|revert)\([\w-]+\): .+?( \([A-Z]+-\d+\))?\s*$/;
+          const RE =
+            /^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|revert)\([\w-]+\): .+?( \([A-Z]+-\d+\))?\s*$/;
           if (!RE.test(header)) {
             return [
               false,
               `header must match format: type(scope): description (JIRA-ID)\n` +
-              `Example: feat(payments): implement stripe webhooks (VL-42)`
+                `Example: feat(payments): implement stripe webhooks (VL-42)`,
             ];
           }
           return [true];
@@ -23,7 +24,7 @@ const commitlintConfig =  {
     'type-empty': [0],
     'subject-empty': [0],
     'subject-case': [0],
-    'header-trim': [2, 'always'], 
+    'header-trim': [2, 'always'],
   },
 };
 

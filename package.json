@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "prepare": "husky",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test"
