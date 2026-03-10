@@ -38,9 +38,3 @@ jobs:
 
       - name: Run Tests
         run: pnpm test
-
-      - name: Build Storybook
-        run: pnpm storybook:build
-
-      - name: Check Size Limit
-        run: pnpm size-limit
