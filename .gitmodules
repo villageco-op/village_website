@@ -1,0 +1,3 @@
+[submodule "deps/api-specs"]
+	path = deps/api-specs
+	url = https://github.com/villageco-op/api-specs.git
