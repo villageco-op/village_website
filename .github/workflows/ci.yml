@@ -42,11 +42,11 @@ jobs:
         run: pnpm test
 
       - name: Verify API Generation
-          run: |
-            pnpm generate:api
-            
-            if [ -n "$(git status --porcelain)" ]; then
-              echo "::error::API generated code is out of sync with deps/api-specs. Please run 'pnpm generate:api' and commit the changes."
-              git status
-              exit 1
-            fi
+        run: |
+          pnpm generate:api
+          
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::API generated code is out of sync with deps/api-specs. Please run 'pnpm generate:api' and commit the changes."
+            git status
+            exit 1
+          fi
