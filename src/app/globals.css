@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-deep-forest: #2a4b28;
@@ -20,16 +20,16 @@
   --color-ink-2: #3d4d38;
   --color-ink-3: #6a8060;
 
-  --font-serif: "Playfair Display", Georgia, serif;
-  --font-heading: "Bricolage Grotesque", "Segoe UI", sans-serif;
-  --font-sans: "Sora", "Segoe UI", sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-heading: 'Bricolage Grotesque', 'Segoe UI', sans-serif;
+  --font-sans: 'Sora', 'Segoe UI', sans-serif;
 
   --spacing-max-width: 1160px;
   --radius-brand: 6px;
 }
 
 @layer base {
-  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Sora:wght@100..800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap");
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Sora:wght@100..800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
   :root {
     background-color: var(--color-off-white);
@@ -42,7 +42,12 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading);
     font-weight: 700;
   }
