@@ -1,6 +1,10 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
-@theme {
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
   --color-deep-forest: #2a4b28;
   --color-forest-dark: #1e3820;
   --color-forest-mid: #3a6435;
@@ -26,6 +30,40 @@
 
   --spacing-max-width: 1160px;
   --radius-brand: 6px;
+
+  --color-background: var(--color-off-white);
+  --color-foreground: var(--color-ink);
+
+  --color-card: var(--color-off-white);
+  --color-card-foreground: var(--color-ink);
+
+  --color-popover: var(--color-off-white);
+  --color-popover-foreground: var(--color-ink);
+
+  --color-primary: var(--color-deep-forest);
+  --color-primary-foreground: var(--color-off-white);
+
+  --color-secondary: var(--color-lime-pale);
+  --color-secondary-foreground: var(--color-forest-dark);
+
+  --color-accent: var(--color-lime-pale);
+  --color-accent-foreground: var(--color-forest-dark);
+
+  --color-destructive: #c0392b; /* Mapped to your --color-brick */
+  --color-destructive-foreground: var(--color-off-white);
+
+  --color-border: var(--color-cream-dark);
+  --color-input: var(--color-cream-dark);
+  --color-ring: var(--color-click-green);
+
+  --radius: var(--radius-brand);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  --color-muted: oklch(0.97 0.001 106.424);
+  --color-muted-foreground: oklch(0.553 0.013 58.071);
 }
 
 @layer base {
@@ -40,6 +78,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    @apply bg-background text-foreground;
   }
 
   h1,
@@ -50,6 +89,12 @@
   h6 {
     font-family: var(--font-heading);
     font-weight: 700;
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
   }
 }
 

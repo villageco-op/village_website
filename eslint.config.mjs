@@ -16,6 +16,7 @@ const eslintConfig = [
       '.husky/**',
       'next-env.d.ts',
       'src/lib/api/generated/**',
+      'src/components/ui/**',
     ],
   },
 
