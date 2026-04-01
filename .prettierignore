@@ -11,3 +11,5 @@ docs
 playwright-report
 pnpm-lock.yaml
 pnpm-workspace.yaml
+src/lib/api/generated/
+deps/
