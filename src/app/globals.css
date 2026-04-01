@@ -1,26 +1,59 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-deep-forest: #2a4b28;
+  --color-forest-dark: #1e3820;
+  --color-forest-mid: #3a6435;
+  --color-click-green: #4a7729;
+  --color-lime: #a4c739;
+  --color-lime-light: #c8dc7a;
+  --color-lime-pale: #eef5cc;
+  --color-cream: #f5edd8;
+  --color-cream-dark: #e8dcbc;
+  --color-off-white: #faf7ef;
+  --color-sun: #f5a800;
+  --color-sun-light: #fde9a8;
+  --color-clay: #a0522d;
+  --color-brick: #c0392b;
+  --color-black: #1a1a1a;
+  --color-ink: #1a2018;
+  --color-ink-2: #3d4d38;
+  --color-ink-3: #6a8060;
+
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-heading: "Bricolage Grotesque", "Segoe UI", sans-serif;
+  --font-sans: "Sora", "Segoe UI", sans-serif;
+
+  --spacing-max-width: 1160px;
+  --radius-brand: 6px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Sora:wght@100..800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap");
 
-@media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    background-color: var(--color-off-white);
+    color: var(--color-ink);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .container-custom {
+    max-width: var(--spacing-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
