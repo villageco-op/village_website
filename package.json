@@ -13,11 +13,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "generate:api": "orval --config orval.config.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",
-    "axios": "^1.13.6",
     "happy-dom": "20.8.3",
     "next": "16.1.6",
     "react": "19.2.3",
@@ -46,6 +46,7 @@
     "eslint-plugin-unused-imports": "^4.4.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.3.2",
+    "orval": "^8.5.3",
     "prettier": "^3.8.1",
     "tailwindcss": "^4",
     "typescript": "^5",
@@ -56,11 +57,16 @@
   },
   "lint-staged": {
     "*.ts": [
-      "eslint --fix",
+      "eslint --fix --no-warn-ignored",
       "prettier --write"
     ],
     "*.{json,md}": [
       "prettier --write"
+    ],
+    "deps/api-specs": [
+      "npx @apidevtools/swagger-cli validate ./deps/api-specs/openapi.json",
+      "pnpm generate:api",
+      "git add src/lib/api/generated"
     ]
   }
 }

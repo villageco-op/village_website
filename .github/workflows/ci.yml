@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v3
@@ -38,3 +41,25 @@ jobs:
 
       - name: Run Tests
         run: pnpm test
+
+      - name: Verify API Sync
+        run: |
+          SPEC_PATH="deps/api-specs/openapi.json"
+          GENERATED_PATH="src/lib/api/generated"
+
+          SPEC_CHANGED=$(git diff --name-only origin/main...HEAD | grep "$SPEC_PATH" || true)
+
+          if [ -n "$SPEC_CHANGED" ]; then
+            echo "✅ API Specification change detected."
+            
+            CODE_CHANGED=$(git diff --name-only origin/main...HEAD | grep "$GENERATED_PATH" || true)
+            
+            if [ -z "$CODE_CHANGED" ]; then
+              echo "::error::The API spec ($SPEC_PATH) was updated, but the generated code ($GENERATED_PATH) was not. Please run 'pnpm generate:api' locally and commit the changes."
+              exit 1
+            else
+              echo "✅ Generated code appears to be updated in tandem."
+            fi
+          else
+            echo "No API spec changes detected. Skipping sync check."
+          fi

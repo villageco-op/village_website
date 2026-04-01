@@ -1,7 +1,21 @@
-import axios from 'axios';
-
 import { env } from '@/config/env';
 
-export const apiClient = axios.create({
-  baseURL: env.NEXT_PUBLIC_API_URL,
-});
+export const apiClient = async <T>(url: string, options: RequestInit): Promise<T> => {
+  const baseUrl = env.NEXT_PUBLIC_API_URL;
+
+  const response = await fetch(`${baseUrl}${url}`, {
+    ...options,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Unknown Error' }));
+    throw new Error(error.error || 'Network response was not ok');
+  }
+
+  return response.json() as Promise<T>;
+};

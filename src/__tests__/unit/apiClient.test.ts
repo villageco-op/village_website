@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { apiClient } from '@/lib/api/client';
 
@@ -8,15 +8,39 @@ vi.mock('@/config/env', () => ({
   },
 }));
 
-describe('API Client', () => {
-  it('should_have_the_correct_base_url_from_env', () => {
-    const configuredBaseURL = apiClient.defaults.baseURL;
-
-    expect(configuredBaseURL).toBe('https://api.example.com');
+describe('apiClient', () => {
+  beforeEach(() => {
+    vi.stubGlobal('fetch', vi.fn());
   });
 
-  it('should_be_initialized_with_axios', () => {
-    expect(apiClient.get).toBeDefined();
-    expect(apiClient.post).toBeDefined();
+  it('should prepend the base URL and send correct headers', async () => {
+    const mockData = { id: 1, name: 'Test Item' };
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockData),
+    } as Response);
+
+    const result = await apiClient('/test-endpoint', { method: 'GET' });
+
+    expect(fetch).toHaveBeenCalledWith(
+      'https://api.example.com/test-endpoint',
+      expect.objectContaining({
+        method: 'GET',
+        credentials: 'include',
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json',
+        }),
+      }),
+    );
+    expect(result).toEqual(mockData);
+  });
+
+  it('should throw an error when the response is not ok', async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: false,
+      json: () => Promise.resolve({ error: 'Invalid Request' }),
+    } as Response);
+
+    await expect(apiClient('/fail', {})).rejects.toThrow('Invalid Request');
   });
 });
