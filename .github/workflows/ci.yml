@@ -67,6 +67,8 @@ jobs:
   build-storybook:
       name: Storybook Build & Test
       runs-on: ubuntu-latest
+      container:
+        image: mcr.microsoft.com/playwright:v1.59.1-noble
       steps:
         - uses: actions/checkout@v4
         - uses: pnpm/action-setup@v3
@@ -76,9 +78,6 @@ jobs:
           
         - name: Install dependencies
           run: pnpm install --frozen-lockfile
-
-        - name: Install Playwright Browsers
-          run: pnpm exec playwright install chromium --with-deps
 
         - name: Build Storybook
           run: pnpm build-storybook
