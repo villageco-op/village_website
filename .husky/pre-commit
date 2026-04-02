@@ -1,4 +1,4 @@
 bash .husky/check-branch-name.sh
 
 npx lint-staged
-pnpm test
+pnpm test:unit

@@ -1,6 +1,25 @@
 import type { Metadata } from 'next';
+import { Bricolage_Grotesque, Sora, Playfair_Display } from 'next/font/google';
 
 import './globals.css';
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ['latin'],
+  variable: '--font-heading',
+  display: 'swap',
+});
+
+const sora = Sora({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-serif',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Village',
@@ -21,7 +40,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className={`${bricolage.variable} ${sora.variable} ${playfair.variable} antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }
