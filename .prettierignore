@@ -14,3 +14,4 @@ pnpm-workspace.yaml
 src/lib/api/generated/
 deps/
 src/components/ui/
+storybook-static/
