@@ -40,7 +40,7 @@ jobs:
         run: pnpm typecheck
 
       - name: Run Tests
-        run: pnpm test
+        run: pnpm test:unit
 
       - name: Verify API Sync
         run: |
@@ -63,3 +63,25 @@ jobs:
           else
             echo "No API spec changes detected. Skipping sync check."
           fi
+  
+  build-storybook:
+      name: Storybook Build & Test
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: pnpm/action-setup@v3
+          with: { version: 10 }
+        - uses: actions/setup-node@v4
+          with: { node-version: '22', cache: 'pnpm' }
+          
+        - name: Install dependencies
+          run: pnpm install --frozen-lockfile
+
+        - name: Install Playwright Browsers
+          run: pnpm exec playwright install chromium --with-deps
+
+        - name: Build Storybook
+          run: pnpm build-storybook
+
+        - name: Run Interaction Tests
+          run: pnpm test:storybook

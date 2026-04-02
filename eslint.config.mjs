@@ -1,3 +1,4 @@
+import storybook from 'eslint-plugin-storybook';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import jsdoc from 'eslint-plugin-jsdoc';
 import unusedImports from 'eslint-plugin-unused-imports';
@@ -17,11 +18,10 @@ const eslintConfig = [
       'next-env.d.ts',
       'src/lib/api/generated/**',
       'src/components/ui/**',
+      '.storybook',
     ],
   },
-
   ...nextVitals,
-
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
@@ -106,15 +106,14 @@ const eslintConfig = [
       'jsdoc/require-returns': 'error',
     },
   },
-
   {
     files: ['**/*.test.ts', '**/*.test.tsx', 'tests/**'],
     rules: {
       'jsdoc/require-jsdoc': 'off',
     },
   },
-
   prettier,
+  ...storybook.configs['flat/recommended'],
 ];
 
 export default eslintConfig;
