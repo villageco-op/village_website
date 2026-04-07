@@ -17,7 +17,6 @@ const eslintConfig = [
       '.husky/**',
       'next-env.d.ts',
       'src/lib/api/generated/**',
-      'src/components/ui/**',
       '.storybook',
       'storybook-static/**',
     ],
@@ -39,7 +38,8 @@ const eslintConfig = [
     },
     settings: {
       'boundaries/elements': [
-        { type: 'components', pattern: 'src/components/**' },
+        { type: 'ui', pattern: 'src/components/ui/**' },
+        { type: 'components', pattern: 'src/components/!(ui)/**' },
         { type: 'hooks', pattern: 'src/hooks/**' },
         { type: 'services', pattern: 'src/services/**' },
         { type: 'lib', pattern: 'src/lib/**' },
@@ -75,10 +75,6 @@ const eslintConfig = [
               group: ['**/hooks/**/api/**'],
               message: 'Keep API logic inside Services or Data layers.',
             },
-            {
-              group: ['@/components/ui/**'],
-              message: 'Use shared UI components instead of primitives.',
-            },
           ],
         },
       ],
@@ -88,6 +84,12 @@ const eslintConfig = [
         {
           default: 'allow',
           rules: [
+            {
+              from: 'app',
+              disallow: ['ui'],
+              message:
+                'The App layer should only use shared components, not UI primitives directly.',
+            },
             { from: 'components', disallow: ['services'] },
             { from: 'hooks', disallow: ['services'] },
             { from: 'services', disallow: ['components'] },
@@ -111,6 +113,27 @@ const eslintConfig = [
     files: ['**/*.test.ts', '**/*.test.tsx', 'tests/**'],
     rules: {
       'jsdoc/require-jsdoc': 'off',
+    },
+  },
+  {
+    files: ['**/*.stories.tsx', '**/*.stories.ts', '.storybook/**/*'],
+    rules: {
+      'jsdoc/require-jsdoc': 'off',
+      'jsdoc/require-description': 'off',
+      'jsdoc/require-returns': 'off',
+
+      'import/no-default-export': 'off',
+
+      'boundaries/element-types': 'off',
+    },
+  },
+  {
+    files: ['src/components/ui/**/*'],
+    rules: {
+      'jsdoc/require-jsdoc': 'off',
+      'jsdoc/require-description': 'off',
+
+      'import-x/no-cycle': 'warn',
     },
   },
   prettier,

@@ -49,10 +49,10 @@
   --color-accent: var(--color-lime-pale);
   --color-accent-foreground: var(--color-forest-dark);
 
-  --color-destructive: #c0392b; /* Mapped to your --color-brick */
+  --color-destructive: #c0392b;
   --color-destructive-foreground: var(--color-off-white);
 
-  --color-border: var(--color-cream-dark);
+  --color-border: var(--color-lime);
   --color-input: var(--color-cream-dark);
   --color-ring: var(--color-click-green);
 
