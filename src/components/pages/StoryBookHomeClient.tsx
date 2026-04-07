@@ -1,3 +1,5 @@
+'use client';
+
 import CtaSection from '@/components/home/sections/CtaSection';
 import HeroSection from '@/components/home/sections/HeroSection';
 import HowItWorksSection from '@/components/home/sections/HowItWorksSection';
@@ -8,10 +10,10 @@ import WhatIsSection from '@/components/home/sections/WhatIsSection';
 import WhyItMattersSection from '@/components/home/sections/WhyItMattersSection';
 
 /**
- * Home page at the root of the app.
- * @returns html page
+ * Client version of the home page. Intended for storybook visualization.
+ * @returns The page html
  */
-export default function Home() {
+export function StoryBookHomeClient() {
   return (
     <main className="flex flex-col w-full min-h-screen relative">
       <HeroSection />
