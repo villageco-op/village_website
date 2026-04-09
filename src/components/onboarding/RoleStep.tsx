@@ -6,7 +6,7 @@ import { Sprout, ShoppingBasket, Truck } from 'lucide-react';
  * Props for the RoleStep component.
  */
 export interface RoleStepProps {
-  onSelectRole: (role: 'buyer' | 'seller') => void;
+  onSelectRole: (role: 'buyer' | 'seller') => void | Promise<void>;
 }
 
 /**
@@ -30,7 +30,9 @@ export default function RoleStep({ onSelectRole }: RoleStepProps) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <button
-          onClick={() => onSelectRole('buyer')}
+          onClick={() => {
+            void onSelectRole('buyer');
+          }}
           className="flex flex-col items-center justify-center p-6 bg-white border-2 border-transparent rounded-xl shadow-sm hover:border-lime hover:shadow-md transition-all group"
         >
           <div className="w-12 h-12 bg-lime-pale text-click-green rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -41,7 +43,9 @@ export default function RoleStep({ onSelectRole }: RoleStepProps) {
         </button>
 
         <button
-          onClick={() => onSelectRole('seller')}
+          onClick={() => {
+            void onSelectRole('seller');
+          }}
           className="flex flex-col items-center justify-center p-6 bg-white border-2 border-transparent rounded-xl shadow-sm hover:border-lime hover:shadow-md transition-all group"
         >
           <div className="w-12 h-12 bg-lime-pale text-click-green rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">

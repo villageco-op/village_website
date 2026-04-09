@@ -22,9 +22,7 @@ export interface BasicInfoData {
  * Props for the BasicProfileStep component.
  */
 interface BasicProfileStepProps {
-  /** Callback function triggered when the form is successfully submitted. */
-  onSubmit: (data: BasicInfoData) => void;
-  /** Loading state flag to disable interactions during submission. */
+  onSubmit: (data: BasicInfoData) => void | Promise<void>;
   isPending?: boolean;
 }
 
@@ -55,10 +53,10 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
 
   const isValid = name.trim() !== '' && address.trim() !== '' && city.trim() !== '';
 
-  const handleSubmit = (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!isValid || isPending) return;
-    onSubmit({ name, imageFile, address, city });
+    await onSubmit({ name, imageFile, address, city });
   };
 
   return (
@@ -70,7 +68,12 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 noValidate">
+      <form
+        onSubmit={(e) => {
+          void handleSubmit(e);
+        }}
+        className="space-y-6 noValidate"
+      >
         {/* Profile Image Upload */}
         <div className="flex flex-col items-center gap-3 mb-2">
           <div

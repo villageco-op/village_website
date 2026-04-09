@@ -177,27 +177,37 @@ export default function OnboardingFlow() {
         <div className="bg-cream/30 border border-border/20 shadow-sm rounded-xl p-8 min-h-100 flex flex-col justify-center relative">
           {step === 'basic-info' && (
             <BasicProfileStep
-              onSubmit={() => void handleBasicInfoSubmit}
+              onSubmit={handleBasicInfoSubmit}
               isPending={isUploading || updateProfile.isPending}
             />
           )}
 
-          {step === 'role' && <RoleStep onSelectRole={() => void handleRoleSelect} />}
+          {step === 'role' && <RoleStep onSelectRole={handleRoleSelect} />}
 
           {step === 'seller-info' && (
-            <SellerInfoStep onSubmit={() => void handleSellerInfoSubmit} />
+            <SellerInfoStep
+              onSubmit={(data) => {
+                void handleSellerInfoSubmit(data);
+              }}
+            />
           )}
 
           {step === 'notifications' && (
             <NotificationsStep
               role={selectedRole}
-              onEnable={() => void handleEnableNotifications()}
+              onEnable={() => {
+                void handleEnableNotifications();
+              }}
               onSkip={finalizeOnboarding}
             />
           )}
 
           {step === 'seller-success' && (
-            <SellerSuccessStep onStripeRedirect={() => void handleStripeRedirect()} />
+            <SellerSuccessStep
+              onStripeRedirect={() => {
+                void handleStripeRedirect();
+              }}
+            />
           )}
         </div>
       </div>

@@ -24,7 +24,7 @@ interface SellerInfoData {
  * Props for the SellerInfoStep component.
  */
 export interface SellerInfoStepProps {
-  onSubmit: (data: SellerInfoData) => void;
+  onSubmit: (data: SellerInfoData) => void | Promise<void>;
 }
 
 /**
