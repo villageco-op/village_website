@@ -6,9 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export interface CheckoutSessionResponse {
   /** The URL to redirect the user to for Stripe Checkout. */
   url: string;

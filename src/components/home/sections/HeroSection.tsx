@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { HeroSectionHeader } from '../HeroSectionHeader';
 
@@ -34,8 +35,13 @@ export default function HeroSection() {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-3 mt-8 lg:mt-10">
-          <Button className="bg-lime text-forest-dark transition-all duration-300 rounded-md px-6 h-14 font-sans text-base font-semibold hover:bg-lime-light hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(164,199,57,0.4)]">
-            Join the movement <ArrowRight className="ml-2 h-4 w-4" />
+          <Button
+            asChild
+            className="bg-lime text-forest-dark transition-all duration-300 rounded-md px-6 h-14 font-sans text-base font-semibold hover:bg-lime-light hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(164,199,57,0.4)]"
+          >
+            <Link href="/login">
+              Join the movement <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
           <Button
             variant="ghost"

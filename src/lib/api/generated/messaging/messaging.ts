@@ -24,7 +24,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   ConversationsResponse,
   GetConversationsParams,
@@ -34,6 +33,7 @@ import type {
   SuccessResponse
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -48,17 +48,11 @@ export type getConversationsResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getConversationsResponseSuccess = (getConversationsResponse200) & {
   headers: Headers;
 };
 ;
 
-/**
- *
- */
 export type getConversationsResponse = (getConversationsResponseSuccess)
 
 export const getGetConversationsUrl = (params?: GetConversationsParams,) => {
@@ -116,13 +110,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getConversations>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetConversationsQueryResult = NonNullable<Awaited<ReturnType<typeof getConversations>>>
-/**
- *
- */
 export type GetConversationsQueryError = unknown
 
 
@@ -151,14 +139,6 @@ export function useGetConversations<TData = Awaited<ReturnType<typeof getConvers
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetConversations<TData = Awaited<ReturnType<typeof getConversations>>, TError = unknown>(
  params?: GetConversationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConversations>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -182,17 +162,11 @@ export type getMessagesResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getMessagesResponseSuccess = (getMessagesResponse200) & {
   headers: Headers;
 };
 ;
 
-/**
- *
- */
 export type getMessagesResponse = (getMessagesResponseSuccess)
 
 export const getGetMessagesUrl = (params: GetMessagesParams,) => {
@@ -250,13 +224,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMessages>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetMessagesQueryResult = NonNullable<Awaited<ReturnType<typeof getMessages>>>
-/**
- *
- */
 export type GetMessagesQueryError = unknown
 
 
@@ -285,14 +253,6 @@ export function useGetMessages<TData = Awaited<ReturnType<typeof getMessages>>, 
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetMessages<TData = Awaited<ReturnType<typeof getMessages>>, TError = unknown>(
  params: GetMessagesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMessages>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -316,17 +276,11 @@ export type sendMessageResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type sendMessageResponseSuccess = (sendMessageResponse200) & {
   headers: Headers;
 };
 ;
 
-/**
- *
- */
 export type sendMessageResponse = (sendMessageResponseSuccess)
 
 export const getSendMessageUrl = () => {
@@ -379,17 +333,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type SendMessageMutationResult = NonNullable<Awaited<ReturnType<typeof sendMessage>>>
-    /**
-     *
-     */
     export type SendMessageMutationBody = SendMessagePayload
-    /**
-     *
-     */
     export type SendMessageMutationError = unknown
 
     export const useSendMessage = <TError = unknown,

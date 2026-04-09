@@ -6,9 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export interface AvailabilityWindow {
   /** The day of the week for this availability window */
   day: string;

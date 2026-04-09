@@ -7,9 +7,6 @@
  */
 import type { ResourceId } from './resourceId';
 
-/**
- *
- */
 export interface ActiveSubscription {
   id: ResourceId;
   /** Name of the recurring produce item */

@@ -9,9 +9,6 @@ import type { ImageUrl } from './imageUrl';
 import type { ReviewBreakdown } from './reviewBreakdown';
 import type { UserId } from './userId';
 
-/**
- *
- */
 export interface PublicUserProfile {
   id: UserId;
   /** @nullable */

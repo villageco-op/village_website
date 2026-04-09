@@ -9,9 +9,6 @@ import type { Address } from './address';
 import type { IsoDateTime } from './isoDateTime';
 import type { UserId } from './userId';
 
-/**
- *
- */
 export interface Grower {
   sellerId: UserId;
   /**

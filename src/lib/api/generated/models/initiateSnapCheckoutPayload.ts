@@ -8,9 +8,6 @@
 import type { FulfillmentType } from './fulfillmentType';
 import type { UserId } from './userId';
 
-/**
- *
- */
 export interface InitiateSnapCheckoutPayload {
   sellerId: UserId;
   fulfillmentType: FulfillmentType;

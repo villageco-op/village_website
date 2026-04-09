@@ -6,9 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export interface ContactPayload {
   /**
    * Full name of the person submitting the inquiry

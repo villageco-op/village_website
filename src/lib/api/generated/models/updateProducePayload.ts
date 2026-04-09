@@ -11,9 +11,6 @@ import type { PriceDollars } from './priceDollars';
 import type { ProduceStatus } from './produceStatus';
 import type { WeightOz } from './weightOz';
 
-/**
- *
- */
 export interface UpdateProducePayload {
   /**
    * The public title of the produce listing

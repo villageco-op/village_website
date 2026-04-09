@@ -8,9 +8,6 @@
 import type { GetOrdersRole } from './getOrdersRole';
 import type { OrderStatus } from './orderStatus';
 
-/**
- *
- */
 export type GetOrdersParams = {
 /**
  * The perspective from which to fetch orders

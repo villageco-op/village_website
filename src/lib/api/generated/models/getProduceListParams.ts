@@ -10,9 +10,6 @@ import type { GetProduceListSortBy } from './getProduceListSortBy';
 import type { Latitude } from './latitude';
 import type { Longitude } from './longitude';
 
-/**
- *
- */
 export type GetProduceListParams = {
 /**
  * Latitude coordinate

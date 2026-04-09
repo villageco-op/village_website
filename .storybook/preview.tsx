@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/nextjs-vite';
 import { Bricolage_Grotesque, Sora, Playfair_Display } from 'next/font/google';
+import { initialize, mswLoader } from 'msw-storybook-addon';
 
 import '../src/app/globals.css';
 
@@ -19,6 +20,10 @@ const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-serif',
   display: 'swap',
+});
+
+initialize({
+  onUnhandledRequest: 'warn',
 });
 
 const preview: Preview = {
@@ -44,6 +49,7 @@ const preview: Preview = {
       </div>
     ),
   ],
+  loaders: [mswLoader],
 };
 
 export default preview;

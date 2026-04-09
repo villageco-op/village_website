@@ -6,9 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export type GetProduceListSortBy = typeof GetProduceListSortBy[keyof typeof GetProduceListSortBy];
 
 

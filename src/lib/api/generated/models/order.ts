@@ -9,9 +9,6 @@ import type { OrderFulfillmentType } from './orderFulfillmentType';
 import type { OrderPaymentMethod } from './orderPaymentMethod';
 import type { OrderStatusProperty } from './orderStatusProperty';
 
-/**
- *
- */
 export interface Order {
   id: string;
   buyerId: string;

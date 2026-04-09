@@ -9,9 +9,6 @@ import type { IsoDateTime } from './isoDateTime';
 import type { PriceDollars } from './priceDollars';
 import type { ProduceSales } from './produceSales';
 
-/**
- *
- */
 export interface SellerEarningsResponse {
   earnedThisMonth: PriceDollars;
   earnedLastMonth: PriceDollars;

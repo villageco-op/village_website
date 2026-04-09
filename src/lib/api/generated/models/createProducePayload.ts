@@ -10,9 +10,6 @@ import type { IsoDate } from './isoDate';
 import type { PriceDollars } from './priceDollars';
 import type { WeightOz } from './weightOz';
 
-/**
- *
- */
 export interface CreateProducePayload {
   /**
    * The public title of the produce listing

@@ -12,9 +12,6 @@ import type { OrderStatus } from './orderStatus';
 import type { ProduceOrderBuyer } from './produceOrderBuyer';
 import type { ResourceId } from './resourceId';
 
-/**
- *
- */
 export type ProduceOrderListResponseDataItem = {
   id: ResourceId;
   status: OrderStatus & (unknown | null);

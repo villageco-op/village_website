@@ -15,7 +15,6 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   CheckoutSessionResponse,
   CreateCheckoutSessionPayload,
@@ -24,6 +23,7 @@ import type {
   SuccessResponse
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -38,38 +38,23 @@ export type createStripeSessionResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type createStripeSessionResponse400 = {
   data: ErrorResponse
   status: 400
 }
 
-/**
- *
- */
 export type createStripeSessionResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type createStripeSessionResponseSuccess = (createStripeSessionResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type createStripeSessionResponseError = (createStripeSessionResponse400 | createStripeSessionResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type createStripeSessionResponse = (createStripeSessionResponseSuccess | createStripeSessionResponseError)
 
 export const getCreateStripeSessionUrl = () => {
@@ -122,17 +107,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type CreateStripeSessionMutationResult = NonNullable<Awaited<ReturnType<typeof createStripeSession>>>
-    /**
-     *
-     */
     export type CreateStripeSessionMutationBody = CreateCheckoutSessionPayload
-    /**
-     *
-     */
     export type CreateStripeSessionMutationError = ErrorResponse
 
     export const useCreateStripeSession = <TError = ErrorResponse,
@@ -153,17 +129,11 @@ export type initiateSnapCheckoutResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type initiateSnapCheckoutResponseSuccess = (initiateSnapCheckoutResponse200) & {
   headers: Headers;
 };
 ;
 
-/**
- *
- */
 export type initiateSnapCheckoutResponse = (initiateSnapCheckoutResponseSuccess)
 
 export const getInitiateSnapCheckoutUrl = () => {
@@ -216,17 +186,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type InitiateSnapCheckoutMutationResult = NonNullable<Awaited<ReturnType<typeof initiateSnapCheckout>>>
-    /**
-     *
-     */
     export type InitiateSnapCheckoutMutationBody = InitiateSnapCheckoutPayload
-    /**
-     *
-     */
     export type InitiateSnapCheckoutMutationError = unknown
 
     export const useInitiateSnapCheckout = <TError = unknown,

@@ -8,9 +8,6 @@
 import type { PaginationMetadata } from './paginationMetadata';
 import type { SellerReviewItem } from './sellerReviewItem';
 
-/**
- *
- */
 export interface PaginatedReviewsResponse {
   /** List of reviews for the seller */
   reviews: SellerReviewItem[];

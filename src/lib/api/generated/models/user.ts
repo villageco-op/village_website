@@ -7,9 +7,6 @@
  */
 import type { UserSpecialties } from './userSpecialties';
 
-/**
- *
- */
 export interface User {
   id: string;
   /** @nullable */

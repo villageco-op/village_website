@@ -6,9 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export interface Conversation {
   id: string;
   lastMessage?: string;

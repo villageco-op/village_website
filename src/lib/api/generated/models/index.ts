@@ -104,6 +104,8 @@ export * from './updateProducePayload';
 export * from './updateScheduleRulesPayload';
 export * from './updateSubscriptionStatusPayload';
 export * from './updateUserPayload';
+export * from './uploadImagePayload';
+export * from './uploadResponse';
 export * from './user';
 export * from './userId';
 export * from './userParam';

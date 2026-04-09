@@ -8,9 +8,6 @@
 import type { PaginationMetadata } from './paginationMetadata';
 import type { Produce } from './produce';
 
-/**
- *
- */
 export interface ProduceResponse {
   data: Produce[];
   meta: PaginationMetadata;

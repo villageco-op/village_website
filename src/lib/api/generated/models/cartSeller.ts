@@ -7,9 +7,6 @@
  */
 import type { UserId } from './userId';
 
-/**
- *
- */
 export interface CartSeller {
   id: UserId;
   /**

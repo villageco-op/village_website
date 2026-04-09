@@ -8,9 +8,6 @@
 import type { ResourceId } from './resourceId';
 import type { WeightOz } from './weightOz';
 
-/**
- *
- */
 export interface AddToCartPayload {
   productId: ResourceId;
   quantityOz: WeightOz;

@@ -24,7 +24,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   ErrorResponse,
   GetSellerReviewsParams,
@@ -38,6 +37,7 @@ import type {
   UserId
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -52,38 +52,23 @@ export type getCurrentUserResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getCurrentUserResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getCurrentUserResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-/**
- *
- */
 export type getCurrentUserResponseSuccess = (getCurrentUserResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getCurrentUserResponseError = (getCurrentUserResponse401 | getCurrentUserResponse404) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getCurrentUserResponse = (getCurrentUserResponseSuccess | getCurrentUserResponseError)
 
 export const getGetCurrentUserUrl = () => {
@@ -134,13 +119,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetCurrentUserQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>
-/**
- *
- */
 export type GetCurrentUserQueryError = ErrorResponse
 
 
@@ -169,13 +148,6 @@ export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUs
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorResponse>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -199,38 +171,23 @@ export type updateCurrentUserResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type updateCurrentUserResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type updateCurrentUserResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-/**
- *
- */
 export type updateCurrentUserResponseSuccess = (updateCurrentUserResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type updateCurrentUserResponseError = (updateCurrentUserResponse401 | updateCurrentUserResponse404) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type updateCurrentUserResponse = (updateCurrentUserResponseSuccess | updateCurrentUserResponseError)
 
 export const getUpdateCurrentUserUrl = () => {
@@ -283,17 +240,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type UpdateCurrentUserMutationResult = NonNullable<Awaited<ReturnType<typeof updateCurrentUser>>>
-    /**
-     *
-     */
     export type UpdateCurrentUserMutationBody = UpdateUserPayload
-    /**
-     *
-     */
     export type UpdateCurrentUserMutationError = ErrorResponse
 
     export const useUpdateCurrentUser = <TError = ErrorResponse,
@@ -314,38 +262,23 @@ export type registerFcmTokenResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type registerFcmTokenResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type registerFcmTokenResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-/**
- *
- */
 export type registerFcmTokenResponseSuccess = (registerFcmTokenResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type registerFcmTokenResponseError = (registerFcmTokenResponse401 | registerFcmTokenResponse404) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type registerFcmTokenResponse = (registerFcmTokenResponseSuccess | registerFcmTokenResponseError)
 
 export const getRegisterFcmTokenUrl = () => {
@@ -398,17 +331,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type RegisterFcmTokenMutationResult = NonNullable<Awaited<ReturnType<typeof registerFcmToken>>>
-    /**
-     *
-     */
     export type RegisterFcmTokenMutationBody = RegisterFcmTokenPayload
-    /**
-     *
-     */
     export type RegisterFcmTokenMutationError = ErrorResponse
 
     export const useRegisterFcmToken = <TError = ErrorResponse,
@@ -429,38 +353,23 @@ export type updateScheduleRulesResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type updateScheduleRulesResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type updateScheduleRulesResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-/**
- *
- */
 export type updateScheduleRulesResponseSuccess = (updateScheduleRulesResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type updateScheduleRulesResponseError = (updateScheduleRulesResponse401 | updateScheduleRulesResponse404) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type updateScheduleRulesResponse = (updateScheduleRulesResponseSuccess | updateScheduleRulesResponseError)
 
 export const getUpdateScheduleRulesUrl = () => {
@@ -513,17 +422,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type UpdateScheduleRulesMutationResult = NonNullable<Awaited<ReturnType<typeof updateScheduleRules>>>
-    /**
-     *
-     */
     export type UpdateScheduleRulesMutationBody = UpdateScheduleRulesPayload
-    /**
-     *
-     */
     export type UpdateScheduleRulesMutationError = ErrorResponse
 
     export const useUpdateScheduleRules = <TError = ErrorResponse,
@@ -544,17 +444,11 @@ export type getSellerReviewsResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getSellerReviewsResponseSuccess = (getSellerReviewsResponse200) & {
   headers: Headers;
 };
 ;
 
-/**
- *
- */
 export type getSellerReviewsResponse = (getSellerReviewsResponseSuccess)
 
 export const getGetSellerReviewsUrl = (id: UserId,
@@ -616,13 +510,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSellerReviews>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetSellerReviewsQueryResult = NonNullable<Awaited<ReturnType<typeof getSellerReviews>>>
-/**
- *
- */
 export type GetSellerReviewsQueryError = unknown
 
 
@@ -654,15 +542,6 @@ export function useGetSellerReviews<TData = Awaited<ReturnType<typeof getSellerR
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param id
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetSellerReviews<TData = Awaited<ReturnType<typeof getSellerReviews>>, TError = unknown>(
  id: UserId,
     params?: GetSellerReviewsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSellerReviews>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
@@ -687,30 +566,18 @@ export type getPublicUserProfileResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getPublicUserProfileResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-/**
- *
- */
 export type getPublicUserProfileResponseSuccess = (getPublicUserProfileResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getPublicUserProfileResponseError = (getPublicUserProfileResponse404) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getPublicUserProfileResponse = (getPublicUserProfileResponseSuccess | getPublicUserProfileResponseError)
 
 export const getGetPublicUserProfileUrl = (id: UserId,) => {
@@ -761,13 +628,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPublicUserProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetPublicUserProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getPublicUserProfile>>>
-/**
- *
- */
 export type GetPublicUserProfileQueryError = ErrorResponse
 
 
@@ -796,14 +657,6 @@ export function useGetPublicUserProfile<TData = Awaited<ReturnType<typeof getPub
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param id
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetPublicUserProfile<TData = Awaited<ReturnType<typeof getPublicUserProfile>>, TError = ErrorResponse>(
  id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicUserProfile>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 

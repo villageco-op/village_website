@@ -8,9 +8,6 @@
 import type { IsoDateTime } from './isoDateTime';
 import type { PriceDollars } from './priceDollars';
 
-/**
- *
- */
 export interface Payout {
   date: IsoDateTime;
   /** Name of the buyer associated with this transaction */

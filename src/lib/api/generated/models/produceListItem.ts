@@ -9,9 +9,6 @@ import type { ImageUrl } from './imageUrl';
 import type { ResourceId } from './resourceId';
 import type { UserId } from './userId';
 
-/**
- *
- */
 export interface ProduceListItem {
   id: ResourceId;
   thumbnail: ImageUrl & (unknown | null);

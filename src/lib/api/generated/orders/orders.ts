@@ -24,7 +24,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   CancelOrderPayload,
   ErrorResponse,
@@ -35,6 +34,7 @@ import type {
   SuccessResponse
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -49,30 +49,18 @@ export type getOrdersResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getOrdersResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getOrdersResponseSuccess = (getOrdersResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getOrdersResponseError = (getOrdersResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getOrdersResponse = (getOrdersResponseSuccess | getOrdersResponseError)
 
 export const getGetOrdersUrl = (params: GetOrdersParams,) => {
@@ -130,13 +118,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetOrdersQueryResult = NonNullable<Awaited<ReturnType<typeof getOrders>>>
-/**
- *
- */
 export type GetOrdersQueryError = ErrorResponse
 
 
@@ -165,14 +147,6 @@ export function useGetOrders<TData = Awaited<ReturnType<typeof getOrders>>, TErr
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetOrders<TData = Awaited<ReturnType<typeof getOrders>>, TError = ErrorResponse>(
  params: GetOrdersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -196,46 +170,28 @@ export type rescheduleOrderResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type rescheduleOrderResponse400 = {
   data: ErrorResponse
   status: 400
 }
 
-/**
- *
- */
 export type rescheduleOrderResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type rescheduleOrderResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-/**
- *
- */
 export type rescheduleOrderResponseSuccess = (rescheduleOrderResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type rescheduleOrderResponseError = (rescheduleOrderResponse400 | rescheduleOrderResponse401 | rescheduleOrderResponse404) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type rescheduleOrderResponse = (rescheduleOrderResponseSuccess | rescheduleOrderResponseError)
 
 export const getRescheduleOrderUrl = (id: ResourceId,) => {
@@ -289,17 +245,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type RescheduleOrderMutationResult = NonNullable<Awaited<ReturnType<typeof rescheduleOrder>>>
-    /**
-     *
-     */
     export type RescheduleOrderMutationBody = RescheduleOrderPayload
-    /**
-     *
-     */
     export type RescheduleOrderMutationError = ErrorResponse
 
     export const useRescheduleOrder = <TError = ErrorResponse,
@@ -320,38 +267,23 @@ export type cancelOrderResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type cancelOrderResponse400 = {
   data: ErrorResponse
   status: 400
 }
 
-/**
- *
- */
 export type cancelOrderResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type cancelOrderResponseSuccess = (cancelOrderResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type cancelOrderResponseError = (cancelOrderResponse400 | cancelOrderResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type cancelOrderResponse = (cancelOrderResponseSuccess | cancelOrderResponseError)
 
 export const getCancelOrderUrl = (id: ResourceId,) => {
@@ -405,17 +337,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type CancelOrderMutationResult = NonNullable<Awaited<ReturnType<typeof cancelOrder>>>
-    /**
-     *
-     */
     export type CancelOrderMutationBody = CancelOrderPayload
-    /**
-     *
-     */
     export type CancelOrderMutationError = ErrorResponse
 
     export const useCancelOrder = <TError = ErrorResponse,

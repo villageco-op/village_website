@@ -8,9 +8,6 @@
 import type { ImageUrl } from './imageUrl';
 import type { UserId } from './userId';
 
-/**
- *
- */
 export interface ReviewBuyer {
   id: UserId;
   /** @nullable */

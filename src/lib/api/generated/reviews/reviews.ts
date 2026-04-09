@@ -15,13 +15,13 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   CreateReviewPayload,
   ErrorResponse,
   SuccessWithEntity
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -36,38 +36,23 @@ export type createReviewResponse201 = {
   status: 201
 }
 
-/**
- *
- */
 export type createReviewResponse400 = {
   data: ErrorResponse
   status: 400
 }
 
-/**
- *
- */
 export type createReviewResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type createReviewResponseSuccess = (createReviewResponse201) & {
   headers: Headers;
 };
-/**
- *
- */
 export type createReviewResponseError = (createReviewResponse400 | createReviewResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type createReviewResponse = (createReviewResponseSuccess | createReviewResponseError)
 
 export const getCreateReviewUrl = () => {
@@ -120,17 +105,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type CreateReviewMutationResult = NonNullable<Awaited<ReturnType<typeof createReview>>>
-    /**
-     *
-     */
     export type CreateReviewMutationBody = CreateReviewPayload
-    /**
-     *
-     */
     export type CreateReviewMutationError = ErrorResponse
 
     export const useCreateReview = <TError = ErrorResponse,

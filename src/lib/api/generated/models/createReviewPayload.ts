@@ -8,9 +8,6 @@
 import type { ResourceId } from './resourceId';
 import type { UserId } from './userId';
 
-/**
- *
- */
 export interface CreateReviewPayload {
   sellerId: UserId;
   orderId: ResourceId;

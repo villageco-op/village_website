@@ -7,9 +7,6 @@
  */
 import type { EntityId } from './entityId';
 
-/**
- *
- */
 export interface EntityParam {
   id: EntityId;
 }

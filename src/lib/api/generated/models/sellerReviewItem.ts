@@ -9,9 +9,6 @@ import type { IsoDateTime } from './isoDateTime';
 import type { ResourceId } from './resourceId';
 import type { ReviewBuyer } from './reviewBuyer';
 
-/**
- *
- */
 export interface SellerReviewItem {
   id: ResourceId;
   rating: number;

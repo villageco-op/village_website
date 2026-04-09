@@ -8,9 +8,6 @@
 import type { Order } from './order';
 import type { PaginationMetadata } from './paginationMetadata';
 
-/**
- *
- */
 export interface OrdersListResponse {
   data: Order[];
   meta: PaginationMetadata;

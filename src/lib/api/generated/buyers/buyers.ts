@@ -20,7 +20,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   BillingSummaryResponse,
   BuyerDashboardResponse,
@@ -29,6 +28,7 @@ import type {
   GrowersResponse
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -43,30 +43,18 @@ export type getBuyerGrowersResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getBuyerGrowersResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getBuyerGrowersResponseSuccess = (getBuyerGrowersResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getBuyerGrowersResponseError = (getBuyerGrowersResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getBuyerGrowersResponse = (getBuyerGrowersResponseSuccess | getBuyerGrowersResponseError)
 
 export const getGetBuyerGrowersUrl = (params?: GetBuyerGrowersParams,) => {
@@ -124,13 +112,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getBuyerGrowers>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetBuyerGrowersQueryResult = NonNullable<Awaited<ReturnType<typeof getBuyerGrowers>>>
-/**
- *
- */
 export type GetBuyerGrowersQueryError = ErrorResponse
 
 
@@ -159,14 +141,6 @@ export function useGetBuyerGrowers<TData = Awaited<ReturnType<typeof getBuyerGro
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetBuyerGrowers<TData = Awaited<ReturnType<typeof getBuyerGrowers>>, TError = ErrorResponse>(
  params?: GetBuyerGrowersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuyerGrowers>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -190,30 +164,18 @@ export type getBuyerBillingSummaryResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getBuyerBillingSummaryResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getBuyerBillingSummaryResponseSuccess = (getBuyerBillingSummaryResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getBuyerBillingSummaryResponseError = (getBuyerBillingSummaryResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getBuyerBillingSummaryResponse = (getBuyerBillingSummaryResponseSuccess | getBuyerBillingSummaryResponseError)
 
 export const getGetBuyerBillingSummaryUrl = () => {
@@ -264,13 +226,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getBuyerBillingSummary>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetBuyerBillingSummaryQueryResult = NonNullable<Awaited<ReturnType<typeof getBuyerBillingSummary>>>
-/**
- *
- */
 export type GetBuyerBillingSummaryQueryError = ErrorResponse
 
 
@@ -299,13 +255,6 @@ export function useGetBuyerBillingSummary<TData = Awaited<ReturnType<typeof getB
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetBuyerBillingSummary<TData = Awaited<ReturnType<typeof getBuyerBillingSummary>>, TError = ErrorResponse>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuyerBillingSummary>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -329,30 +278,18 @@ export type getBuyerDashboardResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getBuyerDashboardResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getBuyerDashboardResponseSuccess = (getBuyerDashboardResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getBuyerDashboardResponseError = (getBuyerDashboardResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getBuyerDashboardResponse = (getBuyerDashboardResponseSuccess | getBuyerDashboardResponseError)
 
 export const getGetBuyerDashboardUrl = () => {
@@ -403,13 +340,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getBuyerDashboard>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetBuyerDashboardQueryResult = NonNullable<Awaited<ReturnType<typeof getBuyerDashboard>>>
-/**
- *
- */
 export type GetBuyerDashboardQueryError = ErrorResponse
 
 
@@ -438,13 +369,6 @@ export function useGetBuyerDashboard<TData = Awaited<ReturnType<typeof getBuyerD
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetBuyerDashboard<TData = Awaited<ReturnType<typeof getBuyerDashboard>>, TError = ErrorResponse>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuyerDashboard>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 

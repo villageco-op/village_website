@@ -8,9 +8,6 @@
 import type { GetSellerReviewsSortBy } from './getSellerReviewsSortBy';
 import type { GetSellerReviewsSortOrder } from './getSellerReviewsSortOrder';
 
-/**
- *
- */
 export type GetSellerReviewsParams = {
 /**
  * The page number for pagination
