@@ -7,7 +7,4 @@
  */
 import type { SellerMapGroup } from './sellerMapGroup';
 
-/**
- *
- */
 export type SellerMapGroupList = SellerMapGroup[];

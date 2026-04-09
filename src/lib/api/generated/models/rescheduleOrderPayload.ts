@@ -7,9 +7,6 @@
  */
 import type { IsoDateTime } from './isoDateTime';
 
-/**
- *
- */
 export interface RescheduleOrderPayload {
   newTime: IsoDateTime;
 }

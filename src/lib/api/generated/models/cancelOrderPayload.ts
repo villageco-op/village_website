@@ -6,9 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export interface CancelOrderPayload {
   /**
    * The reason for canceling the order

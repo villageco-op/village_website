@@ -15,12 +15,12 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   ErrorResponse,
   StripeOnboardingResponse
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -35,30 +35,18 @@ export type generateStripeOnboardingLinkResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type generateStripeOnboardingLinkResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type generateStripeOnboardingLinkResponseSuccess = (generateStripeOnboardingLinkResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type generateStripeOnboardingLinkResponseError = (generateStripeOnboardingLinkResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type generateStripeOnboardingLinkResponse = (generateStripeOnboardingLinkResponseSuccess | generateStripeOnboardingLinkResponseError)
 
 export const getGenerateStripeOnboardingLinkUrl = () => {
@@ -110,14 +98,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type GenerateStripeOnboardingLinkMutationResult = NonNullable<Awaited<ReturnType<typeof generateStripeOnboardingLink>>>
     
-    /**
-     *
-     */
     export type GenerateStripeOnboardingLinkMutationError = ErrorResponse
 
     export const useGenerateStripeOnboardingLink = <TError = ErrorResponse,

@@ -7,9 +7,6 @@
  */
 import type { SubscriptionStatus } from './subscriptionStatus';
 
-/**
- *
- */
 export interface UpdateSubscriptionStatusPayload {
   status: SubscriptionStatus;
 }

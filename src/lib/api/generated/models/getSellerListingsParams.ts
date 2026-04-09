@@ -7,9 +7,6 @@
  */
 import type { ProduceStatus } from './produceStatus';
 
-/**
- *
- */
 export type GetSellerListingsParams = {
 /**
  * The status of the produce listing

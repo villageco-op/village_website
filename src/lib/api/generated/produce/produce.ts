@@ -24,7 +24,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   CreateProducePayload,
   EntityId,
@@ -42,6 +41,7 @@ import type {
   UpdateProducePayload
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -56,17 +56,11 @@ export type getProduceMapResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getProduceMapResponseSuccess = (getProduceMapResponse200) & {
   headers: Headers;
 };
 ;
 
-/**
- *
- */
 export type getProduceMapResponse = (getProduceMapResponseSuccess)
 
 export const getGetProduceMapUrl = (params?: GetProduceMapParams,) => {
@@ -124,13 +118,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProduceMap>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetProduceMapQueryResult = NonNullable<Awaited<ReturnType<typeof getProduceMap>>>
-/**
- *
- */
 export type GetProduceMapQueryError = unknown
 
 
@@ -159,14 +147,6 @@ export function useGetProduceMap<TData = Awaited<ReturnType<typeof getProduceMap
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetProduceMap<TData = Awaited<ReturnType<typeof getProduceMap>>, TError = unknown>(
  params?: GetProduceMapParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduceMap>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -190,17 +170,11 @@ export type getProduceListResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getProduceListResponseSuccess = (getProduceListResponse200) & {
   headers: Headers;
 };
 ;
 
-/**
- *
- */
 export type getProduceListResponse = (getProduceListResponseSuccess)
 
 export const getGetProduceListUrl = (params?: GetProduceListParams,) => {
@@ -258,13 +232,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProduceList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetProduceListQueryResult = NonNullable<Awaited<ReturnType<typeof getProduceList>>>
-/**
- *
- */
 export type GetProduceListQueryError = unknown
 
 
@@ -293,14 +261,6 @@ export function useGetProduceList<TData = Awaited<ReturnType<typeof getProduceLi
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetProduceList<TData = Awaited<ReturnType<typeof getProduceList>>, TError = unknown>(
  params?: GetProduceListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduceList>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -324,30 +284,18 @@ export type createProduceResponse201 = {
   status: 201
 }
 
-/**
- *
- */
 export type createProduceResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type createProduceResponseSuccess = (createProduceResponse201) & {
   headers: Headers;
 };
-/**
- *
- */
 export type createProduceResponseError = (createProduceResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type createProduceResponse = (createProduceResponseSuccess | createProduceResponseError)
 
 export const getCreateProduceUrl = () => {
@@ -400,17 +348,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type CreateProduceMutationResult = NonNullable<Awaited<ReturnType<typeof createProduce>>>
-    /**
-     *
-     */
     export type CreateProduceMutationBody = CreateProducePayload
-    /**
-     *
-     */
     export type CreateProduceMutationError = ErrorResponse
 
     export const useCreateProduce = <TError = ErrorResponse,
@@ -431,46 +370,28 @@ export type updateProduceResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type updateProduceResponse400 = {
   data: ErrorResponse
   status: 400
 }
 
-/**
- *
- */
 export type updateProduceResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type updateProduceResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-/**
- *
- */
 export type updateProduceResponseSuccess = (updateProduceResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type updateProduceResponseError = (updateProduceResponse400 | updateProduceResponse401 | updateProduceResponse404) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type updateProduceResponse = (updateProduceResponseSuccess | updateProduceResponseError)
 
 export const getUpdateProduceUrl = (id: EntityId,) => {
@@ -524,17 +445,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type UpdateProduceMutationResult = NonNullable<Awaited<ReturnType<typeof updateProduce>>>
-    /**
-     *
-     */
     export type UpdateProduceMutationBody = UpdateProducePayload
-    /**
-     *
-     */
     export type UpdateProduceMutationError = ErrorResponse
 
     export const useUpdateProduce = <TError = ErrorResponse,
@@ -555,46 +467,28 @@ export type deleteProduceResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type deleteProduceResponse400 = {
   data: ErrorResponse
   status: 400
 }
 
-/**
- *
- */
 export type deleteProduceResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type deleteProduceResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-/**
- *
- */
 export type deleteProduceResponseSuccess = (deleteProduceResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type deleteProduceResponseError = (deleteProduceResponse400 | deleteProduceResponse401 | deleteProduceResponse404) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type deleteProduceResponse = (deleteProduceResponseSuccess | deleteProduceResponseError)
 
 export const getDeleteProduceUrl = (id: EntityId,) => {
@@ -646,14 +540,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type DeleteProduceMutationResult = NonNullable<Awaited<ReturnType<typeof deleteProduce>>>
     
-    /**
-     *
-     */
     export type DeleteProduceMutationError = ErrorResponse
 
     export const useDeleteProduce = <TError = ErrorResponse,
@@ -674,38 +562,23 @@ export type getProduceOrdersResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getProduceOrdersResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getProduceOrdersResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-/**
- *
- */
 export type getProduceOrdersResponseSuccess = (getProduceOrdersResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getProduceOrdersResponseError = (getProduceOrdersResponse401 | getProduceOrdersResponse404) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getProduceOrdersResponse = (getProduceOrdersResponseSuccess | getProduceOrdersResponseError)
 
 export const getGetProduceOrdersUrl = (id: EntityId,
@@ -767,13 +640,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProduceOrders>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetProduceOrdersQueryResult = NonNullable<Awaited<ReturnType<typeof getProduceOrders>>>
-/**
- *
- */
 export type GetProduceOrdersQueryError = ErrorResponse
 
 
@@ -805,15 +672,6 @@ export function useGetProduceOrders<TData = Awaited<ReturnType<typeof getProduce
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param id
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetProduceOrders<TData = Awaited<ReturnType<typeof getProduceOrders>>, TError = ErrorResponse>(
  id: EntityId,
     params?: GetProduceOrdersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduceOrders>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
@@ -838,30 +696,18 @@ export type getSellerListingsResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getSellerListingsResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getSellerListingsResponseSuccess = (getSellerListingsResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getSellerListingsResponseError = (getSellerListingsResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getSellerListingsResponse = (getSellerListingsResponseSuccess | getSellerListingsResponseError)
 
 export const getGetSellerListingsUrl = (params?: GetSellerListingsParams,) => {
@@ -919,13 +765,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSellerListings>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetSellerListingsQueryResult = NonNullable<Awaited<ReturnType<typeof getSellerListings>>>
-/**
- *
- */
 export type GetSellerListingsQueryError = ErrorResponse
 
 
@@ -954,14 +794,6 @@ export function useGetSellerListings<TData = Awaited<ReturnType<typeof getSeller
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetSellerListings<TData = Awaited<ReturnType<typeof getSellerListings>>, TError = ErrorResponse>(
  params?: GetSellerListingsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSellerListings>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 

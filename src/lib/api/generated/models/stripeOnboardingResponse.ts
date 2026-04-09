@@ -6,9 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export interface StripeOnboardingResponse {
   /** The temporary Stripe Connect onboarding URL for the seller */
   url: string;

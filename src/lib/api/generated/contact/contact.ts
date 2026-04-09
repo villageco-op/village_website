@@ -15,13 +15,13 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   ContactPayload,
   ErrorResponse,
   SuccessResponse
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -36,30 +36,18 @@ export type submitContactFormResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type submitContactFormResponse500 = {
   data: ErrorResponse
   status: 500
 }
 
-/**
- *
- */
 export type submitContactFormResponseSuccess = (submitContactFormResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type submitContactFormResponseError = (submitContactFormResponse500) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type submitContactFormResponse = (submitContactFormResponseSuccess | submitContactFormResponseError)
 
 export const getSubmitContactFormUrl = () => {
@@ -112,17 +100,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type SubmitContactFormMutationResult = NonNullable<Awaited<ReturnType<typeof submitContactForm>>>
-    /**
-     *
-     */
     export type SubmitContactFormMutationBody = ContactPayload
-    /**
-     *
-     */
     export type SubmitContactFormMutationError = ErrorResponse
 
     export const useSubmitContactForm = <TError = ErrorResponse,

@@ -9,9 +9,6 @@ import type { FulfillmentType } from './fulfillmentType';
 import type { IsoDateTime } from './isoDateTime';
 import type { UserId } from './userId';
 
-/**
- *
- */
 export interface CreateCheckoutSessionPayload {
   sellerId: UserId;
   fulfillmentType: FulfillmentType;

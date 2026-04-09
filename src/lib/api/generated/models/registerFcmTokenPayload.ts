@@ -7,9 +7,6 @@
  */
 import type { RegisterFcmTokenPayloadPlatform } from './registerFcmTokenPayloadPlatform';
 
-/**
- *
- */
 export interface RegisterFcmTokenPayload {
   /** The unique Firebase Cloud Messaging token for the device */
   token: string;

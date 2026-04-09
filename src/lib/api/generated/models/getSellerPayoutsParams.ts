@@ -6,9 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export type GetSellerPayoutsParams = {
 /**
  * The period for which to fetch payout history.

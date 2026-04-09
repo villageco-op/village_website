@@ -7,9 +7,6 @@
  */
 import type { Address } from './address';
 
-/**
- *
- */
 export interface Location {
   /** @nullable */
   lat: number | null;

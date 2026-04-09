@@ -8,9 +8,6 @@
 import type { PaginationMetadata } from './paginationMetadata';
 import type { Payout } from './payout';
 
-/**
- *
- */
 export interface PayoutHistoryResponse {
   data: Payout[];
   meta: PaginationMetadata;

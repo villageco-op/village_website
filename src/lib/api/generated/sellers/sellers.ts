@@ -20,7 +20,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   ErrorResponse,
   GetSellerPayoutsParams,
@@ -29,6 +28,7 @@ import type {
   SellerEarningsResponse
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -43,30 +43,18 @@ export type getSellerPayoutsResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getSellerPayoutsResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getSellerPayoutsResponseSuccess = (getSellerPayoutsResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getSellerPayoutsResponseError = (getSellerPayoutsResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getSellerPayoutsResponse = (getSellerPayoutsResponseSuccess | getSellerPayoutsResponseError)
 
 export const getGetSellerPayoutsUrl = (params?: GetSellerPayoutsParams,) => {
@@ -124,13 +112,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSellerPayouts>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetSellerPayoutsQueryResult = NonNullable<Awaited<ReturnType<typeof getSellerPayouts>>>
-/**
- *
- */
 export type GetSellerPayoutsQueryError = ErrorResponse
 
 
@@ -159,14 +141,6 @@ export function useGetSellerPayouts<TData = Awaited<ReturnType<typeof getSellerP
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetSellerPayouts<TData = Awaited<ReturnType<typeof getSellerPayouts>>, TError = ErrorResponse>(
  params?: GetSellerPayoutsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSellerPayouts>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -190,30 +164,18 @@ export type getSellerEarningsResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getSellerEarningsResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getSellerEarningsResponseSuccess = (getSellerEarningsResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getSellerEarningsResponseError = (getSellerEarningsResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getSellerEarningsResponse = (getSellerEarningsResponseSuccess | getSellerEarningsResponseError)
 
 export const getGetSellerEarningsUrl = () => {
@@ -264,13 +226,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSellerEarnings>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetSellerEarningsQueryResult = NonNullable<Awaited<ReturnType<typeof getSellerEarnings>>>
-/**
- *
- */
 export type GetSellerEarningsQueryError = ErrorResponse
 
 
@@ -299,13 +255,6 @@ export function useGetSellerEarnings<TData = Awaited<ReturnType<typeof getSeller
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetSellerEarnings<TData = Awaited<ReturnType<typeof getSellerEarnings>>, TError = ErrorResponse>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSellerEarnings>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -329,30 +278,18 @@ export type getSellerDashboardResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getSellerDashboardResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getSellerDashboardResponseSuccess = (getSellerDashboardResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getSellerDashboardResponseError = (getSellerDashboardResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getSellerDashboardResponse = (getSellerDashboardResponseSuccess | getSellerDashboardResponseError)
 
 export const getGetSellerDashboardUrl = () => {
@@ -403,13 +340,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSellerDashboard>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetSellerDashboardQueryResult = NonNullable<Awaited<ReturnType<typeof getSellerDashboard>>>
-/**
- *
- */
 export type GetSellerDashboardQueryError = ErrorResponse
 
 
@@ -438,13 +369,6 @@ export function useGetSellerDashboard<TData = Awaited<ReturnType<typeof getSelle
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetSellerDashboard<TData = Awaited<ReturnType<typeof getSellerDashboard>>, TError = ErrorResponse>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSellerDashboard>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 

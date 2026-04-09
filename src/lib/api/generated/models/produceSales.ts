@@ -7,9 +7,6 @@
  */
 import type { PriceDollars } from './priceDollars';
 
-/**
- *
- */
 export interface ProduceSales {
   produceName: string;
   amount: PriceDollars;

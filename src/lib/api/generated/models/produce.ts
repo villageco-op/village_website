@@ -8,9 +8,6 @@
 import type { ProduceImages } from './produceImages';
 import type { ProduceStatusProperty } from './produceStatusProperty';
 
-/**
- *
- */
 export interface Produce {
   id: string;
   sellerId: string;

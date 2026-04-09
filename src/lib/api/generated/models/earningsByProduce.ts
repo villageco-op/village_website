@@ -6,9 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export interface EarningsByProduce {
   produceName: string;
   /** Total dollars earned for this produce item */

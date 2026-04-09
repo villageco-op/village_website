@@ -8,9 +8,6 @@
 import type { EntityId } from './entityId';
 import type { SuccessResponse } from './successResponse';
 
-/**
- *
- */
 export type SuccessWithEntity = SuccessResponse & {
   entityId: EntityId;
 };

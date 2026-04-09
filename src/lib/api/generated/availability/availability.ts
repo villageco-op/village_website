@@ -20,13 +20,13 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   AvailabilityResponse,
   GetAvailabilityParams,
   UserId
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -41,17 +41,11 @@ export type getAvailabilityResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getAvailabilityResponseSuccess = (getAvailabilityResponse200) & {
   headers: Headers;
 };
 ;
 
-/**
- *
- */
 export type getAvailabilityResponse = (getAvailabilityResponseSuccess)
 
 export const getGetAvailabilityUrl = (sellerId: UserId,
@@ -113,13 +107,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, enabled: !!(sellerId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAvailability>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetAvailabilityQueryResult = NonNullable<Awaited<ReturnType<typeof getAvailability>>>
-/**
- *
- */
 export type GetAvailabilityQueryError = unknown
 
 
@@ -151,15 +139,6 @@ export function useGetAvailability<TData = Awaited<ReturnType<typeof getAvailabi
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param sellerId
- * @param params
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetAvailability<TData = Awaited<ReturnType<typeof getAvailability>>, TError = unknown>(
  sellerId: UserId,
     params: GetAvailabilityParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAvailability>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}

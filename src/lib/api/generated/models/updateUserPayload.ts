@@ -10,12 +10,11 @@ import type { Latitude } from './latitude';
 import type { Longitude } from './longitude';
 import type { PriceDollars } from './priceDollars';
 
-/**
- *
- */
 export interface UpdateUserPayload {
   /** The user’s display name */
   name?: string;
+  /** The url to the image in vercel blob from the upload image response. */
+  image?: string;
   /** A brief bio or description of the farm/user */
   aboutMe?: string;
   /** List of product categories the user specializes in */

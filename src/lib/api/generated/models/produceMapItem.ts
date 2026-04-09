@@ -8,9 +8,6 @@
 import type { ImageUrl } from './imageUrl';
 import type { ResourceId } from './resourceId';
 
-/**
- *
- */
 export interface ProduceMapItem {
   id: ResourceId;
   name: string;

@@ -9,9 +9,6 @@ import type { ImageUrl } from './imageUrl';
 import type { IsoDateTime } from './isoDateTime';
 import type { ResourceId } from './resourceId';
 
-/**
- *
- */
 export interface CartItem {
   reservationId: ResourceId;
   productId: ResourceId;

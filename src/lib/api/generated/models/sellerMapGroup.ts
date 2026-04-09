@@ -8,9 +8,6 @@
 import type { ProduceMapItem } from './produceMapItem';
 import type { UserId } from './userId';
 
-/**
- *
- */
 export interface SellerMapGroup {
   sellerId: UserId;
   lat: number;

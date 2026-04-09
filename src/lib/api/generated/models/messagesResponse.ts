@@ -8,9 +8,6 @@
 import type { Message } from './message';
 import type { PaginationMetadata } from './paginationMetadata';
 
-/**
- *
- */
 export interface MessagesResponse {
   data: Message[];
   meta: PaginationMetadata;

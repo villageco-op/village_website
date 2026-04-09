@@ -8,9 +8,6 @@
 import type { ActiveSubscription } from './activeSubscription';
 import type { PriceDollars } from './priceDollars';
 
-/**
- *
- */
 export interface BuyerDashboardResponse {
   /** Total weight of produce scheduled for delivery this week */
   onOrderThisWeekLbs: number;

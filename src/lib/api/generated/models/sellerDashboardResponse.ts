@@ -8,9 +8,6 @@
 import type { EarningsByProduce } from './earningsByProduce';
 import type { Location } from './location';
 
-/**
- *
- */
 export interface SellerDashboardResponse {
   earnedThisMonth: number;
   earnedLastMonth: number;

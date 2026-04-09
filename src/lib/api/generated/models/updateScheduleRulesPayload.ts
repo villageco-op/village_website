@@ -7,9 +7,6 @@
  */
 import type { AvailabilityWindow } from './availabilityWindow';
 
-/**
- *
- */
 export interface UpdateScheduleRulesPayload {
   /** Set of time windows when buyers can pick up orders */
   pickupWindows: AvailabilityWindow[];

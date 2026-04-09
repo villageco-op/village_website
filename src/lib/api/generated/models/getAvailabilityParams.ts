@@ -8,9 +8,6 @@
 import type { FulfillmentType } from './fulfillmentType';
 import type { IsoDate } from './isoDate';
 
-/**
- *
- */
 export type GetAvailabilityParams = {
 /**
  * The fulfillment type for completing an order

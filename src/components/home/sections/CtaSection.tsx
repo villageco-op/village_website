@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import { Fragment } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -37,8 +38,13 @@ export default function CtaSection() {
 
         {/* Buttons */}
         <div className="flex gap-3.5 justify-center flex-wrap mb-12">
-          <Button className="bg-lime text-forest-dark transition-all duration-300 rounded-md px-6 h-14 font-sans text-base font-semibold hover:bg-lime-light hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(164,199,57,0.4)]">
-            Get involved <ArrowRight className="ml-2 h-4 w-4" />
+          <Button
+            asChild
+            className="bg-lime text-forest-dark transition-all duration-300 rounded-md px-6 h-14 font-sans text-base font-semibold hover:bg-lime-light hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(164,199,57,0.4)]"
+          >
+            <Link href="/login">
+              Get involved <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
           <Button
             variant="ghost"

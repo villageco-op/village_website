@@ -9,9 +9,6 @@ import type { GetProduceMapHasDelivery } from './getProduceMapHasDelivery';
 import type { Latitude } from './latitude';
 import type { Longitude } from './longitude';
 
-/**
- *
- */
 export type GetProduceMapParams = {
 /**
  * Latitude coordinate

@@ -24,7 +24,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   AddToCartPayload,
   EntityId,
@@ -34,6 +33,7 @@ import type {
   SuccessWithEntity
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -48,30 +48,18 @@ export type getCartResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type getCartResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type getCartResponseSuccess = (getCartResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type getCartResponseError = (getCartResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type getCartResponse = (getCartResponseSuccess | getCartResponseError)
 
 export const getGetCartUrl = () => {
@@ -122,13 +110,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-/**
- *
- */
 export type GetCartQueryResult = NonNullable<Awaited<ReturnType<typeof getCart>>>
-/**
- *
- */
 export type GetCartQueryError = ErrorResponse
 
 
@@ -157,13 +139,6 @@ export function useGetCart<TData = Awaited<ReturnType<typeof getCart>>, TError =
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-/**
- *
- * @param options
- * @param options.query
- * @param options.request
- * @param queryClient
- */
 export function useGetCart<TData = Awaited<ReturnType<typeof getCart>>, TError = ErrorResponse>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient 
@@ -187,30 +162,18 @@ export type addToCartResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type addToCartResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type addToCartResponseSuccess = (addToCartResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type addToCartResponseError = (addToCartResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type addToCartResponse = (addToCartResponseSuccess | addToCartResponseError)
 
 export const getAddToCartUrl = () => {
@@ -263,17 +226,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type AddToCartMutationResult = NonNullable<Awaited<ReturnType<typeof addToCart>>>
-    /**
-     *
-     */
     export type AddToCartMutationBody = AddToCartPayload
-    /**
-     *
-     */
     export type AddToCartMutationError = ErrorResponse
 
     export const useAddToCart = <TError = ErrorResponse,
@@ -294,30 +248,18 @@ export type removeFromCartResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type removeFromCartResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type removeFromCartResponseSuccess = (removeFromCartResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type removeFromCartResponseError = (removeFromCartResponse401) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type removeFromCartResponse = (removeFromCartResponseSuccess | removeFromCartResponseError)
 
 export const getRemoveFromCartUrl = (id: EntityId,) => {
@@ -369,14 +311,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type RemoveFromCartMutationResult = NonNullable<Awaited<ReturnType<typeof removeFromCart>>>
     
-    /**
-     *
-     */
     export type RemoveFromCartMutationError = ErrorResponse
 
     export const useRemoveFromCart = <TError = ErrorResponse,

@@ -6,9 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export type GetMessagesParams = {
 /**
  * The unique ID of the chat thread

@@ -86,7 +86,7 @@ export function Header() {
             size="sm"
             className="ml-2 bg-lime text-forest-dark font-heading text-xs font-bold transition-transform hover:bg-lime-light hover:-translate-y-px"
           >
-            <Link href="#cta">Get involved &rarr;</Link>
+            <Link href="/login">Get involved &rarr;</Link>
           </Button>
         </nav>
       </div>

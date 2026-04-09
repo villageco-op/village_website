@@ -8,9 +8,6 @@
 import type { CartItem } from './cartItem';
 import type { CartSeller } from './cartSeller';
 
-/**
- *
- */
 export interface CartSellerGroup {
   seller: CartSeller;
   /** List of items in the cart belonging to this specific seller */

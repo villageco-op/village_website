@@ -24,7 +24,7 @@ const FOOTER_LINKS = [
     title: 'Contact',
     links: [
       { label: 'Talk to our team', href: '#' },
-      { label: 'Get involved', href: '#' },
+      { label: 'Get involved', href: '/login' },
       { label: 'Press & media', href: '#' },
       { label: 'Privacy policy', href: '#' },
     ],

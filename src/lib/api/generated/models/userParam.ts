@@ -7,9 +7,6 @@
  */
 import type { UserId } from './userId';
 
-/**
- *
- */
 export interface UserParam {
   id: UserId;
 }

@@ -8,9 +8,6 @@
 import type { Grower } from './grower';
 import type { PaginationMetadata } from './paginationMetadata';
 
-/**
- *
- */
 export interface GrowersResponse {
   data: Grower[];
   meta: PaginationMetadata;

@@ -6,7 +6,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- *
- */
 export type ProduceImages = string | number | boolean | unknown | null | {[key: string]: unknown | null} | (unknown | null)[];

@@ -8,9 +8,6 @@
 import type { GetOrdersQueryRole } from './getOrdersQueryRole';
 import type { OrderStatus } from './orderStatus';
 
-/**
- *
- */
 export interface GetOrdersQuery {
   /** The perspective from which to fetch orders */
   role: GetOrdersQueryRole;

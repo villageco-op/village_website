@@ -15,7 +15,6 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import { apiClient } from '../../client';
 import type {
   EntityId,
   ErrorResponse,
@@ -23,6 +22,7 @@ import type {
   UpdateSubscriptionStatusPayload
 } from '../models';
 
+import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -37,38 +37,23 @@ export type updateSubscriptionStatusResponse200 = {
   status: 200
 }
 
-/**
- *
- */
 export type updateSubscriptionStatusResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-/**
- *
- */
 export type updateSubscriptionStatusResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-/**
- *
- */
 export type updateSubscriptionStatusResponseSuccess = (updateSubscriptionStatusResponse200) & {
   headers: Headers;
 };
-/**
- *
- */
 export type updateSubscriptionStatusResponseError = (updateSubscriptionStatusResponse401 | updateSubscriptionStatusResponse404) & {
   headers: Headers;
 };
 
-/**
- *
- */
 export type updateSubscriptionStatusResponse = (updateSubscriptionStatusResponseSuccess | updateSubscriptionStatusResponseError)
 
 export const getUpdateSubscriptionStatusUrl = (id: EntityId,) => {
@@ -122,17 +107,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    /**
-     *
-     */
     export type UpdateSubscriptionStatusMutationResult = NonNullable<Awaited<ReturnType<typeof updateSubscriptionStatus>>>
-    /**
-     *
-     */
     export type UpdateSubscriptionStatusMutationBody = UpdateSubscriptionStatusPayload
-    /**
-     *
-     */
     export type UpdateSubscriptionStatusMutationError = ErrorResponse
 
     export const useUpdateSubscriptionStatus = <TError = ErrorResponse,

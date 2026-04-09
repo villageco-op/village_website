@@ -7,9 +7,6 @@
  */
 import type { CartSellerGroup } from './cartSellerGroup';
 
-/**
- *
- */
 export interface GetCartResponse {
   /** User shopping cart grouped by seller */
   data: CartSellerGroup[];
