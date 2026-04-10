@@ -7,6 +7,7 @@ import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { getAssetPath } from '@/lib/utils';
 
 /**
  * Data structure for the basic profile information step.
@@ -82,7 +83,7 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
           >
             {imagePreview ? (
               <Image
-                src={imagePreview}
+                src={getAssetPath(imagePreview)}
                 alt="Profile preview"
                 fill
                 className="object-cover"

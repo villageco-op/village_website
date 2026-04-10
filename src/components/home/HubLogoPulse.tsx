@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn, getAssetPath } from '@/lib/utils';
 
 /**
  * Props for the hub logo component
@@ -68,7 +68,7 @@ export function HubLogoPulse({
           children
         ) : (
           <Image
-            src={imgSrc}
+            src={getAssetPath(imgSrc)}
             alt={imgAlt}
             width={imgWidth}
             height={imgHeight}

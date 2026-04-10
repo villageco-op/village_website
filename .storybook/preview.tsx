@@ -22,8 +22,8 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
-const isGitHubPages = window.location.hostname.includes('github.io');
-const baseUrl = isGitHubPages ? '/village_website/' : '/';
+const isSubpath = window.location.pathname.startsWith('/village_website');
+const baseUrl = isSubpath ? '/village_website/' : '/';
 
 initialize({
   onUnhandledRequest: 'warn',

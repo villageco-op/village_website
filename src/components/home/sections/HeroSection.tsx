@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { HeroSectionHeader } from '../HeroSectionHeader';
 
 import { Button } from '@/components/ui/button';
+import { getAssetPath } from '@/lib/utils';
 
 /**
  * The main hero section with contact buttons and a large display image.
@@ -61,7 +62,7 @@ export default function HeroSection() {
       {/* Right Column */}
       <div className="relative w-full min-h-100 lg:min-h-full overflow-hidden p-0">
         <Image
-          src="/images/main-hero.jpg"
+          src={getAssetPath('/images/main-hero.jpg')}
           alt="Community farming in Gary, Indiana"
           fill
           priority

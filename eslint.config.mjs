@@ -19,6 +19,7 @@ const eslintConfig = [
       'src/lib/api/generated/**',
       '.storybook',
       'storybook-static/**',
+      'local-test/**',
     ],
   },
   ...nextVitals,

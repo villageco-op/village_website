@@ -5,7 +5,7 @@ import Image from 'next/image';
 import * as React from 'react';
 
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-import { cn } from '@/lib/utils';
+import { cn, getAssetPath } from '@/lib/utils';
 
 const IMAGES = Array.from({ length: 6 }, (_, i) => `/images/home-carousel/local-food-${i}.jpg`);
 
@@ -65,7 +65,7 @@ export function ImageryCarousel({ className, ...props }: ImageryCarouselProps) {
                   )}
                 >
                   <Image
-                    src={src}
+                    src={getAssetPath(src)}
                     alt={`Local food display ${index}`}
                     fill
                     sizes="(max-width: 600px) 200px, 280px"

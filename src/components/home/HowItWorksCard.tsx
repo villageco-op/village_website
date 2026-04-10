@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn, getAssetPath } from '@/lib/utils';
 
 /**
  * The propts for the how it works card including an image, title and description.
@@ -62,7 +62,7 @@ export const HowItWorksCard = React.forwardRef<HTMLDivElement, HowItWorksCardPro
           style={{ aspectRatio: '16/9' }}
         >
           <Image
-            src={imageSrc}
+            src={getAssetPath(imageSrc)}
             alt={title}
             fill
             className="object-cover"
