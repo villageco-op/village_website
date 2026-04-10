@@ -22,8 +22,14 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
+const isGitHubPages = window.location.hostname.includes('github.io');
+const baseUrl = isGitHubPages ? '/village_website/' : '/';
+
 initialize({
   onUnhandledRequest: 'warn',
+  serviceWorker: {
+    url: `${baseUrl}mockServiceWorker.js`,
+  },
 });
 
 const preview: Preview = {
