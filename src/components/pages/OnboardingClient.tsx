@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import BasicProfileStep, { type BasicInfoData } from '../onboarding/BasicProfileStep';
 import NotificationsStep from '../onboarding/NotificationStep';
@@ -49,6 +50,8 @@ export default function OnboardingFlow() {
   const uploadImageMutation = useUploadImage();
 
   const handleBasicInfoSubmit = async (data: BasicInfoData) => {
+    const toastId = toast.loading('Uploading your profile picture...');
+
     try {
       setIsUploading(true);
       let imageUrl: string | undefined = undefined;
@@ -60,6 +63,7 @@ export default function OnboardingFlow() {
 
         if (uploadRes.status === 200) {
           imageUrl = uploadRes.data.url;
+          toast.loading('Saving your profile details...', { id: toastId });
         } else {
           throw new Error(uploadRes.data.error || 'Failed to upload image');
         }
@@ -74,9 +78,11 @@ export default function OnboardingFlow() {
         },
       });
 
+      toast.success('Profile updated!', { id: toastId });
       setStep('role');
     } catch (error) {
       console.error('OnboardingFlow: Failed to update basic profile', error);
+      toast.error('Could not save profile. Please check your connection.', { id: toastId });
     } finally {
       setIsUploading(false);
     }
@@ -109,22 +115,28 @@ export default function OnboardingFlow() {
 
       setStep('notifications');
     } catch (error) {
-      console.error('OnboardingFlow: Failed to update seller profile', error);
+      toast.error('Could not save profile. Please check your connection.');
     }
   };
 
   const handleEnableNotifications = async () => {
+    const toastId = toast.loading('Enabling notifications...');
     try {
       const permission = await Notification.requestPermission();
+
       if (permission === 'granted') {
         const mockFcmToken = 'mock-fcm-token-123';
-
         await registerToken.mutateAsync({
           data: { token: mockFcmToken, platform: 'web' },
         });
+        toast.success('Notifications enabled!', { id: toastId });
+      } else {
+        toast.warning('Notifications were blocked. You can enable them in browser settings.', {
+          id: toastId,
+        });
       }
     } catch (error) {
-      console.error('Failed to enable notifications', error);
+      toast.error('Failed to register for notifications.', { id: toastId });
     } finally {
       finalizeOnboarding();
     }
@@ -139,8 +151,18 @@ export default function OnboardingFlow() {
   };
 
   const handleStripeRedirect = async () => {
-    const res = await generateStripe.mutateAsync();
-    console.log('Redirecting to Stripe...', res);
+    const toastId = toast.loading('Preparing Stripe onboarding...');
+    try {
+      const res = await generateStripe.mutateAsync();
+      if (res.status === 200 && res.data.url) {
+        toast.success('Redirecting...', { id: toastId });
+        window.location.href = res.data.url;
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      toast.error('Could not connect to Stripe. Try again in a moment.', { id: toastId });
+    }
   };
 
   const STEPS_ORDER: Step[] = [

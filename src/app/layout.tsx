@@ -4,6 +4,7 @@ import { Bricolage_Grotesque, Sora, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { Toaster } from '@/components/ui/sonner';
 
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -45,6 +46,7 @@ export default function RootLayout({
       <body className={`${bricolage.variable} ${sora.variable} ${playfair.variable} antialiased`}>
         <Header></Header>
         {children}
+        <Toaster />
         <Footer></Footer>
       </body>
     </html>

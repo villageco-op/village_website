@@ -3,7 +3,9 @@
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
@@ -16,8 +18,17 @@ import { Separator } from '@/components/ui/separator';
  * @returns A branded component for signing in with Google or Magic Link.
  */
 export default function LoginClient() {
+  const searchParams = useSearchParams();
   const [csrfToken, setCsrfToken] = useState<string>('');
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const error = searchParams.get('error');
+    if (error) {
+      toast.error('Authentication failed. Please try again or use a different method.');
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchCsrfToken = async () => {
@@ -31,12 +42,40 @@ export default function LoginClient() {
         const data = await res.json();
         setCsrfToken(data.csrfToken);
       } catch (error) {
-        console.error('Auth Error:', error);
-        // TODO: Show an error toast
+        toast.error('Security handshake failed. Please refresh the page.');
       }
     };
     void fetchCsrfToken();
   }, []);
+
+  const handleMagicLinkSignIn = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+
+    const signInPromise = (async () => {
+      const res = await fetch('/api/auth/signin/nodemailer', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error();
+      return res;
+    })();
+
+    toast.promise(signInPromise, {
+      loading: 'Sending your magic link...',
+      success: () => {
+        setIsLoading(false);
+        return 'Check your email for the login link!';
+      },
+      error: () => {
+        setIsLoading(false);
+        return 'Failed to send email. Please try again.';
+      },
+    });
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-primary py-12 px-4 sm:px-6 lg:px-8">
@@ -90,7 +129,13 @@ export default function LoginClient() {
           </div>
 
           {/* Magic Link (Nodemailer) Form */}
-          <form action="/api/auth/signin/nodemailer" method="POST" className="space-y-4">
+          <form
+            onSubmit={(e) => {
+              void handleMagicLinkSignIn(e);
+            }}
+            method="POST"
+            className="space-y-4"
+          >
             <input type="hidden" name="csrfToken" value={csrfToken} />
             <input type="hidden" name="callbackUrl" value="/" />
 
@@ -112,10 +157,11 @@ export default function LoginClient() {
 
             <Button
               type="submit"
-              className="w-full h-11 bg-lime text-forest-dark font-heading text-sm font-bold tracking-wide transition-transform hover:bg-lime-light hover:-translate-y-px"
+              disabled={isLoading}
+              className="w-full h-11 bg-lime text-forest-dark font-heading text-sm font-bold tracking-wide transition-transform hover:bg-lime-light hover:-translate-y-px disabled:opacity-50"
             >
-              Email me a login link
-              <ArrowRight className="w-4 h-4 ml-2" />
+              {isLoading ? 'Sending...' : 'Email me a login link'}
+              {!isLoading && <ArrowRight className="w-4 h-4 ml-2" />}
             </Button>
           </form>
         </div>
