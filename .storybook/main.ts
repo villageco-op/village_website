@@ -14,5 +14,17 @@ const config: StorybookConfig = {
   ],
   framework: '@storybook/nextjs-vite',
   staticDirs: [path.join(dirname, '../public')],
+  viteFinal: async (config, { configType }) => {
+    if (configType === 'PRODUCTION') {
+      config.base = '/village_website/';
+    }
+
+    config.define = {
+      ...config.define,
+      'process.env.NEXT_PUBLIC_API_URL': JSON.stringify('https://api.mock'),
+    };
+
+    return config;
+  },
 };
 export default config;
