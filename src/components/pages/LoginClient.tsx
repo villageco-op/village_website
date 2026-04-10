@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { getAssetPath } from '@/lib/utils';
 
 /**
  * The client component for the login page.
@@ -82,7 +83,7 @@ export default function LoginClient() {
       {/* Brand Header */}
       <Link href="/" className="mb-8">
         <Image
-          src="/icons/logo-horizontal.png"
+          src={getAssetPath('/icons/logo-horizontal.png')}
           alt="Village Logo"
           width={150}
           height={51}

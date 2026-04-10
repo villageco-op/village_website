@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { getAssetPath } from '@/lib/utils';
+
 const FOOTER_LINKS = [
   {
     title: 'Platform',
@@ -44,7 +46,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr] gap-12 mb-12">
           <div>
             <Image
-              src="/icons/logo-horizontal.png"
+              src={getAssetPath('/icons/logo-horizontal.png')}
               alt="Village Logo"
               width={100}
               height={34}

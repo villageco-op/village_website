@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import { cn, getAssetPath } from '@/lib/utils';
 
 /**
  * The persistent site header. Includes the page navigation links.
@@ -34,7 +34,7 @@ export function Header() {
       <div className="container-custom flex h-16 items-center">
         <Link href="/" className="mr-6 flex items-center">
           <Image
-            src="/icons/logo-horizontal.png"
+            src={getAssetPath('/icons/logo-horizontal.png')}
             alt="Village Logo"
             width={100}
             height={34}
