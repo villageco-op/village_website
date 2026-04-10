@@ -3,6 +3,8 @@ import { within, userEvent, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
+import { Toaster } from '../ui/sonner';
+
 import OnboardingFlow from './OnboardingClient';
 
 const mockedQueryClient = new QueryClient({
@@ -52,6 +54,7 @@ const meta: Meta<typeof OnboardingFlow> = {
     (Story) => (
       <QueryClientProvider client={mockedQueryClient}>
         <Story />
+        <Toaster></Toaster>
       </QueryClientProvider>
     ),
   ],

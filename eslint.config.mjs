@@ -38,7 +38,8 @@ const eslintConfig = [
     },
     settings: {
       'boundaries/elements': [
-        { type: 'ui', pattern: 'src/components/ui/**' },
+        { type: 'global-ui', pattern: 'src/components/ui/sonner.tsx' },
+        { type: 'ui', pattern: 'src/components/ui/!(sonner).tsx' },
         { type: 'components', pattern: 'src/components/!(ui)/**' },
         { type: 'hooks', pattern: 'src/hooks/**' },
         { type: 'services', pattern: 'src/services/**' },
@@ -86,6 +87,7 @@ const eslintConfig = [
           rules: [
             {
               from: 'app',
+              allow: ['global-ui'],
               disallow: ['ui'],
               message:
                 'The App layer should only use shared components, not UI primitives directly.',
@@ -120,6 +122,7 @@ const eslintConfig = [
     rules: {
       'jsdoc/require-jsdoc': 'off',
       'jsdoc/require-description': 'off',
+      'jsdoc/require-params': 'off',
       'jsdoc/require-returns': 'off',
 
       'import/no-default-export': 'off',
