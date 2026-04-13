@@ -4,6 +4,8 @@ import { initialize, mswLoader } from 'msw-storybook-addon';
 
 import '../src/app/globals.css';
 
+import 'maplibre-gl/dist/maplibre-gl.css';
+
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
   variable: '--font-heading',
@@ -26,7 +28,7 @@ const isSubpath = window.location.pathname.startsWith('/village_website');
 const baseUrl = isSubpath ? '/village_website/' : '/';
 
 initialize({
-  onUnhandledRequest: 'warn',
+  onUnhandledRequest: 'bypass',
   serviceWorker: {
     url: `${baseUrl}mockServiceWorker.js`,
   },

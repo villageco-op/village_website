@@ -17,7 +17,7 @@ const config: StorybookConfig = {
   env: (config) => ({
     ...config,
     NEXT_PUBLIC_API_URL: 'https://api.mock',
-    NEXT_PUBLIC_BASE_PATH: '/village_website',
+    NEXT_PUBLIC_BASE_PATH: '/',
   }),
   viteFinal: async (config, { configType }) => {
     if (configType === 'PRODUCTION') {
@@ -28,7 +28,7 @@ const config: StorybookConfig = {
       ...config.define,
       'process.env': {
         NEXT_PUBLIC_API_URL: 'https://api.mock',
-        NEXT_PUBLIC_BASE_PATH: '/village_website',
+        NEXT_PUBLIC_BASE_PATH: '/',
         NODE_ENV: JSON.stringify((configType || 'PRODUCTION').toLowerCase()),
       },
     };
