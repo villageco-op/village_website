@@ -2,6 +2,10 @@
 
 import { Skeleton } from '@/components/ui/skeleton';
 
+/**
+ * A skeleton for the seller listings page loading state.
+ * @returns Animated skeleton component
+ */
 export function ListingsSkeleton() {
   return (
     <div className="flex w-full flex-col space-y-6">
