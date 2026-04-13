@@ -34,8 +34,8 @@ import type {
   GetSellerListingsParams,
   ProduceListResponse,
   ProduceOrderListResponse,
-  ProduceResponse,
   SellerMapGroupList,
+  SellerProduceListResponse,
   SuccessResponse,
   SuccessWithEntity,
   UpdateProducePayload
@@ -692,7 +692,7 @@ export function useGetProduceOrders<TData = Awaited<ReturnType<typeof getProduce
  * Fetch the authenticated seller's own produce listings with full details.
  */
 export type getSellerListingsResponse200 = {
-  data: ProduceResponse
+  data: SellerProduceListResponse
   status: 200
 }
 
