@@ -1,6 +1,6 @@
 'use client';
 
-import { DashboardHeader } from '@/components/seller/dashboard/Dashboardheader';
+import { DashboardHeader } from '@/components/seller/dashboard/DashboardHeader';
 import { DashboardStats } from '@/components/seller/dashboard/DashboardStats';
 import { MonthlyEarningsCard } from '@/components/seller/dashboard/MonthlyEarningsCard';
 import { PlotLocationCard } from '@/components/seller/dashboard/PlotLocationCard';

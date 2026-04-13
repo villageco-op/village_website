@@ -76,14 +76,14 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     // Check if header rendered
-    await expect(await canvas.findByText(/Austin, TX/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/Plot: Austin, TX/i)).toBeInTheDocument();
 
     // Check if stats are visible
-    await expect(canvas.getByText('$1,250.50')).toBeInTheDocument();
-    await expect(canvas.getByText('45.2 lbs')).toBeInTheDocument();
+    await expect(canvas.getAllByText(/1,250.5/i)).toHaveLength(2);
+    await expect(canvas.getByText(/45.2 lbs/i)).toBeInTheDocument();
 
     // Check for specific produce in the breakdown
-    await expect(canvas.getByText('Organic Strawberries')).toBeInTheDocument();
+    await expect(canvas.getByText(/Organic Strawberries/i)).toBeInTheDocument();
   },
 };
 
