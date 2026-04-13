@@ -6,9 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { PaginationMetadata } from './paginationMetadata';
-import type { Produce } from './produce';
+import type { SellerProduceListing } from './sellerProduceListing';
 
-export interface ProduceResponse {
-  data: Produce[];
+export interface SellerProduceListResponse {
+  data: SellerProduceListing[];
   meta: PaginationMetadata;
 }
