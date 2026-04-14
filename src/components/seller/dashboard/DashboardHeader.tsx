@@ -1,5 +1,6 @@
 'use client';
 
+import { PageHeader } from '@/components/ui/page-header';
 import { useAuth } from '@/hooks/useAuth';
 import type { Location } from '@/lib/api/generated/models/location';
 
@@ -31,13 +32,9 @@ export function DashboardHeader({ location }: DashboardHeaderProps) {
   const address = location?.address || 'No plot address';
 
   return (
-    <div className="mb-8">
-      <h1 className="mb-1 font-heading text-[1.6rem] font-extrabold tracking-[-0.025em] text-ink">
-        Good morning, {firstName} 🌿
-      </h1>
-      <p className="font-sans text-[0.88rem] text-ink-3">
-        Week of {formattedWeek} · Plot: {address}
-      </p>
-    </div>
+    <PageHeader
+      title={`Good morning, ${firstName} 🌿`}
+      subtitle={`Week of ${formattedWeek} · Plot: ${address}`}
+    />
   );
 }
