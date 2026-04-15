@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import type { SellerProduceListing } from '@/lib/api/generated/models';
+import { getProduceIcon, getStatusColors } from '@/lib/produce-utils';
 import { cn } from '@/lib/utils';
 
 /**
@@ -152,48 +153,4 @@ export function ListingCard({ produce }: ListingCardProps) {
       </CardContent>
     </Card>
   );
-}
-
-function getStatusColors(status: string | null) {
-  switch (status) {
-    case 'active':
-      return {
-        bg: 'bg-lime/30',
-        text: 'text-deep-forest',
-        dot: 'bg-lime-600',
-        bar: 'bg-lime',
-      };
-    case 'paused':
-      return {
-        bg: 'bg-sun/30',
-        text: 'text-yellow-900',
-        dot: 'bg-yellow-600',
-        bar: 'bg-sun',
-      };
-    case 'deleted':
-      return {
-        bg: 'bg-clay/30',
-        text: 'text-red-900',
-        dot: 'bg-red-600',
-        bar: 'bg-clay',
-      };
-    default:
-      return {
-        bg: 'bg-gray-100',
-        text: 'text-gray-700',
-        dot: 'bg-gray-400',
-        bar: 'bg-gray-400',
-      };
-  }
-}
-
-function getProduceIcon(type: string | null) {
-  const t = (type || '').toLowerCase();
-  if (t.includes('kale') || t.includes('lettuce') || t.includes('greens')) return '🥬';
-  if (t.includes('herb') || t.includes('spinach') || t.includes('basil')) return '🌿';
-  if (t.includes('carrot') || t.includes('root') || t.includes('radish')) return '🥕';
-  if (t.includes('tomato')) return '🍅';
-  if (t.includes('pepper')) return '🌶️';
-  if (t.includes('berry') || t.includes('strawberry')) return '🍓';
-  return '📦';
 }

@@ -32,6 +32,7 @@ import type {
   GetProduceMapParams,
   GetProduceOrdersParams,
   GetSellerListingsParams,
+  ProduceDetail,
   ProduceListResponse,
   ProduceOrderListResponse,
   SellerMapGroupList,
@@ -555,6 +556,120 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getDeleteProduceMutationOptions(options), queryClient);
     }
     /**
+ * Get details of a specific produce listing. Used by buyers to view items and sellers to populate edit forms.
+ */
+export type getProduceResponse200 = {
+  data: ProduceDetail
+  status: 200
+}
+
+export type getProduceResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type getProduceResponseSuccess = (getProduceResponse200) & {
+  headers: Headers;
+};
+export type getProduceResponseError = (getProduceResponse404) & {
+  headers: Headers;
+};
+
+export type getProduceResponse = (getProduceResponseSuccess | getProduceResponseError)
+
+export const getGetProduceUrl = (id: EntityId,) => {
+
+
+  
+
+  return `/api/produce/${id}`
+}
+
+export const getProduce = async (id: EntityId, options?: RequestInit): Promise<getProduceResponse> => {
+  
+  return apiClient<getProduceResponse>(getGetProduceUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetProduceQueryKey = (id: EntityId,) => {
+    return [
+    `/api/produce/${id}`
+    ] as const;
+    }
+
+    
+export const getGetProduceQueryOptions = <TData = Awaited<ReturnType<typeof getProduce>>, TError = ErrorResponse>(id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduce>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProduceQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProduce>>> = ({ signal }) => getProduce(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProduce>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetProduceQueryResult = NonNullable<Awaited<ReturnType<typeof getProduce>>>
+export type GetProduceQueryError = ErrorResponse
+
+
+export function useGetProduce<TData = Awaited<ReturnType<typeof getProduce>>, TError = ErrorResponse>(
+ id: EntityId, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduce>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProduce>>,
+          TError,
+          Awaited<ReturnType<typeof getProduce>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProduce<TData = Awaited<ReturnType<typeof getProduce>>, TError = ErrorResponse>(
+ id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduce>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProduce>>,
+          TError,
+          Awaited<ReturnType<typeof getProduce>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProduce<TData = Awaited<ReturnType<typeof getProduce>>, TError = ErrorResponse>(
+ id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduce>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetProduce<TData = Awaited<ReturnType<typeof getProduce>>, TError = ErrorResponse>(
+ id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProduce>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProduceQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
  * View paginated orders associated with one specific produce listing.
  */
 export type getProduceOrdersResponse200 = {
