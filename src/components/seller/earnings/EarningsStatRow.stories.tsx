@@ -29,7 +29,7 @@ const mockEarningsData: SellerEarningsResponse = {
 };
 
 const meta: Meta<typeof EarningsStatRow> = {
-  title: 'Components/Seller/Earnings/EarningsStatRow',
+  title: 'Seller/Earnings/EarningsStatRow',
   component: EarningsStatRow,
   parameters: {
     layout: 'padded',

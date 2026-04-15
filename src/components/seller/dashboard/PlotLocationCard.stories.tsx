@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { PlotLocationCard } from './PlotLocationCard';
 
 const meta: Meta<typeof PlotLocationCard> = {
-  title: 'Components/Seller/Dashboard/PlotLocationCard',
+  title: 'Seller/Dashboard/PlotLocationCard',
   component: PlotLocationCard,
   parameters: {
     layout: 'padded',

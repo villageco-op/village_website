@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { DiagramNode } from './DiagramNode';
 
 const meta: Meta<typeof DiagramNode> = {
-  title: 'Components/DiagramNode',
+  title: 'Home/Components/DiagramNode',
   component: DiagramNode,
   parameters: {
     layout: 'centered',

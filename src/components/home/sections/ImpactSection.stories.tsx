@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ImpactSection from './ImpactSection';
 
 const meta: Meta<typeof ImpactSection> = {
-  title: 'Sections/ImpactSection',
+  title: 'Home/Sections/ImpactSection',
   component: ImpactSection,
   parameters: {
     layout: 'fullscreen',

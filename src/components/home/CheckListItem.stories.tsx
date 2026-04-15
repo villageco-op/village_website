@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { CheckListItem } from './CheckListItem';
 
 const meta: Meta<typeof CheckListItem> = {
-  title: 'Components/CheckListItem',
+  title: 'Home/Components/CheckListItem',
   component: CheckListItem,
   parameters: {
     layout: 'centered',

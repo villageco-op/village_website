@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { EarningsSkeleton } from './EarningsSkeleton';
 
 const meta: Meta<typeof EarningsSkeleton> = {
-  title: 'Components/Seller/Earnings/EarningsSkeleton',
+  title: 'Seller/Earnings/EarningsSkeleton',
   component: EarningsSkeleton,
   parameters: {
     layout: 'padded',

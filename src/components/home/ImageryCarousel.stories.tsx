@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ImageryCarousel } from './ImageryCarousel';
 
 const meta: Meta<typeof ImageryCarousel> = {
-  title: 'Components/ImageryCarousel',
+  title: 'Home/Components/ImageryCarousel',
   component: ImageryCarousel,
   parameters: {
     layout: 'fullscreen',

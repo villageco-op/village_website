@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { HubLogoPulse } from './HubLogoPulse';
 
 const meta: Meta<typeof HubLogoPulse> = {
-  title: 'Components/HubLogoPulse',
+  title: 'Home/Components/HubLogoPulse',
   component: HubLogoPulse,
   parameters: {
     layout: 'centered',

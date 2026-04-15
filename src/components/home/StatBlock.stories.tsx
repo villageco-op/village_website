@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { StatBlock } from './StatBlock';
 
 const meta: Meta<typeof StatBlock> = {
-  title: 'Components/StatBlock',
+  title: 'Home/Components/StatBlock',
   component: StatBlock,
   parameters: {
     layout: 'centered',

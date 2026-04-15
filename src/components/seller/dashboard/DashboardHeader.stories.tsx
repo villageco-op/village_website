@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { DashboardHeader } from './DashboardHeader';
 
 const meta: Meta<typeof DashboardHeader> = {
-  title: 'Components/Seller/Dashboard/DashboardHeader',
+  title: 'Seller/Dashboard/DashboardHeader',
   component: DashboardHeader,
   parameters: {
     layout: 'padded',

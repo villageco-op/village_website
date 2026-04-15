@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { EarningsHeader } from './EarningsHeader';
 
 const meta: Meta<typeof EarningsHeader> = {
-  title: 'Components/Seller/Earnings/EarningsHeader',
+  title: 'Seller/Earnings/EarningsHeader',
   component: EarningsHeader,
   parameters: {
     layout: 'padded',

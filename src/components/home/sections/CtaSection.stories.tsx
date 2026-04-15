@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CtaSection from './CtaSection';
 
 const meta: Meta<typeof CtaSection> = {
-  title: 'Sections/CtaSection',
+  title: 'Home/Sections/CtaSection',
   component: CtaSection,
   parameters: {
     layout: 'fullscreen',

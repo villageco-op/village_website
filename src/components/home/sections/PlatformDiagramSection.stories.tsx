@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import PlatformDiagramSection from './PlatformDiagramSection';
 
 const meta: Meta<typeof PlatformDiagramSection> = {
-  title: 'Sections/PlatformDiagramSection',
+  title: 'Home/Sections/PlatformDiagramSection',
   component: PlatformDiagramSection,
   parameters: {
     layout: 'fullscreen',
