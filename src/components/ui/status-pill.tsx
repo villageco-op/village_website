@@ -5,9 +5,10 @@ import { cn } from '@/lib/utils';
 interface StatusPillProps {
   status: string | null;
   variant?: 'lime' | 'sun' | 'clay' | 'forest' | 'red';
+  className?: string;
 }
 
-export function StatusPill({ status, variant }: StatusPillProps) {
+export function StatusPill({ status, variant, className }: StatusPillProps) {
   const displayStatus = status || 'Unknown';
   const lowerStatus = displayStatus.toLowerCase();
 
@@ -28,7 +29,8 @@ export function StatusPill({ status, variant }: StatusPillProps) {
       className={cn(
         'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 font-heading text-[0.65rem] font-bold uppercase tracking-wider',
         style.bg,
-        style.text
+        style.text,
+        className
       )}
     >
       <span className="h-1.25 w-1.25 rounded-full bg-current" />
