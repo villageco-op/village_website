@@ -1,6 +1,7 @@
 'use client';
 
 import { AlertTriangle } from 'lucide-react';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -144,10 +145,10 @@ export function ListingCard({ produce }: ListingCardProps) {
         {/* Actions - Pushed to the bottom */}
         <div className="mt-auto flex gap-2 pt-2">
           <Button variant="outline-forest" size="sm" className="px-4 text-xs font-semibold">
-            Edit
+            <Link href={`/seller/listings/${produce.id}/edit`}>Edit</Link>
           </Button>
           <Button variant="forest" size="sm" className="px-4 text-xs font-semibold">
-            View orders
+            <Link href={`/seller/listings/${produce.id}/orders`}>View orders</Link>
           </Button>
         </div>
       </CardContent>
