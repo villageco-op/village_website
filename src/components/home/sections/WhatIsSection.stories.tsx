@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import WhatIsSection from './WhatIsSection';
 
 const meta: Meta<typeof WhatIsSection> = {
-  title: 'Sections/WhatIsSection',
+  title: 'Home/Sections/WhatIsSection',
   component: WhatIsSection,
   parameters: {
     layout: 'fullscreen',

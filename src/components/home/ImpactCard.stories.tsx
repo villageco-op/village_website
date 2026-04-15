@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ImpactCard } from './ImpactCard';
 
 const meta: Meta<typeof ImpactCard> = {
-  title: 'Components/ImpactCard',
+  title: 'Home/Components/ImpactCard',
   component: ImpactCard,
   parameters: {
     layout: 'centered',

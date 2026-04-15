@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { HeroSectionHeader } from './HeroSectionHeader';
 
 const meta: Meta<typeof HeroSectionHeader> = {
-  title: 'Components/HeroSectionHeader',
+  title: 'Home/Components/HeroSectionHeader',
   component: HeroSectionHeader,
   parameters: {
     layout: 'centered',

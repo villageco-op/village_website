@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { MonthlyEarningsCard } from './MonthlyEarningsCard';
 
 const meta: Meta<typeof MonthlyEarningsCard> = {
-  title: 'Components/Seller/Dashboard/MonthlyEarningsCard',
+  title: 'Seller/Dashboard/MonthlyEarningsCard',
   component: MonthlyEarningsCard,
   parameters: {
     layout: 'padded',

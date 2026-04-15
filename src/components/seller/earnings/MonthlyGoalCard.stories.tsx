@@ -10,7 +10,7 @@ const mockProduceBreakdown = [
 ];
 
 const meta: Meta<typeof MonthlyGoalCard> = {
-  title: 'Components/Seller/Earnings/MonthlyGoalCard',
+  title: 'Seller/Earnings/MonthlyGoalCard',
   component: MonthlyGoalCard,
   parameters: {
     layout: 'padded',

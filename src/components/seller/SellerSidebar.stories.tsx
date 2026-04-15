@@ -5,7 +5,7 @@ import { SellerSidebar } from './SellerSidebar';
 import type { User } from '@/lib/api/generated/models/user';
 
 const meta: Meta<typeof SellerSidebar> = {
-  title: 'Components/Seller/SellerSidebar',
+  title: 'Seller/SellerSidebar',
   component: SellerSidebar,
   parameters: {
     layout: 'fullscreen',

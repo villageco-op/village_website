@@ -36,7 +36,7 @@ const mockPayouts: Payout[] = [
 ];
 
 const meta: Meta<typeof PayoutHistoryCard> = {
-  title: 'Components/Seller/Earnings/PayoutHistoryCard',
+  title: 'Seller/Earnings/PayoutHistoryCard',
   component: PayoutHistoryCard,
   parameters: {
     layout: 'padded',

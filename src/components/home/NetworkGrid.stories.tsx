@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { NetworkGrid } from './NetworkGrid';
 
 const meta: Meta<typeof NetworkGrid> = {
-  title: 'Components/NetworkGrid',
+  title: 'Home/Components/NetworkGrid',
   component: NetworkGrid,
   parameters: {
     layout: 'centered',

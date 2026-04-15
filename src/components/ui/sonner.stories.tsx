@@ -54,7 +54,7 @@ const ToastDemo = ({
 };
 
 const meta: Meta<typeof ToastDemo> = {
-  title: "Components/CartToast",
+  title: "UI/CartToast",
   component: ToastDemo,
   parameters: {
     layout: "fullscreen",

@@ -10,7 +10,7 @@ const mockedQueryClient = new QueryClient({
 });
 
 const meta: Meta<typeof ListingCard> = {
-  title: 'Components/Seller/Listings/ListingCard',
+  title: 'Seller/Listings/ListingCard',
   component: ListingCard,
   parameters: {
     layout: 'padded',

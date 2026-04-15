@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { PendingOrdersCard } from './PendingOrdersCard';
 
 const meta: Meta<typeof PendingOrdersCard> = {
-  title: 'Components/Seller/Orders/PendingOrdersCard',
+  title: 'Seller/Orders/PendingOrdersCard',
   component: PendingOrdersCard,
   parameters: {
     layout: 'padded',
