@@ -26,7 +26,18 @@ export interface User {
   address: string | null;
   /** @nullable */
   city: string | null;
-  location?: unknown | null;
+  /**
+   * @minimum -140737488355328
+   * @maximum 140737488355327
+   * @nullable
+   */
+  lat: number | null;
+  /**
+   * @minimum -140737488355328
+   * @maximum 140737488355327
+   * @nullable
+   */
+  lng: number | null;
   /** @nullable */
   deliveryRangeMiles: string | null;
   /** @nullable */

@@ -5,6 +5,7 @@ import { initialize, mswLoader } from 'msw-storybook-addon';
 import '../src/app/globals.css';
 
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { useEffect } from 'react';
 
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -51,11 +52,25 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story) => (
-      <div className={`${bricolage.variable} ${sora.variable} ${playfair.variable} font-sans`}>
-        <Story />
-      </div>
-    ),
+    (Story) => {
+      useEffect(() => {
+        const classes = [
+          bricolage.variable,
+          sora.variable,
+          playfair.variable,
+          'font-sans',
+          'antialiased',
+        ];
+
+        document.body.classList.add(...classes);
+
+        return () => {
+          document.body.classList.remove(...classes);
+        };
+      }, []);
+
+      return <Story />;
+    },
   ],
   loaders: [mswLoader],
 };
