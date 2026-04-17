@@ -1,4 +1,4 @@
-import OrderDetailClient from '@/components/pages/OrderDetailClient';
+import OrderDetailClient from '../../../components/pages/OrderDetailClient';
 
 /**
  * The view specific order page.

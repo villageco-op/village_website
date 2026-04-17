@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { isoStringToLocalTime } from '@/lib/date-utils';
 
 interface RescheduleOrderDialogProps {
   isOpen: boolean;
@@ -38,14 +39,7 @@ export function RescheduleOrderDialog({
   currentScheduledTime,
   isPending,
 }: RescheduleOrderDialogProps) {
-  const formatLocalTime = (isoString: string) => {
-    if (!isoString) return '';
-    const date = new Date(isoString);
-    const tzOffset = date.getTimezoneOffset() * 60000;
-    return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
-  };
-
-  const [newTime, setNewTime] = useState(() => formatLocalTime(currentScheduledTime));
+  const [newTime, setNewTime] = useState(() => isoStringToLocalTime(currentScheduledTime));
 
   const handleConfirm = async () => {
     if (!newTime) return;
@@ -77,7 +71,7 @@ export function RescheduleOrderDialog({
             onChange={(e) => setNewTime(e.target.value)}
             disabled={isPending}
             className="border-forest-dark/20 focus-visible:ring-lime"
-            min={new Date().toISOString().slice(0, 16)} // Prevent past dates
+            min={new Date().toISOString().slice(0, 16)}
           />
         </div>
 

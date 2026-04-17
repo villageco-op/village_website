@@ -18,7 +18,7 @@ import {
   useUpdateProduce,
   useDeleteProduce,
 } from '@/lib/api/generated/produce/produce';
-import { toLocalString } from '@/lib/date-utils';
+import { UTCDateToLocal } from '@/lib/date-utils';
 import { getStatusColors } from '@/lib/produce-utils';
 import { cn } from '@/lib/utils';
 
@@ -54,7 +54,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
           produceType: produce.produceType || '',
           pricePerLb: (Number(produce.pricePerOz || 0) * 16).toFixed(2),
           totalLbsInventory: (Number(produce.totalOzInventory || 0) / 16).toString(),
-          availableBy: produce.availableBy ? toLocalString(new Date(produce.availableBy)) : '',
+          availableBy: produce.availableBy ? UTCDateToLocal(new Date(produce.availableBy)) : '',
           harvestFrequencyDays: produce.harvestFrequencyDays?.toString() || '7',
           seasonStart: produce.seasonStart
             ? new Date(produce.seasonStart).toISOString().split('T')[0]

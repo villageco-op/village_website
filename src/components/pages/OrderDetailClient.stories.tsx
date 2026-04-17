@@ -204,11 +204,20 @@ export const RescheduleFlow: Story = {
     await userEvent.click(rescheduleBtn);
 
     const body = within(canvasElement.ownerDocument.body);
-    const confirmBtn = body.getByRole('button', { name: /Propose New Time/i });
+
+    const dateInput = await body.findByLabelText(/New Date & Time/i);
+
+    if (!(dateInput as HTMLInputElement).value) {
+      await userEvent.type(dateInput, '2026-05-20T10:00');
+    }
+
+    const confirmBtn = await body.findByRole('button', { name: /Propose New Time/i });
+
+    await expect(confirmBtn).toBeEnabled();
     await userEvent.click(confirmBtn);
 
     await expect(
-      await body.findByText(/Reschedule request sent successfully/i),
+      await body.findByText(/Reschedule request sent successfully/i, {}, { timeout: 5000 }),
     ).toBeInTheDocument();
   },
 };

@@ -18,9 +18,25 @@ export function getTimeDiffText(dateString: string | null) {
  * @param date - The input UTC Date
  * @returns A HTML datetime-local (YYYY-MM-DDThh:mm) string
  */
-export const toLocalString = (date: Date) => {
+export const UTCDateToLocal = (date: Date) => {
   const pad = (n: number) => n.toString().padStart(2, '0');
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(
     date.getHours(),
   )}:${pad(date.getMinutes())}`;
+};
+
+/**
+ * Adjusts an ISO strings timezone to local time.
+ * @param isoString - Input ISO string
+ * @returns An ISO string in local time
+ */
+export const isoStringToLocalTime = (isoString: string) => {
+  try {
+    const date = isoString ? new Date(isoString) : new Date();
+    if (isNaN(date.getTime())) return '';
+    const tzOffset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
+  } catch (e) {
+    return '';
+  }
 };
