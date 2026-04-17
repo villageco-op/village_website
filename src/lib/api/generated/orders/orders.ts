@@ -28,6 +28,7 @@ import type {
   CancelOrderPayload,
   ErrorResponse,
   GetOrdersParams,
+  OrderDetailResponse,
   OrdersListResponse,
   RescheduleOrderPayload,
   ResourceId,
@@ -351,4 +352,122 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getCancelOrderMutationOptions(options), queryClient);
     }
+    /**
+ * Get detailed information for a specific order by ID. Accessible only by the buyer or seller associated with the order.
+ */
+export type getOrderByIdResponse200 = {
+  data: OrderDetailResponse
+  status: 200
+}
+
+export type getOrderByIdResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type getOrderByIdResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type getOrderByIdResponseSuccess = (getOrderByIdResponse200) & {
+  headers: Headers;
+};
+export type getOrderByIdResponseError = (getOrderByIdResponse401 | getOrderByIdResponse404) & {
+  headers: Headers;
+};
+
+export type getOrderByIdResponse = (getOrderByIdResponseSuccess | getOrderByIdResponseError)
+
+export const getGetOrderByIdUrl = (id: ResourceId,) => {
+
+
+  
+
+  return `/api/orders/${id}`
+}
+
+export const getOrderById = async (id: ResourceId, options?: RequestInit): Promise<getOrderByIdResponse> => {
+  
+  return apiClient<getOrderByIdResponse>(getGetOrderByIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
     
+    
+  }
+);}
+  
+
+
+
+
+export const getGetOrderByIdQueryKey = (id: ResourceId,) => {
+    return [
+    `/api/orders/${id}`
+    ] as const;
+    }
+
+    
+export const getGetOrderByIdQueryOptions = <TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetOrderByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderById>>> = ({ signal }) => getOrderById(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetOrderByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getOrderById>>>
+export type GetOrderByIdQueryError = ErrorResponse
+
+
+export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
+ id: ResourceId, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrderById>>,
+          TError,
+          Awaited<ReturnType<typeof getOrderById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
+ id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrderById>>,
+          TError,
+          Awaited<ReturnType<typeof getOrderById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
+ id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
+ id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetOrderByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+

@@ -1,4 +1,4 @@
-import LoginClient from '@/components/pages/LoginClient';
+import LoginClient from '../../components/pages/LoginClient';
 
 /**
  * Login page for user login and account creation.
