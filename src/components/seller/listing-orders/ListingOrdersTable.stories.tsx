@@ -7,6 +7,9 @@ const meta: Meta<typeof ListingOrdersTable> = {
   component: ListingOrdersTable,
   parameters: {
     layout: 'padded',
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ['autodocs'],
   decorators: [

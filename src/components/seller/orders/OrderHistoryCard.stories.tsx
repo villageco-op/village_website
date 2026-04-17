@@ -7,6 +7,9 @@ const meta: Meta<typeof OrderHistoryCard> = {
   component: OrderHistoryCard,
   parameters: {
     layout: 'padded',
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ['autodocs'],
   decorators: [

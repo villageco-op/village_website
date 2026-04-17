@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { StatusPill } from '@/components/ui/status-pill';
@@ -29,6 +31,8 @@ interface ListingOrdersTableProps {
  * @returns A table view of the orders
  */
 export function ListingOrdersTable({ orders, totalOrders }: ListingOrdersTableProps) {
+  const router = useRouter();
+
   return (
     <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
       <CardContent className="p-0 sm:p-6">
@@ -86,7 +90,8 @@ export function ListingOrdersTable({ orders, totalOrders }: ListingOrdersTablePr
                   return (
                     <TableRow
                       key={order.id}
-                      className="border-border/50 transition-colors hover:bg-slate-50/80"
+                      className="cursor-pointer border-border/50 transition-colors hover:bg-slate-50/80"
+                      onClick={() => router.push(`/orders/${order.id}`)}
                     >
                       <TableCell className="pl-4 sm:pl-2">
                         <div className="flex items-center gap-3 min-w-35">
