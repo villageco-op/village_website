@@ -5,8 +5,8 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { Address } from './address';
 import type { IsoDateTime } from './isoDateTime';
+import type { Location } from './location';
 import type { UserId } from './userId';
 
 export interface Grower {
@@ -16,7 +16,9 @@ export interface Grower {
    * @nullable
    */
   name: string | null;
-  address: Address & (unknown | null);
+  location: Location & (unknown | null);
+  /** @nullable */
+  city: string | null;
   /** List of produce categories previously purchased from this grower */
   produceTypesOrdered: string[];
   /** Total weight of produce ordered from this grower in the current month */
