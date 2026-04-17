@@ -2,19 +2,18 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent } from '@/components/ui/card';
-import { StatusPill } from '@/components/ui/status-pill';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+  OrderIdentityCell,
+  OrderIdCell,
+  OrderAmountCell,
+  OrderDateCell,
+  OrderStatusCell,
+  OrderFulfillmentCell,
+  OrderQuantityOzCell,
+} from '@/components/orders/OrderTableCells';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { ProduceOrderListResponseDataItem } from '@/lib/api/generated/models';
-import { cn } from '@/lib/utils';
 
 interface ListingOrdersTableProps {
   orders: ProduceOrderListResponseDataItem[];
@@ -81,79 +80,28 @@ export function ListingOrdersTable({ orders, totalOrders }: ListingOrdersTablePr
               </TableHeader>
               <TableBody>
                 {orders.map((order) => {
-                  // Convert API Oz to user-friendly Lbs
-                  const quantityLbs = (Number(order.quantityOz || 0) / 16)
-                    .toFixed(1)
-                    .replace(/\.0$/, '');
-                  const isDelivery = order.fulfillmentType?.toLowerCase() === 'delivery';
-
                   return (
                     <TableRow
                       key={order.id}
                       className="cursor-pointer border-border/50 transition-colors hover:bg-slate-50/80"
                       onClick={() => router.push(`/orders/${order.id}`)}
                     >
-                      <TableCell className="pl-4 sm:pl-2">
-                        <div className="flex items-center gap-3 min-w-35">
-                          <Avatar className="h-8 w-8 border border-border/50">
-                            <AvatarImage
-                              src={order.buyer.image || ''}
-                              alt={order.buyer.name || 'Buyer'}
-                            />
-                            <AvatarFallback className="bg-lime/20 text-forest-dark font-semibold text-xs">
-                              {order.buyer.name?.[0]?.toUpperCase() || 'U'}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="font-medium text-ink text-sm truncate max-w-30">
-                            {order.buyer.name || 'Anonymous User'}
-                          </span>
-                        </div>
-                      </TableCell>
+                      <OrderIdentityCell
+                        id={order.buyer.id}
+                        name={order.buyer.name ?? undefined}
+                        image={order.buyer.image}
+                      />
+                      <OrderIdCell id={order.id} className="font-medium text-xs" />
+                      <OrderQuantityOzCell quantityOz={order.quantityOz} />
+                      <OrderAmountCell amount={order.totalAmount} className="font-bold" />
 
-                      <TableCell className="font-medium text-ink-3 text-xs">
-                        #{order.id.slice(0, 8).toUpperCase()}
-                      </TableCell>
+                      <OrderFulfillmentCell fulfillmentType={order.fulfillmentType} />
 
-                      <TableCell className="text-sm font-medium text-ink">
-                        {quantityLbs} lbs
-                      </TableCell>
-
-                      <TableCell className="font-bold text-ink text-sm">
-                        ${Number(order.totalAmount || 0).toFixed(2)}
-                      </TableCell>
-
-                      <TableCell>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-sm capitalize text-ink-3">
-                            {order.fulfillmentType}
-                          </span>
-                          <span title={isDelivery ? 'Delivery' : 'Pickup'}>
-                            {isDelivery ? '🚚' : '🏪'}
-                          </span>
-                        </div>
-                      </TableCell>
-
-                      <TableCell className="text-ink-3 text-sm whitespace-nowrap">
-                        {order.scheduledTime
-                          ? new Date(order.scheduledTime).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })
-                          : 'Pending'}
-                      </TableCell>
-
-                      <TableCell className="pr-4 sm:pr-2 text-right">
-                        <StatusPill
-                          status={order.status || 'Pending'}
-                          variant={order.status === 'completed' ? 'lime' : 'sun'}
-                          className={cn(
-                            'inline-flex ml-auto',
-                            order.status === 'canceled' &&
-                              'bg-destructive/10 text-destructive border-destructive/20',
-                          )}
-                        />
-                      </TableCell>
+                      <OrderDateCell
+                        date={order.scheduledTime}
+                        options={{ month: 'short', day: 'numeric', year: 'numeric' }}
+                      />
+                      <OrderStatusCell status={order.status} />
                     </TableRow>
                   );
                 })}
