@@ -7,6 +7,9 @@ const meta: Meta<typeof PendingOrdersCard> = {
   component: PendingOrdersCard,
   parameters: {
     layout: 'padded',
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ['autodocs'],
   decorators: [

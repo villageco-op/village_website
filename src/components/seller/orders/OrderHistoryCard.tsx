@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { StatusPill } from '@/components/ui/status-pill';
 import {
@@ -28,6 +30,8 @@ interface OrderHistoryCardProps {
  * @returns A table containing each order and some information
  */
 export function OrderHistoryCard({ orders, completedCount }: OrderHistoryCardProps) {
+  const router = useRouter();
+
   return (
     <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
       <CardContent className="p-6">
@@ -59,7 +63,11 @@ export function OrderHistoryCard({ orders, completedCount }: OrderHistoryCardPro
             </TableHeader>
             <TableBody>
               {orders.map((order) => (
-                <TableRow key={order.id} className="border-border/50">
+                <TableRow
+                  key={order.id}
+                  className="cursor-pointer border-border/50 transition-colors hover:bg-slate-50/80"
+                  onClick={() => router.push(`/orders/${order.id}`)}
+                >
                   <TableCell className="font-medium text-ink">
                     #{order.id.slice(0, 8).toUpperCase()}
                   </TableCell>

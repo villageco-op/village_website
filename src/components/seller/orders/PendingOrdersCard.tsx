@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { StatusPill } from '@/components/ui/status-pill';
 import type { Order } from '@/lib/api/generated/models';
@@ -58,9 +60,10 @@ export function PendingOrdersCard({ orders, pendingCount }: PendingOrdersCardPro
               const timeDiff = getTimeDiffText(order.createdAt);
 
               return (
-                <div
+                <Link
                   key={order.id}
-                  className="flex items-start gap-3 border-b border-border/50 py-3.5 last:border-0 last:pb-0"
+                  href={`/orders/${order.id}`}
+                  className="flex cursor-pointer items-start gap-3 border-b border-border/50 py-3.5 transition-colors hover:bg-slate-50/80 last:border-0 last:pb-0"
                 >
                   <div
                     className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-base ${iconBgClass}`}
@@ -84,7 +87,7 @@ export function PendingOrdersCard({ orders, pendingCount }: PendingOrdersCardPro
                   <div className="mt-0.5 whitespace-nowrap font-heading text-[0.65rem] text-ink-3">
                     {timeDiff}
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
