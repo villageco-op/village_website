@@ -3,7 +3,7 @@ import { within, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
-import SellerListingsClient from './SellerListingsClient';
+import SellerListingsClient from '../listings/SellerListingsClient';
 
 import type { getSellerListingsResponse200 } from '@/lib/api/generated/produce/produce';
 
@@ -77,7 +77,7 @@ const MOCK_LISTINGS: getSellerListingsResponse200 = {
 };
 
 const meta: Meta<typeof SellerListingsClient> = {
-  title: 'Pages/Seller/ListingsPage',
+  title: 'Seller/Listings/ListingsPage',
   component: SellerListingsClient,
   parameters: {
     layout: 'fullscreen',

@@ -3,7 +3,7 @@ import { userEvent, within, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
-import { Toaster } from '../ui/sonner';
+import { Toaster } from '../../ui/sonner';
 
 import AddNewListingClient from './AddNewListingClient';
 
@@ -14,7 +14,7 @@ const mockedQueryClient = new QueryClient({
 });
 
 const meta: Meta<typeof AddNewListingClient> = {
-  title: 'Pages/Seller/AddNewListingPage',
+  title: 'Seller/NewListing/AddNewListingPage',
   component: AddNewListingClient,
   parameters: {
     layout: 'fullscreen',

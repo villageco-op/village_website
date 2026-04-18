@@ -1,8 +1,8 @@
 'use client';
 
-import { BillingHeader } from '../buyer/billing/BillingHeader';
-import { BillingStatsCard } from '../buyer/billing/BillingStatsCard';
-import { InvoiceHistoryCard } from '../buyer/billing/InvoiceHistoryCard';
+import { BillingHeader } from './BillingHeader';
+import { BillingStatsCard } from './BillingStatsCard';
+import { InvoiceHistoryCard } from './InvoiceHistoryCard';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGetBuyerBillingSummary } from '@/lib/api/generated/buyers/buyers';

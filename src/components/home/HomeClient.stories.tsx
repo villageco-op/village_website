@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { StoryBookHomeClient } from './StoryBookHomeClient';
 
 const meta: Meta<typeof StoryBookHomeClient> = {
-  title: 'Pages/Home',
+  title: 'Home/HomePage',
   component: StoryBookHomeClient,
   parameters: {
     layout: 'fullscreen',

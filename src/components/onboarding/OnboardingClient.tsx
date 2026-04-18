@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import BasicProfileStep, { type BasicInfoData } from '../onboarding/BasicProfileStep';
-import NotificationsStep from '../onboarding/NotificationStep';
-import RoleStep from '../onboarding/RoleStep';
-import SellerInfoStep from '../onboarding/SellerInfoStep';
-import SellerSuccessStep from '../onboarding/SellerSuccessStep';
+import BasicProfileStep, { type BasicInfoData } from './BasicProfileStep';
+import NotificationsStep from './NotificationStep';
+import RoleStep from './RoleStep';
+import SellerInfoStep from './SellerInfoStep';
+import SellerSuccessStep from './SellerSuccessStep';
 
 import { useGenerateStripeOnboardingLink } from '@/lib/api/generated/stripe/stripe';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';

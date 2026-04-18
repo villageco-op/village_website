@@ -7,7 +7,7 @@ import { Toaster } from '../ui/sonner';
 import LoginClient from './LoginClient';
 
 const meta: Meta<typeof LoginClient> = {
-  title: 'Pages/Login',
+  title: 'Login/LoginPage',
   component: LoginClient,
   parameters: {
     layout: 'fullscreen',

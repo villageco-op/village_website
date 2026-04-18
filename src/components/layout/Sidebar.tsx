@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import type { User } from '@/lib/api/generated/models/user';
+import { getInitials } from '@/lib/user-utils';
 import { cn } from '@/lib/utils';
 
 /**
@@ -43,13 +44,6 @@ export interface SidebarProps {
   settingsHref: string;
   publicProfileBaseUrl?: string; // e.g., '/producer' or '/buyer'. If omitted, external link is hidden.
   fallbackName?: string;
-}
-
-function getInitials(name?: string) {
-  if (!name) return '??';
-  const parts = name.split(' ');
-  if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  return name.substring(0, 2).toUpperCase();
 }
 
 /**

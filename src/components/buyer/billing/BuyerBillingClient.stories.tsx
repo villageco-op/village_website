@@ -14,7 +14,7 @@ const mockedQueryClient = new QueryClient({
 });
 
 const meta: Meta<typeof BuyerBillingClient> = {
-  title: 'Pages/Buyer/BillingPage',
+  title: 'Buyer/Billing/BillingPage',
   component: BuyerBillingClient,
   parameters: {
     layout: 'fullscreen',

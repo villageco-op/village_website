@@ -1,10 +1,10 @@
 'use client';
 
-import { EarningsHeader } from '../seller/earnings/EarningsHeader';
-import { EarningsSkeleton } from '../seller/earnings/EarningsSkeleton';
-import { EarningsStatRow } from '../seller/earnings/EarningsStatRow';
-import { MonthlyGoalCard } from '../seller/earnings/MonthlyGoalCard';
-import { PayoutHistoryCard } from '../seller/earnings/PayoutHistoryCard';
+import { EarningsHeader } from './EarningsHeader';
+import { EarningsSkeleton } from './EarningsSkeleton';
+import { EarningsStatRow } from './EarningsStatRow';
+import { MonthlyGoalCard } from './MonthlyGoalCard';
+import { PayoutHistoryCard } from './PayoutHistoryCard';
 
 import { useGetSellerEarnings, useGetSellerPayouts } from '@/lib/api/generated/sellers/sellers';
 

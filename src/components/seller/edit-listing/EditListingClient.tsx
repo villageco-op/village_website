@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
-import type { ListingFormData } from '@/components/pages/AddNewListingClient';
 import { ListingStatusActions } from '@/components/seller/edit-listing/ListingStatusActions';
+import type { ListingFormData } from '@/components/seller/new-listing/AddNewListingClient';
 import { ListingBasicInfo } from '@/components/seller/new-listing/ListingBasicInfo';
 import { ListingHarvestDetails } from '@/components/seller/new-listing/ListingHarvestDetails';
 import { ListingImageUpload } from '@/components/seller/new-listing/ListingImageUpload';

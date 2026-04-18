@@ -1,9 +1,9 @@
 'use client';
 
-import { OrderHistoryCard } from '../seller/orders/OrderHistoryCard';
-import { OrdersHeader } from '../seller/orders/OrdersHeader';
-import { OrdersSkeleton } from '../seller/orders/OrdersSkeleton';
-import { PendingOrdersCard } from '../seller/orders/PendingOrdersCard';
+import { OrderHistoryCard } from './OrderHistoryCard';
+import { OrdersHeader } from './OrdersHeader';
+import { OrdersSkeleton } from './OrdersSkeleton';
+import { PendingOrdersCard } from './PendingOrdersCard';
 
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
 

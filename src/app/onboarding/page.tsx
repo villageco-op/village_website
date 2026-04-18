@@ -1,4 +1,4 @@
-import OnboardingFlow from '../../components/pages/OnboardingClient';
+import OnboardingFlow from '../../components/onboarding/OnboardingClient';
 
 /**
  * Onboarding flow that guides the user through profile setup, stripe onboarding, and enabling push notifications.

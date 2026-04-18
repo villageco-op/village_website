@@ -34,7 +34,7 @@ const MOCK_DASHBOARD_DATA = {
 };
 
 const meta: Meta<typeof SellerDashboardClient> = {
-  title: 'Pages/Seller/Dashboard',
+  title: 'Seller/Dashboard/DashboardPage',
   component: SellerDashboardClient,
   parameters: {
     layout: 'fullscreen',

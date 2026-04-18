@@ -1,4 +1,4 @@
-import ListingOrdersClient from '../../../../../components/pages/ListingOrdersClient';
+import ListingOrdersClient from '../../../../../components/seller/listing-orders/ListingOrdersClient';
 
 /**
  * The view listing orders page for sellers.

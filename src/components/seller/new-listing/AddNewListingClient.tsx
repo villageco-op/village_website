@@ -3,11 +3,12 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { ListingBasicInfo } from '../seller/new-listing/ListingBasicInfo';
-import { ListingHarvestDetails } from '../seller/new-listing/ListingHarvestDetails';
-import { ListingImageUpload } from '../seller/new-listing/ListingImageUpload';
-import { ListingPricingInventory } from '../seller/new-listing/ListingPricingInventory';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
+
+import { ListingBasicInfo } from './ListingBasicInfo';
+import { ListingHarvestDetails } from './ListingHarvestDetails';
+import { ListingImageUpload } from './ListingImageUpload';
+import { ListingPricingInventory } from './ListingPricingInventory';
 
 import type { CreateProducePayload } from '@/lib/api/generated/models';
 import { useCreateProduce } from '@/lib/api/generated/produce/produce';

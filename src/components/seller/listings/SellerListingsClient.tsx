@@ -1,9 +1,9 @@
 'use client';
 
-import { AddNewListingCard } from '../seller/listings/AddNewListingCard';
-import { ListingCard } from '../seller/listings/ListingCard';
-import { ListingsHeader } from '../seller/listings/ListingsHeader';
-import { ListingsSkeleton } from '../seller/listings/ListingsSkeleton';
+import { AddNewListingCard } from './AddNewListingCard';
+import { ListingCard } from './ListingCard';
+import { ListingsHeader } from './ListingsHeader';
+import { ListingsSkeleton } from './ListingsSkeleton';
 
 import { useGetSellerListings } from '@/lib/api/generated/produce/produce';
 

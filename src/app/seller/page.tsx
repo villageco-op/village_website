@@ -1,4 +1,4 @@
-import SellerDashboardClient from '@/components/pages/SellerDashboardClient';
+import SellerDashboardClient from '@/components/seller/dashboard/SellerDashboardClient';
 
 /**
  * The seller dashboard page containing seller metrics and plot information.

@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { CancelOrderDialog } from '../orders/CancelOrderDialog';
-import { OrderDetailSkeleton } from '../orders/OrderDetailSkeleton';
-import { OrderItemsCard } from '../orders/OrderItemsCard';
-import { OrderLocationCard } from '../orders/OrderLocationCard';
-import { OrderSummaryCard } from '../orders/OrderSummaryCard';
-import { OrderUserCard } from '../orders/OrderUserCard';
-import { RescheduleOrderDialog } from '../orders/RescheduleOrderDialog';
+import { CancelOrderDialog } from './CancelOrderDialog';
+import { OrderDetailSkeleton } from './OrderDetailSkeleton';
+import { OrderItemsCard } from './OrderItemsCard';
+import { OrderLocationCard } from './OrderLocationCard';
+import { OrderSummaryCard } from './OrderSummaryCard';
+import { OrderUserCard } from './OrderUserCard';
+import { RescheduleOrderDialog } from './RescheduleOrderDialog';
 
 import { Button } from '@/components/ui/button';
 import {
