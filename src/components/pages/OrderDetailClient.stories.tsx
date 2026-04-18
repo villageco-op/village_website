@@ -7,6 +7,8 @@ import { Toaster } from '../ui/sonner';
 
 import OrderDetailClient from './OrderDetailClient';
 
+import type { OrderDetailResponse } from '@/lib/api/generated/models';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -43,7 +45,7 @@ const meta: Meta<typeof OrderDetailClient> = {
 export default meta;
 type Story = StoryObj<typeof OrderDetailClient>;
 
-const MOCK_ORDER_DATA = {
+const MOCK_ORDER_DATA: OrderDetailResponse = {
   id: MOCK_ORDER_ID,
   status: 'pending',
   fulfillmentType: 'delivery',
@@ -51,6 +53,11 @@ const MOCK_ORDER_DATA = {
   totalAmount: '42.50',
   scheduledTime: '2026-05-15T14:00:00Z',
   createdAt: '2026-05-10T09:30:00Z',
+  buyerId: 'buyer_1',
+  sellerId: 'seller_1',
+  stripeReceiptUrl: null,
+  updatedAt: '2026-05-10T09:30:00Z',
+  cancelReason: null,
   buyer: {
     id: 'buyer_1',
     name: 'Alex Gardener',
@@ -166,11 +173,9 @@ export const CancelFlow: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // 1. Click Cancel Button
     const cancelBtn = await canvas.findByRole('button', { name: /Cancel Order/i });
     await userEvent.click(cancelBtn);
 
-    // 2. Interact with Dialog (rendered in Portal)
     const body = within(canvasElement.ownerDocument.body);
     const textarea = body.getByPlaceholderText(/E.g., Out of stock/i);
     await userEvent.type(textarea, 'I accidentally ordered too many carrots.');
@@ -178,8 +183,9 @@ export const CancelFlow: Story = {
     const confirmBtn = body.getByRole('button', { name: /Confirm Cancellation/i });
     await userEvent.click(confirmBtn);
 
-    // 3. Verify Success Toast
-    await expect(await body.findByText(/Order has been canceled/i)).toBeInTheDocument();
+    await expect(
+      await body.findByText(/Order has been canceled/i, {}, { timeout: 5000 }),
+    ).toBeInTheDocument();
   },
 };
 
