@@ -13,6 +13,8 @@ export interface Order {
   id: string;
   buyerId: string;
   sellerId: string;
+  /** @nullable */
+  stripeReceiptUrl: string | null;
   paymentMethod: OrderPaymentMethod;
   fulfillmentType: OrderFulfillmentType;
   scheduledTime: string;

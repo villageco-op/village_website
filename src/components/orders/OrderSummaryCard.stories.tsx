@@ -42,6 +42,7 @@ export const Delivery: Story = {
       totalAmount: '45.50',
       scheduledTime: new Date().toISOString(),
       cancelReason: null,
+      stripeReceiptUrl: 'https://stripe.com/receipt',
     },
   },
 };
@@ -57,6 +58,7 @@ export const Pickup: Story = {
       totalAmount: '12.00',
       scheduledTime: new Date().toISOString(),
       cancelReason: null,
+      stripeReceiptUrl: 'https://stripe.com/receipt',
     },
   },
 };
@@ -72,6 +74,7 @@ export const Canceled: Story = {
       totalAmount: '89.99',
       cancelReason: 'The delivery route is currently blocked by local road construction.',
       scheduledTime: new Date().toISOString(),
+      stripeReceiptUrl: 'https://stripe.com/receipt',
     },
   },
 };

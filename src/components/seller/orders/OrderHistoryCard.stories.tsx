@@ -43,6 +43,7 @@ export const Default: Story = {
         updatedAt: new Date().toISOString(),
         paymentMethod: 'card',
         cancelReason: null,
+        stripeReceiptUrl: 'https://stripe.com/receipt',
       },
       {
         id: 'ord_9876543210fedcba',
@@ -56,6 +57,7 @@ export const Default: Story = {
         updatedAt: new Date().toISOString(),
         paymentMethod: 'card',
         cancelReason: null,
+        stripeReceiptUrl: 'https://stripe.com/receipt',
       },
       {
         id: 'ord_4567891230jklmno',
@@ -69,6 +71,7 @@ export const Default: Story = {
         updatedAt: new Date().toISOString(),
         paymentMethod: 'card',
         cancelReason: null,
+        stripeReceiptUrl: 'https://stripe.com/receipt',
       },
     ],
   },
@@ -102,6 +105,7 @@ export const LongHistory: Story = {
       updatedAt: new Date().toISOString(),
       paymentMethod: 'card',
       cancelReason: null,
+      stripeReceiptUrl: 'https://stripe.com/receipt',
     })),
   },
 };

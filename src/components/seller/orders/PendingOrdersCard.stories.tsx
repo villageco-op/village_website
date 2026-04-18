@@ -44,6 +44,7 @@ export const Default: Story = {
         updatedAt: new Date().toISOString(),
         paymentMethod: 'card',
         cancelReason: null,
+        stripeReceiptUrl: 'https://stripe.com/receipt',
       },
       {
         id: 'ord_pnd67890',
@@ -57,6 +58,7 @@ export const Default: Story = {
         updatedAt: new Date().toISOString(),
         paymentMethod: 'card',
         cancelReason: null,
+        stripeReceiptUrl: 'https://stripe.com/receipt',
       },
     ],
   },
@@ -92,6 +94,7 @@ export const LongWaitTime: Story = {
         updatedAt: new Date().toISOString(),
         paymentMethod: 'card',
         cancelReason: null,
+        stripeReceiptUrl: 'https://stripe.com/receipt',
       },
     ],
   },
