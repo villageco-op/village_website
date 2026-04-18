@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { ListingBasicInfo } from './ListingBasicInfo';
 
-import type { ListingFormData } from '@/components/pages/AddNewListingClient';
+import type { ListingFormData } from '@/components/seller/new-listing/AddNewListingClient';
 
 const mockFullData: ListingFormData = {
   title: '',

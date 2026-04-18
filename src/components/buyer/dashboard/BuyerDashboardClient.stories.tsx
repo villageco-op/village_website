@@ -17,7 +17,7 @@ const mockedQueryClient = new QueryClient({
 });
 
 const meta: Meta<typeof BuyerDashboardClient> = {
-  title: 'Pages/Buyer/Dashboard',
+  title: 'Buyer/Dashboard/DashboardPage',
   component: BuyerDashboardClient,
   parameters: {
     layout: 'fullscreen',

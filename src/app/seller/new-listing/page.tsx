@@ -1,4 +1,4 @@
-import AddNewListingClient from '../../../components/pages/AddNewListingClient';
+import AddNewListingClient from '../../../components/seller/new-listing/AddNewListingClient';
 
 /**
  * The add new listing page for sellers.

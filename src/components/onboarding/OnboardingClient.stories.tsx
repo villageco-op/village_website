@@ -15,7 +15,7 @@ const mockedQueryClient = new QueryClient({
 });
 
 const meta: Meta<typeof OnboardingFlow> = {
-  title: 'Onboarding/Flow Orchestrator',
+  title: 'Onboarding/OnboardingPage',
   component: OnboardingFlow,
   parameters: {
     layout: 'fullscreen',

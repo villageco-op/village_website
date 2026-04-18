@@ -18,7 +18,7 @@ const mockedQueryClient = new QueryClient({
 const MOCK_ORDER_ID = 'order_abc123';
 
 const meta: Meta<typeof OrderDetailClient> = {
-  title: 'Pages/Orders/OrderDetailPage',
+  title: 'Orders/OrderDetails/OrderDetailPage',
   component: OrderDetailClient,
   parameters: {
     layout: 'fullscreen',

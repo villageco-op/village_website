@@ -16,7 +16,7 @@ const mockedQueryClient = new QueryClient({
 const MOCK_ID = 'prod_123';
 
 const meta: Meta<typeof EditListingClient> = {
-  title: 'Pages/Seller/EditListingPage',
+  title: 'Seller/EditListing/EditListingPage',
   component: EditListingClient,
   parameters: {
     layout: 'fullscreen',

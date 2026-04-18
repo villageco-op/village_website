@@ -1,4 +1,4 @@
-import BuyerBillingClient from '@/components/pages/BuyerBillingClient';
+import BuyerBillingClient from '@/components/buyer/billing/BuyerBillingClient';
 
 /**
  * The buyer billing page containing a billing summary and a list of invoices.

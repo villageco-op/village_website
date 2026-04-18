@@ -3,7 +3,7 @@ import { fn, userEvent, within, expect } from '@storybook/test';
 
 import { ListingPricingInventory } from './ListingPricingInventory';
 
-import type { ListingFormData } from '@/components/pages/AddNewListingClient';
+import type { ListingFormData } from '@/components/seller/new-listing/AddNewListingClient';
 
 const mockFullData: ListingFormData = {
   title: 'Honeycrisp Apples',

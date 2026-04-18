@@ -1,4 +1,4 @@
-import BuyerDashboardClient from '@/components/pages/BuyerDashboardClient';
+import BuyerDashboardClient from '@/components/buyer/dashboard/BuyerDashboardClient';
 
 /**
  * The buyer dashboard page containing buyer metrics and order information.

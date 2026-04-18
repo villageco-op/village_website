@@ -1,4 +1,4 @@
-import SellerOrdersClient from '../../../components/pages/SellerOrdersClient';
+import SellerOrdersClient from '../../../components/seller/orders/SellerOrdersClient';
 
 /**
  * The seller orders page containing pending and past orders.

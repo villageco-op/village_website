@@ -74,7 +74,7 @@ const MOCK_HISTORY_ORDERS: getOrdersResponse200 = {
 };
 
 const meta: Meta<typeof SellerOrdersClient> = {
-  title: 'Pages/Seller/OrdersPage',
+  title: 'Seller/Orders/OrdersPage',
   component: SellerOrdersClient,
   parameters: {
     layout: 'fullscreen',

@@ -1,4 +1,4 @@
-import EditListingClient from '../../../../../components/pages/EditListingClient';
+import EditListingClient from '../../../../../components/seller/edit-listing/EditListingClient';
 
 /**
  * The edit listing page for sellers.

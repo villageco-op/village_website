@@ -1,4 +1,4 @@
-import type { StepComponentProps } from '@/components/pages/AddNewListingClient';
+import type { StepComponentProps } from '@/components/seller/new-listing/AddNewListingClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
