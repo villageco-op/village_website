@@ -93,7 +93,12 @@ export function GrowerCard({ grower, index }: GrowerCardProps) {
 
         {/* Actions */}
         <div className="mt-auto flex gap-2 pt-1">
-          <Button variant="outline-forest" size="sm" asChild className="h-8 px-4 text-xs font-semibold">
+          <Button
+            variant="outline-forest"
+            size="sm"
+            asChild
+            className="h-8 px-4 text-xs font-semibold"
+          >
             <Link href={`/seller/${grower.sellerId}`}>View Profile</Link>
           </Button>
         </div>
