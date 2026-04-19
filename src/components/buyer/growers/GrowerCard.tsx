@@ -64,7 +64,7 @@ export function GrowerCard({ grower, index }: GrowerCardProps) {
             </div>
             <div className="font-sans text-[0.74rem] text-ink-3">
               {grower.location?.address || 'No address provided'}
-              {grower.city ? ` · ${grower.city}` : ''}
+              {grower.location.city ? ` · ${grower.location.city}` : ''}
             </div>
           </div>
         </div>
@@ -91,9 +91,9 @@ export function GrowerCard({ grower, index }: GrowerCardProps) {
           Supplying since {startDate} · {grower.amountOrderedThisMonthLbs} lbs this month
         </div>
 
-        {/* Actions - Pushed to the bottom for future scalability */}
+        {/* Actions */}
         <div className="mt-auto flex gap-2 pt-1">
-          <Button variant="outline" size="sm" asChild className="h-8 px-4 text-xs font-semibold">
+          <Button variant="outline-forest" size="sm" asChild className="h-8 px-4 text-xs font-semibold">
             <Link href={`/seller/${grower.sellerId}`}>View Profile</Link>
           </Button>
         </div>

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn, userEvent, within, expect } from '@storybook/test';
+import { fn, userEvent, within, expect, screen } from '@storybook/test';
 
 import BasicProfileStep from './BasicProfileStep';
 
@@ -45,9 +45,19 @@ export const FilledForm: Story = {
 
     await userEvent.type(canvas.getByLabelText(/Real Name/i), 'Jane Doe');
     await userEvent.type(canvas.getByLabelText(/Street Address/i), '123 Bluebell Lane');
-    await userEvent.type(canvas.getByLabelText(/City/i), 'Austin');
 
-    // The button should now be enabled
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Austin');
+
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+
+    const txOption = await screen.findByRole('option', { name: 'Texas' });
+    await userEvent.click(txOption);
+
+    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '78701');
+
     const submitBtn = canvas.getByRole('button', { name: /continue/i });
     await expect(submitBtn).not.toBeDisabled();
   },
@@ -63,17 +73,29 @@ export const FullInteractionTest: Story = {
 
     await userEvent.type(canvas.getByLabelText(/Real Name/i), 'John Smith');
     await userEvent.type(canvas.getByLabelText(/Street Address/i), '456 Oak St');
-    await userEvent.type(canvas.getByLabelText(/City/i), 'Portland');
+
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Portland');
+
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+    const orOption = await screen.findByRole('option', { name: 'Oregon' });
+    await userEvent.click(orOption);
+
+    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '97204');
 
     const submitBtn = canvas.getByRole('button', { name: /continue/i });
     await userEvent.click(submitBtn);
 
-    // Verify the mock function was called
     await expect(args.onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'John Smith',
         address: '456 Oak St',
         city: 'Portland',
+        state: 'OR',
+        zip: '97204',
+        country: 'United States',
       }),
     );
   },

@@ -63,9 +63,13 @@ const MOCK_ORDER_DATA: OrderDetailResponse = {
     name: 'Alex Gardener',
     email: 'alex@example.com',
     location: {
-      address: '742 Evergreen Terrace, Springfield',
+      address: '742 Evergreen Terrace',
       lat: 41.5934,
       lng: -87.3464,
+      city: 'Springfield',
+      state: 'KY',
+      country: 'United States',
+      zip: '45638',
     },
   },
   seller: {
@@ -73,9 +77,13 @@ const MOCK_ORDER_DATA: OrderDetailResponse = {
     name: 'Springfield Community Plot',
     email: 'plots@springfield.org',
     location: {
-      address: '123 Farm Road, Springfield',
+      address: '123 Farm Road',
       lat: 41.6,
       lng: -87.35,
+      city: 'Springfield',
+      state: 'KY',
+      country: 'United States',
+      zip: '45638',
     },
   },
   items: [

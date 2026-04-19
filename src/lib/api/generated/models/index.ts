@@ -7,7 +7,6 @@
  */
 
 export * from './activeSubscription';
-export * from './address';
 export * from './addToCartPayload';
 export * from './availabilityResponse';
 export * from './availabilityWindow';

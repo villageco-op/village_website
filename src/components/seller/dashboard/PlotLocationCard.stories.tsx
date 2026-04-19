@@ -27,9 +27,13 @@ type Story = StoryObj<typeof PlotLocationCard>;
 export const Default: Story = {
   args: {
     location: {
-      address: '123 Garden Lane, North Harvest',
+      address: '123 Garden Lane',
       lat: 45.523062,
       lng: -122.676482,
+      city: 'North Harvest',
+      state: 'IN',
+      country: 'United States',
+      zip: '45678',
     },
   },
 };
@@ -40,9 +44,13 @@ export const Default: Story = {
 export const LongAddress: Story = {
   args: {
     location: {
-      address: 'Suite 402, Green Valley Community Garden Hub, West Springfield, IL 62704',
+      address: 'Suite 402, Green Valley Community Garden Hub',
       lat: 39.7817,
       lng: -89.6501,
+      city: 'West Springfield',
+      state: 'IL',
+      country: 'United States',
+      zip: '62704',
     },
   },
 };
@@ -72,9 +80,13 @@ export const InDashboardContext: Story = {
   ],
   args: {
     location: {
-      address: 'Plot #42, Sunset Acres',
+      address: 'Plot #42',
       lat: 41.5934,
       lng: -87.3464,
+      city: 'Sunset Acres',
+      state: 'IN',
+      country: 'United States',
+      zip: '45678',
     },
   },
 };
