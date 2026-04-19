@@ -27,9 +27,13 @@ type Story = StoryObj<typeof DashboardHeader>;
 export const Default: Story = {
   args: {
     location: {
-      address: 'Plot 12-B, Green Meadows',
+      address: 'Plot 12-B',
       lat: 45.523062,
       lng: -122.676482,
+      city: 'Green Meadows',
+      state: 'IN',
+      country: 'United States',
+      zip: '45678',
     },
   },
 };
@@ -53,6 +57,10 @@ export const UnnamedUser: Story = {
       address: 'Community Garden North',
       lat: 45.523062,
       lng: -122.676482,
+      city: 'Green Meadows',
+      state: 'IN',
+      country: 'United States',
+      zip: '45678',
     },
   },
 };
@@ -68,9 +76,13 @@ export const Mobile: Story = {
   },
   args: {
     location: {
-      address: '742 Evergreen Terrace, Springfield Plot',
+      address: '742 Evergreen Terrace',
       lat: 45.523062,
       lng: -122.676482,
+      city: 'Springfield',
+      state: 'IN',
+      country: 'United States',
+      zip: '45678',
     },
   },
 };

@@ -5,7 +5,6 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { Address } from './address';
 import type { Latitude } from './latitude';
 import type { Longitude } from './longitude';
 import type { PriceDollars } from './priceDollars';
@@ -20,8 +19,11 @@ export interface UpdateUserPayload {
   /** List of product categories the user specializes in */
   specialties?: string[];
   goal?: PriceDollars & unknown;
-  address?: Address;
+  address?: string;
   city?: string;
+  state?: string;
+  country?: string;
+  zip?: string;
   lat?: Latitude | null;
   lng?: Longitude | null;
   /** Maximum distance the seller is willing to travel for deliveries */

@@ -30,11 +30,12 @@ export function DashboardHeader({ location }: DashboardHeaderProps) {
   const formattedWeek = `${weekStart.toLocaleString('default', { month: 'short' })} ${weekStart.getDate()}–${weekEnd.getDate()}`;
 
   const address = location?.address || 'No plot address';
+  const city = location?.city ? `, ${location.city}` : '';
 
   return (
     <PageHeader
       title={`Good morning, ${firstName} 🌿`}
-      subtitle={`Week of ${formattedWeek} · Plot: ${address}`}
+      subtitle={`Week of ${formattedWeek} · Plot: ${address}${city}`}
     />
   );
 }

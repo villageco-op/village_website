@@ -4,9 +4,12 @@ import { ArrowRight, Camera, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useRef } from 'react';
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { US_STATES } from '@/lib/constants/location-constants';
 import { getAssetPath } from '@/lib/utils';
 
 /**
@@ -17,6 +20,9 @@ export interface BasicInfoData {
   imageFile: File | null;
   address: string;
   city: string;
+  state: string;
+  country: string;
+  zip: string;
 }
 
 /**
@@ -38,7 +44,9 @@ interface BasicProfileStepProps {
 export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileStepProps) {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState('Gary');
+  const [state, setState] = useState('IN');
+  const [zip, setZip] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -52,12 +60,25 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
     }
   };
 
-  const isValid = name.trim() !== '' && address.trim() !== '' && city.trim() !== '';
+  const isValid =
+    name.trim() !== '' &&
+    address.trim() !== '' &&
+    city.trim() !== '' &&
+    state.trim() !== '' &&
+    zip.trim() !== '';
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!isValid || isPending) return;
-    await onSubmit({ name, imageFile, address, city });
+    await onSubmit({
+      name,
+      imageFile,
+      address,
+      city,
+      country: 'United States',
+      state,
+      zip,
+    });
   };
 
   return (
@@ -143,18 +164,64 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="city" className="text-ink-2 font-semibold">
-              City <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              id="city"
-              placeholder="e.g. Austin"
-              className="bg-white border-lime/50 focus-visible:ring-click-green"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              required
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="city" className="text-ink-2 font-semibold">
+                City <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="city"
+                placeholder="e.g. Gary"
+                className="bg-white border-lime/50 focus-visible:ring-click-green"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="state" className="text-ink-2 font-semibold">
+                  State <span className="text-red-500">*</span>
+                </Label>
+                <Select value={state} onValueChange={setState} required>
+                  <SelectTrigger
+                    id="state"
+                    className="bg-white border-lime/50 focus-visible:ring-click-green"
+                  >
+                    <SelectValue placeholder="State" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {US_STATES.map((s) => (
+                      <SelectItem key={s.value} value={s.value}>
+                        {s.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="zip" className="text-ink-2 font-semibold">
+                  ZIP Code <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="zip"
+                  placeholder="e.g. 46402"
+                  inputMode="numeric"
+                  maxLength={5}
+                  pattern="[0-9]*"
+                  className="bg-white border-lime/50 focus-visible:ring-click-green"
+                  value={zip}
+                  onChange={(e) => {
+                    // Only allow numerical input for US Zip codes
+                    const value = e.target.value.replace(/[^0-9]/g, '');
+                    setZip(value);
+                  }}
+                  required
+                />
+              </div>
+            </div>
           </div>
         </div>
 

@@ -25,6 +25,10 @@ export interface PublicUserProfile {
    */
   specialties: string[] | null;
   /** @nullable */
+  country: string | null;
+  /** @nullable */
+  state: string | null;
+  /** @nullable */
   city: string | null;
   /** Timestamp of when the user first registered */
   joinedAt: string | unknown | null;

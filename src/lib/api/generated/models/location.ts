@@ -5,12 +5,20 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { Address } from './address';
 
 export interface Location {
   /** @nullable */
   lat: number | null;
   /** @nullable */
   lng: number | null;
-  address: Address & (unknown | null);
+  /** @nullable */
+  address: string | null;
+  /** @nullable */
+  city: string | null;
+  /** @nullable */
+  state: string | null;
+  /** @nullable */
+  country: string | null;
+  /** @nullable */
+  zip: string | null;
 }

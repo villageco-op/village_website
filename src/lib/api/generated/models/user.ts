@@ -26,6 +26,12 @@ export interface User {
   address: string | null;
   /** @nullable */
   city: string | null;
+  /** @nullable */
+  state: string | null;
+  /** @nullable */
+  country: string | null;
+  /** @nullable */
+  zip: string | null;
   /**
    * @minimum -140737488355328
    * @maximum 140737488355327

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, userEvent, expect } from '@storybook/test';
+import { within, userEvent, expect, screen } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -80,7 +80,18 @@ export const CompleteSellerJourney: Story = {
     // 1. Basic Info
     await userEvent.type(await canvas.findByLabelText(/Real Name/i), 'Jane Doe');
     await userEvent.type(canvas.getByLabelText(/Street Address/i), '123 Farm Lane');
-    await userEvent.type(canvas.getByLabelText(/City/i), 'Austin');
+
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Austin');
+
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+    const txOption = await screen.findByRole('option', { name: 'Texas' });
+    await userEvent.click(txOption);
+
+    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '78701');
+
     await userEvent.click(canvas.getByRole('button', { name: /Continue/i }));
 
     // 2. Role Selection
@@ -118,7 +129,18 @@ export const CompleteBuyerJourney: Story = {
     // 1. Basic Info
     await userEvent.type(await canvas.findByLabelText(/Real Name/i), 'John Smith');
     await userEvent.type(canvas.getByLabelText(/Street Address/i), '456 Oak St');
-    await userEvent.type(canvas.getByLabelText(/City/i), 'Portland');
+
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Portland');
+
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+    const orOption = await screen.findByRole('option', { name: 'Oregon' });
+    await userEvent.click(orOption);
+
+    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '97204');
+
     await userEvent.click(canvas.getByRole('button', { name: /Continue/i }));
 
     // 2. Role Selection
@@ -128,9 +150,6 @@ export const CompleteBuyerJourney: Story = {
     // 3. Notifications (Skipped Seller Info automatically)
     const skipBtn = await canvas.findByRole('button', { name: /Not right now/i });
     await userEvent.click(skipBtn);
-
-    // Note: At this point, router.push('/buyer') is called.
-    // In Storybook, you'll see this logged in the 'Actions' tab.
   },
 };
 
@@ -153,7 +172,17 @@ export const ProfileUpdateError: Story = {
     // Fill out the required basic info
     await userEvent.type(await canvas.findByLabelText(/Real Name/i), 'Error Test');
     await userEvent.type(canvas.getByLabelText(/Street Address/i), 'Nowhere');
-    await userEvent.type(canvas.getByLabelText(/City/i), 'Void');
+
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Void');
+
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+    const wyOption = await screen.findByRole('option', { name: 'Wyoming' });
+    await userEvent.click(wyOption);
+
+    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '82001');
 
     // Submit
     const continueBtn = canvas.getByRole('button', { name: /Continue/i });

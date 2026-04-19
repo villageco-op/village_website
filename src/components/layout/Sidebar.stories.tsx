@@ -49,6 +49,9 @@ const mockUser: User = {
   city: 'Gary',
   lat: 41.59,
   lng: -87.34,
+  state: 'IN',
+  country: 'United States',
+  zip: '45678',
 };
 
 const mockNavGroups: NavGroup[] = [

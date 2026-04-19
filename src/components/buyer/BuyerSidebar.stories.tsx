@@ -50,6 +50,9 @@ const mockUser: User = {
   city: 'Gary',
   lat: 41.59,
   lng: -87.34,
+  state: 'IN',
+  country: 'United States',
+  zip: '92921',
   createdAt: '2024-01-01T00:00:00Z',
   updatedAt: '2024-01-01T00:00:00Z',
 };
