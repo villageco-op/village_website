@@ -18,7 +18,6 @@ export interface Order {
   paymentMethod: OrderPaymentMethod;
   fulfillmentType: OrderFulfillmentType;
   scheduledTime: string;
-  /** @nullable */
   status: OrderStatusProperty;
   /** @nullable */
   cancelReason: string | null;

@@ -3,14 +3,11 @@
 import { Mail, User as UserIcon } from 'lucide-react';
 
 import { Card, CardContent } from '@/components/ui/card';
-import type {
-  OrderDetailResponseBuyer,
-  OrderDetailResponseSeller,
-} from '@/lib/api/generated/models';
+import type { SubscriptionDetailResponseSeller } from '@/lib/api/generated/models';
 
-interface OrderUserCardProps {
+interface SubscriptionUserCardProps {
   title: string;
-  user: OrderDetailResponseBuyer | OrderDetailResponseSeller;
+  user: SubscriptionDetailResponseSeller | null | undefined;
   role: 'buyer' | 'seller';
 }
 
@@ -22,7 +19,7 @@ interface OrderUserCardProps {
  * @param props.role - Buyer or seller
  * @returns A simple card displaying basic user information
  */
-export function OrderUserCard({ title, user, role }: OrderUserCardProps) {
+export function SubscriptionUserCard({ title, user, role }: SubscriptionUserCardProps) {
   if (!user) return null;
 
   return (
@@ -31,7 +28,6 @@ export function OrderUserCard({ title, user, role }: OrderUserCardProps) {
         <h2 className="mb-4 font-heading text-[0.95rem] font-bold text-ink border-b border-border/50 pb-3">
           {title}
         </h2>
-
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-ink-3">
@@ -42,7 +38,6 @@ export function OrderUserCard({ title, user, role }: OrderUserCardProps) {
               <p className="font-medium text-sm text-ink">{user.name || 'Anonymous'}</p>
             </div>
           </div>
-
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-ink-3">
               <Mail className="h-5 w-5" />

@@ -5,8 +5,5 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { SubscriptionStatus } from './subscriptionStatus';
 
-export interface UpdateSubscriptionStatusPayload {
-  status: SubscriptionStatus;
-}
+export type SubscriptionDetailResponseProductImages = string | number | boolean | unknown | null | {[key: string]: unknown | null} | (unknown | null)[];
