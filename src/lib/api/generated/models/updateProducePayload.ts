@@ -38,4 +38,6 @@ export interface UpdateProducePayload {
   /** Whether customers can set up recurring orders for this item */
   isSubscribable?: boolean;
   status?: ProduceStatus;
+  /** If true, forces cancellation of all active subscriptions. Required if frequency changes. */
+  cancelExistingSubscriptions?: boolean;
 }

@@ -6,20 +6,32 @@
  * OpenAPI spec version: 1.0.0
  */
 import {
-  useMutation
+  useMutation,
+  useQuery
 } from '@tanstack/react-query';
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
-  UseMutationResult
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
   EntityId,
   ErrorResponse,
+  GetSubscriptionsParams,
+  SubscriptionDetailResponse,
+  SubscriptionsListResponse,
   SuccessResponse,
-  UpdateSubscriptionStatusPayload
+  UpdateSubscriptionPayload
 } from '../models';
 
 import { apiClient } from '../../client';
@@ -30,61 +42,180 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Manage recurring scheduled purchases. Integrates natively with Stripe to pause or cancel collections.
+ * Get detailed information for a specific subscription by ID. Accessible only by the buyer or seller associated with the subscription.
  */
-export type updateSubscriptionStatusResponse200 = {
-  data: SuccessResponse
+export type getSubscriptionByIdResponse200 = {
+  data: SubscriptionDetailResponse
   status: 200
 }
 
-export type updateSubscriptionStatusResponse401 = {
+export type getSubscriptionByIdResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-export type updateSubscriptionStatusResponse404 = {
+export type getSubscriptionByIdResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-export type updateSubscriptionStatusResponseSuccess = (updateSubscriptionStatusResponse200) & {
+export type getSubscriptionByIdResponseSuccess = (getSubscriptionByIdResponse200) & {
   headers: Headers;
 };
-export type updateSubscriptionStatusResponseError = (updateSubscriptionStatusResponse401 | updateSubscriptionStatusResponse404) & {
+export type getSubscriptionByIdResponseError = (getSubscriptionByIdResponse401 | getSubscriptionByIdResponse404) & {
   headers: Headers;
 };
 
-export type updateSubscriptionStatusResponse = (updateSubscriptionStatusResponseSuccess | updateSubscriptionStatusResponseError)
+export type getSubscriptionByIdResponse = (getSubscriptionByIdResponseSuccess | getSubscriptionByIdResponseError)
 
-export const getUpdateSubscriptionStatusUrl = (id: EntityId,) => {
+export const getGetSubscriptionByIdUrl = (id: EntityId,) => {
 
 
   
 
-  return `/api/subscriptions/${id}/status`
+  return `/api/subscriptions/${id}`
 }
 
-export const updateSubscriptionStatus = async (id: EntityId,
-    updateSubscriptionStatusPayload: UpdateSubscriptionStatusPayload, options?: RequestInit): Promise<updateSubscriptionStatusResponse> => {
+export const getSubscriptionById = async (id: EntityId, options?: RequestInit): Promise<getSubscriptionByIdResponse> => {
   
-  return apiClient<updateSubscriptionStatusResponse>(getUpdateSubscriptionStatusUrl(id),
+  return apiClient<getSubscriptionByIdResponse>(getGetSubscriptionByIdUrl(id),
   {      
     ...options,
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      updateSubscriptionStatusPayload,)
+    method: 'GET'
+    
+    
   }
 );}
   
 
 
 
-export const getUpdateSubscriptionStatusMutationOptions = <TError = ErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSubscriptionStatus>>, TError,{id: EntityId;data: UpdateSubscriptionStatusPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateSubscriptionStatus>>, TError,{id: EntityId;data: UpdateSubscriptionStatusPayload}, TContext> => {
 
-const mutationKey = ['updateSubscriptionStatus'];
+export const getGetSubscriptionByIdQueryKey = (id: EntityId,) => {
+    return [
+    `/api/subscriptions/${id}`
+    ] as const;
+    }
+
+    
+export const getGetSubscriptionByIdQueryOptions = <TData = Awaited<ReturnType<typeof getSubscriptionById>>, TError = ErrorResponse>(id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubscriptionById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSubscriptionByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubscriptionById>>> = ({ signal }) => getSubscriptionById(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSubscriptionById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSubscriptionByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getSubscriptionById>>>
+export type GetSubscriptionByIdQueryError = ErrorResponse
+
+
+export function useGetSubscriptionById<TData = Awaited<ReturnType<typeof getSubscriptionById>>, TError = ErrorResponse>(
+ id: EntityId, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubscriptionById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSubscriptionById>>,
+          TError,
+          Awaited<ReturnType<typeof getSubscriptionById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSubscriptionById<TData = Awaited<ReturnType<typeof getSubscriptionById>>, TError = ErrorResponse>(
+ id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubscriptionById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSubscriptionById>>,
+          TError,
+          Awaited<ReturnType<typeof getSubscriptionById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSubscriptionById<TData = Awaited<ReturnType<typeof getSubscriptionById>>, TError = ErrorResponse>(
+ id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubscriptionById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetSubscriptionById<TData = Awaited<ReturnType<typeof getSubscriptionById>>, TError = ErrorResponse>(
+ id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubscriptionById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSubscriptionByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Update a subscription quantity, status (pause/cancel), or fulfillment type. Syncs natively with Stripe.
+ */
+export type updateSubscriptionResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type updateSubscriptionResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type updateSubscriptionResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type updateSubscriptionResponseSuccess = (updateSubscriptionResponse200) & {
+  headers: Headers;
+};
+export type updateSubscriptionResponseError = (updateSubscriptionResponse401 | updateSubscriptionResponse404) & {
+  headers: Headers;
+};
+
+export type updateSubscriptionResponse = (updateSubscriptionResponseSuccess | updateSubscriptionResponseError)
+
+export const getUpdateSubscriptionUrl = (id: EntityId,) => {
+
+
+  
+
+  return `/api/subscriptions/${id}`
+}
+
+export const updateSubscription = async (id: EntityId,
+    updateSubscriptionPayload: UpdateSubscriptionPayload, options?: RequestInit): Promise<updateSubscriptionResponse> => {
+  
+  return apiClient<updateSubscriptionResponse>(getUpdateSubscriptionUrl(id),
+  {      
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateSubscriptionPayload,)
+  }
+);}
+  
+
+
+
+export const getUpdateSubscriptionMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSubscription>>, TError,{id: EntityId;data: UpdateSubscriptionPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateSubscription>>, TError,{id: EntityId;data: UpdateSubscriptionPayload}, TContext> => {
+
+const mutationKey = ['updateSubscription'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -94,10 +225,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSubscriptionStatus>>, {id: EntityId;data: UpdateSubscriptionStatusPayload}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSubscription>>, {id: EntityId;data: UpdateSubscriptionPayload}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  updateSubscriptionStatus(id,data,requestOptions)
+          return  updateSubscription(id,data,requestOptions)
         }
 
 
@@ -107,18 +238,143 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type UpdateSubscriptionStatusMutationResult = NonNullable<Awaited<ReturnType<typeof updateSubscriptionStatus>>>
-    export type UpdateSubscriptionStatusMutationBody = UpdateSubscriptionStatusPayload
-    export type UpdateSubscriptionStatusMutationError = ErrorResponse
+    export type UpdateSubscriptionMutationResult = NonNullable<Awaited<ReturnType<typeof updateSubscription>>>
+    export type UpdateSubscriptionMutationBody = UpdateSubscriptionPayload
+    export type UpdateSubscriptionMutationError = ErrorResponse
 
-    export const useUpdateSubscriptionStatus = <TError = ErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSubscriptionStatus>>, TError,{id: EntityId;data: UpdateSubscriptionStatusPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+    export const useUpdateSubscription = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSubscription>>, TError,{id: EntityId;data: UpdateSubscriptionPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateSubscriptionStatus>>,
+        Awaited<ReturnType<typeof updateSubscription>>,
         TError,
-        {id: EntityId;data: UpdateSubscriptionStatusPayload},
+        {id: EntityId;data: UpdateSubscriptionPayload},
         TContext
       > => {
-      return useMutation(getUpdateSubscriptionStatusMutationOptions(options), queryClient);
+      return useMutation(getUpdateSubscriptionMutationOptions(options), queryClient);
     }
+    /**
+ * Get a paginated list of subscriptions. Filterable by buyerId, sellerId, productId, and status.
+ */
+export type getSubscriptionsResponse200 = {
+  data: SubscriptionsListResponse
+  status: 200
+}
+
+export type getSubscriptionsResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type getSubscriptionsResponse403 = {
+  data: ErrorResponse
+  status: 403
+}
+
+export type getSubscriptionsResponseSuccess = (getSubscriptionsResponse200) & {
+  headers: Headers;
+};
+export type getSubscriptionsResponseError = (getSubscriptionsResponse401 | getSubscriptionsResponse403) & {
+  headers: Headers;
+};
+
+export type getSubscriptionsResponse = (getSubscriptionsResponseSuccess | getSubscriptionsResponseError)
+
+export const getGetSubscriptionsUrl = (params?: GetSubscriptionsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
     
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/subscriptions?${stringifiedParams}` : `/api/subscriptions`
+}
+
+export const getSubscriptions = async (params?: GetSubscriptionsParams, options?: RequestInit): Promise<getSubscriptionsResponse> => {
+  
+  return apiClient<getSubscriptionsResponse>(getGetSubscriptionsUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetSubscriptionsQueryKey = (params?: GetSubscriptionsParams,) => {
+    return [
+    `/api/subscriptions`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+    
+export const getGetSubscriptionsQueryOptions = <TData = Awaited<ReturnType<typeof getSubscriptions>>, TError = ErrorResponse>(params?: GetSubscriptionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubscriptions>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSubscriptionsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubscriptions>>> = ({ signal }) => getSubscriptions(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSubscriptions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSubscriptionsQueryResult = NonNullable<Awaited<ReturnType<typeof getSubscriptions>>>
+export type GetSubscriptionsQueryError = ErrorResponse
+
+
+export function useGetSubscriptions<TData = Awaited<ReturnType<typeof getSubscriptions>>, TError = ErrorResponse>(
+ params: undefined |  GetSubscriptionsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubscriptions>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSubscriptions>>,
+          TError,
+          Awaited<ReturnType<typeof getSubscriptions>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSubscriptions<TData = Awaited<ReturnType<typeof getSubscriptions>>, TError = ErrorResponse>(
+ params?: GetSubscriptionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubscriptions>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSubscriptions>>,
+          TError,
+          Awaited<ReturnType<typeof getSubscriptions>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSubscriptions<TData = Awaited<ReturnType<typeof getSubscriptions>>, TError = ErrorResponse>(
+ params?: GetSubscriptionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubscriptions>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetSubscriptions<TData = Awaited<ReturnType<typeof getSubscriptions>>, TError = ErrorResponse>(
+ params?: GetSubscriptionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubscriptions>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSubscriptionsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+

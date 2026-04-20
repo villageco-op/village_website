@@ -10,6 +10,7 @@ import {
   LineChart,
   MessageCircle,
   Settings,
+  Repeat,
 } from 'lucide-react';
 
 import { Sidebar, type NavGroup } from '../layout/Sidebar';
@@ -22,6 +23,12 @@ const BUYER_NAV_GROUPS: NavGroup[] = [
     items: [
       { name: 'Order Dashboard', sub: 'Weekly summary', icon: Package, href: '/buyer' },
       { name: 'Browse Produce', sub: 'Available this week', icon: Store, href: '/buyer/browse' },
+      {
+        name: 'Subscriptions',
+        sub: 'Recurring orders',
+        icon: Repeat,
+        href: '/buyer/subscriptions',
+      },
       { name: 'Order History', sub: 'Past deliveries', icon: ClipboardList, href: '/buyer/orders' },
     ],
   },
