@@ -18,4 +18,13 @@ page?: number;
  * @maximum 50
  */
 limit?: number;
+/**
+ * Regex/text check to filter by produce type or grower name
+ */
+search?: string;
+/**
+ * Maximum distance in miles from the buyer address
+ * @nullable
+ */
+maxDistance?: number | null;
 };

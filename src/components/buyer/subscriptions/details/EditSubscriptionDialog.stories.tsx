@@ -49,7 +49,7 @@ export const InteractionTest: Story = {
     const body = within(canvasElement.ownerDocument.body);
 
     const qtyInput = body.getByLabelText(/Quantity \(oz\)/i);
-    const fulfillmentSelect = body.getByLabelText(/Fulfillment Type/i);
+    const fulfillmentTrigger = body.getByLabelText(/Fulfillment Type/i);
     const saveBtn = body.getByRole('button', { name: /Save Changes/i });
 
     // Change quantity from 16 to 20
@@ -60,8 +60,12 @@ export const InteractionTest: Story = {
     await expect(body.getByText(/\$15.00/i)).toBeInTheDocument();
 
     // Change fulfillment type
-    await userEvent.selectOptions(fulfillmentSelect, 'pickup');
-    await expect(fulfillmentSelect).toHaveValue('pickup');
+    await userEvent.click(fulfillmentTrigger);
+
+    const pickupOption = body.getByRole('option', { name: /pickup/i });
+    await userEvent.click(pickupOption);
+
+    await expect(fulfillmentTrigger).toHaveTextContent(/pickup/i);
 
     // Click save
     await userEvent.click(saveBtn);

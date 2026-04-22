@@ -5,10 +5,9 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { Grower } from './grower';
-import type { PaginationMetadata } from './paginationMetadata';
+import type { GrowersResponseBase } from './growersResponseBase';
 
-export interface GrowersResponse {
-  data: Grower[];
-  meta: PaginationMetadata;
-}
+export type GrowersResponse = GrowersResponseBase & {
+  /** A complete unpaginated list of all cities the filtered growers are located in. */
+  cities: string[];
+};

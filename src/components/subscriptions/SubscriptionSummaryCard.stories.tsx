@@ -8,7 +8,7 @@ import {
 } from '@/lib/api/generated/models';
 
 const meta: Meta<typeof SubscriptionSummaryCard> = {
-  title: 'Buyer/Subscriptions/Details/SubscriptionSummaryCard',
+  title: 'Subscriptions/SubscriptionSummaryCard',
   component: SubscriptionSummaryCard,
   parameters: {
     layout: 'padded',

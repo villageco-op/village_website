@@ -5,6 +5,8 @@ import { ListingCard } from './ListingCard';
 import { ListingsHeader } from './ListingsHeader';
 import { ListingsSkeleton } from './ListingsSkeleton';
 
+import { PaginationControls } from '@/components/ui/pagination-controls';
+import { usePagination } from '@/hooks/usePagination';
 import { useGetSellerListings } from '@/lib/api/generated/produce/produce';
 
 /**
@@ -12,7 +14,8 @@ import { useGetSellerListings } from '@/lib/api/generated/produce/produce';
  * @returns A component with seller listing cards and buttons for adding listings.
  */
 export default function SellerListingsClient() {
-  const { data: response, isLoading, isError } = useGetSellerListings({ status: 'active' });
+  const { page, limit, setPage } = usePagination(12);
+  const { data: response, isLoading, isError } = useGetSellerListings({ status: 'active', limit, page });
 
   if (isLoading) {
     return <ListingsSkeleton />;
@@ -27,7 +30,8 @@ export default function SellerListingsClient() {
   }
 
   const listings = response?.data?.data || [];
-  const activeCount = listings.filter((item) => item.status === 'active').length;
+  const meta = response?.data?.meta;
+  const activeCount = meta.total || listings.filter((item) => item.status === 'active').length;
 
   return (
     <div className="flex w-full flex-col">
@@ -40,6 +44,7 @@ export default function SellerListingsClient() {
         ))}
         <AddNewListingCard />
       </div>
+      <PaginationControls meta={meta} onPageChange={setPage} />
     </div>
   );
 }

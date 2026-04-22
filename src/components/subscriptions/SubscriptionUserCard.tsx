@@ -3,11 +3,11 @@
 import { Mail, User as UserIcon } from 'lucide-react';
 
 import { Card, CardContent } from '@/components/ui/card';
-import type { SubscriptionDetailResponseSeller } from '@/lib/api/generated/models';
+import type { SubscriptionDetailResponseBuyer, SubscriptionDetailResponseSeller } from '@/lib/api/generated/models';
 
 interface SubscriptionUserCardProps {
   title: string;
-  user: SubscriptionDetailResponseSeller | null | undefined;
+  user: SubscriptionDetailResponseSeller | SubscriptionDetailResponseBuyer | null | undefined;
   role: 'buyer' | 'seller';
 }
 

@@ -6,7 +6,9 @@ import { useRouter } from 'next/navigation';
 import { ListingOrdersSkeleton } from '@/components/seller/listing-orders/ListingOrdersSkeleton';
 import { ListingOrdersTable } from '@/components/seller/listing-orders/ListingOrdersTable';
 import { Button } from '@/components/ui/button';
-import { useGetProduceOrders } from '@/lib/api/generated/produce/produce'; // Adjust based on your actual generated path
+import { PaginationControls } from '@/components/ui/pagination-controls';
+import { usePagination } from '@/hooks/usePagination';
+import { useGetProduceOrders } from '@/lib/api/generated/produce/produce';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
 
 interface ListingOrdersClientProps {
@@ -23,11 +25,12 @@ interface ListingOrdersClientProps {
 export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
   const router = useRouter();
 
+  const { page, limit, setPage } = usePagination(12);
+
   // Fetch listing details to show the title in the header
   const produceQuery = useGetProduce(id, { query: { enabled: !!id } });
 
-  // Fetch the orders for this specific listing
-  const ordersQuery = useGetProduceOrders(id, { limit: 50 }, { query: { enabled: !!id } });
+  const ordersQuery = useGetProduceOrders(id, { limit, page }, { query: { enabled: !!id } });
 
   const isLoading = produceQuery.isLoading || ordersQuery.isLoading;
   const isError = produceQuery.isError || ordersQuery.isError;
@@ -56,7 +59,9 @@ export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
 
   const produceTitle = produceQuery.data?.data?.title || 'Unknown Produce';
   const orders = ordersQuery.data?.data?.data || [];
-  const totalOrders = ordersQuery.data?.data?.meta?.total || orders.length;
+
+  const meta = ordersQuery.data?.data?.meta;
+  const totalOrders = meta?.total || orders.length;
 
   return (
     <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
@@ -83,6 +88,7 @@ export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
 
         {/* Orders Table Card */}
         <ListingOrdersTable orders={orders} totalOrders={totalOrders} />
+        <PaginationControls meta={meta} onPageChange={setPage} />
       </div>
     </div>
   );
