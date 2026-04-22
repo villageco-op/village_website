@@ -73,6 +73,26 @@ const MOCK_HISTORY_ORDERS: getOrdersResponse200 = {
   },
 };
 
+const generateMockOrders = (count: number, prefix: string, status: string) => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: `${i + 1}-${prefix}-ord`,
+    totalAmount: (10 + i).toFixed(2),
+    fulfillmentType: i % 2 === 0 ? 'pickup' : 'delivery',
+    scheduledTime: new Date().toISOString(),
+    status: status,
+    sellerId: 'seller-1',
+    buyerId: `buyer-${i}`,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    paymentMethod: 'card',
+    cancelReason: null,
+    stripeReceiptUrl: 'https://stripe.com/receipt',
+  }));
+};
+
+const LARGE_PENDING_DATA = generateMockOrders(15, 'pending', 'pending');
+const LARGE_HISTORY_DATA = generateMockOrders(15, 'history', 'completed');
+
 const meta: Meta<typeof SellerOrdersClient> = {
   title: 'Seller/Orders/OrdersPage',
   component: SellerOrdersClient,
@@ -191,5 +211,64 @@ export const EmptyState: Story = {
       await canvas.findByText(/0 pending · All time orders from buyers on Village/i),
     ).toBeInTheDocument();
     await expect(canvas.getByText(/No historical orders found/i)).toBeInTheDocument();
+  },
+};
+
+/**
+ * Story testing pagination for both Pending and History sections.
+ */
+export const Paginated: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('*/api/orders', ({ request }) => {
+          const url = new URL(request.url);
+          const status = url.searchParams.get('status');
+          const page = Number(url.searchParams.get('page') || '1');
+          const limit = 12;
+
+          const allItems = status === 'pending' ? LARGE_PENDING_DATA : LARGE_HISTORY_DATA;
+          const start = (page - 1) * limit;
+          const end = start + limit;
+          const items = allItems.slice(start, end);
+
+          return HttpResponse.json({
+            status: 200,
+            data: {
+              data: items,
+              meta: {
+                total: allItems.length,
+                page,
+                limit,
+                totalPages: Math.ceil(allItems.length / limit),
+              },
+            },
+          });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(await canvas.findByText(/Order #1-PEND/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/#1-HIST/i)).toBeInTheDocument();
+
+    await expect(canvas.queryByText(/Order #13-PEND/i)).not.toBeInTheDocument();
+    await expect(canvas.queryByText(/#13-HIST/i)).not.toBeInTheDocument();
+
+    const pendingNextBtn = (await canvas.findAllByRole('button', { name: /Next/i }))[0];
+    pendingNextBtn.click();
+
+    await expect(await canvas.findByText(/Order #13-PEND/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/#1-HIST/i)).toBeInTheDocument();
+
+    const historyNextBtn = (await canvas.findAllByRole('button', { name: /Next/i }))[1];
+    historyNextBtn.click();
+
+    await expect(await canvas.findByText(/#13-HIST/i)).toBeInTheDocument();
+
+    await expect(canvas.queryByText(/Order #1-PEND/i)).not.toBeInTheDocument();
+    await expect(canvas.queryByText(/#1-HIST/i)).not.toBeInTheDocument();
   },
 };

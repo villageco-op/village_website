@@ -5,6 +5,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import SellerListingsClient from '../listings/SellerListingsClient';
 
+import type { ProduceStatusProperty } from '@/lib/api/generated/models/produceStatusProperty';
 import type { getSellerListingsResponse200 } from '@/lib/api/generated/produce/produce';
 
 const mockedQueryClient = new QueryClient({
@@ -13,64 +14,43 @@ const mockedQueryClient = new QueryClient({
   },
 });
 
+const PAGE_LIMIT = 12;
+
+const generateMockListings = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: `list_${i + 1}`,
+    sellerId: 'seller_1',
+    title: `Listing Item ${i + 1}`,
+    produceType: 'Vegetable',
+    pricePerOz: '0.50',
+    totalOzInventory: '100',
+    availableBy: '2026-05-01',
+    harvestFrequencyDays: 7,
+    seasonStart: '2026-04-01',
+    seasonEnd: '2026-10-01',
+    images: [],
+    isSubscribable: true,
+    status: 'active' as ProduceStatusProperty,
+    createdAt: '2026-01-01T00:00:00Z',
+    updatedAt: '2026-01-01T00:00:00Z',
+    analytics: {
+      percentSold: 10,
+      totalMonthlyEarnings: 50,
+      totalOzSold: 5,
+      numberOfOrders: 1,
+      numberOfSubscriptions: 1,
+      upcomingSubscriptionOzNeeded: 10,
+      inventorySufficientForUpcoming: true,
+      availableInventory: 90,
+    },
+  }));
+};
+
+const PAGINATED_LISTINGS_DATA = generateMockListings(25);
+
 const MOCK_LISTINGS: getSellerListingsResponse200 = {
   data: {
-    data: [
-      {
-        id: '1',
-        sellerId: 'seller_1',
-        title: 'Organic Lacinato Kale',
-        produceType: 'Kale',
-        pricePerOz: '0.50',
-        totalOzInventory: '320',
-        availableBy: '2026-05-01',
-        harvestFrequencyDays: 7,
-        seasonStart: '2026-04-01',
-        seasonEnd: '2026-10-01',
-        images: [],
-        isSubscribable: true,
-        status: 'active',
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-01-01T00:00:00Z',
-        analytics: {
-          percentSold: 45,
-          totalMonthlyEarnings: 120,
-          totalOzSold: 12,
-          numberOfOrders: 0,
-          numberOfSubscriptions: 0,
-          upcomingSubscriptionOzNeeded: 78,
-          inventorySufficientForUpcoming: true,
-          availableInventory: 24,
-        },
-      },
-      {
-        id: '2',
-        sellerId: 'seller_1',
-        title: 'Heirloom Tomatoes',
-        produceType: 'Tomato',
-        pricePerOz: '0.75',
-        totalOzInventory: '160',
-        availableBy: '2026-06-15',
-        harvestFrequencyDays: 3,
-        seasonStart: '2026-06-01',
-        seasonEnd: '2026-09-15',
-        images: [],
-        isSubscribable: false,
-        status: 'active',
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-01-01T00:00:00Z',
-        analytics: {
-          percentSold: 88,
-          totalMonthlyEarnings: 450,
-          totalOzSold: 12,
-          numberOfOrders: 2,
-          numberOfSubscriptions: 56,
-          upcomingSubscriptionOzNeeded: 0,
-          inventorySufficientForUpcoming: true,
-          availableInventory: 160,
-        },
-      },
-    ],
+    data: PAGINATED_LISTINGS_DATA.slice(0, 2),
     meta: { total: 2, page: 1, limit: 2, totalPages: 1 },
   },
   status: 200,
@@ -119,16 +99,57 @@ export const Default: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-
-    // Check header
     await expect(await canvas.findByText(/2 active/i)).toBeInTheDocument();
-
-    // Check if cards rendered
-    await expect(canvas.getByText(/Organic Lacinato Kale/i)).toBeInTheDocument();
-    await expect(canvas.getByText(/Heirloom Tomatoes/i)).toBeInTheDocument();
-
-    // Check if Add New card is present
+    await expect(canvas.getByText(/Listing Item 1/i)).toBeInTheDocument();
     await expect(canvas.getByText(/Add a new listing/i)).toBeInTheDocument();
+  },
+};
+
+/**
+ * Pagination state with multiple pages of listings.
+ */
+export const Paginated: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('*/api/produce/me', ({ request }) => {
+          const url = new URL(request.url);
+          const page = Number(url.searchParams.get('page') || '1');
+
+          const start = (page - 1) * PAGE_LIMIT;
+          const end = start + PAGE_LIMIT;
+          const items = PAGINATED_LISTINGS_DATA.slice(start, end);
+
+          return HttpResponse.json({
+            status: 200,
+            data: {
+              data: items,
+              meta: {
+                total: PAGINATED_LISTINGS_DATA.length,
+                page,
+                limit: PAGE_LIMIT,
+                totalPages: Math.ceil(PAGINATED_LISTINGS_DATA.length / PAGE_LIMIT),
+              },
+            },
+          });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify Page 1
+    await expect(await canvas.findByText('Listing Item 1')).toBeInTheDocument();
+    await expect(canvas.queryByText(`Listing Item ${PAGE_LIMIT + 1}`)).not.toBeInTheDocument();
+
+    // Navigate to Page 2
+    const nextButton = await canvas.findByRole('button', { name: /next|2/i });
+    nextButton.click();
+
+    // Verify Page 2
+    await expect(await canvas.findByText(`Listing Item ${PAGE_LIMIT + 1}`)).toBeInTheDocument();
+    await expect(canvas.queryByText('Listing Item 1')).not.toBeInTheDocument();
   },
 };
 
@@ -150,14 +171,16 @@ export const Loading: Story = {
 
 /**
  * View when the seller has no listings yet.
- * Should show the header with 0 count and the Add New card.
  */
 export const EmptyState: Story = {
   parameters: {
     msw: {
       handlers: [
         http.get('*/api/produce/me', () => {
-          return HttpResponse.json({ data: { data: [] }, status: 200 });
+          return HttpResponse.json({
+            status: 200,
+            data: { data: [], meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 } },
+          });
         }),
       ],
     },

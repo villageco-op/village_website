@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect } from '@storybook/test';
+import { within, expect, userEvent } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -13,48 +13,37 @@ const mockedQueryClient = new QueryClient({
   },
 });
 
+const PAGE_LIMIT = 12;
+
+const generateMockGrowers = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    sellerId: `grower-${i + 1}`,
+    name: `Grower ${i + 1}`,
+    city: 'Austin',
+    location: {
+      lat: 30.2672,
+      lng: -97.7431,
+      address: `${i + 1} Green Lane`,
+      city: 'Austin',
+      state: 'TX',
+      country: 'United States',
+      zip: '92921',
+    },
+    produceTypesOrdered: ['Vegetables'],
+    amountOrderedThisMonthLbs: 10,
+    daysSinceFirstOrder: 100,
+    firstOrderDate: '2024-01-01T00:00:00Z',
+  }));
+};
+
+const PAGINATED_GROWERS_DATA = generateMockGrowers(25);
+
 const MOCK_GROWERS: { data: GrowersResponse; status: number } = {
   status: 200,
   data: {
-    data: [
-      {
-        sellerId: 'grower-1',
-        name: 'Sun-Kissed Orchards',
-        city: 'Austin',
-        location: {
-          lat: 30.2672,
-          lng: -97.7431,
-          address: '456 Apple Way',
-          city: 'Austin',
-          state: 'TX',
-          country: 'United States',
-          zip: '92921',
-        },
-        produceTypesOrdered: ['Apples', 'Pears', 'Cider'],
-        amountOrderedThisMonthLbs: 120,
-        daysSinceFirstOrder: 365,
-        firstOrderDate: '2023-04-18T00:00:00Z',
-      },
-      {
-        sellerId: 'grower-2',
-        name: 'Rooted Earth Farm',
-        city: 'Austin',
-        location: {
-          lat: 30.2672,
-          lng: -97.7431,
-          address: '789 Dirt Road',
-          city: 'Austin',
-          state: 'TX',
-          country: 'United States',
-          zip: '92921',
-        },
-        produceTypesOrdered: ['Carrots', 'Radishes'],
-        amountOrderedThisMonthLbs: 15.2,
-        daysSinceFirstOrder: 45,
-        firstOrderDate: '2026-03-04T00:00:00Z',
-      },
-    ],
+    data: PAGINATED_GROWERS_DATA.slice(0, 2),
     meta: { total: 2, page: 1, limit: 10, totalPages: 1 },
+    cities: ['Austin'],
   },
 };
 
@@ -84,10 +73,6 @@ const meta: Meta<typeof BuyerGrowersClient> = {
 export default meta;
 type Story = StoryObj<typeof BuyerGrowersClient>;
 
-/**
- * Standard view with multiple growers.
- * Note how "All Austin" is derived from the shared city.
- */
 export const Default: Story = {
   parameters: {
     msw: {
@@ -100,18 +85,58 @@ export const Default: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Check header logic
     await expect(await canvas.findByText(/2 active relationships/i)).toBeInTheDocument();
     await expect(canvas.getByText(/All Austin/i)).toBeInTheDocument();
-    // Check card rendering
-    await expect(canvas.getByText('Sun-Kissed Orchards')).toBeInTheDocument();
-    await expect(canvas.getByText('Rooted Earth Farm')).toBeInTheDocument();
+    await expect(canvas.getByText('Grower 1')).toBeInTheDocument();
+    await expect(canvas.getByText('Grower 2')).toBeInTheDocument();
   },
 };
 
 /**
- * Displays the "Multiple locations" subtitle logic when growers are from different cities.
+ * Pagination state with multiple pages of growers.
  */
+export const Paginated: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('*/api/buyer/growers', ({ request }) => {
+          const url = new URL(request.url);
+          const page = Number(url.searchParams.get('page') || '1');
+
+          const start = (page - 1) * PAGE_LIMIT;
+          const end = start + PAGE_LIMIT;
+          const items = PAGINATED_GROWERS_DATA.slice(start, end);
+
+          return HttpResponse.json({
+            status: 200,
+            data: {
+              data: items,
+              meta: {
+                total: PAGINATED_GROWERS_DATA.length,
+                page,
+                limit: PAGE_LIMIT,
+                totalPages: Math.ceil(PAGINATED_GROWERS_DATA.length / PAGE_LIMIT),
+              },
+            },
+          });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(await canvas.findByText('Grower 1')).toBeInTheDocument();
+    await expect(canvas.queryByText(`Grower ${PAGE_LIMIT + 1}`)).not.toBeInTheDocument();
+
+    const nextButton = await canvas.findByRole('button', { name: /next|2/i });
+    await userEvent.click(nextButton);
+
+    await expect(await canvas.findByText(`Grower ${PAGE_LIMIT + 1}`)).toBeInTheDocument();
+    await expect(canvas.queryByText('Grower 1')).not.toBeInTheDocument();
+  },
+};
+
 export const MixedLocations: Story = {
   parameters: {
     msw: {
@@ -119,6 +144,7 @@ export const MixedLocations: Story = {
         http.get('*/api/buyer/growers', () => {
           const mixedData = JSON.parse(JSON.stringify(MOCK_GROWERS));
           mixedData.data.data[1].city = 'San Antonio';
+          mixedData.data.cities = ['Austin', 'San Antonio'];
           return HttpResponse.json(mixedData);
         }),
       ],
@@ -130,9 +156,6 @@ export const MixedLocations: Story = {
   },
 };
 
-/**
- * Loading state utilizing the GrowersSkeleton.
- */
 export const Loading: Story = {
   parameters: {
     msw: {
@@ -146,16 +169,13 @@ export const Loading: Story = {
   },
 };
 
-/**
- * Empty state for users who haven't made any purchases yet.
- */
 export const EmptyState: Story = {
   parameters: {
     msw: {
       handlers: [
         http.get('*/api/buyer/growers', () => {
           return HttpResponse.json({
-            data: { data: [], meta: { total: 0, page: 1, limit: 10, totalPages: 0 } },
+            data: { data: [], meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 } },
             status: 200,
           });
         }),
@@ -164,9 +184,6 @@ export const EmptyState: Story = {
   },
 };
 
-/**
- * Error state when the API request fails.
- */
 export const ErrorState: Story = {
   parameters: {
     msw: {

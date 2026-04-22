@@ -6,7 +6,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { SubscriptionStatus } from '@/lib/api/generated/models';
 
 const meta: Meta<typeof SubscriptionLocationCard> = {
-  title: 'Buyer/Subscriptions/Details/SubscriptionLocationCard',
+  title: 'Subscriptions/SubscriptionLocationCard',
   component: SubscriptionLocationCard,
   parameters: {
     layout: 'padded',

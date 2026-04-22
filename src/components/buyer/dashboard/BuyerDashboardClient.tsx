@@ -4,7 +4,9 @@ import { BuyerDashboardHeader } from '@/components/buyer/dashboard/BuyerDashboar
 import { BuyerDashboardStats } from '@/components/buyer/dashboard/BuyerDashboardStats';
 import { SupplyMapCard } from '@/components/buyer/dashboard/SupplyMapCard';
 import { UpcomingOrdersCard } from '@/components/buyer/dashboard/UpcomingOrdersCard';
+import { PaginationControls } from '@/components/ui/pagination-controls';
 import { Skeleton } from '@/components/ui/skeleton';
+import { usePagination } from '@/hooks/usePagination';
 import { useGetBuyerDashboard } from '@/lib/api/generated/buyers/buyers';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
 
@@ -13,6 +15,8 @@ import { useGetOrders } from '@/lib/api/generated/orders/orders';
  * @returns A page containing all the buyer dashboard elements
  */
 export default function BuyerDashboardClient() {
+  const { page, limit, setPage } = usePagination(5);
+
   const {
     data: dashboardResponse,
     isLoading: isDashboardLoading,
@@ -23,7 +27,7 @@ export default function BuyerDashboardClient() {
     data: ordersResponse,
     isLoading: isOrdersLoading,
     isError: isOrdersError,
-  } = useGetOrders({ role: 'buyer', status: 'pending', limit: 5 });
+  } = useGetOrders({ role: 'buyer', status: 'pending', limit, page });
 
   const isLoading = isDashboardLoading || isOrdersLoading;
   const isError = isDashboardError || isOrdersError;
@@ -41,7 +45,9 @@ export default function BuyerDashboardClient() {
   }
 
   const dashboardData = dashboardResponse.data;
+
   const pendingOrders = ordersResponse?.data?.data || [];
+  const meta = ordersResponse.data.meta;
 
   return (
     <div className="flex w-full flex-col">
@@ -58,7 +64,10 @@ export default function BuyerDashboardClient() {
       />
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <UpcomingOrdersCard orders={pendingOrders} />
+        <div className="flex flex-col">
+          <UpcomingOrdersCard orders={pendingOrders} />
+          <PaginationControls meta={meta} onPageChange={setPage} className="mt-2 mb-10" />
+        </div>
         <SupplyMapCard
           localGrowersSupplying={dashboardData.localGrowersSupplying}
           avgGrowerDistanceMiles={dashboardData.avgGrowerDistanceMiles}

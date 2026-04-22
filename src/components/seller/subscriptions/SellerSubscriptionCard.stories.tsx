@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { SubscriptionCard } from './SubscriptionCard';
+import { SellerSubscriptionCard } from './SellerSubscriptionCard';
 
 import { Toaster } from '@/components/ui/sonner';
 import type {
@@ -8,9 +8,9 @@ import type {
   SubscriptionStatus,
 } from '@/lib/api/generated/models';
 
-const meta: Meta<typeof SubscriptionCard> = {
-  title: 'Buyer/Subscriptions/SubscriptionCard',
-  component: SubscriptionCard,
+const meta: Meta<typeof SellerSubscriptionCard> = {
+  title: 'Seller/Subscriptions/SellerSubscriptionCard',
+  component: SellerSubscriptionCard,
   parameters: {
     layout: 'padded',
   },
@@ -26,43 +26,43 @@ const meta: Meta<typeof SubscriptionCard> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof SubscriptionCard>;
+type Story = StoryObj<typeof SellerSubscriptionCard>;
 
 const mockSubscription = {
-  id: 'sub-123',
-  buyerId: 'user-buyer',
-  productId: 'prod-456',
-  sellerId: 'user-seller',
-  quantityOz: '16',
+  id: 'sub-789',
+  buyerId: 'user-buyer-1',
+  productId: 'prod-001',
+  sellerId: 'user-seller-pro',
+  quantityOz: '32',
   status: 'active' as SubscriptionStatus,
-  fulfillmentType: 'delivery',
-  nextDeliveryDate: '2026-05-15T10:00:00Z',
+  fulfillmentType: 'pickup',
+  nextDeliveryDate: '2026-06-12T09:00:00Z',
   cancelReason: null,
-  createdAt: '2026-01-01T00:00:00Z',
-  updatedAt: '2026-01-01T00:00:00Z',
+  createdAt: '2026-02-15T00:00:00Z',
+  updatedAt: '2026-02-15T00:00:00Z',
   product: {
-    id: 'prod-456',
-    sellerId: 'user-seller',
-    title: 'Organic Heirloom Kale',
-    produceType: 'Leafy Greens',
-    pricePerOz: '0.75',
-    totalOzInventory: '100',
-    availableBy: '2026-04-20',
-    harvestFrequencyDays: 7,
-    seasonStart: '2026-03-01',
-    seasonEnd: '2026-11-01',
+    id: 'prod-001',
+    sellerId: 'user-seller-pro',
+    title: 'Red Bourbon Coffee Beans',
+    produceType: 'Coffee',
+    pricePerOz: '1.25',
+    totalOzInventory: '500',
+    availableBy: '2026-01-01',
+    harvestFrequencyDays: 14,
+    seasonStart: '2026-01-01',
+    seasonEnd: '2026-12-31',
     images: [],
     isSubscribable: true,
     status: 'active' as SubscriptionDetailResponseProductStatus,
     createdAt: '2026-01-01T00:00:00Z',
     updatedAt: '2026-01-01T00:00:00Z',
   },
-  seller: {
-    id: 'user-seller',
-    name: 'Sun-Kissed Acres',
-    email: 'contact@sunkissed.com',
+  buyer: {
+    id: 'user-buyer-1',
+    name: 'Alice Henderson',
+    email: 'alice@example.com',
   },
-  buyer: null,
+  seller: null, // From seller perspective, we usually focus on the buyer
 };
 
 export const Active: Story = {
@@ -82,22 +82,22 @@ export const Paused: Story = {
   },
 };
 
-export const PendingDelivery: Story = {
+export const PickupPending: Story = {
   args: {
     subscription: {
       ...mockSubscription,
+      fulfillmentType: 'pickup',
       nextDeliveryDate: null,
     },
     index: 2,
   },
 };
 
-export const MissingData: Story = {
+export const AnonymousBuyer: Story = {
   args: {
     subscription: {
       ...mockSubscription,
-      product: { ...mockSubscription.product, title: '' },
-      seller: null,
+      buyer: null,
     },
     index: 3,
   },

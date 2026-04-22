@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 
-import { SubscriptionCard } from './SubscriptionCard';
-import { SubscriptionsHeader } from './SubscriptionsHeader';
-import { SubscriptionsSkeleton } from './SubscriptionsSkeleton';
+import { SellerSubscriptionCard } from './SellerSubscriptionCard';
+import { SellerSubscriptionsHeader } from './SellerSubscriptionsHeader';
+import { SellerSubscriptionsSkeleton } from './SellerSubscriptionsSkeleton';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,38 +21,48 @@ import type { GetSubscriptionsParams, SubscriptionStatus } from '@/lib/api/gener
 import { useGetSubscriptions } from '@/lib/api/generated/subscriptions/subscriptions';
 
 /**
- * The buyer subscriptions page client for displaying the user's subscriptions.
- * @returns Page displaying a list of subscription cards.
+ * The seller subscriptions page client for displaying subscriptions from buyers.
+ * @returns Page displaying a list of subscription cards with filters.
  */
-export default function BuyerSubscriptionsClient() {
+export default function SellerSubscriptionsClient() {
   const { page, limit, setPage, resetPage } = usePagination(12);
 
   const [statusFilter, setStatusFilter] = useState<SubscriptionStatus | 'all'>('all');
-  const [sellerInput, setSellerInput] = useState<string>('');
-  const [debouncedSellerId, setDebouncedSellerId] = useState<string>('');
+  const [buyerInput, setBuyerInput] = useState<string>('');
+  const [productInput, setProductInput] = useState<string>('');
+
+  const [debouncedBuyerId, setDebouncedBuyerId] = useState<string>('');
+  const [debouncedProductId, setDebouncedProductId] = useState<string>('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedSellerId(sellerInput);
+      setDebouncedBuyerId(buyerInput);
+      setDebouncedProductId(productInput);
     }, 500);
+
     return () => clearTimeout(timer);
-  }, [sellerInput]);
+  }, [buyerInput, productInput]);
 
   useEffect(() => {
     resetPage();
-  }, [statusFilter, debouncedSellerId, resetPage]);
+  }, [statusFilter, debouncedBuyerId, debouncedProductId, resetPage]);
 
-  const queryParams: GetSubscriptionsParams = {
-    page,
-    limit,
-    ...(statusFilter !== 'all' && { status: statusFilter }),
-    ...(debouncedSellerId && { sellerId: debouncedSellerId }),
-  };
+  const queryParams: GetSubscriptionsParams = { page, limit };
+
+  if (statusFilter !== 'all') {
+    queryParams.status = statusFilter;
+  }
+  if (debouncedBuyerId) {
+    queryParams.buyerId = debouncedBuyerId;
+  }
+  if (debouncedProductId) {
+    queryParams.productId = debouncedProductId;
+  }
 
   const { data: response, isLoading, isError } = useGetSubscriptions(queryParams);
 
   if (isLoading) {
-    return <SubscriptionsSkeleton />;
+    return <SellerSubscriptionsSkeleton />;
   }
 
   if (isError || response?.status !== 200 || !response?.data) {
@@ -65,26 +75,33 @@ export default function BuyerSubscriptionsClient() {
 
   const subscriptions = response.data.data || [];
   const meta = response.data.meta;
+
   const activeCount =
     response.data.meta.activeCount || subscriptions.filter((sub) => sub.status === 'active').length;
 
   return (
     <div className="flex w-full flex-col p-8 pt-6">
-      <SubscriptionsHeader activeCount={activeCount} />
+      <SellerSubscriptionsHeader activeCount={activeCount} />
 
-      {/* Filters Section */}
+      {/* Filters */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
         <Input
-          placeholder="Filter by Seller ID..."
-          value={sellerInput}
-          onChange={(e) => setSellerInput(e.target.value)}
+          placeholder="Filter by Buyer ID..."
+          value={buyerInput}
+          onChange={(e) => setBuyerInput(e.target.value)}
+          className="max-w-xs bg-white"
+        />
+        <Input
+          placeholder="Filter by Product ID..."
+          value={productInput}
+          onChange={(e) => setProductInput(e.target.value)}
           className="max-w-xs bg-white"
         />
         <Select
           value={statusFilter}
           onValueChange={(val) => setStatusFilter(val as SubscriptionStatus | 'all')}
         >
-          <SelectTrigger className="w-full sm:w-48 bg-white">
+          <SelectTrigger className="w-full sm:w-45 bg-white">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
@@ -95,11 +112,12 @@ export default function BuyerSubscriptionsClient() {
           </SelectContent>
         </Select>
 
-        {(statusFilter !== 'all' || sellerInput) && (
+        {(debouncedBuyerId || debouncedProductId || statusFilter !== 'all') && (
           <Button
             onClick={() => {
+              setBuyerInput('');
+              setProductInput('');
               setStatusFilter('all');
-              setSellerInput('');
             }}
             className="text-sm font-semibold text-forest hover:underline"
             variant="ghost"
@@ -109,23 +127,26 @@ export default function BuyerSubscriptionsClient() {
         )}
       </div>
 
+      {/* Results Grid */}
       {subscriptions.length > 0 ? (
         <>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {subscriptions.map((subscription, i) => (
-              <SubscriptionCard
+              <SellerSubscriptionCard
                 key={subscription.id}
                 subscription={subscription}
                 index={i}
-                onFilterSeller={setSellerInput}
+                onFilterBuyer={setBuyerInput}
+                onFilterProduct={setProductInput}
               />
             ))}
           </div>
+
           <PaginationControls meta={meta} onPageChange={setPage} />
         </>
       ) : (
         <div className="flex h-48 flex-col items-center justify-center rounded-xl border border-dashed border-forest-dark/20 bg-slate-50 text-ink-3">
-          <p>No subscriptions found matching your filters.</p>
+          <p>No subscriptions match your current filters.</p>
         </div>
       )}
     </div>

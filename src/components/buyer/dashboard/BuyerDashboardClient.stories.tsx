@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { within, expect, userEvent } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -15,6 +16,54 @@ const mockedQueryClient = new QueryClient({
     queries: { retry: false },
   },
 });
+
+const PAGE_LIMIT = 5;
+
+const generateMockOrders = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: `ORD-${7000 + i}`,
+    buyerId: 'me',
+    sellerId: i % 2 === 0 ? 'grower-alpha' : 'grower-beta',
+    paymentMethod: OrderPaymentMethod.card,
+    fulfillmentType: OrderFulfillmentType.delivery,
+    scheduledTime: new Date().toISOString(),
+    status: OrderStatusProperty.pending,
+    totalAmount: (Math.random() * 100 + 20).toFixed(2),
+    createdAt: new Date().toISOString(),
+  }));
+};
+
+const PAGINATED_ORDERS_DATA = generateMockOrders(25);
+
+const MOCK_DASHBOARD_STATS = {
+  onOrderThisWeekLbs: 342,
+  percentChangeFromLastWeek: 15.4,
+  totalSpendThisMonth: '1850.50',
+  totalSpendLastMonth: '1600.00',
+  activeSubscriptions: [
+    { id: 'sub-1', produceName: 'Organic Spinach' },
+    { id: 'sub-2', produceName: 'Heirloom Tomatoes' },
+    { id: 'sub-3', produceName: 'Bell Peppers' },
+  ],
+  localGrowersSupplying: 6,
+  furthestGrowerDistanceMiles: 24.5,
+  avgGrowerDistanceMiles: 8.2,
+};
+
+const MOCK_GROWERS_LIST = {
+  data: [
+    {
+      sellerId: 'grower-alpha',
+      name: 'Alpha Farms',
+      location: { lat: 41.61, lng: -87.34 },
+    },
+    {
+      sellerId: 'grower-beta',
+      name: 'Beta Gardens',
+      location: { lat: 41.59, lng: -87.32 },
+    },
+  ],
+};
 
 const meta: Meta<typeof BuyerDashboardClient> = {
   title: 'Buyer/Dashboard/DashboardPage',
@@ -42,87 +91,81 @@ const meta: Meta<typeof BuyerDashboardClient> = {
 export default meta;
 type Story = StoryObj<typeof BuyerDashboardClient>;
 
-const MOCK_DASHBOARD_STATS = {
-  onOrderThisWeekLbs: 342,
-  percentChangeFromLastWeek: 15.4,
-  totalSpendThisMonth: '1850.50',
-  totalSpendLastMonth: '1600.00',
-  activeSubscriptions: [
-    { id: 'sub-1', produceName: 'Organic Spinach' },
-    { id: 'sub-2', produceName: 'Heirloom Tomatoes' },
-    { id: 'sub-3', produceName: 'Bell Peppers' },
-  ],
-  localGrowersSupplying: 6,
-  furthestGrowerDistanceMiles: 24.5,
-  avgGrowerDistanceMiles: 8.2,
-};
-
-const MOCK_ORDERS = {
-  data: [
-    {
-      id: 'ORD-7721',
-      buyerId: 'me',
-      sellerId: 'grower-alpha',
-      paymentMethod: OrderPaymentMethod.card,
-      fulfillmentType: OrderFulfillmentType.delivery,
-      scheduledTime: new Date().toISOString(),
-      status: OrderStatusProperty.pending,
-      totalAmount: '85.20',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: 'ORD-7722',
-      buyerId: 'me',
-      sellerId: 'grower-beta',
-      paymentMethod: OrderPaymentMethod.snap,
-      fulfillmentType: OrderFulfillmentType.pickup,
-      scheduledTime: new Date(Date.now() + 86400000).toISOString(),
-      status: OrderStatusProperty.pending,
-      totalAmount: '42.00',
-      createdAt: new Date().toISOString(),
-    },
-  ],
-};
-
-const MOCK_GROWERS_LIST = {
-  data: [
-    {
-      sellerId: 'grower-alpha',
-      name: 'Alpha Farms',
-      location: { lat: 41.61, lng: -87.34 },
-    },
-    {
-      sellerId: 'grower-beta',
-      name: 'Beta Gardens',
-      location: { lat: 41.59, lng: -87.32 },
-    },
-  ],
-};
-
-/**
- * The standard "Happy Path" for a buyer with active orders and stats.
- */
 export const Default: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/dashboard', () => {
-          return HttpResponse.json({ status: 200, data: MOCK_DASHBOARD_STATS });
-        }),
+        http.get('*/api/buyer/dashboard', () =>
+          HttpResponse.json({ status: 200, data: MOCK_DASHBOARD_STATS }),
+        ),
         http.get('*/api/orders*', () => {
-          return HttpResponse.json({ status: 200, data: MOCK_ORDERS });
+          return HttpResponse.json({
+            status: 200,
+            data: {
+              data: PAGINATED_ORDERS_DATA.slice(0, 2),
+              meta: { total: 2, page: 1, limit: PAGE_LIMIT, totalPages: 1 },
+            },
+          });
         }),
-        http.get('*/api/buyer/growers*', () => {
-          return HttpResponse.json({ status: 200, data: MOCK_GROWERS_LIST });
-        }),
+        http.get('*/api/buyer/growers*', () =>
+          HttpResponse.json({ status: 200, data: MOCK_GROWERS_LIST }),
+        ),
       ],
     },
   },
 };
 
 /**
- * Visualizes the loading skeletons across the entire page.
+ * Pagination state specifically for the Orders list.
  */
+export const OrdersPaginated: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('*/api/buyer/dashboard', () =>
+          HttpResponse.json({ status: 200, data: MOCK_DASHBOARD_STATS }),
+        ),
+        http.get('*/api/buyer/growers*', () =>
+          HttpResponse.json({ status: 200, data: MOCK_GROWERS_LIST }),
+        ),
+        http.get('*/api/orders*', ({ request }) => {
+          const url = new URL(request.url);
+          const page = Number(url.searchParams.get('page') || '1');
+
+          const start = (page - 1) * PAGE_LIMIT;
+          const end = start + PAGE_LIMIT;
+          const items = PAGINATED_ORDERS_DATA.slice(start, end);
+
+          return HttpResponse.json({
+            status: 200,
+            data: {
+              data: items,
+              meta: {
+                total: PAGINATED_ORDERS_DATA.length,
+                page,
+                limit: PAGE_LIMIT,
+                totalPages: Math.ceil(PAGINATED_ORDERS_DATA.length / PAGE_LIMIT),
+              },
+            },
+          });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(await canvas.findByText(/#ORD-7000/i)).toBeInTheDocument();
+    await expect(canvas.queryByText(/#ORD-7005/i)).not.toBeInTheDocument();
+
+    const pageTwoButton = await canvas.findByRole('button', { name: /next|2/i });
+    await userEvent.click(pageTwoButton);
+
+    await expect(await canvas.findByText(/#ORD-7005/i)).toBeInTheDocument();
+    await expect(canvas.queryByText(/#ORD-7000/i)).not.toBeInTheDocument();
+  },
+};
+
 export const Loading: Story = {
   parameters: {
     msw: {
@@ -136,27 +179,17 @@ export const Loading: Story = {
   },
 };
 
-/**
- * Displays the error UI when one or more essential APIs fail.
- */
 export const ErrorState: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/dashboard', () => {
-          return new HttpResponse(null, { status: 500 });
-        }),
-        http.get('*/api/orders*', () => {
-          return new HttpResponse(null, { status: 500 });
-        }),
+        http.get('*/api/buyer/dashboard', () => new HttpResponse(null, { status: 500 })),
+        http.get('*/api/orders*', () => new HttpResponse(null, { status: 500 })),
       ],
     },
   },
 };
 
-/**
- * Dashboard for a buyer who has no history or pending orders yet.
- */
 export const EmptyState: Story = {
   parameters: {
     msw: {
@@ -174,12 +207,15 @@ export const EmptyState: Story = {
             },
           });
         }),
-        http.get('*/api/orders*', () => {
-          return HttpResponse.json({ status: 200, data: { data: [] } });
-        }),
-        http.get('*/api/buyer/growers*', () => {
-          return HttpResponse.json({ status: 200, data: { data: [] } });
-        }),
+        http.get('*/api/orders*', () =>
+          HttpResponse.json({
+            status: 200,
+            data: { data: [], meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 } },
+          }),
+        ),
+        http.get('*/api/buyer/growers*', () =>
+          HttpResponse.json({ status: 200, data: { data: [] } }),
+        ),
       ],
     },
   },

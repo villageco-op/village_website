@@ -1,15 +1,16 @@
 'use client';
 
-import { ArrowLeft, Pause, Play } from 'lucide-react';
+import { AlertCircle, ArrowLeft, Pause, Play } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import { SubscriptionLocationCard } from '../../../subscriptions/SubscriptionLocationCard';
+import { SubscriptionSummaryCard } from '../../../subscriptions/SubscriptionSummaryCard';
+import { SubscriptionUserCard } from '../../../subscriptions/SubscriptionUserCard';
+
 import { CancelSubscriptionDialog } from './CancelSubscriptionDialog';
 import { EditSubscriptionDialog } from './EditSubscriptionDialog';
-import { SubscriptionLocationCard } from './SubscriptionLocationCard';
-import { SubscriptionSummaryCard } from './SubscriptionSummaryCard';
-import { SubscriptionUserCard } from './SubscriptionUserCard';
 
 import { OrderDetailSkeleton } from '@/components/orders/OrderDetailSkeleton';
 import { Button } from '@/components/ui/button';
@@ -164,6 +165,17 @@ export default function SubscriptionDetailClient({ id }: SubscriptionDetailClien
             </div>
           )}
         </div>
+
+        {/* Cancellation Reason Banner */}
+        {isCanceled && subscription.cancelReason && (
+          <div className="mb-6 flex items-start gap-3 rounded-lg border border-destructive/20 bg-destructive/10 p-4 text-sm text-destructive">
+            <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
+            <div>
+              <p className="font-bold">Cancellation Reason</p>
+              <p className="mt-1">{subscription.cancelReason}</p>
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div className="flex flex-col gap-6 md:col-span-2">

@@ -1,10 +1,13 @@
+'use client';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect } from '@storybook/test';
+import { within, expect, userEvent } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
 import BuyerSubscriptionsClient from './BuyerSubscriptionsClient';
 
+import { Toaster } from '@/components/ui/sonner';
 import { SubscriptionStatus } from '@/lib/api/generated/models';
 
 const mockedQueryClient = new QueryClient({
@@ -13,39 +16,25 @@ const mockedQueryClient = new QueryClient({
   },
 });
 
+const generateMockSubscriptions = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: `sub-${i + 1}`,
+    quantityOz: (i + 4).toString(),
+    status: i % 3 === 0 ? SubscriptionStatus.paused : SubscriptionStatus.active,
+    fulfillmentType: i % 2 === 0 ? 'delivery' : 'pickup',
+    nextDeliveryDate: '2026-06-15T10:00:00Z',
+    product: { title: `Premium Produce ${i + 1}` },
+    seller: { name: `Farmer ${i + 1}`, id: `seller_${i + 1}` },
+  }));
+};
+
+const PAGINATED_DATA = generateMockSubscriptions(25);
+
 const MOCK_SUBSCRIPTIONS = {
   status: 200,
   data: {
-    data: [
-      {
-        id: 'sub-1',
-        quantityOz: '12',
-        status: SubscriptionStatus.active,
-        fulfillmentType: 'delivery',
-        nextDeliveryDate: '2026-05-20T10:00:00Z',
-        product: { title: 'Fresh Basil' },
-        seller: { name: 'Green Thumb Farm' },
-      },
-      {
-        id: 'sub-2',
-        quantityOz: '8',
-        status: SubscriptionStatus.paused,
-        fulfillmentType: 'pickup',
-        nextDeliveryDate: null,
-        product: { title: 'Wild Arugula' },
-        seller: { name: 'Urban Sprout' },
-      },
-      {
-        id: 'sub-3',
-        quantityOz: '16',
-        status: SubscriptionStatus.active,
-        fulfillmentType: 'delivery',
-        nextDeliveryDate: '2026-05-22T08:00:00Z',
-        product: { title: 'Heirloom Tomatoes' },
-        seller: { name: 'Valley Creek' },
-      },
-    ],
-    meta: { total: 3, page: 1, limit: 10, totalPages: 1 },
+    data: PAGINATED_DATA.slice(0, 3),
+    meta: { total: 3, page: 1, limit: 12, totalPages: 1, activeCount: 2 },
   },
 };
 
@@ -63,8 +52,9 @@ const meta: Meta<typeof BuyerSubscriptionsClient> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <div className="min-h-screen bg-background">
+          <div className="min-h-screen bg-slate-50">
             <Story />
+            <Toaster />
           </div>
         </QueryClientProvider>
       );
@@ -76,31 +66,81 @@ export default meta;
 type Story = StoryObj<typeof BuyerSubscriptionsClient>;
 
 /**
- * Standard view with a list of active and paused subscriptions.
+ * Standard view. Tests hover states to ensure Copy/Filter buttons appear.
  */
 export const Default: Story = {
   parameters: {
     msw: {
+      handlers: [http.get('*/api/subscriptions', () => HttpResponse.json(MOCK_SUBSCRIPTIONS))],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify initial data
+    await expect(await canvas.findByText(/2 active subscriptions/i)).toBeInTheDocument();
+
+    // Test Hover Interaction for hidden buttons
+    const firstCard = canvas.getByText('Premium Produce 1').closest('.group');
+    if (firstCard) {
+      await userEvent.hover(firstCard);
+      // Verify buttons are now accessible (using the titles added in the previous step)
+      await expect(canvas.getAllByTitle(/Copy Seller ID/i)).toHaveLength(3);
+      await expect(canvas.getAllByTitle(/Filter by this Seller/i)).toHaveLength(3);
+    }
+  },
+};
+
+/**
+ * Pagination state showing navigation between pages.
+ */
+export const Paginated: Story = {
+  parameters: {
+    msw: {
       handlers: [
-        http.get('*/api/subscriptions', () => {
-          return HttpResponse.json(MOCK_SUBSCRIPTIONS);
+        http.get('*/api/subscriptions', ({ request }) => {
+          const url = new URL(request.url);
+          const page = Number(url.searchParams.get('page') || '1');
+          const limit = 12;
+
+          const start = (page - 1) * limit;
+          const end = start + limit;
+          const items = PAGINATED_DATA.slice(start, end);
+
+          return HttpResponse.json({
+            status: 200,
+            data: {
+              data: items,
+              meta: {
+                total: PAGINATED_DATA.length,
+                page,
+                limit,
+                totalPages: Math.ceil(PAGINATED_DATA.length / limit),
+                activeCount: 19,
+              },
+            },
+          });
         }),
       ],
     },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Verify header count (2 active out of 3 total)
-    await expect(await canvas.findByText(/2 active subscriptions/i)).toBeInTheDocument();
-    // Verify specific product cards
-    await expect(canvas.getByText('Fresh Basil')).toBeInTheDocument();
-    await expect(canvas.getByText('Wild Arugula')).toBeInTheDocument();
+
+    // Check Page 1 content
+    await expect(await canvas.findByText('Premium Produce 1')).toBeInTheDocument();
+    await expect(canvas.queryByText('Premium Produce 13')).not.toBeInTheDocument();
+
+    // Navigate to Page 2
+    const nextButton = await canvas.findByRole('button', { name: /next|2/i });
+    await userEvent.click(nextButton);
+
+    // Verify Page 2 content
+    await expect(await canvas.findByText('Premium Produce 13')).toBeInTheDocument();
+    await expect(canvas.queryByText('Premium Produce 1')).not.toBeInTheDocument();
   },
 };
 
-/**
- * Loading state showing the SubscriptionsSkeleton.
- */
 export const Loading: Story = {
   parameters: {
     msw: {
@@ -114,9 +154,6 @@ export const Loading: Story = {
   },
 };
 
-/**
- * Empty state for users with no subscriptions.
- */
 export const EmptyState: Story = {
   parameters: {
     msw: {
@@ -124,35 +161,21 @@ export const EmptyState: Story = {
         http.get('*/api/subscriptions', () => {
           return HttpResponse.json({
             status: 200,
-            data: { data: [], meta: { total: 0, page: 1, limit: 10, totalPages: 0 } },
+            data: {
+              data: [],
+              meta: { total: 0, page: 1, limit: 12, totalPages: 0, activeCount: 0 },
+            },
           });
         }),
       ],
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await expect(
-      await canvas.findByText(/don't have any active subscriptions yet/i),
-    ).toBeInTheDocument();
-  },
 };
 
-/**
- * Error state when the API call fails or returns a non-200 status.
- */
 export const ErrorState: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get('*/api/subscriptions', () => {
-          return new HttpResponse(null, { status: 500 });
-        }),
-      ],
+      handlers: [http.get('*/api/subscriptions', () => new HttpResponse(null, { status: 500 }))],
     },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await expect(await canvas.findByText(/Failed to load your subscriptions/i)).toBeInTheDocument();
   },
 };

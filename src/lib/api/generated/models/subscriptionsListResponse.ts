@@ -5,10 +5,10 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { PaginationMetadata } from './paginationMetadata';
 import type { SubscriptionDetailResponse } from './subscriptionDetailResponse';
+import type { SubscriptionsPaginationMetadata } from './subscriptionsPaginationMetadata';
 
 export interface SubscriptionsListResponse {
   data: SubscriptionDetailResponse[];
-  meta: PaginationMetadata;
+  meta: SubscriptionsPaginationMetadata;
 }

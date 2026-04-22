@@ -12,21 +12,28 @@ import type { SubscriptionDetailResponse } from '@/lib/api/generated/models';
 import { getInitials } from '@/lib/user-utils';
 import { cn } from '@/lib/utils';
 
-interface SubscriptionCardProps {
+interface SellerSubscriptionCardProps {
   subscription: SubscriptionDetailResponse;
   index: number;
-  onFilterSeller?: (id: string) => void;
+  onFilterBuyer?: (id: string) => void;
+  onFilterProduct?: (id: string) => void;
 }
 
 /**
- * Card for displaying information about a single subscription.
+ * Card for displaying information about a single subscription from the seller's perspective.
  * @param props - Props containing the subscription data
  * @param props.subscription - The subscription payload
  * @param props.index - Array index used for styling the fallback avatar
- * @param props.onFilterSeller - Callback for updating the seller filter
+ * @param props.onFilterBuyer - When the buyer ID filter is changed
+ * @param props.onFilterProduct - When teh product ID filter is changed
  * @returns A card containing a snapshot of the subscription
  */
-export function SubscriptionCard({ subscription, index, onFilterSeller }: SubscriptionCardProps) {
+export function SellerSubscriptionCard({
+  subscription,
+  index,
+  onFilterBuyer,
+  onFilterProduct,
+}: SellerSubscriptionCardProps) {
   const nextDelivery = subscription.nextDeliveryDate
     ? new Date(subscription.nextDeliveryDate).toLocaleDateString('en-US', {
         month: 'short',
@@ -35,64 +42,89 @@ export function SubscriptionCard({ subscription, index, onFilterSeller }: Subscr
       })
     : 'Pending';
 
-  const sellerName = subscription.seller?.name || 'Unknown Grower';
-  const sellerId = subscription.seller?.id || '';
+  const buyerName = subscription.buyer?.name || 'Unknown Buyer';
+  const buyerId = subscription.buyer?.id || '';
   const productTitle = subscription.product?.title || 'Unknown Product';
+  const productId = subscription.product?.id || '';
 
-  const handleCopyId = (e: React.MouseEvent) => {
+  const handleCopy = (e: React.MouseEvent, text: string, label: string) => {
     e.preventDefault();
-    if (sellerId) {
-      navigator.clipboard.writeText(sellerId).catch(() => {
-        toast.error('Failed to copy seller ID');
+    if (text) {
+      navigator.clipboard.writeText(text).catch(() => {
+        toast.error(`Failed to copy ${label} to clipboard`);
       });
-      toast.success('Seller ID copied to clipboard');
+      toast.success(`${label} copied to clipboard`);
     }
   };
 
   const getAvatarFallbackColor = (index: number) => {
-    const styles = ['bg-lime/20', 'bg-sun/20', 'bg-clay/10'];
+    const styles = ['bg-lime/20', 'bg-sun/20', 'bg-clay/10', 'bg-sky-100'];
     return styles[index % styles.length];
   };
 
   return (
-    <Card className="group flex h-full flex-col rounded-xl border-none bg-white shadow-md transition-shadow hover:shadow-lg">
+    <Card className="group flex h-full flex-col rounded-xl border border-forest-dark/10 bg-white shadow-sm transition-shadow hover:shadow-md">
       <CardContent className="flex h-full flex-col p-6">
-        {/* Header */}
+        {/* Header: Avatar, Product, Buyer & Status */}
         <div className="mb-4 flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10">
               <AvatarFallback
                 className={cn(
-                  'bg-forest-light text-[0.85rem] font-medium text-forest-dark',
+                  'text-[0.85rem] font-semibold text-ink',
                   getAvatarFallbackColor(index),
                 )}
               >
-                {getInitials(sellerName)}
+                {getInitials(buyerName)}
               </AvatarFallback>
             </Avatar>
             <div>
-              <div className="line-clamp-1 font-heading text-[0.92rem] font-bold text-ink">
-                {productTitle}
-              </div>
-              <div className="flex items-center gap-2 font-sans text-[0.74rem] text-ink-3">
-                <span className="truncate max-w-80">from {sellerName}</span>
-                {/* ID Actions */}
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-2">
+                <div className="line-clamp-1 font-heading text-[0.92rem] font-bold text-ink">
+                  {productTitle}
+                </div>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                   <Button
-                    onClick={handleCopyId}
-                    title="Copy Seller ID"
-                    className="hover:text-forest"
+                    onClick={(e) => handleCopy(e, productId, 'Product ID')}
+                    className="cursor-pointer text-ink-3 hover:text-forest"
                     size="xs"
                     variant="ghost"
+                    title="Copy Product ID"
                   >
                     <Copy size={12} />
                   </Button>
                   <Button
-                    onClick={() => onFilterSeller?.(sellerId)}
-                    title="Filter by this Seller"
-                    className="hover:text-forest"
+                    onClick={() => onFilterProduct?.(productId)}
+                    className="cursor-pointer text-ink-3 hover:text-forest"
+                    size="xs"
+                    variant="ghost"
+                    title="Filter by Product"
+                  >
+                    <Filter size={12} />
+                  </Button>
+                </div>
+              </div>
+              {/* Buyer Name Row */}
+              <div className="flex items-center gap-2 font-sans text-[0.74rem] text-ink-3">
+                <span className="truncate">
+                  Subscribed by <span className="font-medium text-ink/80">{buyerName}</span>
+                </span>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                  <Button
+                    onClick={(e) => handleCopy(e, buyerId, 'Buyer ID')}
+                    className="cursor-pointer text-ink-3 hover:text-forest"
+                    size="xs"
+                    variant="ghost"
+                    title="Copy Buyer ID"
+                  >
+                    <Copy size={12} />
+                  </Button>
+                  <Button
+                    onClick={() => onFilterBuyer?.(buyerId)}
+                    className="cursor-pointer text-ink-3 hover:text-forest"
                     variant="ghost"
                     size="xs"
+                    title="Filter by Buyer"
                   >
                     <Filter size={12} />
                   </Button>
@@ -103,7 +135,7 @@ export function SubscriptionCard({ subscription, index, onFilterSeller }: Subscr
           <StatusPill status={subscription.status} />
         </div>
 
-        {/* Details */}
+        {/* Subscription Details */}
         <div className="mb-4 space-y-1.5 font-sans text-[0.8rem] text-ink-3">
           <div className="flex justify-between">
             <span className="font-medium text-ink/80">Quantity:</span>
@@ -119,6 +151,7 @@ export function SubscriptionCard({ subscription, index, onFilterSeller }: Subscr
           </div>
         </div>
 
+        {/* Actions */}
         <div className="mt-auto flex pt-2">
           <Button
             variant="outline-forest"
@@ -126,7 +159,7 @@ export function SubscriptionCard({ subscription, index, onFilterSeller }: Subscr
             asChild
             className="w-full text-xs font-semibold"
           >
-            <Link href={`/subscriptions/${subscription.id}`}>View Details</Link>
+            <Link href={`/seller/subscriptions/${subscription.id}`}>Manage Subscription</Link>
           </Button>
         </div>
       </CardContent>

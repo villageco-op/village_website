@@ -13,6 +13,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface EditSubscriptionDialogProps {
   isOpen: boolean;
@@ -95,16 +102,15 @@ export function EditSubscriptionDialog({
             <label htmlFor="fulfillment" className="text-sm font-semibold text-ink">
               Fulfillment Type
             </label>
-            <select
-              id="fulfillment"
-              value={fulfillment}
-              onChange={(e) => setFulfillment(e.target.value)}
-              disabled={isPending}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <option value="pickup">Pickup</option>
-              <option value="delivery">Delivery</option>
-            </select>
+            <Select value={fulfillment} onValueChange={setFulfillment} disabled={isPending}>
+              <SelectTrigger id="fulfillment" className="w-full bg-white">
+                <SelectValue placeholder="Select fulfillment type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="pickup">Pickup</SelectItem>
+                <SelectItem value="delivery">Delivery</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

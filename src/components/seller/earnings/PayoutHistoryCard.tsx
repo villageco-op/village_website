@@ -1,7 +1,16 @@
 'use client';
 
+import { Loader2 } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -11,22 +20,35 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import type { Payout } from '@/lib/api/generated/models';
-import { handleDownloadSellerPayoutsCSV } from '@/lib/csv-utils';
 
 /**
  * Props for the payout history card.
  */
 interface PayoutHistoryCardProps {
   payouts: Payout[];
+  onDownload: () => Promise<void>;
+  isDownloading?: boolean;
+  timeframeFilter: string;
+  setTimeframeFilter: (val: string) => void;
 }
 
 /**
  * A table card displaying the payout history for past produce sales.
  * @param props - Props containing the payouts
  * @param props.payouts - An array of seller payouts
+ * @param props.onDownload - When download is triggered
+ * @param props.isDownloading - True when downloading is occurring
+ * @param props.timeframeFilter - Currently selected timeframe
+ * @param props.setTimeframeFilter - When the timeframe is set
  * @returns A card containing a table displaying the sellers payout history
  */
-export function PayoutHistoryCard({ payouts }: PayoutHistoryCardProps) {
+export function PayoutHistoryCard({
+  payouts,
+  onDownload,
+  isDownloading,
+  timeframeFilter,
+  setTimeframeFilter,
+}: PayoutHistoryCardProps) {
   return (
     <Card className="rounded-xl border border-[rgba(42,75,40,0.08)] bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
       <CardContent className="p-6">
@@ -39,11 +61,43 @@ export function PayoutHistoryCard({ payouts }: PayoutHistoryCardProps) {
             variant="outline"
             size="sm"
             className="h-8 text-xs"
-            onClick={() => void handleDownloadSellerPayoutsCSV(payouts)}
-            disabled={payouts.length === 0}
+            onClick={() => void onDownload()}
+            disabled={payouts.length === 0 || isDownloading}
           >
-            Download
+            {isDownloading ? (
+              <>
+                <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                Downloading...
+              </>
+            ) : (
+              'Download All'
+            )}
           </Button>
+        </div>
+
+        {/* Filters Section */}
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <Select value={timeframeFilter} onValueChange={(val) => setTimeframeFilter(val)}>
+            <SelectTrigger className="w-full sm:w-48 bg-white">
+              <SelectValue placeholder="Filter by timeframe" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Time</SelectItem>
+              <SelectItem value="7d">Last 7 Days</SelectItem>
+              <SelectItem value="30d">Last 30 Days</SelectItem>
+              <SelectItem value="90d">Last 90 Days</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {timeframeFilter !== 'all' && (
+            <Button
+              onClick={() => setTimeframeFilter('all')}
+              className="text-sm font-semibold text-forest hover:underline"
+              variant="ghost"
+            >
+              Clear filter
+            </Button>
+          )}
         </div>
 
         {payouts.length === 0 ? (

@@ -13,6 +13,8 @@ const mockedQueryClient = new QueryClient({
   },
 });
 
+const PAGE_LIMIT = 12;
+
 const MOCK_EARNINGS: SellerEarningsResponse = {
   earnedThisMonth: 850.5,
   earnedLastMonth: 720.0,
@@ -54,6 +56,18 @@ const MOCK_PAYOUTS: PayoutHistoryResponse = {
   ],
   meta: { total: 3, page: 1, limit: 50, totalPages: 1 },
 };
+
+const generateMockPayouts = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    date: new Date(2026, 3, 20 - i).toISOString(),
+    buyerName: `Buyer ${i + 1}`,
+    productName: `Bulk Item ${i + 1}`,
+    quantityLbs: 10,
+    amountDollars: 50.0,
+  }));
+};
+
+const PAGINATED_DATA = generateMockPayouts(25);
 
 const meta: Meta<typeof SellerEarningsClient> = {
   title: 'Seller/Earnings/EarningsPage',
@@ -110,6 +124,54 @@ export const Default: Story = {
 
     // Check payout history
     await expect(canvas.getByText('The Daily Grind Coffee')).toBeInTheDocument();
+  },
+};
+
+/**
+ * Pagination state with multiple pages of payout history.
+ */
+export const Paginated: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('*/api/seller/earnings', () => {
+          return HttpResponse.json({ data: MOCK_EARNINGS, status: 200 });
+        }),
+        http.get('*/api/seller/payouts', ({ request }) => {
+          const url = new URL(request.url);
+          const page = Number(url.searchParams.get('page') || '1');
+
+          const start = (page - 1) * PAGE_LIMIT;
+          const end = start + PAGE_LIMIT;
+          const items = PAGINATED_DATA.slice(start, end);
+
+          return HttpResponse.json({
+            status: 200,
+            data: {
+              data: items,
+              meta: {
+                total: PAGINATED_DATA.length,
+                page,
+                limit: PAGE_LIMIT,
+                totalPages: Math.ceil(PAGINATED_DATA.length / PAGE_LIMIT),
+              },
+            },
+          });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(await canvas.findByText('Buyer 1')).toBeInTheDocument();
+    await expect(canvas.queryByText(`Buyer ${PAGE_LIMIT + 1}`)).not.toBeInTheDocument();
+
+    const nextButton = await canvas.findByRole('button', { name: /next|2/i });
+    nextButton.click();
+
+    await expect(await canvas.findByText(`Buyer ${PAGE_LIMIT + 1}`)).toBeInTheDocument();
+    await expect(canvas.queryByText('Buyer 1')).not.toBeInTheDocument();
   },
 };
 

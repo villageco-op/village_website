@@ -1,10 +1,18 @@
 'use client';
 
+import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -13,20 +21,39 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import type { Order } from '@/lib/api/generated/models';
-import { handleDownloadBuyerInvoicesCSV } from '@/lib/csv-utils';
+import type { Order, OrderStatus } from '@/lib/api/generated/models';
 
 interface InvoiceHistoryCardProps {
   orders: Order[];
+  onDownload: () => Promise<void>;
+  isDownloading?: boolean;
+  statusFilter: OrderStatus | 'all';
+  setStatusFilter: (val: OrderStatus | 'all') => void;
+  timeframeFilter: string;
+  setTimeframeFilter: (val: string) => void;
 }
 
 /**
- * Displays a table of the buyer's completed orders with routing and download functionality.
- * @param props - Props for the orders
- * @param props.orders - List of past orders
- * @returns A card containing a table of orders with download buttons
+ * Displays a table of the buyer's completed orders with routing, filtering, and download functionality.
+ * @param props - Props for the orders and filter states
+ * @param props.orders - The orders to display
+ * @param props.onDownload - When download is triggered
+ * @param props.isDownloading - True when downloading is occurring
+ * @param props.statusFilter - Currently selected status
+ * @param props.setStatusFilter - When the status filter is set
+ * @param props.timeframeFilter - Currently selected timeframe
+ * @param props.setTimeframeFilter - When the timeframe is set
+ * @returns A card containing filters and a table of orders
  */
-export function InvoiceHistoryCard({ orders }: InvoiceHistoryCardProps) {
+export function InvoiceHistoryCard({
+  orders,
+  onDownload,
+  isDownloading,
+  statusFilter,
+  setStatusFilter,
+  timeframeFilter,
+  setTimeframeFilter,
+}: InvoiceHistoryCardProps) {
   const router = useRouter();
 
   return (
@@ -40,16 +67,65 @@ export function InvoiceHistoryCard({ orders }: InvoiceHistoryCardProps) {
             variant="outline"
             size="sm"
             className="h-8 text-xs"
-            onClick={() => void handleDownloadBuyerInvoicesCSV(orders)}
-            disabled={orders.length === 0}
+            onClick={() => void onDownload()}
+            disabled={orders.length === 0 || isDownloading}
           >
-            Download all
+            {isDownloading ? (
+              <>
+                <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                Downloading...
+              </>
+            ) : (
+              'Download All'
+            )}
           </Button>
+        </div>
+
+        {/* Filters Section */}
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <Select
+            value={statusFilter}
+            onValueChange={(val) => setStatusFilter(val as OrderStatus | 'all')}
+          >
+            <SelectTrigger className="w-full sm:w-48 bg-white">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Statuses</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="canceled">Canceled</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={timeframeFilter} onValueChange={(val) => setTimeframeFilter(val)}>
+            <SelectTrigger className="w-full sm:w-48 bg-white">
+              <SelectValue placeholder="Filter by timeframe" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Time</SelectItem>
+              <SelectItem value="7d">Last 7 Days</SelectItem>
+              <SelectItem value="30d">Last 30 Days</SelectItem>
+              <SelectItem value="90d">Last 90 Days</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {(statusFilter !== 'all' || timeframeFilter !== 'all') && (
+            <Button
+              onClick={() => {
+                setStatusFilter('all');
+                setTimeframeFilter('all');
+              }}
+              className="text-sm font-semibold text-forest hover:underline"
+              variant="ghost"
+            >
+              Clear filters
+            </Button>
+          )}
         </div>
 
         {orders.length === 0 ? (
           <div className="py-8 text-center font-sans text-sm text-ink-3">
-            No invoice history found.
+            No orders found matching your filters.
           </div>
         ) : (
           <Table className="w-full">

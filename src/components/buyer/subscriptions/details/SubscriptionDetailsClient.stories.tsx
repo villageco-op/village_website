@@ -149,6 +149,7 @@ export const Canceled: Story = {
             data: {
               ...MOCK_BASE_SUBSCRIPTION,
               status: SubscriptionStatus.canceled,
+              cancelReason: 'Slow harvests, can no longer meet demand.',
             },
           });
         }),
