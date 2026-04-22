@@ -259,15 +259,15 @@ export const Paginated: Story = {
 
     const pendingNextBtn = (await canvas.findAllByRole('button', { name: /Next/i }))[0];
     pendingNextBtn.click();
-    
+
     await expect(await canvas.findByText(/Order #13-PEND/i)).toBeInTheDocument();
     await expect(canvas.getByText(/#1-HIST/i)).toBeInTheDocument();
-    
+
     const historyNextBtn = (await canvas.findAllByRole('button', { name: /Next/i }))[1];
     historyNextBtn.click();
 
     await expect(await canvas.findByText(/#13-HIST/i)).toBeInTheDocument();
-    
+
     await expect(canvas.queryByText(/Order #1-PEND/i)).not.toBeInTheDocument();
     await expect(canvas.queryByText(/#1-HIST/i)).not.toBeInTheDocument();
   },

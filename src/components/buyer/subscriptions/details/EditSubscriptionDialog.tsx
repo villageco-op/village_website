@@ -13,7 +13,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface EditSubscriptionDialogProps {
   isOpen: boolean;
@@ -96,11 +102,7 @@ export function EditSubscriptionDialog({
             <label htmlFor="fulfillment" className="text-sm font-semibold text-ink">
               Fulfillment Type
             </label>
-            <Select 
-              value={fulfillment} 
-              onValueChange={setFulfillment}
-              disabled={isPending}
-            >
+            <Select value={fulfillment} onValueChange={setFulfillment} disabled={isPending}>
               <SelectTrigger id="fulfillment" className="w-full bg-white">
                 <SelectValue placeholder="Select fulfillment type" />
               </SelectTrigger>

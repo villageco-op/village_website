@@ -63,7 +63,8 @@ export function SellerUpdateStatusDialog({
 
         <div className="my-4 space-y-2">
           <label htmlFor="reason" className="text-sm font-semibold text-ink">
-            Reason for {isCancel ? 'cancellation' : 'pausing'} <span className="text-destructive">*</span>
+            Reason for {isCancel ? 'cancellation' : 'pausing'}{' '}
+            <span className="text-destructive">*</span>
           </label>
           <Textarea
             id="reason"

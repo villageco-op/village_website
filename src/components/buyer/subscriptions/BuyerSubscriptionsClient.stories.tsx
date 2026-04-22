@@ -71,17 +71,15 @@ type Story = StoryObj<typeof BuyerSubscriptionsClient>;
 export const Default: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get('*/api/subscriptions', () => HttpResponse.json(MOCK_SUBSCRIPTIONS)),
-      ],
+      handlers: [http.get('*/api/subscriptions', () => HttpResponse.json(MOCK_SUBSCRIPTIONS))],
     },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // Verify initial data
     await expect(await canvas.findByText(/2 active subscriptions/i)).toBeInTheDocument();
-    
+
     // Test Hover Interaction for hidden buttons
     const firstCard = canvas.getByText('Premium Produce 1').closest('.group');
     if (firstCard) {
@@ -104,7 +102,7 @@ export const Paginated: Story = {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
           const limit = 12;
-          
+
           const start = (page - 1) * limit;
           const end = start + limit;
           const items = PAGINATED_DATA.slice(start, end);
@@ -163,7 +161,10 @@ export const EmptyState: Story = {
         http.get('*/api/subscriptions', () => {
           return HttpResponse.json({
             status: 200,
-            data: { data: [], meta: { total: 0, page: 1, limit: 12, totalPages: 0, activeCount: 0 } },
+            data: {
+              data: [],
+              meta: { total: 0, page: 1, limit: 12, totalPages: 0, activeCount: 0 },
+            },
           });
         }),
       ],
@@ -174,9 +175,7 @@ export const EmptyState: Story = {
 export const ErrorState: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get('*/api/subscriptions', () => new HttpResponse(null, { status: 500 })),
-      ],
+      handlers: [http.get('*/api/subscriptions', () => new HttpResponse(null, { status: 500 }))],
     },
   },
 };

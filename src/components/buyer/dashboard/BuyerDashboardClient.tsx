@@ -16,7 +16,7 @@ import { useGetOrders } from '@/lib/api/generated/orders/orders';
  */
 export default function BuyerDashboardClient() {
   const { page, limit, setPage } = usePagination(5);
-  
+
   const {
     data: dashboardResponse,
     isLoading: isDashboardLoading,
@@ -66,7 +66,7 @@ export default function BuyerDashboardClient() {
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <div className="flex flex-col">
           <UpcomingOrdersCard orders={pendingOrders} />
-          <PaginationControls meta={meta} onPageChange={setPage} className='mt-2 mb-10' />
+          <PaginationControls meta={meta} onPageChange={setPage} className="mt-2 mb-10" />
         </div>
         <SupplyMapCard
           localGrowersSupplying={dashboardData.localGrowersSupplying}

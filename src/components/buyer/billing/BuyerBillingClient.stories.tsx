@@ -71,7 +71,9 @@ export const Default: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/billing-summary', () => HttpResponse.json({ status: 200, data: MOCK_BILLING_SUMMARY })),
+        http.get('*/api/buyer/billing-summary', () =>
+          HttpResponse.json({ status: 200, data: MOCK_BILLING_SUMMARY }),
+        ),
         http.get('*/api/orders', () => {
           return HttpResponse.json({
             status: 200,
@@ -93,7 +95,9 @@ export const PaginatedHistory: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/billing-summary', () => HttpResponse.json({ status: 200, data: MOCK_BILLING_SUMMARY })),
+        http.get('*/api/buyer/billing-summary', () =>
+          HttpResponse.json({ status: 200, data: MOCK_BILLING_SUMMARY }),
+        ),
         http.get('*/api/orders', ({ request }) => {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
@@ -156,7 +160,12 @@ export const EmptyState: Story = {
         http.get('*/api/buyer/billing-summary', () => {
           return HttpResponse.json({
             status: 200,
-            data: { totalSpent: 0, totalProduceLbs: 0, avgCostPerLb: 0, localSourcingPercentage: 0 },
+            data: {
+              totalSpent: 0,
+              totalProduceLbs: 0,
+              avgCostPerLb: 0,
+              localSourcingPercentage: 0,
+            },
           });
         }),
         http.get('*/api/orders', () => {

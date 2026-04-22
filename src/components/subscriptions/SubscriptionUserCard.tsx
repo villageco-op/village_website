@@ -3,7 +3,10 @@
 import { Mail, User as UserIcon } from 'lucide-react';
 
 import { Card, CardContent } from '@/components/ui/card';
-import type { SubscriptionDetailResponseBuyer, SubscriptionDetailResponseSeller } from '@/lib/api/generated/models';
+import type {
+  SubscriptionDetailResponseBuyer,
+  SubscriptionDetailResponseSeller,
+} from '@/lib/api/generated/models';
 
 interface SubscriptionUserCardProps {
   title: string;

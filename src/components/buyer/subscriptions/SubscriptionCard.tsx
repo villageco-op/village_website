@@ -78,24 +78,24 @@ export function SubscriptionCard({ subscription, index, onFilterSeller }: Subscr
                 <span className="truncate max-w-80">from {sellerName}</span>
                 {/* ID Actions */}
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Button 
-                        onClick={handleCopyId}
-                        title="Copy Seller ID"
-                        className="hover:text-forest"
-                        size='xs'
-                        variant='ghost'
-                    >
-                        <Copy size={12} />
-                    </Button>
-                    <Button 
-                        onClick={() => onFilterSeller?.(sellerId)}
-                        title="Filter by this Seller"
-                        className="hover:text-forest"
-                        variant='ghost'
-                        size='xs'
-                    >
-                        <Filter size={12} />
-                    </Button>
+                  <Button
+                    onClick={handleCopyId}
+                    title="Copy Seller ID"
+                    className="hover:text-forest"
+                    size="xs"
+                    variant="ghost"
+                  >
+                    <Copy size={12} />
+                  </Button>
+                  <Button
+                    onClick={() => onFilterSeller?.(sellerId)}
+                    title="Filter by this Seller"
+                    className="hover:text-forest"
+                    variant="ghost"
+                    size="xs"
+                  >
+                    <Filter size={12} />
+                  </Button>
                 </div>
               </div>
             </div>

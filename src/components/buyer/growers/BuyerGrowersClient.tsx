@@ -9,7 +9,13 @@ import { GrowersSkeleton } from './GrowersSkeleton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PaginationControls } from '@/components/ui/pagination-controls';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { usePagination } from '@/hooks/usePagination';
 import { useGetBuyerGrowers } from '@/lib/api/generated/buyers/buyers';
 import type { GetBuyerGrowersParams, GrowersResponse } from '@/lib/api/generated/models';
@@ -24,7 +30,7 @@ export default function BuyerGrowersClient() {
   const [searchInput, setSearchInput] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
   const [distanceFilter, setDistanceFilter] = useState<string>('all');
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchInput);
@@ -78,10 +84,7 @@ export default function BuyerGrowersClient() {
           onChange={(e) => setSearchInput(e.target.value)}
           className="max-w-xs bg-white"
         />
-        <Select 
-          value={distanceFilter} 
-          onValueChange={(val) => setDistanceFilter(val)}
-        >
+        <Select value={distanceFilter} onValueChange={(val) => setDistanceFilter(val)}>
           <SelectTrigger className="w-full sm:w-48 bg-white">
             <SelectValue placeholder="Filter by distance" />
           </SelectTrigger>
@@ -95,8 +98,11 @@ export default function BuyerGrowersClient() {
         </Select>
 
         {(distanceFilter !== 'all' || searchInput) && (
-          <Button 
-            onClick={() => { setDistanceFilter('all'); setSearchInput(''); }}
+          <Button
+            onClick={() => {
+              setDistanceFilter('all');
+              setSearchInput('');
+            }}
             className="text-sm font-semibold text-forest hover:underline"
             variant="ghost"
           >

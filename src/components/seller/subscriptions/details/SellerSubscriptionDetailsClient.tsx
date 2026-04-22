@@ -31,7 +31,9 @@ interface SellerSubscriptionDetailClientProps {
  * @param props.id - The ID of the subscription
  * @returns A page for viewing subscription details from the seller's perspective
  */
-export default function SellerSubscriptionDetailClient({ id }: SellerSubscriptionDetailClientProps) {
+export default function SellerSubscriptionDetailClient({
+  id,
+}: SellerSubscriptionDetailClientProps) {
   const router = useRouter();
 
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
@@ -181,11 +183,7 @@ export default function SellerSubscriptionDetailClient({ id }: SellerSubscriptio
           </div>
 
           <div className="flex flex-col gap-6">
-            <SubscriptionUserCard
-              title="Buyer Details"
-              user={subscription.buyer}
-              role="buyer"
-            />
+            <SubscriptionUserCard title="Buyer Details" user={subscription.buyer} role="buyer" />
           </div>
         </div>
       </div>

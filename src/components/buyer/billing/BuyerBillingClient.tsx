@@ -14,7 +14,6 @@ import type { GetOrdersParams, OrderStatus } from '@/lib/api/generated/models';
 import { getOrders, useGetOrders } from '@/lib/api/generated/orders/orders';
 import { handleDownloadBuyerInvoicesCSV } from '@/lib/csv-utils';
 
-
 /**
  * The client component for the buyer billing & order history page.
  * @returns A composite view of the buyer's billing summary and past invoices.
@@ -22,7 +21,7 @@ import { handleDownloadBuyerInvoicesCSV } from '@/lib/csv-utils';
 export default function BuyerBillingClient() {
   const { page, limit, setPage, resetPage } = usePagination(12);
   const [isDownloading, setIsDownloading] = useState(false);
-  
+
   const [statusFilter, setStatusFilter] = useState<OrderStatus | 'all'>('completed');
   const [timeframeFilter, setTimeframeFilter] = useState<string>('all');
 
@@ -80,8 +79,8 @@ export default function BuyerBillingClient() {
 
     setIsDownloading(true);
     try {
-      const fullRes = await getOrders({ 
-        limit: totalRecords, 
+      const fullRes = await getOrders({
+        limit: totalRecords,
         page: 1,
         role: 'buyer',
         ...(statusFilter !== 'all' && { status: statusFilter as OrderStatus }),
@@ -106,10 +105,10 @@ export default function BuyerBillingClient() {
     <div className="flex w-full flex-col">
       <BillingHeader />
       <BillingStatsCard data={summaryData} />
-      
+
       <div className="mt-8 flex flex-col">
-        <InvoiceHistoryCard 
-          orders={ordersData} 
+        <InvoiceHistoryCard
+          orders={ordersData}
           onDownload={handleDownloadAll}
           isDownloading={isDownloading}
           statusFilter={statusFilter}
@@ -117,9 +116,7 @@ export default function BuyerBillingClient() {
           timeframeFilter={timeframeFilter}
           setTimeframeFilter={setTimeframeFilter}
         />
-        {ordersData.length > 0 && (
-          <PaginationControls meta={meta} onPageChange={setPage} />
-        )}
+        {ordersData.length > 0 && <PaginationControls meta={meta} onPageChange={setPage} />}
       </div>
     </div>
   );

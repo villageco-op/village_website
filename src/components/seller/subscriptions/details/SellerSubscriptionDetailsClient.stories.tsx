@@ -26,20 +26,20 @@ const generateMockSubscription = (overrides = {}) => ({
     nextDeliveryDate: '2026-05-20T10:00:00Z',
     cancelReason: null,
     buyer: {
-    id: 'user-buyer-1',
-    name: 'Alex Johnson',
-    email: 'alex.j@example.com',
+      id: 'user-buyer-1',
+      name: 'Alex Johnson',
+      email: 'alex.j@example.com',
     },
     seller: {
-    id: 'user-seller-1',
-    name: 'Alex Johnson',
-    email: 'alex.j@example.com',
+      id: 'user-seller-1',
+      name: 'Alex Johnson',
+      email: 'alex.j@example.com',
     },
     product: {
-    id: 'prod-001',
-    title: 'Heirloom Carrots',
-    produceType: 'Root Vegetables',
-    pricePerOz: '0.50',
+      id: 'prod-001',
+      title: 'Heirloom Carrots',
+      produceType: 'Root Vegetables',
+      pricePerOz: '0.50',
     },
     ...overrides,
   },
@@ -107,7 +107,7 @@ export const Paused: Story = {
             generateMockSubscription({
               status: SubscriptionStatus.paused,
               cancelReason: 'Crop needs time to regrow after heavy harvest.',
-            })
+            }),
           );
         }),
       ],
@@ -117,7 +117,7 @@ export const Paused: Story = {
     const canvas = within(canvasElement);
     await expect(await canvas.findByText(/Resume Subscription/i)).toBeInTheDocument();
     await expect(
-      canvas.getByText('Crop needs time to regrow after heavy harvest.')
+      canvas.getByText('Crop needs time to regrow after heavy harvest.'),
     ).toBeInTheDocument();
   },
 };
@@ -134,7 +134,7 @@ export const Canceled: Story = {
             generateMockSubscription({
               status: SubscriptionStatus.canceled,
               cancelReason: 'Moving farms, unable to fulfill long-term orders.',
-            })
+            }),
           );
         }),
       ],
@@ -143,7 +143,7 @@ export const Canceled: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
-      await canvas.findByText('Moving farms, unable to fulfill long-term orders.')
+      await canvas.findByText('Moving farms, unable to fulfill long-term orders.'),
     ).toBeInTheDocument();
     await expect(canvas.queryByText('Cancel Subscription')).not.toBeInTheDocument();
     await expect(canvas.queryByText('Pause Subscription')).not.toBeInTheDocument();

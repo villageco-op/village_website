@@ -27,7 +27,13 @@ export default function SellerOrdersClient() {
     data: historyRes,
     isLoading: isHistoryLoading,
     isError: isHistoryError,
-  } = useGetOrders({ role: 'seller', status: 'completed', timeframe: '30d', limit: historyLimit, page: historyPage });
+  } = useGetOrders({
+    role: 'seller',
+    status: 'completed',
+    timeframe: '30d',
+    limit: historyLimit,
+    page: historyPage,
+  });
 
   if (isPendingLoading || isHistoryLoading) {
     return <OrdersSkeleton />;
@@ -48,7 +54,7 @@ export default function SellerOrdersClient() {
 
   const pendingOrders = pendingRes?.data?.data || [];
   const historyOrders = historyRes?.data?.data || [];
-  
+
   const pendingMeta = pendingRes?.data?.meta;
   const historyMeta = historyRes?.data?.meta;
 

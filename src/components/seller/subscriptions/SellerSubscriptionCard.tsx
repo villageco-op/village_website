@@ -28,7 +28,12 @@ interface SellerSubscriptionCardProps {
  * @param props.onFilterProduct - When teh product ID filter is changed
  * @returns A card containing a snapshot of the subscription
  */
-export function SellerSubscriptionCard({ subscription, index, onFilterBuyer, onFilterProduct }: SellerSubscriptionCardProps) {
+export function SellerSubscriptionCard({
+  subscription,
+  index,
+  onFilterBuyer,
+  onFilterProduct,
+}: SellerSubscriptionCardProps) {
   const nextDelivery = subscription.nextDeliveryDate
     ? new Date(subscription.nextDeliveryDate).toLocaleDateString('en-US', {
         month: 'short',
@@ -76,47 +81,49 @@ export function SellerSubscriptionCard({ subscription, index, onFilterBuyer, onF
             <div>
               <div className="flex items-center gap-2">
                 <div className="line-clamp-1 font-heading text-[0.92rem] font-bold text-ink">
-                {productTitle}
+                  {productTitle}
                 </div>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                <Button 
+                  <Button
                     onClick={(e) => handleCopy(e, productId, 'Product ID')}
                     className="cursor-pointer text-ink-3 hover:text-forest"
-                    size='xs'
-                    variant='ghost'
+                    size="xs"
+                    variant="ghost"
                     title="Copy Product ID"
-                >
+                  >
                     <Copy size={12} />
-                </Button>
-                <Button 
+                  </Button>
+                  <Button
                     onClick={() => onFilterProduct?.(productId)}
                     className="cursor-pointer text-ink-3 hover:text-forest"
-                    size='xs'
-                    variant='ghost'
+                    size="xs"
+                    variant="ghost"
                     title="Filter by Product"
-                >
+                  >
                     <Filter size={12} />
-                </Button>
+                  </Button>
                 </div>
-            </div>
+              </div>
               {/* Buyer Name Row */}
               <div className="flex items-center gap-2 font-sans text-[0.74rem] text-ink-3">
-                <span className="truncate">Subscribed by <span className="font-medium text-ink/80">{buyerName}</span></span>
+                <span className="truncate">
+                  Subscribed by <span className="font-medium text-ink/80">{buyerName}</span>
+                </span>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                  <Button 
+                  <Button
                     onClick={(e) => handleCopy(e, buyerId, 'Buyer ID')}
                     className="cursor-pointer text-ink-3 hover:text-forest"
-                    size='xs'
-                    variant='ghost'
+                    size="xs"
+                    variant="ghost"
                     title="Copy Buyer ID"
                   >
                     <Copy size={12} />
                   </Button>
-                  <Button 
+                  <Button
                     onClick={() => onFilterBuyer?.(buyerId)}
                     className="cursor-pointer text-ink-3 hover:text-forest"
-                    variant='ghost'
-                    size='xs'
+                    variant="ghost"
+                    size="xs"
                     title="Filter by Buyer"
                   >
                     <Filter size={12} />

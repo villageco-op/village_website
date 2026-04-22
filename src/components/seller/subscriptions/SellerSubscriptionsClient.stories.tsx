@@ -94,7 +94,7 @@ export default meta;
 type Story = StoryObj<typeof SellerSubscriptionsClient>;
 
 /**
- * Verifies that the dashboard loads and that hovering a card 
+ * Verifies that the dashboard loads and that hovering a card
  * reveals ID-based actions for both Buyer and Product.
  */
 export const Default: Story = {
@@ -109,10 +109,12 @@ export const Default: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // Check header
-    await expect(await canvas.findByText(/You are fulfilling 2 active subscriptions/i)).toBeInTheDocument();
-    
+    await expect(
+      await canvas.findByText(/You are fulfilling 2 active subscriptions/i),
+    ).toBeInTheDocument();
+
     // Check specific card content
     await expect(canvas.getByText('John Doe')).toBeInTheDocument();
     await expect(canvas.getByText('Organic Honeycrisp Apples')).toBeInTheDocument();
@@ -121,11 +123,11 @@ export const Default: Story = {
     const firstCard = canvas.getByText('Organic Honeycrisp Apples').closest('.group');
     if (firstCard) {
       await userEvent.hover(firstCard);
-      
+
       // Verify Product Actions
       await expect(canvas.getAllByTitle(/Copy Product ID/i)).toHaveLength(3);
       await expect(canvas.getAllByTitle(/Filter by Product/i)).toHaveLength(3);
-      
+
       // Verify Buyer Actions
       await expect(canvas.getAllByTitle(/Copy Buyer ID/i)).toHaveLength(3);
       await expect(canvas.getAllByTitle(/Filter by Buyer/i)).toHaveLength(3);
@@ -141,7 +143,7 @@ export const Paginated: Story = {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
           const limit = 12;
-          
+
           const start = (page - 1) * limit;
           const end = start + limit;
           const items = PAGINATED_DATA.slice(start, end);
@@ -208,9 +210,7 @@ export const EmptyState: Story = {
 export const ErrorState: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get('*/api/subscriptions', () => new HttpResponse(null, { status: 500 })),
-      ],
+      handlers: [http.get('*/api/subscriptions', () => new HttpResponse(null, { status: 500 }))],
     },
   },
 };

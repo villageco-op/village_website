@@ -120,7 +120,7 @@ export const Paginated: Story = {
         http.get(`*/api/produce/${MOCK_ID}/orders`, ({ request }) => {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
-          
+
           const start = (page - 1) * PAGE_LIMIT;
           const end = start + PAGE_LIMIT;
           const items = PAGINATED_ORDERS.slice(start, end);

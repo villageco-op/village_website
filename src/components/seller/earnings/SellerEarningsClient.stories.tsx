@@ -140,7 +140,7 @@ export const Paginated: Story = {
         http.get('*/api/seller/payouts', ({ request }) => {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
-          
+
           const start = (page - 1) * PAGE_LIMIT;
           const end = start + PAGE_LIMIT;
           const items = PAGINATED_DATA.slice(start, end);

@@ -95,17 +95,21 @@ export const Default: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/dashboard', () => HttpResponse.json({ status: 200, data: MOCK_DASHBOARD_STATS })),
+        http.get('*/api/buyer/dashboard', () =>
+          HttpResponse.json({ status: 200, data: MOCK_DASHBOARD_STATS }),
+        ),
         http.get('*/api/orders*', () => {
           return HttpResponse.json({
             status: 200,
             data: {
               data: PAGINATED_ORDERS_DATA.slice(0, 2),
-              meta: { total: 2, page: 1, limit: PAGE_LIMIT, totalPages: 1 }
-            }
+              meta: { total: 2, page: 1, limit: PAGE_LIMIT, totalPages: 1 },
+            },
           });
         }),
-        http.get('*/api/buyer/growers*', () => HttpResponse.json({ status: 200, data: MOCK_GROWERS_LIST })),
+        http.get('*/api/buyer/growers*', () =>
+          HttpResponse.json({ status: 200, data: MOCK_GROWERS_LIST }),
+        ),
       ],
     },
   },
@@ -118,8 +122,12 @@ export const OrdersPaginated: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/dashboard', () => HttpResponse.json({ status: 200, data: MOCK_DASHBOARD_STATS })),
-        http.get('*/api/buyer/growers*', () => HttpResponse.json({ status: 200, data: MOCK_GROWERS_LIST })),
+        http.get('*/api/buyer/dashboard', () =>
+          HttpResponse.json({ status: 200, data: MOCK_DASHBOARD_STATS }),
+        ),
+        http.get('*/api/buyer/growers*', () =>
+          HttpResponse.json({ status: 200, data: MOCK_GROWERS_LIST }),
+        ),
         http.get('*/api/orders*', ({ request }) => {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
@@ -199,8 +207,15 @@ export const EmptyState: Story = {
             },
           });
         }),
-        http.get('*/api/orders*', () => HttpResponse.json({ status: 200, data: { data: [], meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 } } })),
-        http.get('*/api/buyer/growers*', () => HttpResponse.json({ status: 200, data: { data: [] } })),
+        http.get('*/api/orders*', () =>
+          HttpResponse.json({
+            status: 200,
+            data: { data: [], meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 } },
+          }),
+        ),
+        http.get('*/api/buyer/growers*', () =>
+          HttpResponse.json({ status: 200, data: { data: [] } }),
+        ),
       ],
     },
   },

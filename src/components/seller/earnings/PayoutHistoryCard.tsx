@@ -4,7 +4,13 @@ import { Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -36,12 +42,12 @@ interface PayoutHistoryCardProps {
  * @param props.setTimeframeFilter - When the timeframe is set
  * @returns A card containing a table displaying the sellers payout history
  */
-export function PayoutHistoryCard({ 
-  payouts, 
-  onDownload, 
+export function PayoutHistoryCard({
+  payouts,
+  onDownload,
   isDownloading,
   timeframeFilter,
-  setTimeframeFilter
+  setTimeframeFilter,
 }: PayoutHistoryCardProps) {
   return (
     <Card className="rounded-xl border border-[rgba(42,75,40,0.08)] bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
@@ -71,10 +77,7 @@ export function PayoutHistoryCard({
 
         {/* Filters Section */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-          <Select 
-            value={timeframeFilter} 
-            onValueChange={(val) => setTimeframeFilter(val)}
-          >
+          <Select value={timeframeFilter} onValueChange={(val) => setTimeframeFilter(val)}>
             <SelectTrigger className="w-full sm:w-48 bg-white">
               <SelectValue placeholder="Filter by timeframe" />
             </SelectTrigger>
@@ -87,7 +90,7 @@ export function PayoutHistoryCard({
           </Select>
 
           {timeframeFilter !== 'all' && (
-            <Button 
+            <Button
               onClick={() => setTimeframeFilter('all')}
               className="text-sm font-semibold text-forest hover:underline"
               variant="ghost"

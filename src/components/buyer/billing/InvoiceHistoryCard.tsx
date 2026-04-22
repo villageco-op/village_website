@@ -45,14 +45,14 @@ interface InvoiceHistoryCardProps {
  * @param props.setTimeframeFilter - When the timeframe is set
  * @returns A card containing filters and a table of orders
  */
-export function InvoiceHistoryCard({ 
+export function InvoiceHistoryCard({
   orders,
-  onDownload, 
+  onDownload,
   isDownloading,
   statusFilter,
   setStatusFilter,
   timeframeFilter,
-  setTimeframeFilter
+  setTimeframeFilter,
 }: InvoiceHistoryCardProps) {
   const router = useRouter();
 
@@ -83,8 +83,8 @@ export function InvoiceHistoryCard({
 
         {/* Filters Section */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-          <Select 
-            value={statusFilter} 
+          <Select
+            value={statusFilter}
             onValueChange={(val) => setStatusFilter(val as OrderStatus | 'all')}
           >
             <SelectTrigger className="w-full sm:w-48 bg-white">
@@ -97,10 +97,7 @@ export function InvoiceHistoryCard({
             </SelectContent>
           </Select>
 
-          <Select 
-            value={timeframeFilter} 
-            onValueChange={(val) => setTimeframeFilter(val)}
-          >
+          <Select value={timeframeFilter} onValueChange={(val) => setTimeframeFilter(val)}>
             <SelectTrigger className="w-full sm:w-48 bg-white">
               <SelectValue placeholder="Filter by timeframe" />
             </SelectTrigger>
@@ -113,8 +110,11 @@ export function InvoiceHistoryCard({
           </Select>
 
           {(statusFilter !== 'all' || timeframeFilter !== 'all') && (
-            <Button 
-              onClick={() => { setStatusFilter('all'); setTimeframeFilter('all'); }}
+            <Button
+              onClick={() => {
+                setStatusFilter('all');
+                setTimeframeFilter('all');
+              }}
               className="text-sm font-semibold text-forest hover:underline"
               variant="ghost"
             >

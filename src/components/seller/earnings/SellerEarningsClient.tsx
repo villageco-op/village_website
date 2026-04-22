@@ -11,7 +11,11 @@ import { PayoutHistoryCard } from './PayoutHistoryCard';
 
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { usePagination } from '@/hooks/usePagination';
-import { getSellerPayouts, useGetSellerEarnings, useGetSellerPayouts } from '@/lib/api/generated/sellers/sellers';
+import {
+  getSellerPayouts,
+  useGetSellerEarnings,
+  useGetSellerPayouts,
+} from '@/lib/api/generated/sellers/sellers';
 import { handleDownloadSellerPayoutsCSV } from '@/lib/csv-utils';
 
 /**
@@ -19,7 +23,6 @@ import { handleDownloadSellerPayoutsCSV } from '@/lib/csv-utils';
  * @returns A composite view of the seller's earnings, progress, and payout history.
  */
 export default function SellerEarningsClient() {
-
   const { page, limit, setPage, resetPage } = usePagination(12);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -28,7 +31,7 @@ export default function SellerEarningsClient() {
   useEffect(() => {
     resetPage();
   }, [timeframeFilter, resetPage]);
-  
+
   const {
     data: earningsRes,
     isLoading: isEarningsLoading,
@@ -39,8 +42,8 @@ export default function SellerEarningsClient() {
     data: payoutsRes,
     isLoading: isPayoutsLoading,
     isError: isPayoutsError,
-  } = useGetSellerPayouts({ 
-    limit, 
+  } = useGetSellerPayouts({
+    limit,
     page,
     ...(timeframeFilter !== 'all' && { timeframe: timeframeFilter }),
   });
@@ -72,10 +75,10 @@ export default function SellerEarningsClient() {
 
     setIsDownloading(true);
     try {
-      const fullRes = await getSellerPayouts({ 
-        limit: totalRecords, 
+      const fullRes = await getSellerPayouts({
+        limit: totalRecords,
         page: 1,
-        ...(timeframeFilter !== 'all' && { timeframe: timeframeFilter })
+        ...(timeframeFilter !== 'all' && { timeframe: timeframeFilter }),
       });
 
       if (fullRes.status === 200 && fullRes.data?.data) {
@@ -107,8 +110,8 @@ export default function SellerEarningsClient() {
         />
       </div>
 
-      <PayoutHistoryCard 
-        payouts={payoutsData} 
+      <PayoutHistoryCard
+        payouts={payoutsData}
         onDownload={handleDownloadAll}
         isDownloading={isDownloading}
         timeframeFilter={timeframeFilter}

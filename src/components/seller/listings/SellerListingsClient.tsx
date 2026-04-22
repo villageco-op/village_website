@@ -15,7 +15,11 @@ import { useGetSellerListings } from '@/lib/api/generated/produce/produce';
  */
 export default function SellerListingsClient() {
   const { page, limit, setPage } = usePagination(12);
-  const { data: response, isLoading, isError } = useGetSellerListings({ status: 'active', limit, page });
+  const {
+    data: response,
+    isLoading,
+    isError,
+  } = useGetSellerListings({ status: 'active', limit, page });
 
   if (isLoading) {
     return <ListingsSkeleton />;
