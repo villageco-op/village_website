@@ -1,14 +1,18 @@
 'use client';
 
-import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import Map, { Marker, NavigationControl, Popup } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/useAuth';
-import { useGetBuyerGrowers } from '@/lib/api/generated/buyers/buyers';
-import type { Grower } from '@/lib/api/generated/models';
+import { useGetGrowersForMap } from '@/lib/api/generated/growers/growers';
+import type { MapGrower } from '@/lib/api/generated/models';
+import { cn } from '@/lib/utils';
 
 interface SupplyMapCardProps {
   localGrowersSupplying: number;
@@ -29,8 +33,17 @@ export function SupplyMapCard({
   avgGrowerDistanceMiles,
 }: SupplyMapCardProps) {
   const { user } = useAuth();
+  const router = useRouter();
 
-  const { data: response, isLoading, isError } = useGetBuyerGrowers({ limit: 50 });
+  const [hoveredGrower, setHoveredGrower] = useState<MapGrower | null>(null);
+
+  const {
+    data: response,
+    isLoading,
+    isError,
+  } = useGetGrowersForMap({
+    buyerId: user?.id,
+  });
 
   // Use Gary, IN bounds as fallback base point if user location is missing
   const baseLat = user?.lat ?? 41.602;
@@ -48,11 +61,20 @@ export function SupplyMapCard({
     );
   }
 
-  let growers: Grower[] = [];
+  let growers: MapGrower[] = [];
 
   if (response?.status === 200) {
-    growers = response?.data?.data || [];
+    growers = response?.data || [];
   }
+
+  const getPillColor = (index: number) => {
+    const styles = [
+      'bg-lime/20 text-deep-forest hover:bg-lime/30',
+      'bg-sun/20 text-yellow-900 hover:bg-sun/30',
+      'bg-clay/10 text-clay hover:bg-clay/20',
+    ];
+    return styles[index % styles.length];
+  };
 
   return (
     <Card className="mb-5 flex flex-col rounded-xl border border-forest-dark/10 p-6 shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
@@ -90,19 +112,20 @@ export function SupplyMapCard({
 
             {/* Dynamic Grower Pins */}
             {growers.map((grower) => {
-              // Skip rendering if coordinates are missing
-              if (grower.location?.lat == null || grower.location?.lng == null) return null;
+              if (grower.lat == null || grower.lng == null) return null;
 
               return (
                 <Marker
-                  key={grower.sellerId}
-                  longitude={grower.location.lng}
-                  latitude={grower.location.lat}
+                  key={String(grower.sellerId)}
+                  longitude={grower.lng}
+                  latitude={grower.lat}
                   anchor="bottom"
                 >
                   <div
                     className="text-[1.2rem] drop-shadow-sm cursor-pointer transition-transform hover:scale-125"
-                    title={grower.name || 'Local Grower'}
+                    onMouseEnter={() => setHoveredGrower(grower)}
+                    onMouseLeave={() => setHoveredGrower(null)}
+                    onClick={() => router.push(`/seller/${grower.sellerId}`)}
                   >
                     🌱
                   </div>
@@ -110,7 +133,89 @@ export function SupplyMapCard({
               );
             })}
 
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 font-heading text-[0.65rem] font-bold tracking-[0.08em] uppercase text-deep-forest opacity-80 whitespace-nowrap bg-white/80 px-2 py-0.5 rounded shadow-sm">
+            {/* Hover Popup Overlay */}
+            {hoveredGrower && hoveredGrower.lat != null && hoveredGrower.lng != null && (
+              <Popup
+                longitude={hoveredGrower.lng}
+                latitude={hoveredGrower.lat}
+                offset={14}
+                closeButton={false}
+                closeOnClick={false}
+                className="z-50 pointer-events-none"
+                maxWidth="none"
+              >
+                <div className="flex items-center gap-3 px-1 py-0.5">
+                  {/* Image on the Left */}
+                  {hoveredGrower.image && (
+                    <Image
+                      src={hoveredGrower.image}
+                      alt={hoveredGrower.name || 'Grower'}
+                      className="h-10 w-10 shrink-0 rounded-full object-cover shadow-sm border border-forest-dark/10"
+                    />
+                  )}
+
+                  {/* Text on the Right */}
+                  <div className="flex flex-col justify-center min-w-30 overflow-hidden">
+                    <div className="font-heading text-[0.75rem] font-bold text-deep-forest leading-tight truncate">
+                      {hoveredGrower.name || 'Local Grower'}
+                    </div>
+
+                    {/* Rating, City, and Distance */}
+                    <div className="text-[0.62rem] text-ink-3 mt-0.5 flex flex-wrap items-center gap-x-1 leading-tight">
+                      {hoveredGrower.rating > 0 ? (
+                        <span className="flex items-center gap-0.5 whitespace-nowrap">
+                          <span className="text-sun-dark">⭐</span>
+                          {hoveredGrower.rating.toFixed(1)}
+                        </span>
+                      ) : (
+                        <span className="text-ink-4 whitespace-nowrap">New</span>
+                      )}
+
+                      {(hoveredGrower.city || hoveredGrower.distanceMiles != null) && (
+                        <span className="text-ink-4/50">•</span>
+                      )}
+
+                      {hoveredGrower.city && (
+                        <span className="truncate max-w-16.25">{hoveredGrower.city}</span>
+                      )}
+
+                      {hoveredGrower.city && hoveredGrower.distanceMiles != null && (
+                        <span className="text-ink-4/50">•</span>
+                      )}
+
+                      {hoveredGrower.distanceMiles != null && (
+                        <span className="whitespace-nowrap">{hoveredGrower.distanceMiles} mi</span>
+                      )}
+                    </div>
+
+                    {/* Specialties Pills (Max 2 to prevent overcrowding) */}
+                    {hoveredGrower.specialties && hoveredGrower.specialties.length > 0 && (
+                      <div className="mt-1.5 flex flex-nowrap gap-1">
+                        {hoveredGrower.specialties.slice(0, 2).map((specialty, i) => (
+                          <Badge
+                            key={i}
+                            variant="secondary"
+                            className={cn(
+                              'border-none px-1.5 py-[0.1rem] text-[0.55rem] font-medium leading-tight rounded-sm whitespace-nowrap',
+                              getPillColor(i),
+                            )}
+                          >
+                            {specialty}
+                          </Badge>
+                        ))}
+                        {hoveredGrower.specialties.length > 2 && (
+                          <span className="text-[0.55rem] text-ink-4 self-center ml-0.5 font-medium shrink-0 whitespace-nowrap">
+                            +{hoveredGrower.specialties.length - 2}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </Popup>
+            )}
+
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 font-heading text-[0.65rem] font-bold tracking-[0.08em] uppercase text-deep-forest opacity-80 whitespace-nowrap bg-white/80 px-2 py-0.5 rounded shadow-sm pointer-events-none">
               Gary, IN · Your sourcing network
             </div>
           </Map>

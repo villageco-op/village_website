@@ -50,20 +50,30 @@ const MOCK_DASHBOARD_STATS = {
   avgGrowerDistanceMiles: 8.2,
 };
 
-const MOCK_GROWERS_LIST = {
-  data: [
-    {
-      sellerId: 'grower-alpha',
-      name: 'Alpha Farms',
-      location: { lat: 41.61, lng: -87.34 },
-    },
-    {
-      sellerId: 'grower-beta',
-      name: 'Beta Gardens',
-      location: { lat: 41.59, lng: -87.32 },
-    },
-  ],
-};
+const MOCK_GROWERS_LIST = [
+  {
+    sellerId: 'grower-alpha',
+    name: 'Alpha Farms',
+    lat: 41.61,
+    lng: -87.34,
+    image: 'https://i.pravatar.cc/150?u=alpha',
+    rating: 4.9,
+    city: 'Gary',
+    distanceMiles: 3.2,
+    specialties: ['Hydroponic Lettuce', 'Basil', 'Microgreens'],
+  },
+  {
+    sellerId: 'grower-beta',
+    name: 'Beta Gardens',
+    lat: 41.59,
+    lng: -87.32,
+    image: null,
+    rating: 4.2,
+    city: 'Hobart',
+    distanceMiles: 7.5,
+    specialties: ['Honey', 'Wildflowers'],
+  },
+];
 
 const meta: Meta<typeof BuyerDashboardClient> = {
   title: 'Buyer/Dashboard/DashboardPage',
@@ -107,8 +117,8 @@ export const Default: Story = {
             },
           });
         }),
-        http.get('*/api/buyer/growers*', () =>
-          HttpResponse.json({ status: 200, data: MOCK_GROWERS_LIST }),
+        http.get('*/api/growers/growers-map*', () =>
+          HttpResponse.json({ data: MOCK_GROWERS_LIST, status: 200 }),
         ),
       ],
     },
@@ -125,8 +135,8 @@ export const OrdersPaginated: Story = {
         http.get('*/api/buyer/dashboard', () =>
           HttpResponse.json({ status: 200, data: MOCK_DASHBOARD_STATS }),
         ),
-        http.get('*/api/buyer/growers*', () =>
-          HttpResponse.json({ status: 200, data: MOCK_GROWERS_LIST }),
+        http.get('*/api/growers/growers-map*', () =>
+          HttpResponse.json({ data: MOCK_GROWERS_LIST, status: 200 }),
         ),
         http.get('*/api/orders*', ({ request }) => {
           const url = new URL(request.url);
@@ -213,9 +223,7 @@ export const EmptyState: Story = {
             data: { data: [], meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 } },
           }),
         ),
-        http.get('*/api/buyer/growers*', () =>
-          HttpResponse.json({ status: 200, data: { data: [] } }),
-        ),
+        http.get('*/api/growers/growers-map*', () => HttpResponse.json({ data: [], status: 200 })),
       ],
     },
   },

@@ -20,4 +20,16 @@ export interface MapGrower {
   image: string | null;
   /** Average star rating */
   rating: number;
+  /** A list of the growers specialties */
+  specialties?: string[];
+  /**
+   * The growers city.
+   * @nullable
+   */
+  city: string | null;
+  /**
+   * Distance from the buyer to the grower.
+   * @nullable
+   */
+  distanceMiles: number | null;
 }

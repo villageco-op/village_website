@@ -34,40 +34,41 @@ const meta: Meta<typeof SupplyMapCard> = {
 export default meta;
 type Story = StoryObj<typeof SupplyMapCard>;
 
-const MOCK_GROWERS = {
-  data: [
-    {
-      sellerId: 'grower-1',
-      name: 'Sunshine Farms',
-      location: { lat: 41.615, lng: -87.35, address: '123 Corn St' },
-      city: 'Gary',
-      produceTypesOrdered: ['Corn', 'Tomatoes'],
-      amountOrderedThisMonthLbs: 150,
-      daysSinceFirstOrder: 200,
-      firstOrderDate: '2023-01-01T00:00:00Z',
-    },
-    {
-      sellerId: 'grower-2',
-      name: 'Lakeview Orchards',
-      location: { lat: 41.585, lng: -87.31, address: '456 Apple Ln' },
-      city: 'Gary',
-      produceTypesOrdered: ['Apples'],
-      amountOrderedThisMonthLbs: 50,
-      daysSinceFirstOrder: 45,
-      firstOrderDate: '2024-02-15T00:00:00Z',
-    },
-    {
-      sellerId: 'grower-3',
-      name: 'Green Thumb Gardens',
-      location: { lat: 41.605, lng: -87.38, address: '789 Leafy Way' },
-      city: 'Gary',
-      produceTypesOrdered: ['Kale', 'Spinach'],
-      amountOrderedThisMonthLbs: 85,
-      daysSinceFirstOrder: 365,
-      firstOrderDate: '2023-04-20T00:00:00Z',
-    },
-  ],
-};
+const MOCK_GROWERS = [
+  {
+    sellerId: 'grower-1',
+    name: 'Sunshine Farms',
+    lat: 41.615,
+    lng: -87.35,
+    image: 'https://i.pravatar.cc/150?u=1',
+    rating: 4.8,
+    city: 'Gary',
+    distanceMiles: 2.4,
+    specialties: ['Microgreens', 'Heirloom Tomatoes', 'Herbs'],
+  },
+  {
+    sellerId: 'grower-2',
+    name: 'Lakeview Orchards',
+    lat: 41.585,
+    lng: -87.31,
+    image: null,
+    rating: 0,
+    city: 'Miller Beach',
+    distanceMiles: 5.1,
+    specialties: ['Apples', 'Peaches'],
+  },
+  {
+    sellerId: 'grower-3',
+    name: 'Green Thumb Gardens',
+    lat: 41.605,
+    lng: -87.38,
+    image: 'https://i.pravatar.cc/150?u=3',
+    rating: 4.5,
+    city: 'Hammond',
+    distanceMiles: 3.8,
+    specialties: ['Organic Kale', 'Root Vegetables'],
+  },
+];
 
 /**
  * Standard state showing several active growers on the map.
@@ -80,8 +81,8 @@ export const Default: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/growers', () => {
-          return HttpResponse.json({ status: 200, data: MOCK_GROWERS });
+        http.get('*/api/growers/growers-map*', () => {
+          return HttpResponse.json({ data: MOCK_GROWERS, status: 200 });
         }),
       ],
     },
@@ -99,9 +100,9 @@ export const Loading: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/growers', async () => {
+        http.get('*/api/growers/growers-map*', async () => {
           await delay('infinite');
-          return HttpResponse.json({});
+          return HttpResponse.json({ data: [] });
         }),
       ],
     },
@@ -119,7 +120,7 @@ export const ErrorState: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/growers', () => {
+        http.get('*/api/growers/growers-map*', () => {
           return new HttpResponse(null, { status: 500 });
         }),
       ],
@@ -138,17 +139,23 @@ export const LargeNetwork: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/growers', () => {
+        http.get('*/api/growers/growers-map*', () => {
+          const specialtyPool = ['Berries', 'Mushrooms', 'Honey', 'Flowers', 'Squash', 'Eggs'];
+          const cities = ['Gary', 'Hammond', 'Hobart', 'Merrillville', 'East Chicago'];
+
           // Generate pseudo-random growers around Gary, IN
           const denseGrowers = Array.from({ length: 12 }).map((_, i) => ({
             sellerId: `grower-${i}`,
             name: `Grower ${i}`,
-            location: {
-              lat: 41.602 + (Math.random() - 0.5) * 0.1,
-              lng: -87.3371 + (Math.random() - 0.5) * 0.1,
-            },
+            lat: 41.602 + (Math.random() - 0.5) * 0.1,
+            lng: -87.3371 + (Math.random() - 0.5) * 0.1,
+            image: null,
+            rating: Math.random() * 2 + 3, // Random rating between 3.0 and 5.0
+            city: cities[Math.floor(Math.random() * cities.length)],
+            distanceMiles: parseFloat((Math.random() * 10 + 1).toFixed(1)),
+            specialties: specialtyPool.sort(() => 0.5 - Math.random()).slice(0, 2),
           }));
-          return HttpResponse.json({ status: 200, data: { data: denseGrowers } });
+          return HttpResponse.json({ data: denseGrowers, status: 200 });
         }),
       ],
     },
