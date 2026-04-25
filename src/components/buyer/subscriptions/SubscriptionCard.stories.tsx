@@ -4,6 +4,7 @@ import { SubscriptionCard } from './SubscriptionCard';
 
 import { Toaster } from '@/components/ui/sonner';
 import type {
+  ProduceType,
   SubscriptionDetailResponseProductStatus,
   SubscriptionStatus,
 } from '@/lib/api/generated/models';
@@ -44,7 +45,7 @@ const mockSubscription = {
     id: 'prod-456',
     sellerId: 'user-seller',
     title: 'Organic Heirloom Kale',
-    produceType: 'Leafy Greens',
+    produceType: 'leafy_greens' as ProduceType,
     pricePerOz: '0.75',
     totalOzInventory: '100',
     availableBy: '2026-04-20',

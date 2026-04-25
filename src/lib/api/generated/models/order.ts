@@ -15,6 +15,8 @@ export interface Order {
   sellerId: string;
   /** @nullable */
   stripeReceiptUrl: string | null;
+  /** @nullable */
+  stripeInvoiceId: string | null;
   paymentMethod: OrderPaymentMethod;
   fulfillmentType: OrderFulfillmentType;
   scheduledTime: string;

@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SubscriptionDetailResponseProductImages } from './subscriptionDetailResponseProductImages';
+import type { SubscriptionDetailResponseProductProduceType } from './subscriptionDetailResponseProductProduceType';
 import type { SubscriptionDetailResponseProductStatus } from './subscriptionDetailResponseProductStatus';
 
 export type SubscriptionDetailResponseProduct = {
@@ -13,7 +14,7 @@ export type SubscriptionDetailResponseProduct = {
   sellerId: string;
   title: string;
   /** @nullable */
-  produceType: string | null;
+  produceType: SubscriptionDetailResponseProductProduceType;
   pricePerOz: string;
   totalOzInventory: string;
   availableBy: string;

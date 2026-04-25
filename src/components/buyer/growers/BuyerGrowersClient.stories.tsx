@@ -5,7 +5,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import BuyerGrowersClient from './BuyerGrowersClient';
 
-import type { GrowersResponse } from '@/lib/api/generated/models';
+import type { GrowersResponse, ProduceType } from '@/lib/api/generated/models';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -29,7 +29,7 @@ const generateMockGrowers = (count: number) => {
       country: 'United States',
       zip: '92921',
     },
-    produceTypesOrdered: ['Vegetables'],
+    produceTypesOrdered: ['root_vegetables' as ProduceType],
     amountOrderedThisMonthLbs: 10,
     daysSinceFirstOrder: 100,
     firstOrderDate: '2024-01-01T00:00:00Z',

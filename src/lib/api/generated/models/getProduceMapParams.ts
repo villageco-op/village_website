@@ -8,6 +8,7 @@
 import type { GetProduceMapHasDelivery } from './getProduceMapHasDelivery';
 import type { Latitude } from './latitude';
 import type { Longitude } from './longitude';
+import type { ProduceType } from './produceType';
 
 export type GetProduceMapParams = {
 /**
@@ -23,7 +24,10 @@ lng?: Longitude | null;
  * @nullable
  */
 radiusMiles?: number | null;
-produceType?: string;
+/**
+ * The category of the produce.
+ */
+produceType?: ProduceType;
 hasDelivery?: GetProduceMapHasDelivery;
 /**
  * Filter for items under a specific price point

@@ -10,7 +10,7 @@ import { ListingHarvestDetails } from './ListingHarvestDetails';
 import { ListingImageUpload } from './ListingImageUpload';
 import { ListingPricingInventory } from './ListingPricingInventory';
 
-import type { CreateProducePayload } from '@/lib/api/generated/models';
+import type { CreateProducePayload, ProduceType } from '@/lib/api/generated/models';
 import { useCreateProduce } from '@/lib/api/generated/produce/produce';
 
 /**
@@ -18,7 +18,7 @@ import { useCreateProduce } from '@/lib/api/generated/produce/produce';
  */
 export interface ListingFormData {
   title: string;
-  produceType: string;
+  produceType: ProduceType | undefined;
   pricePerLb: string;
   totalLbsInventory: string;
   availableBy: string;
@@ -47,7 +47,7 @@ export default function AddNewListingClient() {
 
   const [formData, setFormData] = useState<ListingFormData>({
     title: '',
-    produceType: '',
+    produceType: undefined,
     pricePerLb: '',
     totalLbsInventory: '',
     availableBy: '',

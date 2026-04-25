@@ -44,6 +44,7 @@ export const Default: Story = {
         paymentMethod: 'card',
         cancelReason: null,
         stripeReceiptUrl: 'https://stripe.com/receipt',
+        stripeInvoiceId: 'invoice_id',
       },
       {
         id: 'ord_9876543210fedcba',
@@ -58,6 +59,7 @@ export const Default: Story = {
         paymentMethod: 'card',
         cancelReason: null,
         stripeReceiptUrl: 'https://stripe.com/receipt',
+        stripeInvoiceId: 'invoice_id',
       },
       {
         id: 'ord_4567891230jklmno',
@@ -72,6 +74,7 @@ export const Default: Story = {
         paymentMethod: 'card',
         cancelReason: null,
         stripeReceiptUrl: 'https://stripe.com/receipt',
+        stripeInvoiceId: 'invoice_id',
       },
     ],
   },
@@ -106,6 +109,7 @@ export const LongHistory: Story = {
       paymentMethod: 'card',
       cancelReason: null,
       stripeReceiptUrl: 'https://stripe.com/receipt',
+      stripeInvoiceId: 'invoice_id',
     })),
   },
 };

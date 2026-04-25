@@ -46,10 +46,15 @@ export type getGrowersForMapResponse400 = {
   status: 400
 }
 
+export type getGrowersForMapResponse403 = {
+  data: ErrorResponse
+  status: 403
+}
+
 export type getGrowersForMapResponseSuccess = (getGrowersForMapResponse200) & {
   headers: Headers;
 };
-export type getGrowersForMapResponseError = (getGrowersForMapResponse400) & {
+export type getGrowersForMapResponseError = (getGrowersForMapResponse400 | getGrowersForMapResponse403) & {
   headers: Headers;
 };
 

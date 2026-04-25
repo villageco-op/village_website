@@ -57,7 +57,7 @@ export const Default: Story = {
             status: 200,
             data: {
               title: 'Organic Strawberries',
-              produceType: 'Fruit',
+              produceType: 'berries',
               pricePerOz: 0.5, // $8.00/lb
               totalOzInventory: 160, // 10 lbs
               availableBy: '2026-06-01T12:00:00Z',

@@ -42,7 +42,7 @@ export const ActiveWithAnalytics: Story = {
       id: '1',
       sellerId: 'seller-123',
       title: 'Organic Lacinato Kale',
-      produceType: 'Kale',
+      produceType: 'leafy_greens',
       pricePerOz: '0.50', // $8.00/lb
       totalOzInventory: '320',
       availableBy: new Date().toISOString(),
@@ -79,7 +79,7 @@ export const InventoryAlert: Story = {
       id: '2',
       sellerId: 'seller-123',
       title: 'Heirloom Tomatoes',
-      produceType: 'Tomato',
+      produceType: 'nightshades',
       pricePerOz: '0.75', // $12.00/lb
       totalOzInventory: '160',
       availableBy: new Date().toISOString(),
@@ -116,7 +116,7 @@ export const PausedState: Story = {
       ...ActiveWithAnalytics.args?.produce!,
       status: 'paused',
       title: 'Fresh Basil (Paused)',
-      produceType: 'Herb',
+      produceType: 'fresh_herbs',
     },
   },
 };
@@ -131,7 +131,7 @@ export const NoAnalytics: Story = {
       id: '3',
       sellerId: 'seller-123',
       title: 'Wild Strawberries',
-      produceType: 'Berry',
+      produceType: 'berries',
       pricePerOz: '1.00',
       totalOzInventory: '80',
       availableBy: '2024-10-15T00:00:00Z',
@@ -157,7 +157,7 @@ export const FallbackIcon: Story = {
     produce: {
       ...NoAnalytics.args?.produce!,
       title: 'Unknown Exotic Fruit',
-      produceType: 'Dragonfruit',
+      produceType: 'tropical_fruits',
     },
   },
 };

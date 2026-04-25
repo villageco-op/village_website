@@ -5,6 +5,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import SellerListingsClient from '../listings/SellerListingsClient';
 
+import type { ProduceType } from '@/lib/api/generated/models';
 import type { ProduceStatusProperty } from '@/lib/api/generated/models/produceStatusProperty';
 import type { getSellerListingsResponse200 } from '@/lib/api/generated/produce/produce';
 
@@ -21,7 +22,7 @@ const generateMockListings = (count: number) => {
     id: `list_${i + 1}`,
     sellerId: 'seller_1',
     title: `Listing Item ${i + 1}`,
-    produceType: 'Vegetable',
+    produceType: 'root_vegetables' as ProduceType,
     pricePerOz: '0.50',
     totalOzInventory: '100',
     availableBy: '2026-05-01',

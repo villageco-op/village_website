@@ -80,8 +80,13 @@ export function ListingImageUpload({
               key={index}
               className="relative group aspect-square rounded-lg border border-border/50 overflow-hidden bg-slate-50"
             >
-              {/* FIXED: Replaced w-full/h-full with the `fill` property natively supported by next/image */}
-              <Image src={url} alt={`Upload preview ${index + 1}`} fill className="object-cover" />
+              <Image
+                aria-label={`Profile Image ${index}`}
+                src={url}
+                alt={`Upload preview ${index + 1}`}
+                fill
+                className="object-cover"
+              />
               <button
                 type="button"
                 onClick={() => onRemoveImage(index)}
@@ -112,6 +117,7 @@ export function ListingImageUpload({
           )}
         </div>
         <input
+          aria-label="Profile Image Input"
           type="file"
           ref={fileInputRef}
           className="sr-only"

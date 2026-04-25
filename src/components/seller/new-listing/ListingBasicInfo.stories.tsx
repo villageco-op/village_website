@@ -8,7 +8,7 @@ import type { ListingFormData } from '@/components/seller/new-listing/AddNewList
 
 const mockFullData: ListingFormData = {
   title: '',
-  produceType: '',
+  produceType: undefined,
   pricePerLb: '0.00',
   totalLbsInventory: '0',
   availableBy: '',
@@ -49,7 +49,7 @@ export const Prepopulated: Story = {
     data: {
       ...mockFullData,
       title: 'Zucchini Blossoms',
-      produceType: 'Vegetable',
+      produceType: 'cucurbits',
       pricePerLb: '12.50',
       totalLbsInventory: '5',
     },
@@ -73,6 +73,7 @@ export const InteractionTest: Story = {
   },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
+    const screen = within(canvasElement.ownerDocument.body);
 
     const titleInput = canvas.getByLabelText(/Title/i);
     await userEvent.type(titleInput, 'Red Currants');
@@ -81,12 +82,15 @@ export const InteractionTest: Story = {
       expect.objectContaining({ title: 'Red Currants' }),
     );
 
-    const typeInput = canvas.getByLabelText(/Produce Type/i);
-    await userEvent.type(typeInput, 'Berry');
+    const selectTrigger = canvas.getByLabelText(/Produce Type/i);
+    await userEvent.click(selectTrigger);
+
+    const option = (await screen.findAllByText('Berries'))[0];
+    await userEvent.click(option);
 
     // Check that updateData was called with produceType updates
     await expect(args.updateData).toHaveBeenCalledWith(
-      expect.objectContaining({ produceType: 'Berry' }),
+      expect.objectContaining({ produceType: 'berries' }),
     );
   },
 };

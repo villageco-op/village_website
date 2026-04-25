@@ -2,6 +2,15 @@ import type { StepComponentProps } from '@/components/seller/new-listing/AddNewL
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { ProduceType } from '@/lib/api/generated/models';
+import { formatProduceType } from '@/lib/produce-utils';
 
 /**
  * Collects basic identifier information for the listing.
@@ -34,13 +43,24 @@ export function ListingBasicInfo({ data, updateData }: StepComponentProps) {
           <Label htmlFor="produceType" className="text-ink-2 font-semibold">
             Produce Type
           </Label>
-          <Input
-            id="produceType"
-            placeholder="e.g. vegetable, fruit, herb"
-            className="bg-white border-lime/50 focus-visible:ring-click-green"
-            value={data.produceType}
-            onChange={(e) => updateData({ produceType: e.target.value })}
-          />
+          <Select
+            value={data.produceType || 'ALL'}
+            onValueChange={(val) =>
+              updateData({ produceType: val === 'ALL' ? undefined : (val as ProduceType) })
+            }
+          >
+            <SelectTrigger id="produceType" className="h-9 bg-white text-sm">
+              <SelectValue placeholder="All Produce" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Produce</SelectItem>
+              {Object.entries(ProduceType).map(([key, value]) => (
+                <SelectItem key={key} value={value}>
+                  {formatProduceType(key)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </CardContent>
     </Card>

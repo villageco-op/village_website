@@ -4,6 +4,7 @@ import { SellerSubscriptionCard } from './SellerSubscriptionCard';
 
 import { Toaster } from '@/components/ui/sonner';
 import type {
+  ProduceType,
   SubscriptionDetailResponseProductStatus,
   SubscriptionStatus,
 } from '@/lib/api/generated/models';
@@ -44,7 +45,7 @@ const mockSubscription = {
     id: 'prod-001',
     sellerId: 'user-seller-pro',
     title: 'Red Bourbon Coffee Beans',
-    produceType: 'Coffee',
+    produceType: 'legumes' as ProduceType,
     pricePerOz: '1.25',
     totalOzInventory: '500',
     availableBy: '2026-01-01',

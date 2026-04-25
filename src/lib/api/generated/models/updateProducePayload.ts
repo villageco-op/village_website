@@ -9,6 +9,7 @@ import type { ImageUrl } from './imageUrl';
 import type { IsoDate } from './isoDate';
 import type { PriceDollars } from './priceDollars';
 import type { ProduceStatus } from './produceStatus';
+import type { ProduceType } from './produceType';
 import type { WeightOz } from './weightOz';
 
 export interface UpdateProducePayload {
@@ -17,8 +18,7 @@ export interface UpdateProducePayload {
    * @minLength 1
    */
   title?: string;
-  /** Category of the produce (e.g., vegetable, fruit, herb) */
-  produceType?: string;
+  produceType?: ProduceType;
   pricePerOz?: PriceDollars;
   totalOzInventory?: WeightOz;
   /**
