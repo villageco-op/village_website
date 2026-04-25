@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ProduceImages } from './produceImages';
+import type { ProduceProduceType } from './produceProduceType';
 import type { ProduceStatusProperty } from './produceStatusProperty';
 
 export interface Produce {
@@ -13,7 +14,7 @@ export interface Produce {
   sellerId: string;
   title: string;
   /** @nullable */
-  produceType: string | null;
+  produceType: ProduceProduceType;
   pricePerOz: string;
   totalOzInventory: string;
   availableBy: string;

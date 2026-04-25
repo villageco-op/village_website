@@ -7,7 +7,7 @@ import type { ListingFormData } from '@/components/seller/new-listing/AddNewList
 
 const mockFullData: ListingFormData = {
   title: 'Honeycrisp Apples',
-  produceType: 'Fruit',
+  produceType: 'stone_fruits',
   pricePerLb: '',
   totalLbsInventory: '',
   availableBy: '',

@@ -56,6 +56,7 @@ const MOCK_ORDER_DATA: OrderDetailResponse = {
   buyerId: 'buyer_1',
   sellerId: 'seller_1',
   stripeReceiptUrl: null,
+  stripeInvoiceId: null,
   updatedAt: '2026-05-10T09:30:00Z',
   cancelReason: null,
   buyer: {

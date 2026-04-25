@@ -45,6 +45,7 @@ export const Default: Story = {
         paymentMethod: 'card',
         cancelReason: null,
         stripeReceiptUrl: 'https://stripe.com/receipt',
+        stripeInvoiceId: 'invoice_id',
       },
       {
         id: 'ord_pnd67890',
@@ -59,6 +60,7 @@ export const Default: Story = {
         paymentMethod: 'card',
         cancelReason: null,
         stripeReceiptUrl: 'https://stripe.com/receipt',
+        stripeInvoiceId: 'invoice_id',
       },
     ],
   },
@@ -95,6 +97,7 @@ export const LongWaitTime: Story = {
         paymentMethod: 'card',
         cancelReason: null,
         stripeReceiptUrl: 'https://stripe.com/receipt',
+        stripeInvoiceId: 'invoice_id',
       },
     ],
   },

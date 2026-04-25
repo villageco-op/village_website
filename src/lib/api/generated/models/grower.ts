@@ -7,6 +7,7 @@
  */
 import type { IsoDateTime } from './isoDateTime';
 import type { Location } from './location';
+import type { ProduceType } from './produceType';
 import type { UserId } from './userId';
 
 export interface Grower {
@@ -20,7 +21,7 @@ export interface Grower {
   /** @nullable */
   city: string | null;
   /** List of produce categories previously purchased from this grower */
-  produceTypesOrdered: string[];
+  produceTypesOrdered: ProduceType[];
   /** Total weight of produce ordered from this grower in the current month */
   amountOrderedThisMonthLbs: number;
   /** Number of days since the first transaction with this grower */

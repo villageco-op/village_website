@@ -51,7 +51,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
 
         setFormData({
           title: produce.title,
-          produceType: produce.produceType || '',
+          produceType: produce.produceType || undefined,
           pricePerLb: (Number(produce.pricePerOz || 0) * 16).toFixed(2),
           totalLbsInventory: (Number(produce.totalOzInventory || 0) / 16).toString(),
           availableBy: produce.availableBy ? UTCDateToLocal(new Date(produce.availableBy)) : '',

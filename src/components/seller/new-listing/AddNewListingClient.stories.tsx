@@ -59,17 +59,22 @@ export const FullFormSubmission: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const screen = within(canvasElement.ownerDocument.body);
 
     // 1. Basic Info
     await userEvent.type(canvas.getByLabelText(/Title/i), 'Gala Apples');
-    await userEvent.type(canvas.getByLabelText(/Produce Type/i), 'Fruit');
+
+    const selectTrigger = canvas.getByLabelText(/Produce Type/i);
+    await userEvent.click(selectTrigger);
+
+    const option = (await screen.findAllByText('Stone Fruits'))[1];
+    await userEvent.click(option);
 
     // 2. Pricing & Inventory
     await userEvent.type(canvas.getByLabelText(/Price per lb/i), '3.50');
     await userEvent.type(canvas.getByLabelText(/Total Inventory/i), '100');
 
     // 3. Harvest Details
-    // Note: datetime-local and date inputs require specific string formats
     await userEvent.type(canvas.getByLabelText(/Available By/i), '2026-05-01T10:00');
     await userEvent.type(canvas.getByLabelText(/Season Start/i), '2026-05-01');
     await userEvent.type(canvas.getByLabelText(/Season End/i), '2026-09-01');

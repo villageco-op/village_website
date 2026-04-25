@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { SubscriptionSummaryCard } from './SubscriptionSummaryCard';
 
 import {
+  type ProduceType,
   type SubscriptionDetailResponseProductStatus,
   SubscriptionStatus,
 } from '@/lib/api/generated/models';
@@ -42,7 +43,7 @@ const mockSubscription = {
     id: 'prod-1',
     sellerId: 'seller-1',
     title: 'Gourmet Spring Mix',
-    produceType: 'Leafy Greens',
+    produceType: 'leafy_greens' as ProduceType,
     pricePerOz: '1.25',
     harvestFrequencyDays: 14,
     totalOzInventory: '500',

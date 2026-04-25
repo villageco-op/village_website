@@ -30,6 +30,7 @@ const MOCK_PENDING_ORDERS: getOrdersResponse200 = {
         paymentMethod: 'card',
         cancelReason: null,
         stripeReceiptUrl: 'https://stripe.com/receipt',
+        stripeInvoiceId: 'invoice_id',
       },
       {
         id: 'ord_pending_2',
@@ -44,6 +45,7 @@ const MOCK_PENDING_ORDERS: getOrdersResponse200 = {
         paymentMethod: 'card',
         cancelReason: null,
         stripeReceiptUrl: 'https://stripe.com/receipt',
+        stripeInvoiceId: 'invoice_id',
       },
     ],
     meta: { total: 2, page: 1, limit: 2, totalPages: 1 },
@@ -67,6 +69,7 @@ const MOCK_HISTORY_ORDERS: getOrdersResponse200 = {
         paymentMethod: 'card',
         cancelReason: null,
         stripeReceiptUrl: 'https://stripe.com/receipt',
+        stripeInvoiceId: 'invoice_id',
       },
     ],
     meta: { total: 1, page: 1, limit: 1, totalPages: 1 },
