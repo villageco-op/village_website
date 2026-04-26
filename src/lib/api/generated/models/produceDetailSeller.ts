@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ImageUrl } from './imageUrl';
+import type { Location } from './location';
 import type { UserId } from './userId';
 
 export type ProduceDetailSeller = {
@@ -13,4 +14,12 @@ export type ProduceDetailSeller = {
   /** @nullable */
   name: string | null;
   image: ImageUrl & (unknown | null);
+  /** Does the seller do deliveries? */
+  canDeliver?: boolean;
+  /**
+   * The sellers maximum delivery range.
+   * @nullable
+   */
+  deliveryRangeMiles: number | null;
+  location: Location & (unknown | null);
 };
