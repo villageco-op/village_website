@@ -10,6 +10,7 @@ const mockFullData: ListingFormData = {
   produceType: 'stone_fruits',
   pricePerLb: '',
   totalLbsInventory: '',
+  maxOrderLbs: '',
   availableBy: '',
   harvestFrequencyDays: '7',
   seasonStart: '',

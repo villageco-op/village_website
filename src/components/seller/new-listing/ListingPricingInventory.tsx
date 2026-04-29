@@ -49,6 +49,24 @@ export function ListingPricingInventory({ data, updateData }: StepComponentProps
             onChange={(e) => updateData({ totalLbsInventory: e.target.value })}
           />
         </div>
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="maxOrder" className="text-ink-2 font-semibold">
+            Max Order per Customer (lbs)
+          </Label>
+          <Input
+            id="maxOrder"
+            type="number"
+            step="0.1"
+            min="0"
+            placeholder="No limit (leave empty)"
+            className="bg-white border-lime/50 focus-visible:ring-click-green"
+            value={data.maxOrderLbs}
+            onChange={(e) => updateData({ maxOrderLbs: e.target.value })}
+          />
+          <p className="text-xs text-ink-3">
+            Limits the quantity a single customer can buy in one checkout.
+          </p>
+        </div>
       </CardContent>
     </Card>
   );

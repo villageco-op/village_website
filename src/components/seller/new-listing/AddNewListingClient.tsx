@@ -21,6 +21,7 @@ export interface ListingFormData {
   produceType: ProduceType | undefined;
   pricePerLb: string;
   totalLbsInventory: string;
+  maxOrderLbs: string;
   availableBy: string;
   harvestFrequencyDays: string;
   seasonStart: string;
@@ -50,6 +51,7 @@ export default function AddNewListingClient() {
     produceType: undefined,
     pricePerLb: '',
     totalLbsInventory: '',
+    maxOrderLbs: '',
     availableBy: '',
     harvestFrequencyDays: '7',
     seasonStart: '',
@@ -91,12 +93,16 @@ export default function AddNewListingClient() {
       // Convert user-friendly units (Lbs) to API units (Oz)
       const pricePerOz = Number(formData.pricePerLb) / 16;
       const totalOzInventory = Math.round(Number(formData.totalLbsInventory) * 16);
+      const maxOrderQuantityOz = formData.maxOrderLbs
+        ? Math.round(Number(formData.maxOrderLbs) * 16)
+        : null;
 
       const payload: CreateProducePayload = {
         title: formData.title,
         produceType: formData.produceType || undefined,
         pricePerOz,
         totalOzInventory,
+        maxOrderQuantityOz,
         harvestFrequencyDays: Number(formData.harvestFrequencyDays),
         availableBy: formData.availableBy ? new Date(formData.availableBy).toISOString() : null,
         seasonStart: new Date(formData.seasonStart).toISOString(),
