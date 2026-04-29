@@ -5,9 +5,9 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { CartSellerGroup } from './cartSellerGroup';
+import type { CartCheckoutGroup } from './cartCheckoutGroup';
 
 export interface GetCartResponse {
-  /** User shopping cart grouped by seller */
-  data: CartSellerGroup[];
+  /** User shopping cart divided into executable checkouts */
+  data: CartCheckoutGroup[];
 }

@@ -2,9 +2,13 @@ import type { Metadata } from 'next';
 import { Bricolage_Grotesque, Sora, Playfair_Display } from 'next/font/google';
 
 import './globals.css';
+import { CartDrawer } from '@/components/cart/CartDrawer';
+import { CartFab } from '@/components/cart/CartFab';
+import { ReservationBanner } from '@/components/cart/ReservationBanner';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { Toaster } from '@/components/ui/sonner';
+import { CartProvider } from '@/hooks/useCartUI';
 
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -44,8 +48,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${bricolage.variable} ${sora.variable} ${playfair.variable} antialiased`}>
-        <Header></Header>
-        {children}
+        <CartProvider>
+          <ReservationBanner />
+          <Header />
+          {children}
+          <CartFab />
+          <CartDrawer />
+        </CartProvider>
         <Toaster />
         <Footer></Footer>
       </body>
