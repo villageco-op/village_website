@@ -48,6 +48,7 @@ const mockSubscription = {
     produceType: 'legumes' as ProduceType,
     pricePerOz: '1.25',
     totalOzInventory: '500',
+    maxOrderQuantityOz: null,
     availableBy: '2026-01-01',
     harvestFrequencyDays: 14,
     seasonStart: '2026-01-01',

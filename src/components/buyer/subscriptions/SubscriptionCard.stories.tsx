@@ -48,6 +48,7 @@ const mockSubscription = {
     produceType: 'leafy_greens' as ProduceType,
     pricePerOz: '0.75',
     totalOzInventory: '100',
+    maxOrderQuantityOz: null,
     availableBy: '2026-04-20',
     harvestFrequencyDays: 7,
     seasonStart: '2026-03-01',

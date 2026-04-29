@@ -47,6 +47,7 @@ const mockSubscription = {
     pricePerOz: '1.25',
     harvestFrequencyDays: 14,
     totalOzInventory: '500',
+    maxOrderQuantityOz: '',
     availableBy: '2026-01-01',
     seasonStart: '2026-01-01',
     seasonEnd: '2026-12-31',

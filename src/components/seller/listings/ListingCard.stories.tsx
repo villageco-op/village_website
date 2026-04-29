@@ -45,6 +45,7 @@ export const ActiveWithAnalytics: Story = {
       produceType: 'leafy_greens',
       pricePerOz: '0.50', // $8.00/lb
       totalOzInventory: '320',
+      maxOrderQuantityOz: null,
       availableBy: new Date().toISOString(),
       status: 'active',
       harvestFrequencyDays: 7,
@@ -82,6 +83,7 @@ export const InventoryAlert: Story = {
       produceType: 'nightshades',
       pricePerOz: '0.75', // $12.00/lb
       totalOzInventory: '160',
+      maxOrderQuantityOz: null,
       availableBy: new Date().toISOString(),
       status: 'active',
       harvestFrequencyDays: 3,
@@ -134,6 +136,7 @@ export const NoAnalytics: Story = {
       produceType: 'berries',
       pricePerOz: '1.00',
       totalOzInventory: '80',
+      maxOrderQuantityOz: null,
       availableBy: '2024-10-15T00:00:00Z',
       status: 'active',
       harvestFrequencyDays: 14,
