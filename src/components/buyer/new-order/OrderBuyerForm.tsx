@@ -56,11 +56,13 @@ export function BuyerOrderForm({ produceId, onClose }: BuyerOrderFormProps) {
     : {
         title: 'Produce',
         totalOzInventory: 0,
+        maxOrderQuantityOz: Infinity,
         pricePerOz: 0,
         harvestFrequencyDays: 7,
         isSubscribable: false,
       };
   const maxLbsInventory = Number(produce.totalOzInventory) / 16;
+  const maxOrderLbs = Number(produce.maxOrderQuantityOz) / 16;
   const pricePerLb = Number(produce.pricePerOz) * 16;
   const totalPrice = pricePerLb * quantityLbs;
   const isOutOfStock = maxLbsInventory <= 0;
@@ -119,7 +121,7 @@ export function BuyerOrderForm({ produceId, onClose }: BuyerOrderFormProps) {
           <OrderQuantityInput
             quantityLbs={quantityLbs}
             onChange={setQuantityLbs}
-            maxLbs={maxLbsInventory}
+            maxLbs={Math.min(maxLbsInventory, maxOrderLbs)}
           />
 
           {produce.isSubscribable && (

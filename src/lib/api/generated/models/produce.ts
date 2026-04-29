@@ -17,6 +17,8 @@ export interface Produce {
   produceType: ProduceProduceType;
   pricePerOz: string;
   totalOzInventory: string;
+  /** @nullable */
+  maxOrderQuantityOz: string | null;
   availableBy: string;
   /**
    * @minimum -2147483648

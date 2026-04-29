@@ -30,7 +30,9 @@ import type {
   ErrorResponse,
   GetCartResponse,
   SuccessResponse,
-  SuccessWithEntity
+  SuccessWithEntity,
+  UpdateCartGroupPayload,
+  UpdateCartPayload
 } from '../models';
 
 import { apiClient } from '../../client';
@@ -41,7 +43,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Fetch user's active cart, grouped by seller. Drops expired reservations automatically.
+ * Fetch user's active cart. Groups items into checkouts partitioned by Seller AND Subscription vs Single-Purchase configurations. Drops expired reservations automatically.
  */
 export type getCartResponse200 = {
   data: GetCartResponse
@@ -167,10 +169,15 @@ export type addToCartResponse401 = {
   status: 401
 }
 
+export type addToCartResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
 export type addToCartResponseSuccess = (addToCartResponse200) & {
   headers: Headers;
 };
-export type addToCartResponseError = (addToCartResponse401) & {
+export type addToCartResponseError = (addToCartResponse401 | addToCartResponse404) & {
   headers: Headers;
 };
 
@@ -324,5 +331,184 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
         TContext
       > => {
       return useMutation(getRemoveFromCartMutationOptions(options), queryClient);
+    }
+    /**
+ * Update cart reservation quantity and subscription status.
+ */
+export type updateCartItemResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type updateCartItemResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type updateCartItemResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type updateCartItemResponseSuccess = (updateCartItemResponse200) & {
+  headers: Headers;
+};
+export type updateCartItemResponseError = (updateCartItemResponse401 | updateCartItemResponse404) & {
+  headers: Headers;
+};
+
+export type updateCartItemResponse = (updateCartItemResponseSuccess | updateCartItemResponseError)
+
+export const getUpdateCartItemUrl = (id: EntityId,) => {
+
+
+  
+
+  return `/api/cart/update/${id}`
+}
+
+export const updateCartItem = async (id: EntityId,
+    updateCartPayload: UpdateCartPayload, options?: RequestInit): Promise<updateCartItemResponse> => {
+  
+  return apiClient<updateCartItemResponse>(getUpdateCartItemUrl(id),
+  {      
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateCartPayload,)
+  }
+);}
+  
+
+
+
+export const getUpdateCartItemMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCartItem>>, TError,{id: EntityId;data: UpdateCartPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateCartItem>>, TError,{id: EntityId;data: UpdateCartPayload}, TContext> => {
+
+const mutationKey = ['updateCartItem'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCartItem>>, {id: EntityId;data: UpdateCartPayload}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateCartItem(id,data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateCartItemMutationResult = NonNullable<Awaited<ReturnType<typeof updateCartItem>>>
+    export type UpdateCartItemMutationBody = UpdateCartPayload
+    export type UpdateCartItemMutationError = ErrorResponse
+
+    export const useUpdateCartItem = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCartItem>>, TError,{id: EntityId;data: UpdateCartPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateCartItem>>,
+        TError,
+        {id: EntityId;data: UpdateCartPayload},
+        TContext
+      > => {
+      return useMutation(getUpdateCartItemMutationOptions(options), queryClient);
+    }
+    /**
+ * Update settings (like fulfillmentType) for an entire checkout group.
+ */
+export type updateCartGroupResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type updateCartGroupResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type updateCartGroupResponseSuccess = (updateCartGroupResponse200) & {
+  headers: Headers;
+};
+export type updateCartGroupResponseError = (updateCartGroupResponse401) & {
+  headers: Headers;
+};
+
+export type updateCartGroupResponse = (updateCartGroupResponseSuccess | updateCartGroupResponseError)
+
+export const getUpdateCartGroupUrl = (id: EntityId,) => {
+
+
+  
+
+  return `/api/cart/group/${id}`
+}
+
+export const updateCartGroup = async (id: EntityId,
+    updateCartGroupPayload: UpdateCartGroupPayload, options?: RequestInit): Promise<updateCartGroupResponse> => {
+  
+  return apiClient<updateCartGroupResponse>(getUpdateCartGroupUrl(id),
+  {      
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateCartGroupPayload,)
+  }
+);}
+  
+
+
+
+export const getUpdateCartGroupMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCartGroup>>, TError,{id: EntityId;data: UpdateCartGroupPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateCartGroup>>, TError,{id: EntityId;data: UpdateCartGroupPayload}, TContext> => {
+
+const mutationKey = ['updateCartGroup'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCartGroup>>, {id: EntityId;data: UpdateCartGroupPayload}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateCartGroup(id,data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateCartGroupMutationResult = NonNullable<Awaited<ReturnType<typeof updateCartGroup>>>
+    export type UpdateCartGroupMutationBody = UpdateCartGroupPayload
+    export type UpdateCartGroupMutationError = ErrorResponse
+
+    export const useUpdateCartGroup = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCartGroup>>, TError,{id: EntityId;data: UpdateCartGroupPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateCartGroup>>,
+        TError,
+        {id: EntityId;data: UpdateCartGroupPayload},
+        TContext
+      > => {
+      return useMutation(getUpdateCartGroupMutationOptions(options), queryClient);
     }
     

@@ -54,6 +54,9 @@ export default function EditListingClient({ id }: EditListingClientProps) {
           produceType: produce.produceType || undefined,
           pricePerLb: (Number(produce.pricePerOz || 0) * 16).toFixed(2),
           totalLbsInventory: (Number(produce.totalOzInventory || 0) / 16).toString(),
+          maxOrderLbs: produce.maxOrderQuantityOz
+            ? (Number(produce.maxOrderQuantityOz) / 16).toString()
+            : '',
           availableBy: produce.availableBy ? UTCDateToLocal(new Date(produce.availableBy)) : '',
           harvestFrequencyDays: produce.harvestFrequencyDays?.toString() || '7',
           seasonStart: produce.seasonStart
@@ -146,16 +149,20 @@ export default function EditListingClient({ id }: EditListingClientProps) {
       // Convert user-friendly units back to API units (Lbs -> Oz)
       const pricePerOz = Number(formData.pricePerLb) / 16;
       const totalOzInventory = Math.round(Number(formData.totalLbsInventory) * 16);
+      const maxOrderQuantityOz = formData.maxOrderLbs
+        ? Math.round(Number(formData.maxOrderLbs) * 16)
+        : null;
 
       const payload: UpdateProducePayload = {
         title: formData.title,
         produceType: formData.produceType || undefined,
-        pricePerOz: pricePerOz as any,
-        totalOzInventory: totalOzInventory as any,
+        pricePerOz: pricePerOz,
+        totalOzInventory: totalOzInventory,
+        maxOrderQuantityOz: maxOrderQuantityOz,
         harvestFrequencyDays: Number(formData.harvestFrequencyDays),
         availableBy: formData.availableBy ? new Date(formData.availableBy).toISOString() : null,
-        seasonStart: new Date(formData.seasonStart).toISOString() as any,
-        seasonEnd: new Date(formData.seasonEnd).toISOString() as any,
+        seasonStart: new Date(formData.seasonStart).toISOString(),
+        seasonEnd: new Date(formData.seasonEnd).toISOString(),
         isSubscribable: formData.isSubscribable,
         images: formData.images.length > 0 ? formData.images : [],
       };

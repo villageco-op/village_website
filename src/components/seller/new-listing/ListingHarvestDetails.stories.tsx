@@ -10,6 +10,7 @@ const mockFullData: ListingFormData = {
   produceType: 'alliums',
   pricePerLb: '2.50',
   totalLbsInventory: '20',
+  maxOrderLbs: '4',
   availableBy: '2026-06-01T08:00',
   harvestFrequencyDays: '3',
   seasonStart: '2026-06-01',

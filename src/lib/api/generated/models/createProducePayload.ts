@@ -21,6 +21,12 @@ export interface CreateProducePayload {
   pricePerOz: PriceDollars;
   totalOzInventory: WeightOz;
   /**
+   * Optional maximum ounces a single user can order per checkout
+   * @minimum 0
+   * @nullable
+   */
+  maxOrderQuantityOz?: number | null;
+  /**
    * The date and time when the produce will be ready for pickup or delivery
    * @nullable
    */

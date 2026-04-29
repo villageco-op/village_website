@@ -18,11 +18,25 @@ export interface CartItem {
   pricePerOz: string;
   /** Quantity in ounces currently in cart */
   quantityOz: string;
+  /** The maximum allowable order quantity (lowest of stock or seller limit) */
+  maxOrderQuantityOz: string;
+  /** Can this item be subscribed to (set by the seller) */
+  isSubscribable?: boolean;
   /**
    * Flag indicating if this is a subscription item
    * @nullable
    */
   isSubscription: boolean | null;
+  /**
+   * How often the harvest/delivery repeats if this is a subscription
+   * @nullable
+   */
+  subscriptionFrequencyDays: number | null;
+  /**
+   * Percentage discount applied to subscription orders
+   * @nullable
+   */
+  subscriptionCostReductionPercent: number | null;
   expiresAt: IsoDateTime;
   /** @nullable */
   images: ImageUrl[] | null;

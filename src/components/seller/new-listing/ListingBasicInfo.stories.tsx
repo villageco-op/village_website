@@ -11,6 +11,7 @@ const mockFullData: ListingFormData = {
   produceType: undefined,
   pricePerLb: '0.00',
   totalLbsInventory: '0',
+  maxOrderLbs: '',
   availableBy: '',
   harvestFrequencyDays: '7',
   seasonStart: '',

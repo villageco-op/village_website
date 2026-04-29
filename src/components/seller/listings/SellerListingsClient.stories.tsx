@@ -25,6 +25,7 @@ const generateMockListings = (count: number) => {
     produceType: 'root_vegetables' as ProduceType,
     pricePerOz: '0.50',
     totalOzInventory: '100',
+    maxOrderQuantityOz: null,
     availableBy: '2026-05-01',
     harvestFrequencyDays: 7,
     seasonStart: '2026-04-01',
