@@ -3,8 +3,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 
 import { MapPopup } from './MapPopup';
 
+import { ProduceIcon } from '@/components/ui/produce-icon';
 import type { SourceMapNode } from '@/lib/api/generated/models';
-import { getProduceIcon } from '@/lib/produce-utils';
 
 interface SourceMapProps {
   baseLat: number;
@@ -90,7 +90,7 @@ export function SourceMap({
               anchor="center"
             >
               <div
-                className="flex cursor-pointer items-center justify-center rounded-full border border-forest-dark/20 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-transform hover:scale-125 hover:z-30"
+                className="flex cursor-pointer items-center justify-center rounded-full bg-lime border-2 border-white text-deep-forest shadow-[0_4px_12px_rgba(0,0,0,0.15)] drop-shadow-sm transition-transform hover:scale-125 hover:z-30"
                 style={{
                   width: `${size + 0.6}rem`,
                   height: `${size + 0.6}rem`,
@@ -99,7 +99,9 @@ export function SourceMap({
                 onMouseEnter={() => setHoveredNode(node)}
                 onMouseLeave={() => setHoveredNode(null)}
               >
-                {getProduceIcon(node.primaryProduceType)}
+                <div className="h-4 w-4">
+                  <ProduceIcon type={node.primaryProduceType} className="h-full w-full" />
+                </div>
               </div>
             </Marker>
           );

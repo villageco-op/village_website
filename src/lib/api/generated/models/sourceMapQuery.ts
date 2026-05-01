@@ -6,10 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ProduceType } from './produceType';
-import type { SourceMapQuerySeason } from './sourceMapQuerySeason';
+import type { Season } from './season';
 
 export interface SourceMapQuery {
   produceType?: ProduceType;
-  /** Filter map and analytics by the season an order occurred. */
-  season?: SourceMapQuerySeason;
+  season?: Season & unknown;
 }

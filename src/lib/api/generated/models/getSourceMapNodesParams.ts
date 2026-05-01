@@ -5,8 +5,8 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { GetSourceMapNodesSeason } from './getSourceMapNodesSeason';
 import type { ProduceType } from './produceType';
+import type { Season } from './season';
 
 export type GetSourceMapNodesParams = {
 /**
@@ -16,5 +16,5 @@ produceType?: ProduceType;
 /**
  * Filter map and analytics by the season an order occurred.
  */
-season?: GetSourceMapNodesSeason;
+season?: Season & unknown;
 };

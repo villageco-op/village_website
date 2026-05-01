@@ -6,10 +6,19 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ImageUrl } from './imageUrl';
+import type { ProduceType } from './produceType';
 import type { ResourceId } from './resourceId';
 
 export interface ProduceMapItem {
   id: ResourceId;
   name: string;
+  type: ProduceType & (unknown | null);
   thumbnail: ImageUrl & (unknown | null);
+  price: string;
+  availableInventory: string;
+  availableBy: string;
+  seasonStart: string;
+  seasonEnd: string;
+  /** @nullable */
+  isSubscribable: boolean | null;
 }

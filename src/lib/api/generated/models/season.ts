@@ -6,10 +6,13 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSourceMapNodesSeason = typeof GetSourceMapNodesSeason[keyof typeof GetSourceMapNodesSeason];
+/**
+ * Season enum for filtering produce.
+ */
+export type Season = typeof Season[keyof typeof Season];
 
 
-export const GetSourceMapNodesSeason = {
+export const Season = {
   all: 'all',
   spring: 'spring',
   summer: 'summer',
