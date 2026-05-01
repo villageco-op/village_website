@@ -51,7 +51,7 @@ export const ActiveWithAnalytics: Story = {
       harvestFrequencyDays: 7,
       seasonStart: '2024-01-01',
       seasonEnd: '2024-12-31',
-      images: {},
+      images: ['https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=100&h=100&fit=crop'],
       isSubscribable: true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

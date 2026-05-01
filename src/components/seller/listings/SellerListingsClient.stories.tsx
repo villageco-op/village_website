@@ -30,7 +30,7 @@ const generateMockListings = (count: number) => {
     harvestFrequencyDays: 7,
     seasonStart: '2026-04-01',
     seasonEnd: '2026-10-01',
-    images: [],
+    images: ['https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=100&h=100&fit=crop'],
     isSubscribable: true,
     status: 'active' as ProduceStatusProperty,
     createdAt: '2026-01-01T00:00:00Z',

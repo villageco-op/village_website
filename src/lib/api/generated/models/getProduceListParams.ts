@@ -6,9 +6,12 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GetProduceListHasDelivery } from './getProduceListHasDelivery';
+import type { GetProduceListIsSubscribable } from './getProduceListIsSubscribable';
 import type { GetProduceListSortBy } from './getProduceListSortBy';
 import type { Latitude } from './latitude';
 import type { Longitude } from './longitude';
+import type { ProduceType } from './produceType';
+import type { Season } from './season';
 
 export type GetProduceListParams = {
 /**
@@ -27,6 +30,52 @@ sortBy?: GetProduceListSortBy;
  * Filter for items that offer delivery
  */
 hasDelivery?: GetProduceListHasDelivery;
+/**
+ * The category of the produce.
+ */
+produceType?: ProduceType;
+/**
+ * Search produce titles, types, and seller names
+ */
+search?: string;
+/**
+ * Filter for listings allowing at least this maximum order quantity (oz)
+ * @nullable
+ */
+maxOrderQuantity?: number | null;
+/**
+ * Filter for items that are subscribable
+ */
+isSubscribable?: GetProduceListIsSubscribable;
+/**
+ * Minimum total available inventory in oz
+ * @nullable
+ */
+availableInventory?: number | null;
+/**
+ * Season enum for filtering produce.
+ */
+season?: Season;
+/**
+ * Filter for items available on or before this date
+ * @nullable
+ */
+availableBy?: string | null;
+/**
+ * Minimum price per oz
+ * @nullable
+ */
+minPrice?: number | null;
+/**
+ * Maximum price per oz
+ * @nullable
+ */
+maxPrice?: number | null;
+/**
+ * Maximum distance in miles
+ * @nullable
+ */
+maxDistance?: number | null;
 /**
  * The page number for pagination
  * @minimum 1

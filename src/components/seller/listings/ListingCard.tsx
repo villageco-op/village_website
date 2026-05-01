@@ -1,13 +1,15 @@
 'use client';
 
 import { AlertTriangle } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { ProduceIcon } from '@/components/ui/produce-icon';
 import { useAuth } from '@/hooks/useAuth';
 import type { SellerProduceListing } from '@/lib/api/generated/models';
-import { getProduceIcon, getStatusColors } from '@/lib/produce-utils';
+import { getStatusColors } from '@/lib/produce-utils';
 import { cn } from '@/lib/utils';
 
 /**
@@ -46,16 +48,33 @@ export function ListingCard({ produce }: ListingCardProps) {
     month: 'short',
     day: 'numeric',
   });
+  const thumbnail = (produce.images as string[])[0];
 
   return (
     <Card className="mb-5 flex flex-col justify-between rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
       <CardContent className="flex flex-col p-6">
-        {/* Header Info */}
-        <div className="mb-2.5 text-[2.5rem]">{getProduceIcon(produce.produceType)}</div>
+        <div className="mb-4 flex items-start gap-4">
+          {/* Icon/Image Section */}
+          {thumbnail ? (
+            <Image
+              src={String(thumbnail)}
+              alt={produce.title}
+              width={48}
+              height={48}
+              className="h-12 w-12 shrink-0 rounded-md border border-forest-dark/10 object-cover"
+            />
+          ) : (
+            <div className="shrink-0 text-[2.5rem] leading-none">
+              <ProduceIcon type={produce.produceType}></ProduceIcon>
+            </div>
+          )}
 
-        <div className="mb-1 font-heading text-base font-extrabold text-ink">{produce.title}</div>
-
-        <div className="mb-3.5 font-sans text-[0.78rem] text-ink-3">Plot · {plotAddress}</div>
+          {/* Title and Address Section */}
+          <div className="flex flex-col">
+            <div className="font-heading text-base font-extrabold text-ink">{produce.title}</div>
+            <div className="font-sans text-[0.78rem] text-ink-3">Plot · {plotAddress}</div>
+          </div>
+        </div>
 
         <div className="mb-4 flex items-center justify-between">
           <span

@@ -10,6 +10,8 @@ import type { UserId } from './userId';
 
 export interface SellerMapGroup {
   sellerId: UserId;
+  /** The sellers name */
+  name: string;
   lat: number;
   lng: number;
   /** List of produce items available at this specific map location */

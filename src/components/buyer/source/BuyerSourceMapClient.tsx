@@ -7,11 +7,11 @@ import { SourceMap } from './SourceMap';
 
 import { useAuth } from '@/hooks/useAuth';
 import type {
-  GetSourceMapAnalyticsSeason,
   SourceMapNodesResponse,
   SourceMapNode,
   SourceMapQuery,
   ProduceType,
+  Season,
 } from '@/lib/api/generated/models';
 import {
   useGetSourceMapAnalytics,
@@ -31,7 +31,7 @@ export default function BuyerSourceMapClient() {
 
   const queryParams: SourceMapQuery = {
     produceType,
-    season: season as GetSourceMapAnalyticsSeason,
+    season: season as Season,
   };
 
   const {

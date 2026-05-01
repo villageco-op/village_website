@@ -91,7 +91,7 @@ export function BuyerOrderForm({ produceId, onClose }: BuyerOrderFormProps) {
   };
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden relative">
+    <Card className="z-50 rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden relative">
       <CardHeader className="bg-off-white border-b border-lime/20 pb-4 pr-12">
         <CardTitle className="font-heading text-xl text-deep-forest">
           Order {produce.title}

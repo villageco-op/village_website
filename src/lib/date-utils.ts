@@ -40,3 +40,14 @@ export const isoStringToLocalTime = (isoString: string) => {
     return '';
   }
 };
+
+/**
+ * Gets the day from a given date string.
+ * @param dateStr - The source ISO date string
+ * @returns The day or TBD
+ */
+export const getDayFromDate = (dateStr?: string) => {
+  if (!dateStr) return 'TBD';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { weekday: 'short' });
+};

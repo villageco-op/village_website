@@ -6,9 +6,11 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GetProduceMapHasDelivery } from './getProduceMapHasDelivery';
+import type { GetProduceMapIsSubscribable } from './getProduceMapIsSubscribable';
 import type { Latitude } from './latitude';
 import type { Longitude } from './longitude';
 import type { ProduceType } from './produceType';
+import type { Season } from './season';
 
 export type GetProduceMapParams = {
 /**
@@ -28,7 +30,39 @@ radiusMiles?: number | null;
  * The category of the produce.
  */
 produceType?: ProduceType;
+/**
+ * Search produce titles, types, and seller names
+ */
+search?: string;
+/**
+ * Filter for listings allowing at least this maximum order quantity (oz)
+ * @nullable
+ */
+maxOrderQuantity?: number | null;
+/**
+ * Filter for items that are subscribable
+ */
+isSubscribable?: GetProduceMapIsSubscribable;
+/**
+ * Minimum total available inventory in oz
+ * @nullable
+ */
+availableInventory?: number | null;
+/**
+ * Season enum for filtering produce.
+ */
+season?: Season;
+/**
+ * Filter for items available on or before this date
+ * @nullable
+ */
+availableBy?: string | null;
 hasDelivery?: GetProduceMapHasDelivery;
+/**
+ * Minimum price per oz
+ * @nullable
+ */
+minPrice?: number | null;
 /**
  * Filter for items under a specific price point
  * @nullable
