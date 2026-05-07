@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ProduceIcon } from '@/components/ui/produce-icon';
 import { useAuth } from '@/hooks/useAuth';
 import type { SellerProduceListing } from '@/lib/api/generated/models';
+import { formatAppDate } from '@/lib/date-utils';
 import { getStatusColors } from '@/lib/produce-utils';
 import { cn } from '@/lib/utils';
 
@@ -43,11 +44,7 @@ export function ListingCard({ produce }: ListingCardProps) {
   const neededLbs = analytics ? Math.ceil(analytics.upcomingSubscriptionOzNeeded / 16) : 0;
 
   const rawHarvestDate = analytics?.nextHarvestDate || produce.availableBy;
-  const harvestDate = new Date(rawHarvestDate).toLocaleDateString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-  });
+  const harvestDate = formatAppDate(new Date(rawHarvestDate), 'weekdayDayMonth');
   const thumbnail = (produce.images as string[])[0];
 
   return (

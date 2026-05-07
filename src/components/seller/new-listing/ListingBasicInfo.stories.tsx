@@ -9,6 +9,7 @@ import type { ListingFormData } from '@/components/seller/new-listing/AddNewList
 const mockFullData: ListingFormData = {
   title: '',
   produceType: undefined,
+  description: '',
   pricePerLb: '0.00',
   totalLbsInventory: '0',
   maxOrderLbs: '',
@@ -50,6 +51,7 @@ export const Prepopulated: Story = {
     data: {
       ...mockFullData,
       title: 'Zucchini Blossoms',
+      description: 'Freshly picked early morning blossoms, perfect for stuffing with ricotta.',
       produceType: 'cucurbits',
       pricePerLb: '12.50',
       totalLbsInventory: '5',
@@ -58,8 +60,7 @@ export const Prepopulated: Story = {
 };
 
 /**
- * Verifies the interaction: typing in the Title and Produce Type
- * inputs should trigger the updateData callback with the correct keys.
+ * Verifies interaction for Title, Description, and Produce Type.
  */
 export const InteractionTest: Story = {
   render: (args) => {
@@ -78,10 +79,20 @@ export const InteractionTest: Story = {
 
     const titleInput = canvas.getByLabelText(/Title/i);
     await userEvent.type(titleInput, 'Red Currants');
-
     await expect(args.updateData).toHaveBeenCalledWith(
       expect.objectContaining({ title: 'Red Currants' }),
     );
+
+    const descriptionInput = canvas.getByLabelText(/Description/i);
+    const testDescription = 'Sweet and tart berries.';
+    await userEvent.type(descriptionInput, testDescription);
+
+    await expect(args.updateData).toHaveBeenCalledWith(
+      expect.objectContaining({ description: testDescription }),
+    );
+
+    const counter = canvas.getByText(/23 \/ 500/i);
+    await expect(counter).toBeInTheDocument();
 
     const selectTrigger = canvas.getByLabelText(/Produce Type/i);
     await userEvent.click(selectTrigger);
@@ -89,7 +100,6 @@ export const InteractionTest: Story = {
     const option = (await screen.findAllByText('Berries'))[0];
     await userEvent.click(option);
 
-    // Check that updateData was called with produceType updates
     await expect(args.updateData).toHaveBeenCalledWith(
       expect.objectContaining({ produceType: 'berries' }),
     );

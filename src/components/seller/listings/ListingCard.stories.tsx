@@ -42,6 +42,7 @@ export const ActiveWithAnalytics: Story = {
       id: '1',
       sellerId: 'seller-123',
       title: 'Organic Lacinato Kale',
+      description: 'We plant early in the spring and harvest throughout the year.',
       produceType: 'leafy_greens',
       pricePerOz: '0.50', // $8.00/lb
       totalOzInventory: '320',
@@ -80,6 +81,7 @@ export const InventoryAlert: Story = {
       id: '2',
       sellerId: 'seller-123',
       title: 'Heirloom Tomatoes',
+      description: '',
       produceType: 'nightshades',
       pricePerOz: '0.75', // $12.00/lb
       totalOzInventory: '160',
@@ -133,6 +135,7 @@ export const NoAnalytics: Story = {
       id: '3',
       sellerId: 'seller-123',
       title: 'Wild Strawberries',
+      description: 'Grown wild.',
       produceType: 'berries',
       pricePerOz: '1.00',
       totalOzInventory: '80',

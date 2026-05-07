@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { StatusPill } from '@/components/ui/status-pill';
 import type { SubscriptionDetailResponse } from '@/lib/api/generated/models';
+import { formatAppDate } from '@/lib/date-utils';
 import { getInitials } from '@/lib/user-utils';
 import { cn } from '@/lib/utils';
 
@@ -27,13 +28,7 @@ interface SubscriptionCardProps {
  * @returns A card containing a snapshot of the subscription
  */
 export function SubscriptionCard({ subscription, index, onFilterSeller }: SubscriptionCardProps) {
-  const nextDelivery = subscription.nextDeliveryDate
-    ? new Date(subscription.nextDeliveryDate).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      })
-    : 'Pending';
+  const nextDelivery = formatAppDate(subscription.nextDeliveryDate, 'full', 'Pending');
 
   const sellerName = subscription.seller?.name || 'Unknown Grower';
   const sellerId = subscription.seller?.id || '';

@@ -25,4 +25,9 @@ export interface ProduceListItem {
   distance: number;
   /** @nullable */
   isSubscribable: boolean | null;
+  /**
+   * Description of the produce written by the seller.
+   * @nullable
+   */
+  description: string | null;
 }

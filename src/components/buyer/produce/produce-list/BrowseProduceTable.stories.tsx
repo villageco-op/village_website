@@ -15,6 +15,7 @@ const mockProduce = [
     availableBy: new Date().toISOString(),
     distance: 4.2,
     isSubscribable: true,
+    description: null,
   },
   {
     id: '2',
@@ -27,6 +28,7 @@ const mockProduce = [
     availableBy: new Date(Date.now() + 86400000).toISOString(),
     distance: 12.8,
     isSubscribable: false,
+    description: null,
   },
 ];
 

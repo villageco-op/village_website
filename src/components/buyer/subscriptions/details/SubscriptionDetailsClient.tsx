@@ -20,6 +20,7 @@ import {
   useGetSubscriptionById,
   useUpdateSubscription,
 } from '@/lib/api/generated/subscriptions/subscriptions';
+import { formatAppDate } from '@/lib/date-utils';
 
 interface SubscriptionDetailClientProps {
   id: string;
@@ -130,10 +131,7 @@ export default function SubscriptionDetailClient({ id }: SubscriptionDetailClien
               <StatusPill status={subscription.status} />
             </div>
             <p className="mt-1 font-sans text-sm text-ink-3">
-              Started on{' '}
-              {subscription.createdAt
-                ? new Date(subscription.createdAt).toLocaleDateString()
-                : 'Unknown date'}
+              Started on {formatAppDate(subscription.createdAt, 'full', 'Unknown date')}
             </p>
           </div>
 

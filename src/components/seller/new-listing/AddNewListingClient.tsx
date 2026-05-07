@@ -28,6 +28,7 @@ export interface ListingFormData {
   seasonEnd: string;
   isSubscribable: boolean;
   images: string[];
+  description: string;
 }
 
 /**
@@ -58,6 +59,7 @@ export default function AddNewListingClient() {
     seasonEnd: '',
     isSubscribable: false,
     images: [],
+    description: '',
   });
 
   const [isUploading, setIsUploading] = useState(false);
@@ -99,6 +101,7 @@ export default function AddNewListingClient() {
 
       const payload: CreateProducePayload = {
         title: formData.title,
+        description: formData.description || undefined,
         produceType: formData.produceType || undefined,
         pricePerOz,
         totalOzInventory,

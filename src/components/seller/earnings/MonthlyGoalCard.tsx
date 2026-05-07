@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import type { ProduceSales } from '@/lib/api/generated/models';
+import { formatAppDate } from '@/lib/date-utils';
 
 /**
  * Props for the monthly goal card.
@@ -40,7 +41,7 @@ export function MonthlyGoalCard({
   monthlyGoal,
   produceBreakdown,
 }: MonthlyGoalCardProps) {
-  const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const currentMonth = formatAppDate(new Date(), 'longMonthYear');
   const progressPercent = Math.min((earnedThisMonth / monthlyGoal) * 100, 100);
 
   return (

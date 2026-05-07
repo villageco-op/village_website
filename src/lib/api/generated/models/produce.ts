@@ -14,6 +14,8 @@ export interface Produce {
   sellerId: string;
   title: string;
   /** @nullable */
+  description: string | null;
+  /** @nullable */
   produceType: ProduceProduceType;
   pricePerOz: string;
   totalOzInventory: string;

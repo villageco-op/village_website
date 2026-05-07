@@ -19,6 +19,7 @@ import {
   useCancelOrder,
   useRescheduleOrder,
 } from '@/lib/api/generated/orders/orders';
+import { formatAppDate } from '@/lib/date-utils';
 
 interface OrderDetailClientProps {
   id: string;
@@ -112,8 +113,7 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
               </h1>
             </div>
             <p className="mt-1 font-sans text-sm text-ink-3">
-              Placed on{' '}
-              {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Unknown date'}
+              Placed on {formatAppDate(order.createdAt, 'full', 'Unknown date')}
             </p>
           </div>
 

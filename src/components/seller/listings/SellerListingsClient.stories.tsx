@@ -22,6 +22,7 @@ const generateMockListings = (count: number) => {
     id: `list_${i + 1}`,
     sellerId: 'seller_1',
     title: `Listing Item ${i + 1}`,
+    description: `Listing Item ${i + 1} description.`,
     produceType: 'root_vegetables' as ProduceType,
     pricePerOz: '0.50',
     totalOzInventory: '100',

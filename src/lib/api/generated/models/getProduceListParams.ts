@@ -12,6 +12,7 @@ import type { Latitude } from './latitude';
 import type { Longitude } from './longitude';
 import type { ProduceType } from './produceType';
 import type { Season } from './season';
+import type { UserId } from './userId';
 
 export type GetProduceListParams = {
 /**
@@ -22,6 +23,10 @@ lat?: Latitude | null;
  * Longitude coordinate
  */
 lng?: Longitude | null;
+/**
+ * Filter for produce owned by this seller.
+ */
+sellerId?: UserId & unknown;
 /**
  * Sort order for the results
  */

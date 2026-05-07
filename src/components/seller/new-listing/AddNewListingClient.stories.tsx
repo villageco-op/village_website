@@ -64,6 +64,10 @@ export const FullFormSubmission: Story = {
     // 1. Basic Info
     await userEvent.type(canvas.getByLabelText(/Title/i), 'Gala Apples');
 
+    const descriptionInput = await canvas.findByLabelText(/Description/i);
+    await userEvent.clear(descriptionInput);
+    await userEvent.type(descriptionInput, 'Updated berry description');
+
     const selectTrigger = canvas.getByLabelText(/Produce Type/i);
     await userEvent.click(selectTrigger);
 
