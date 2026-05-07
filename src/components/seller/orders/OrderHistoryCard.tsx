@@ -13,6 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import type { Order } from '@/lib/api/generated/models';
+import { formatAppDate } from '@/lib/date-utils';
 
 /**
  * Props for the order history card.
@@ -76,12 +77,7 @@ export function OrderHistoryCard({ orders, completedCount }: OrderHistoryCardPro
                   </TableCell>
                   <TableCell className="capitalize text-ink-3">{order.fulfillmentType}</TableCell>
                   <TableCell className="text-ink-3">
-                    {order.scheduledTime
-                      ? new Date(order.scheduledTime).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                        })
-                      : '—'}
+                    {formatAppDate(order.scheduledTime, 'dayMonth')}
                   </TableCell>
                   <TableCell>
                     <StatusPill status={order.status} />

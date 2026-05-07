@@ -57,6 +57,7 @@ export const Default: Story = {
             status: 200,
             data: {
               title: 'Organic Strawberries',
+              description: 'Freshly picked sun-ripened strawberries from our north field.',
               produceType: 'berries',
               pricePerOz: 0.5, // $8.00/lb
               totalOzInventory: 160, // 10 lbs
@@ -94,6 +95,10 @@ export const UpdateSuccess: Story = {
     const titleInput = await canvas.findByLabelText(/Title/i);
     await userEvent.clear(titleInput);
     await userEvent.type(titleInput, 'Premium Strawberries');
+
+    const descriptionInput = await canvas.findByLabelText(/Description/i);
+    await userEvent.clear(descriptionInput);
+    await userEvent.type(descriptionInput, 'Updated berry description');
 
     const saveBtn = canvas.getByRole('button', { name: /Save Changes/i });
     await userEvent.click(saveBtn);

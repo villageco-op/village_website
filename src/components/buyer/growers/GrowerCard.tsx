@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import type { Grower } from '@/lib/api/generated/models';
+import { formatAppDate } from '@/lib/date-utils';
 import { getInitials } from '@/lib/user-utils';
 import { cn } from '@/lib/utils';
 
@@ -23,11 +24,7 @@ interface GrowerCardProps {
  * @returns A card containing grower information
  */
 export function GrowerCard({ grower, index }: GrowerCardProps) {
-  // Format the starting date
-  const startDate = new Date(grower.firstOrderDate).toLocaleDateString('en-US', {
-    month: 'short',
-    year: 'numeric',
-  });
+  const startDate = formatAppDate(grower.firstOrderDate, 'monthYear');
 
   const getPillColor = (index: number) => {
     const styles = [

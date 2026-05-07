@@ -18,6 +18,8 @@ export interface UpdateProducePayload {
    * @minLength 1
    */
   title?: string;
+  /** Description of the produce. */
+  description?: string;
   produceType?: ProduceType;
   pricePerOz?: PriceDollars;
   totalOzInventory?: WeightOz;

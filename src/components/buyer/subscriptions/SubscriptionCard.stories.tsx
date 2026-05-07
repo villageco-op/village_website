@@ -45,6 +45,7 @@ const mockSubscription = {
     id: 'prod-456',
     sellerId: 'user-seller',
     title: 'Organic Heirloom Kale',
+    description: null,
     produceType: 'leafy_greens' as ProduceType,
     pricePerOz: '0.75',
     totalOzInventory: '100',

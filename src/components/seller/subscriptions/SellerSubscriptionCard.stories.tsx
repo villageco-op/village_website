@@ -45,6 +45,7 @@ const mockSubscription = {
     id: 'prod-001',
     sellerId: 'user-seller-pro',
     title: 'Red Bourbon Coffee Beans',
+    description: 'Hand crafted coffee beans made with love.',
     produceType: 'legumes' as ProduceType,
     pricePerOz: '1.25',
     totalOzInventory: '500',

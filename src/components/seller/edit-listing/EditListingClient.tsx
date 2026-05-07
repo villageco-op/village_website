@@ -51,6 +51,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
 
         setFormData({
           title: produce.title,
+          description: produce.description || '',
           produceType: produce.produceType || undefined,
           pricePerLb: (Number(produce.pricePerOz || 0) * 16).toFixed(2),
           totalLbsInventory: (Number(produce.totalOzInventory || 0) / 16).toString(),
@@ -155,6 +156,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
 
       const payload: UpdateProducePayload = {
         title: formData.title,
+        description: formData.description || undefined,
         produceType: formData.produceType || undefined,
         pricePerOz: pricePerOz,
         totalOzInventory: totalOzInventory,

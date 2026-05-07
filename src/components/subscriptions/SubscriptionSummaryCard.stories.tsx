@@ -43,6 +43,7 @@ const mockSubscription = {
     id: 'prod-1',
     sellerId: 'seller-1',
     title: 'Gourmet Spring Mix',
+    description: null,
     produceType: 'leafy_greens' as ProduceType,
     pricePerOz: '1.25',
     harvestFrequencyDays: 14,

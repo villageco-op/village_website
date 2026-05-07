@@ -51,3 +51,69 @@ export const getDayFromDate = (dateStr?: string) => {
   const date = new Date(dateStr);
   return date.toLocaleDateString('en-US', { weekday: 'short' });
 };
+
+/**
+ * Computes the difference in time from the given date to now in a human-readable format.
+ * @param dateString - A standard date string
+ * @returns A formatted date string (e.g., '2 yrs', '5 mo', '< 1 mo') or 'New' if null
+ */
+export function getTimeDifferenceFromNow(dateString: string | null | undefined): string {
+  if (!dateString) return 'New';
+
+  const joined = new Date(dateString);
+  if (isNaN(joined.getTime())) return 'New';
+
+  const now = new Date();
+
+  const months =
+    (now.getFullYear() - joined.getFullYear()) * 12 + (now.getMonth() - joined.getMonth());
+
+  if (months > 11) {
+    const years = Math.floor(months / 12);
+    return `${years} yr${years > 1 ? 's' : ''}`;
+  } else if (months > 0) {
+    return `${months} mo`;
+  } else {
+    return '< 1 mo';
+  }
+}
+
+type DateFormatPreset =
+  | 'numeric'
+  | 'short'
+  | 'full'
+  | 'monthYear'
+  | 'longMonthYear'
+  | 'dayMonth'
+  | 'weekdayDayMonth';
+
+const PRESETS: Record<DateFormatPreset, Intl.DateTimeFormatOptions> = {
+  numeric: { month: 'numeric', day: 'numeric', year: 'numeric' },
+  short: { month: 'short', day: 'numeric' },
+  dayMonth: { month: 'short', day: 'numeric' },
+  full: { month: 'short', day: 'numeric', year: 'numeric' },
+  monthYear: { month: 'short', year: 'numeric' },
+  longMonthYear: { month: 'long', year: 'numeric' },
+  weekdayDayMonth: { weekday: 'short', month: 'short', day: 'numeric' },
+};
+
+/**
+ * Standardizes date formatting across the application.
+ * @param date - Date string, Date object, or null/undefined
+ * @param preset - The formatting style to use
+ * @param fallback - String to return if date is missing/invalid
+ * @returns The formatted local date string
+ */
+export function formatAppDate(
+  date: string | Date | null | undefined,
+  preset: DateFormatPreset = 'full',
+  fallback: string = '—',
+): string {
+  if (!date) return fallback;
+
+  const d = typeof date === 'string' ? new Date(date) : date;
+
+  if (isNaN(d.getTime())) return fallback;
+
+  return d.toLocaleDateString('en-US', PRESETS[preset]);
+}

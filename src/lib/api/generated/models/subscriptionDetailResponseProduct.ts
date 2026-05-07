@@ -14,6 +14,8 @@ export type SubscriptionDetailResponseProduct = {
   sellerId: string;
   title: string;
   /** @nullable */
+  description: string | null;
+  /** @nullable */
   produceType: SubscriptionDetailResponseProductProduceType;
   pricePerOz: string;
   totalOzInventory: string;

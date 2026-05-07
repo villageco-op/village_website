@@ -20,6 +20,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import type { Payout } from '@/lib/api/generated/models';
+import { formatAppDate } from '@/lib/date-utils';
 
 /**
  * Props for the payout history card.
@@ -127,10 +128,7 @@ export function PayoutHistoryCard({
             </TableHeader>
             <TableBody>
               {payouts.map((payout, i) => {
-                const dateStr = new Date(payout.date).toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                });
+                const dateStr = formatAppDate(payout.date, 'short');
 
                 return (
                   <TableRow key={i} className="border-[rgba(42,75,40,0.05)] hover:bg-off-white">

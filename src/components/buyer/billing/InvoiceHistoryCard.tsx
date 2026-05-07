@@ -22,6 +22,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import type { Order, OrderStatus } from '@/lib/api/generated/models';
+import { formatAppDate } from '@/lib/date-utils';
 
 interface InvoiceHistoryCardProps {
   orders: Order[];
@@ -148,12 +149,7 @@ export function InvoiceHistoryCard({
             </TableHeader>
             <TableBody>
               {orders.map((order) => {
-                const dateStr = order.scheduledTime
-                  ? new Date(order.scheduledTime).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                    })
-                  : '—';
+                const dateStr = formatAppDate(order.scheduledTime, 'dayMonth');
 
                 return (
                   <TableRow

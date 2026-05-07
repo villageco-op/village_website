@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import type { SellerEarningsResponse } from '@/lib/api/generated/models';
+import { formatAppDate } from '@/lib/date-utils';
 
 /**
  * Props for the earnings stat row component.
@@ -34,11 +35,7 @@ export function EarningsStatRow({ data }: EarningsStatRowProps) {
   const isPositive = deltaVal >= 0;
   const formattedDelta = Math.abs(deltaVal).toFixed(0);
 
-  // Format YTD start date
-  const formattedYtdDate = new Date(ytdStartDate).toLocaleDateString('en-US', {
-    month: 'long',
-    year: 'numeric',
-  });
+  const formattedYtdDate = formatAppDate(ytdStartDate, 'longMonthYear');
 
   return (
     <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

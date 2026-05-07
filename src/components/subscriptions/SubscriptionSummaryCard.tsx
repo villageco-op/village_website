@@ -4,6 +4,7 @@ import { Calendar, Package, RefreshCw } from 'lucide-react';
 
 import { Card, CardContent } from '@/components/ui/card';
 import type { SubscriptionDetailResponse } from '@/lib/api/generated/models';
+import { formatAppDate } from '@/lib/date-utils';
 
 interface SubscriptionSummaryCardProps {
   subscription: SubscriptionDetailResponse;
@@ -20,13 +21,11 @@ export function SubscriptionSummaryCard({ subscription }: SubscriptionSummaryCar
   const quantity = Number(subscription.quantityOz || 0);
   const totalCost = (pricePerOz * quantity).toFixed(2);
 
-  const nextDelivery = subscription.nextDeliveryDate
-    ? new Date(subscription.nextDeliveryDate).toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-      })
-    : 'Pending / Not Scheduled';
+  const nextDelivery = formatAppDate(
+    subscription.nextDeliveryDate,
+    'weekdayDayMonth',
+    'Pending / Not Scheduled',
+  );
 
   return (
     <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
