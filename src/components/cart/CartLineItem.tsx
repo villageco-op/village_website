@@ -7,6 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
+import { ProduceIcon } from '../ui/produce-icon';
 
 import type { CartItem } from '@/lib/api/generated/models/cartItem';
 import type { UpdateCartPayload } from '@/lib/api/generated/models/updateCartPayload';
@@ -88,7 +89,9 @@ export function CartLineItem({
               )}
             />
           ) : (
-            <span className={cn(isUpdating && 'opacity-40')}>🌿</span>
+            <span className={cn(isUpdating && 'opacity-40')}>
+              <ProduceIcon type={item.title} className="h-5 w-5 text-ink-3" />
+            </span>
           )}
 
           {/* Centralized Spinner */}

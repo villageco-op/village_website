@@ -1,5 +1,6 @@
 'use client';
 
+import { Store, Truck } from 'lucide-react';
 import Link from 'next/link';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -44,7 +45,11 @@ export function PendingOrdersCard({ orders, pendingCount }: PendingOrdersCardPro
           <div className="flex flex-col">
             {orders.map((order) => {
               const isDelivery = order.fulfillmentType?.toLowerCase() === 'delivery';
-              const icon = isDelivery ? '🚚' : '🏪';
+              const icon = isDelivery ? (
+                <Truck className="text-deep-forest h-5 w-5" />
+              ) : (
+                <Store className="text-deep-forest h-5 w-5" />
+              );
               const iconBgClass = isDelivery ? 'bg-sun/30' : 'bg-lime/30';
 
               const date = order.scheduledTime

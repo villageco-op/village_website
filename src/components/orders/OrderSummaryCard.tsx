@@ -18,8 +18,6 @@ interface OrderSummaryCardProps {
  * @returns A card displaying all the order details
  */
 export function OrderSummaryCard({ order }: OrderSummaryCardProps) {
-  const isDelivery = order.fulfillmentType?.toLowerCase() === 'delivery';
-
   return (
     <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
       <CardContent className="p-6">
@@ -61,7 +59,6 @@ export function OrderSummaryCard({ order }: OrderSummaryCardProps) {
             </div>
             <p className="font-medium text-ink capitalize flex items-center gap-2">
               {order.fulfillmentType}
-              <span className="text-lg leading-none">{isDelivery ? '🚚' : '🏪'}</span>
             </p>
           </div>
 

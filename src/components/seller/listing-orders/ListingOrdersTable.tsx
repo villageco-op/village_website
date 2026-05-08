@@ -1,5 +1,6 @@
 'use client';
 
+import { Package } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -47,7 +48,7 @@ export function ListingOrdersTable({ orders, totalOrders }: ListingOrdersTablePr
         {orders.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-2xl">
-              📦
+              <Package />
             </div>
             <h3 className="font-heading text-lg font-bold text-ink">No orders yet</h3>
             <p className="mt-1 max-w-sm text-sm text-ink-3">

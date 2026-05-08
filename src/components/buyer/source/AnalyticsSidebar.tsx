@@ -1,3 +1,5 @@
+import { Truck } from 'lucide-react';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import {
@@ -137,8 +139,8 @@ export function AnalyticsSidebar({
               {/* Food Miles Saved */}
               <div className="rounded-lg border border-sun/20 bg-sun/10 p-4 shadow-sm">
                 <div className="mb-1 flex items-center gap-2">
-                  <span className="text-xl">🚚</span>
-                  <div className="font-heading text-xl font-extrabold text-[#8a6000]">
+                  <Truck className="text-xl text-clay" />
+                  <div className="font-heading text-xl font-extrabold text-clay">
                     {analytics.foodMilesSaved.toLocaleString()} miles
                   </div>
                 </div>

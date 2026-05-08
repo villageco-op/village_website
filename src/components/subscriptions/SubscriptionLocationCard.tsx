@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Copy, ExternalLink, MapPin } from 'lucide-react';
+import { Check, Copy, ExternalLink, MapPin, Store, Truck } from 'lucide-react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useState } from 'react';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
@@ -31,7 +31,7 @@ export function SubscriptionLocationCard({ subscription }: SubscriptionLocationC
   const location = targetUser?.location;
 
   const title = isDelivery ? 'Delivery Location' : 'Pickup Location';
-  const headerIcon = isDelivery ? '🚚' : '🏪';
+  const headerIcon = isDelivery ? <Truck /> : <Store />;
   const address = location?.address || 'No address provided';
   const lat = location?.lat ?? 41.5934;
   const lng = location?.lng ?? -87.3464;
@@ -55,7 +55,7 @@ export function SubscriptionLocationCard({ subscription }: SubscriptionLocationC
     <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
       <CardContent className="p-6">
         <div className="mb-4 flex items-center gap-2 border-b border-border/50 pb-3">
-          <span className="text-lg leading-none">{headerIcon}</span>
+          <span className="leading-none h-5 w-5 text-deep-forest">{headerIcon}</span>
           <h2 className="font-heading text-[0.95rem] font-bold text-ink">{title}</h2>
         </div>
         <div className="relative mb-4 flex h-52 w-full items-center justify-center overflow-hidden rounded-[10px] bg-[#e8f0e0] border border-border/50">
@@ -68,7 +68,7 @@ export function SubscriptionLocationCard({ subscription }: SubscriptionLocationC
             <NavigationControl position="top-right" showCompass={false} />
             <Marker longitude={lng} latitude={lat} anchor="bottom">
               <div className="text-[2.2rem] drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] animate-in fade-in slide-in-from-bottom-2 duration-1000">
-                📍
+                <MapPin />
               </div>
             </Marker>
           </Map>

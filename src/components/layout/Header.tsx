@@ -19,7 +19,7 @@ export function Header() {
     { name: 'Home', href: '/' },
     { name: 'Producer', href: '/producer' },
     { name: 'Buyer', href: '/buyer' },
-    { name: 'Want to deliver? 🚙', href: '/deliver' },
+    { name: 'Want to deliver?', href: '/deliver' },
   ];
 
   const secondaryNavItems = [
