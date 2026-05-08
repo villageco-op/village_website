@@ -150,7 +150,7 @@ export function OrderFulfillmentCell({
     <TableCell>
       <div className={cn('flex items-center gap-1.5', className)}>
         <span className="text-sm capitalize text-ink-3">{fulfillmentType}</span>
-        <span title={isDelivery ? 'Delivery' : 'Pickup'}>{isDelivery ? '🚚' : '🏪'}</span>
+        <span title={isDelivery ? 'Delivery' : 'Pickup'} />
       </div>
     </TableCell>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Copy, ExternalLink, MapPin } from 'lucide-react';
+import { Check, Copy, ExternalLink, MapPin, Truck, Store } from 'lucide-react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useState } from 'react';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
@@ -32,7 +32,7 @@ export function OrderLocationCard({ order }: OrderLocationCardProps) {
   const location = targetUser?.location;
 
   const title = isDelivery ? 'Delivery Location' : 'Pickup Location';
-  const headerIcon = isDelivery ? '🚚' : '🏪';
+  const headerIcon = isDelivery ? <Truck /> : <Store />;
   const address =
     typeof location?.address === 'string'
       ? location.address
@@ -65,7 +65,7 @@ export function OrderLocationCard({ order }: OrderLocationCardProps) {
     <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
       <CardContent className="p-6">
         <div className="mb-4 flex items-center gap-2 border-b border-border/50 pb-3">
-          <span className="text-lg leading-none">{headerIcon}</span>
+          <span className="leading-none h-5 w-5 text-ink-3">{headerIcon}</span>
           <h2 className="font-heading text-[0.95rem] font-bold text-ink">{title}</h2>
         </div>
 

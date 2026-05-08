@@ -34,7 +34,7 @@ export function DashboardHeader({ location }: DashboardHeaderProps) {
 
   return (
     <PageHeader
-      title={`Good morning, ${firstName} 🌿`}
+      title={`Good morning, ${firstName}`}
       subtitle={`Week of ${formattedWeek} · Plot: ${address}${city}`}
     />
   );

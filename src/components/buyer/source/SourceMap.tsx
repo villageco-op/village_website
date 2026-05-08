@@ -1,3 +1,4 @@
+import { MapPin } from 'lucide-react';
 import Map, { Layer, Marker, NavigationControl, Source } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -73,7 +74,7 @@ export function SourceMap({
             className="z-20 cursor-pointer drop-shadow-md transition-transform hover:scale-110"
             title="Your Store"
           >
-            <span className="text-[2rem]">📍</span>
+            <MapPin className="text-xl text-deep-forest" />
           </div>
         </Marker>
 

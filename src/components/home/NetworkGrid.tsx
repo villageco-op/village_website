@@ -32,7 +32,10 @@ function NetworkNode({ icon, label, sub }: { icon: string; label: string; sub: s
         transition: 'border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
       }}
     >
-      <span style={{ fontSize: '1.7rem', display: 'block', marginBottom: '7px', lineHeight: 1 }}>
+      <span
+        className="items-center"
+        style={{ fontSize: '1.7rem', display: 'block', marginBottom: '7px', lineHeight: 1 }}
+      >
         {icon}
       </span>
       <div

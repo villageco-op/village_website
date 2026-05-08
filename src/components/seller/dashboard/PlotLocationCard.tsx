@@ -1,5 +1,6 @@
 'use client';
 
+import { MapPin } from 'lucide-react';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -55,7 +56,7 @@ export function PlotLocationCard({ location }: PlotLocationCardProps) {
           {/* Location Pin */}
           <Marker longitude={lng} latitude={lat} anchor="bottom">
             <div className="text-[2rem] drop-shadow-[0_4px_8px_rgba(0,0,0,0.2)] animate-in fade-in slide-in-from-bottom-2 duration-1000">
-              📍
+              <MapPin className="text-deep-forest" />
             </div>
           </Marker>
         </Map>

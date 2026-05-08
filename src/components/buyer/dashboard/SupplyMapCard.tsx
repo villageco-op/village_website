@@ -1,5 +1,6 @@
 'use client';
 
+import { Leaf, MapPin, Sprout, Star } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -106,7 +107,7 @@ export function SupplyMapCard({
             {/* Base Store Pin */}
             <Marker longitude={baseLng} latitude={baseLat} anchor="bottom">
               <div className="text-[1.5rem] drop-shadow-md z-10" title="Your Store">
-                📍
+                <MapPin className="text-deep-forest" />
               </div>
             </Marker>
 
@@ -127,7 +128,7 @@ export function SupplyMapCard({
                     onMouseLeave={() => setHoveredGrower(null)}
                     onClick={() => router.push(`/seller/${grower.sellerId}`)}
                   >
-                    🌱
+                    <Sprout className="text-lime" />
                   </div>
                 </Marker>
               );
@@ -148,6 +149,8 @@ export function SupplyMapCard({
                   {/* Image on the Left */}
                   {hoveredGrower.image && (
                     <Image
+                      width="10"
+                      height="10"
                       src={hoveredGrower.image}
                       alt={hoveredGrower.name || 'Grower'}
                       className="h-10 w-10 shrink-0 rounded-full object-cover shadow-sm border border-forest-dark/10"
@@ -164,7 +167,7 @@ export function SupplyMapCard({
                     <div className="text-[0.62rem] text-ink-3 mt-0.5 flex flex-wrap items-center gap-x-1 leading-tight">
                       {hoveredGrower.rating > 0 ? (
                         <span className="flex items-center gap-0.5 whitespace-nowrap">
-                          <span className="text-sun-dark">⭐</span>
+                          <Star className="text-sun h-3 w-3 fill-current" />
                           {hoveredGrower.rating.toFixed(1)}
                         </span>
                       ) : (
@@ -228,13 +231,13 @@ export function SupplyMapCard({
           variant="outline"
           className="border-0 bg-deep-forest/10 text-deep-forest px-2.5 py-1 font-heading text-[0.65rem] font-bold uppercase tracking-[0.05em] rounded-full"
         >
-          📍 Your store
+          <MapPin className="text-deep-forest" /> Your location
         </Badge>
         <Badge
           variant="outline"
           className="border-0 bg-lime-pale text-click-green px-2.5 py-1 font-heading text-[0.65rem] font-bold uppercase tracking-[0.05em] rounded-full"
         >
-          🌱 Active growers
+          <Sprout className="text-lime" /> Active growers
         </Badge>
         <Badge
           variant="outline"
@@ -246,8 +249,9 @@ export function SupplyMapCard({
 
       {/* Impact Box */}
       <div className="mt-3.5 rounded-lg bg-lime-pale p-3.5">
-        <div className="mb-1 font-heading text-[0.78rem] font-bold text-deep-forest">
-          🌿 Your impact this month
+        <div className="mb-1 flex items-center gap-2 font-heading text-[0.78rem] font-bold text-deep-forest">
+          <Leaf className="text-click-green h-4 w-4" />
+          <span>Your impact this month</span>
         </div>
         <div className="font-sans text-[0.76rem] leading-[1.55] text-ink-2">
           Every order keeps dollars in our local community. This month your purchases supported{' '}
