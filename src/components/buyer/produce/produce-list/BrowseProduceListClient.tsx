@@ -12,6 +12,7 @@ import { BrowseProduceTable } from './BrowseProduceTable';
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { PaginationControls } from '@/components/ui/pagination-controls';
+import { EmptyState, PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import type { GetProduceListParams } from '@/lib/api/generated/models';
 import { useGetProduceList } from '@/lib/api/generated/produce/produce';
@@ -56,13 +57,11 @@ export default function BrowseProduceListClient({ onViewChange }: BrowseProduceL
     ...filters,
   };
 
-  const { data: response, isLoading, isError } = useGetProduceList(queryParams);
+  const { data: response, isLoading, isError, refetch } = useGetProduceList(queryParams);
 
   if (isError || (response && response.status !== 200)) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-xl bg-destructive/10 text-destructive p-8">
-        <p className="font-heading font-bold">Failed to load produce listings.</p>
-      </div>
+      <PageErrorState title="Failed to load produce listings." onRetry={() => void refetch()} />
     );
   }
 
@@ -92,9 +91,7 @@ export default function BrowseProduceListClient({ onViewChange }: BrowseProduceL
           <PaginationControls meta={meta} onPageChange={setPage} />
         </div>
       ) : (
-        <div className="flex h-48 flex-col items-center justify-center rounded-xl border border-dashed border-forest-dark/20 bg-slate-50 text-ink-3">
-          <p>No produce found matching your filters.</p>
-        </div>
+        <EmptyState title="No produce found matching your filters." />
       )}
       <Dialog
         open={!!selectedProduceId}

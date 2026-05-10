@@ -13,6 +13,7 @@ import {
   OrderQuantityOzCell,
 } from '@/components/orders/OrderTableCells';
 import { Card, CardContent } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/state-displays';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { ProduceOrderListResponseDataItem } from '@/lib/api/generated/models';
 
@@ -46,15 +47,11 @@ export function ListingOrdersTable({ orders, totalOrders }: ListingOrdersTablePr
         </div>
 
         {orders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-2xl">
-              <Package />
-            </div>
-            <h3 className="font-heading text-lg font-bold text-ink">No orders yet</h3>
-            <p className="mt-1 max-w-sm text-sm text-ink-3">
-              When customers purchase this listing, their orders will appear here.
-            </p>
-          </div>
+          <EmptyState
+            icon={Package}
+            title="No orders yet"
+            description="When customers purchase this listing, their orders will appear here."
+          />
         ) : (
           <div className="overflow-x-auto">
             <Table>

@@ -14,6 +14,7 @@ import { EditSubscriptionDialog } from './EditSubscriptionDialog';
 
 import { OrderDetailSkeleton } from '@/components/orders/OrderDetailSkeleton';
 import { Button } from '@/components/ui/button';
+import { NotFoundState } from '@/components/ui/state-displays';
 import { StatusPill } from '@/components/ui/status-pill';
 import type { FulfillmentType } from '@/lib/api/generated/models';
 import {
@@ -98,11 +99,10 @@ export default function SubscriptionDetailClient({ id }: SubscriptionDetailClien
 
   if (query.isError || query.data?.status !== 200 || !query.data?.data) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center bg-off-white p-4">
-        <h2 className="mb-2 text-2xl font-bold text-deep-forest">Subscription not found</h2>
-        <p className="mb-6 text-ink-3">We couldn&apos;t load the details for this subscription.</p>
-        <Button onClick={() => router.back()}>Go Back</Button>
-      </div>
+      <NotFoundState
+        title="Subscription not found"
+        description="We couldn't load the details for this subscription."
+      />
     );
   }
 

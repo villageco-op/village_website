@@ -10,6 +10,7 @@ import { MonthlyGoalCard } from './MonthlyGoalCard';
 import { PayoutHistoryCard } from './PayoutHistoryCard';
 
 import { PaginationControls } from '@/components/ui/pagination-controls';
+import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import {
   getSellerPayouts,
@@ -36,12 +37,14 @@ export default function SellerEarningsClient() {
     data: earningsRes,
     isLoading: isEarningsLoading,
     isError: isEarningsError,
+    refetch: refetchEarnings,
   } = useGetSellerEarnings();
 
   const {
     data: payoutsRes,
     isLoading: isPayoutsLoading,
     isError: isPayoutsError,
+    refetch: refetchPayouts,
   } = useGetSellerPayouts({
     limit,
     page,
@@ -60,9 +63,13 @@ export default function SellerEarningsClient() {
     !earningsRes?.data
   ) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
-        <p className="font-heading font-bold">Failed to load earnings data.</p>
-      </div>
+      <PageErrorState
+        title="Failed to load earnings data."
+        onRetry={() => {
+          void refetchEarnings();
+          void refetchPayouts();
+        }}
+      />
     );
   }
 

@@ -5,6 +5,7 @@ import { DashboardStats } from '@/components/seller/dashboard/DashboardStats';
 import { MonthlyEarningsCard } from '@/components/seller/dashboard/MonthlyEarningsCard';
 import { PlotLocationCard } from '@/components/seller/dashboard/PlotLocationCard';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PageErrorState } from '@/components/ui/state-displays';
 import type { SellerDashboardResponse } from '@/lib/api/generated/models';
 import { useGetSellerDashboard } from '@/lib/api/generated/sellers/sellers';
 
@@ -13,18 +14,14 @@ import { useGetSellerDashboard } from '@/lib/api/generated/sellers/sellers';
  * @returns A page containing all the seller dashboard elements
  */
 export default function SellerDashboardClient() {
-  const { data: response, isLoading, isError } = useGetSellerDashboard();
+  const { data: response, isLoading, isError, refetch } = useGetSellerDashboard();
 
   if (isLoading) {
     return <DashboardSkeleton />;
   }
 
   if (isError || !response?.data) {
-    return (
-      <div className="flex h-64 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
-        <p className="font-heading font-bold">Failed to load dashboard data.</p>
-      </div>
-    );
+    return <PageErrorState title="Failed to load dashboard data." onRetry={() => void refetch()} />;
   }
 
   const dashboardData: SellerDashboardResponse = response.data as SellerDashboardResponse;

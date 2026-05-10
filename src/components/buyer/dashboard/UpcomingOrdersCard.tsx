@@ -1,5 +1,6 @@
 'use client';
 
+import { Package } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -11,6 +12,7 @@ import {
 } from '@/components/orders/OrderTableCells';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/state-displays';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { Order } from '@/lib/api/generated/models';
 
@@ -42,15 +44,11 @@ export function UpcomingOrdersCard({ orders }: UpcomingOrdersCardProps) {
         </div>
 
         {orders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-2xl">
-              📦
-            </div>
-            <h3 className="font-heading text-lg font-bold text-ink">No upcoming orders</h3>
-            <p className="mt-1 max-w-sm text-sm text-ink-3">
-              When you place an order, its delivery status will appear here.
-            </p>
-          </div>
+          <EmptyState
+            icon={Package}
+            title="No upcoming orders"
+            description="When you place an order, its delivery status will appear here."
+          />
         ) : (
           <div className="overflow-x-auto">
             <Table>

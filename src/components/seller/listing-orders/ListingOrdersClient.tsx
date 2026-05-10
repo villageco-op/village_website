@@ -7,6 +7,7 @@ import { ListingOrdersSkeleton } from '@/components/seller/listing-orders/Listin
 import { ListingOrdersTable } from '@/components/seller/listing-orders/ListingOrdersTable';
 import { Button } from '@/components/ui/button';
 import { PaginationControls } from '@/components/ui/pagination-controls';
+import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import { useGetProduceOrders } from '@/lib/api/generated/produce/produce';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
@@ -47,13 +48,11 @@ export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
 
   if (isError || produceQuery.data?.status !== 200 || ordersQuery.data?.status !== 200) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center bg-off-white p-4">
-        <h2 className="mb-2 text-2xl font-bold text-deep-forest">Failed to load orders</h2>
-        <p className="mb-6 text-ink-3">
-          We couldn&apos;t load the orders for this listing. Please try again.
-        </p>
-        <Button onClick={() => router.back()}>Back to Listing</Button>
-      </div>
+      <PageErrorState
+        title="Failed to load orders"
+        description="We couldn't load the orders for this listing. Please try again."
+        action={<Button onClick={() => router.back()}>Back to Listing</Button>}
+      />
     );
   }
 

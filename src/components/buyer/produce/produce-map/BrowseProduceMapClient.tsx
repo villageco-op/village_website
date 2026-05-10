@@ -11,6 +11,7 @@ import { BrowseProduceMapFilters } from './BrowseProduceMapFilters';
 import { SellerProduceSidebar } from './SellerProduceSidebar';
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { PageErrorState } from '@/components/ui/state-displays';
 import { useAuth } from '@/hooks/useAuth';
 import type { GetProduceMapParams, SellerMapGroup } from '@/lib/api/generated/models';
 import { useGetProduceMap } from '@/lib/api/generated/produce/produce';
@@ -56,13 +57,11 @@ export default function BrowseProduceMapClient({ onViewChange }: BrowseProduceMa
     ...filters,
   };
 
-  const { data: response, isLoading, isError } = useGetProduceMap(queryParams);
+  const { data: response, isLoading, isError, refetch } = useGetProduceMap(queryParams);
 
   if (isError || (response && response.status !== 200)) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-xl bg-destructive/10 text-destructive p-8">
-        <p className="font-heading font-bold">Failed to load produce map data.</p>
-      </div>
+      <PageErrorState title="Failed to load produce map data." onRetry={() => void refetch()} />
     );
   }
 
@@ -84,7 +83,7 @@ export default function BrowseProduceMapClient({ onViewChange }: BrowseProduceMa
           <div className="absolute inset-0 flex items-center justify-center bg-slate-50/50">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-deep-forest border-t-transparent" />
           </div>
-        ) : mapGroups.length > 0 ? (
+        ) : (
           <>
             <BrowseProduceMap
               baseLat={baseLat}
@@ -101,10 +100,6 @@ export default function BrowseProduceMapClient({ onViewChange }: BrowseProduceMa
               />
             )}
           </>
-        ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50 text-ink-3">
-            <p>No produce found matching your filters in this area.</p>
-          </div>
         )}
       </div>
 

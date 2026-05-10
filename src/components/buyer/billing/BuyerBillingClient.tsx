@@ -8,6 +8,7 @@ import { InvoiceHistoryCard } from './InvoiceHistoryCard';
 
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import { useGetBuyerBillingSummary } from '@/lib/api/generated/buyers/buyers';
 import type { GetOrdersParams, OrderStatus } from '@/lib/api/generated/models';
@@ -41,12 +42,14 @@ export default function BuyerBillingClient() {
     data: summaryRes,
     isLoading: isSummaryLoading,
     isError: isSummaryError,
+    refetch: refetchBillingSummary,
   } = useGetBuyerBillingSummary();
 
   const {
     data: ordersRes,
     isLoading: isOrdersLoading,
     isError: isOrdersError,
+    refetch: refetchOrders,
   } = useGetOrders(queryParams);
 
   if (isSummaryLoading || isOrdersLoading) {
@@ -67,9 +70,13 @@ export default function BuyerBillingClient() {
     !summaryRes?.data
   ) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
-        <p className="font-heading font-bold">Failed to load billing data.</p>
-      </div>
+      <PageErrorState
+        title="Failed to load billing data."
+        onRetry={() => {
+          void refetchBillingSummary();
+          void refetchOrders();
+        }}
+      />
     );
   }
 

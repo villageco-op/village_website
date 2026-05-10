@@ -1,5 +1,7 @@
 'use client';
 
+import { NotFoundState } from '../ui/state-displays';
+
 import SellerAboutTab from './SellerAboutTab';
 import SellerHero from './SellerHero';
 import SellerListingsTab from './SellerListingsTab';
@@ -50,9 +52,10 @@ export default function PublicSellerProfile({ sellerId }: PublicSellerProfilePro
 
   if (isError || !response?.data || response.status !== 200) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-off-white text-ink-3">
-        Seller profile not found.
-      </div>
+      <NotFoundState
+        title="Seller profile not found."
+        description="We couldn't load the details for this seller."
+      />
     );
   }
 

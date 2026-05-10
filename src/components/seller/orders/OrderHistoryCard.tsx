@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import { Card, CardContent } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/state-displays';
 import { StatusPill } from '@/components/ui/status-pill';
 import {
   Table,
@@ -46,9 +47,7 @@ export function OrderHistoryCard({ orders, completedCount }: OrderHistoryCardPro
         </div>
 
         {orders.length === 0 ? (
-          <div className="py-8 text-center font-sans text-sm text-ink-3">
-            No historical orders found.
-          </div>
+          <EmptyState title="No historical orders found." className="py-6 h-auto" />
         ) : (
           <Table>
             <TableHeader>

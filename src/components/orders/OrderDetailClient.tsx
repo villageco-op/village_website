@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import { NotFoundState } from '../ui/state-displays';
+
 import { CancelOrderDialog } from './CancelOrderDialog';
 import { OrderDetailSkeleton } from './OrderDetailSkeleton';
 import { OrderItemsCard } from './OrderItemsCard';
@@ -79,14 +81,10 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
 
   if (orderQuery.isError || orderQuery.data?.status !== 200) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center bg-off-white p-4">
-        <h2 className="mb-2 text-2xl font-bold text-deep-forest">Order not found</h2>
-        <p className="mb-6 text-ink-3">
-          We couldn&apos;t load the details for this order. It may have been removed or you lack
-          permission.
-        </p>
-        <Button onClick={() => router.back()}>Go Back</Button>
-      </div>
+      <NotFoundState
+        title="Order not found"
+        description="We couldn't load the details for this order."
+      />
     );
   }
 

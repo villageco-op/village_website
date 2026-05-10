@@ -4,6 +4,7 @@ import { Store, Truck } from 'lucide-react';
 import Link from 'next/link';
 
 import { Card, CardContent } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/state-displays';
 import { StatusPill } from '@/components/ui/status-pill';
 import type { Order } from '@/lib/api/generated/models';
 import { getTimeDiffText } from '@/lib/date-utils';
@@ -38,9 +39,7 @@ export function PendingOrdersCard({ orders, pendingCount }: PendingOrdersCardPro
         </div>
 
         {orders.length === 0 ? (
-          <div className="py-6 text-center font-sans text-sm text-ink-3">
-            No pending orders at this time.
-          </div>
+          <EmptyState title="No pending orders at this time." className="py-6 h-auto" />
         ) : (
           <div className="flex flex-col">
             {orders.map((order) => {

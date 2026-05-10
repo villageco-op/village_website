@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { EmptyState } from '@/components/ui/state-displays';
 import {
   Table,
   TableBody,
@@ -125,9 +126,7 @@ export function InvoiceHistoryCard({
         </div>
 
         {orders.length === 0 ? (
-          <div className="py-8 text-center font-sans text-sm text-ink-3">
-            No orders found matching your filters.
-          </div>
+          <EmptyState title="No orders found matching your filters." />
         ) : (
           <Table className="w-full">
             <TableHeader>

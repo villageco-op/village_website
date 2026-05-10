@@ -6,6 +6,7 @@ import { OrdersSkeleton } from './OrdersSkeleton';
 import { PendingOrdersCard } from './PendingOrdersCard';
 
 import { PaginationControls } from '@/components/ui/pagination-controls';
+import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
 
@@ -21,12 +22,14 @@ export default function SellerOrdersClient() {
     data: pendingRes,
     isLoading: isPendingLoading,
     isError: isPendingError,
+    refetch: refetchPending,
   } = useGetOrders({ role: 'seller', status: 'pending', limit: pendingLimit, page: pendingPage });
 
   const {
     data: historyRes,
     isLoading: isHistoryLoading,
     isError: isHistoryError,
+    refetch: refetchHistory,
   } = useGetOrders({
     role: 'seller',
     status: 'completed',
@@ -46,9 +49,13 @@ export default function SellerOrdersClient() {
     historyRes?.status !== 200
   ) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
-        <p className="font-heading font-bold">Failed to load orders data.</p>
-      </div>
+      <PageErrorState
+        title="Failed to load orders data."
+        onRetry={() => {
+          void refetchHistory();
+          void refetchPending();
+        }}
+      />
     );
   }
 

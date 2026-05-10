@@ -6,6 +6,7 @@ import { ListingsHeader } from './ListingsHeader';
 import { ListingsSkeleton } from './ListingsSkeleton';
 
 import { PaginationControls } from '@/components/ui/pagination-controls';
+import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import { useGetSellerListings } from '@/lib/api/generated/produce/produce';
 
@@ -19,6 +20,7 @@ export default function SellerListingsClient() {
     data: response,
     isLoading,
     isError,
+    refetch,
   } = useGetSellerListings({ status: 'active', limit, page });
 
   if (isLoading) {
@@ -26,11 +28,7 @@ export default function SellerListingsClient() {
   }
 
   if (isError || response?.status !== 200) {
-    return (
-      <div className="flex h-64 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
-        <p className="font-heading font-bold">Failed to load listings data.</p>
-      </div>
-    );
+    return <PageErrorState title="Failed to load listings data." onRetry={() => void refetch()} />;
   }
 
   const listings = response?.data?.data || [];
