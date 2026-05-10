@@ -12,6 +12,7 @@ import { ListingHarvestDetails } from '@/components/seller/new-listing/ListingHa
 import { ListingImageUpload } from '@/components/seller/new-listing/ListingImageUpload';
 import { ListingPricingInventory } from '@/components/seller/new-listing/ListingPricingInventory';
 import { Button } from '@/components/ui/button';
+import { NotFoundState } from '@/components/ui/state-displays';
 import type { UpdateProducePayload, ProduceDetail } from '@/lib/api/generated/models';
 import {
   useGetProduce,
@@ -195,13 +196,11 @@ export default function EditListingClient({ id }: EditListingClientProps) {
 
   if (produceQuery.isError || !formData) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-off-white p-4">
-        <h2 className="text-2xl font-bold text-deep-forest mb-2">Listing not found</h2>
-        <p className="text-ink-3 mb-6">
-          We couldn&apos;t load the details for this produce listing.
-        </p>
-        <Button onClick={() => router.push('/seller/listings')}>Back to Listings</Button>
-      </div>
+      <NotFoundState
+        title="Listing not found"
+        description="We couldn't load the details for this produce listing."
+        action={<Button onClick={() => router.push('/seller/listings')}>Back to Listings</Button>}
+      />
     );
   }
 

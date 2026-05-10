@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
+import { InlineErrorState } from '@/components/ui/state-displays';
 import {
   ProduceType,
   type SourceMapAnalyticsResponse,
@@ -176,9 +177,7 @@ export function AnalyticsSidebar({
               </div>
             </>
           ) : (
-            <div className="text-sm font-medium text-destructive">
-              Failed to load map analytics.
-            </div>
+            <InlineErrorState title="Failed to load map analytics." />
           )}
         </CardContent>
       </Card>

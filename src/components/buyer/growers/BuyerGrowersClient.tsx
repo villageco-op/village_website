@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { EmptyState, PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import { useGetBuyerGrowers } from '@/lib/api/generated/buyers/buyers';
 import type { GetBuyerGrowersParams, GrowersResponse } from '@/lib/api/generated/models';
@@ -49,18 +50,14 @@ export default function BuyerGrowersClient() {
     ...(distanceFilter !== 'all' && { maxDistance: Number(distanceFilter) }),
   };
 
-  const { data: response, isLoading, isError } = useGetBuyerGrowers(queryParams);
+  const { data: response, isLoading, isError, refetch } = useGetBuyerGrowers(queryParams);
 
   if (isLoading) {
     return <GrowersSkeleton />;
   }
 
   if (isError || response?.status !== 200 || !response?.data) {
-    return (
-      <div className="flex h-64 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
-        <p className="font-heading font-bold">Failed to load your growers.</p>
-      </div>
-    );
+    return <PageErrorState title="Failed to load your growers." onRetry={() => void refetch()} />;
   }
 
   const growersResponse: GrowersResponse = response.data;
@@ -118,9 +115,7 @@ export default function BuyerGrowersClient() {
           ))}
         </div>
       ) : (
-        <div className="flex h-48 flex-col items-center justify-center rounded-xl border border-dashed border-forest-dark/20 bg-slate-50 text-ink-3">
-          <p>You haven&apos;t ordered from any local growers yet.</p>
-        </div>
+        <EmptyState title="You haven't ordered from any local growers yet." />
       )}
       <PaginationControls meta={meta} onPageChange={setPage} />
     </div>

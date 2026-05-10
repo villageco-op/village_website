@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { AnalyticsSidebar } from './AnalyticsSidebar';
 import { SourceMap } from './SourceMap';
 
+import { PageErrorState } from '@/components/ui/state-displays';
 import { useAuth } from '@/hooks/useAuth';
 import type {
   SourceMapNodesResponse,
@@ -38,11 +39,13 @@ export default function BuyerSourceMapClient() {
     data: nodesResponse,
     isLoading: nodesLoading,
     isError: isNodesError,
+    refetch: nodesRefetch,
   } = useGetSourceMapNodes(queryParams);
   const {
     data: analyticsResponse,
     isLoading: analyticsLoading,
     isError: isAnalyticsError,
+    refetch: analyticsRefetch,
   } = useGetSourceMapAnalytics(queryParams);
 
   const nodesFailed = isNodesError || nodesResponse?.status !== 200 || !nodesResponse?.data;
@@ -108,9 +111,13 @@ export default function BuyerSourceMapClient() {
 
   if ((nodesFailed && !nodesLoading) || (analyticsFailed && !analyticsLoading)) {
     return (
-      <div className="m-8 flex h-64 items-center justify-center rounded-xl bg-destructive/10 p-8 text-destructive">
-        <p className="font-heading font-bold">Failed to load your sourcing data.</p>
-      </div>
+      <PageErrorState
+        title="Failed to load your sourcing data."
+        onRetry={() => {
+          void nodesRefetch();
+          void analyticsRefetch();
+        }}
+      />
     );
   }
 

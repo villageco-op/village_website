@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { EmptyState, PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import type { GetSubscriptionsParams, SubscriptionStatus } from '@/lib/api/generated/models';
 import { useGetSubscriptions } from '@/lib/api/generated/subscriptions/subscriptions';
@@ -49,7 +50,7 @@ export default function BuyerSubscriptionsClient() {
     ...(debouncedSellerId && { sellerId: debouncedSellerId }),
   };
 
-  const { data: response, isLoading, isError } = useGetSubscriptions(queryParams);
+  const { data: response, isLoading, isError, refetch } = useGetSubscriptions(queryParams);
 
   if (isLoading) {
     return <SubscriptionsSkeleton />;
@@ -57,9 +58,7 @@ export default function BuyerSubscriptionsClient() {
 
   if (isError || response?.status !== 200 || !response?.data) {
     return (
-      <div className="m-8 flex h-64 items-center justify-center rounded-xl bg-destructive/10 p-8 text-destructive">
-        <p className="font-heading font-bold">Failed to load your subscriptions.</p>
-      </div>
+      <PageErrorState title="Failed to load your subscriptions." onRetry={() => void refetch()} />
     );
   }
 
@@ -124,9 +123,7 @@ export default function BuyerSubscriptionsClient() {
           <PaginationControls meta={meta} onPageChange={setPage} />
         </>
       ) : (
-        <div className="flex h-48 flex-col items-center justify-center rounded-xl border border-dashed border-forest-dark/20 bg-slate-50 text-ink-3">
-          <p>No subscriptions found matching your filters.</p>
-        </div>
+        <EmptyState title="No subscriptions match your current filters." />
       )}
     </div>
   );

@@ -6,6 +6,7 @@ import { SupplyMapCard } from '@/components/buyer/dashboard/SupplyMapCard';
 import { UpcomingOrdersCard } from '@/components/buyer/dashboard/UpcomingOrdersCard';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import { useGetBuyerDashboard } from '@/lib/api/generated/buyers/buyers';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
@@ -21,12 +22,14 @@ export default function BuyerDashboardClient() {
     data: dashboardResponse,
     isLoading: isDashboardLoading,
     isError: isDashboardError,
+    refetch: refetchDashboard,
   } = useGetBuyerDashboard();
 
   const {
     data: ordersResponse,
     isLoading: isOrdersLoading,
     isError: isOrdersError,
+    refetch: refetchOrders,
   } = useGetOrders({ role: 'buyer', status: 'pending', limit, page });
 
   const isLoading = isDashboardLoading || isOrdersLoading;
@@ -38,9 +41,13 @@ export default function BuyerDashboardClient() {
 
   if (isError || dashboardResponse?.status !== 200 || ordersResponse?.status !== 200) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
-        <p className="font-heading font-bold">Failed to load dashboard data.</p>
-      </div>
+      <PageErrorState
+        title="Failed to load dashboard data."
+        onRetry={() => {
+          void refetchDashboard();
+          void refetchOrders();
+        }}
+      />
     );
   }
 
