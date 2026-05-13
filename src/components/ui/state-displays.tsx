@@ -1,8 +1,10 @@
 'use client';
 
-import { AlertCircle, FileQuestion } from 'lucide-react';
+import { AlertCircle, FileQuestion, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+
+import { Card } from './card';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -132,5 +134,52 @@ export function NotFoundState({
         {action}
       </div>
     </div>
+  );
+}
+
+interface FormErrorStateProps extends ErrorStateProps {
+  onClose?: () => void;
+}
+
+export function FormErrorState({
+  title = 'Failed to load details',
+  description = 'There was an error retrieving the information. Please try again.',
+  icon: Icon = AlertCircle,
+  onRetry,
+  onClose,
+  action,
+  className,
+}: FormErrorStateProps) {
+  return (
+    <Card className={cn("relative flex flex-col items-center justify-center p-12 text-center", className)}>
+      {onClose && (
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="absolute right-2 top-2 text-ink-3 hover:text-ink" 
+          onClick={onClose}
+        >
+          <X className="h-5 w-5" />
+        </Button>
+      )}
+      
+      {Icon && (
+        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-deep-forest">
+          <Icon className="h-7 w-7" />
+        </div>
+      )}
+      
+      <h3 className="mb-2 font-heading text-xl font-bold text-deep-forest">{title}</h3>
+      {description && <p className="mb-6 max-w-xs text-sm text-ink-3">{description}</p>}
+      
+      <div className="flex flex-col gap-3">
+        {onRetry && !action && (
+          <Button onClick={onRetry} variant="default">
+            Try Again
+          </Button>
+        )}
+        {action}
+      </div>
+    </Card>
   );
 }

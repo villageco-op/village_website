@@ -1,10 +1,12 @@
 'use client';
 
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, RotateCcw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import { ReorderForm } from '../buyer/new-order/ReorderForm';
+import { Dialog, DialogContent } from '../ui/dialog';
 import { NotFoundState } from '../ui/state-displays';
 
 import { CancelOrderDialog } from './CancelOrderDialog';
@@ -40,6 +42,7 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
 
   const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
+  const [isReorderOpen, setIsReorderOpen] = useState(false);
 
   const orderQuery = useGetOrderById(id, { query: { enabled: !!id } });
   const cancelMutation = useCancelOrder();
@@ -90,6 +93,7 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
 
   const order = orderQuery.data.data;
   const isPending = order.status === 'pending';
+  const isReorderable = order.status === 'completed' || order.status === 'canceled';
 
   return (
     <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
@@ -133,6 +137,16 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
               </Button>
             </div>
           )}
+
+          {isReorderable && (
+            <Button
+              className="bg-lime text-forest-dark hover:bg-lime/80 font-semibold"
+              onClick={() => setIsReorderOpen(true)}
+            >
+              <RotateCcw className="mr-2 h-4 w-4" />
+              Order Again
+            </Button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -166,6 +180,11 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
         currentScheduledTime={order.scheduledTime}
         isPending={rescheduleMutation.isPending}
       />
+      <Dialog open={isReorderOpen} onOpenChange={setIsReorderOpen}>
+        <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
+          <ReorderForm orderId={id} onClose={() => setIsReorderOpen(false)} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

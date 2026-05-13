@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import router from 'next/router';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -59,7 +60,8 @@ export function BrowseProduceTable({
               {produce.map((item) => (
                 <TableRow
                   key={item.id}
-                  className="border-border/50 transition-colors hover:bg-white/60 group"
+                  className="cursor-pointer border-border/50 transition-colors hover:bg-white/60 group"
+                  onClick={() => void router.push(`/produce/${item.id}`)}
                 >
                   <TableCell className="font-bold text-ink pl-4 py-3">
                     <div className="flex items-center gap-3 min-w-0">

@@ -7,6 +7,7 @@
  */
 import type { GetOrdersQueryRole } from './getOrdersQueryRole';
 import type { OrderStatus } from './orderStatus';
+import type { ResourceId } from './resourceId';
 
 export interface GetOrdersQuery {
   /** The perspective from which to fetch orders */
@@ -14,6 +15,7 @@ export interface GetOrdersQuery {
   status?: OrderStatus;
   /** Optional timeframe filter (e.g., "7d", "30d", or ISO range) */
   timeframe?: string;
+  productId?: ResourceId & unknown;
   /**
    * The page number for pagination
    * @minimum 1

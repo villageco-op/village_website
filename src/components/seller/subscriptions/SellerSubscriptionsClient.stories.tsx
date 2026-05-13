@@ -117,10 +117,10 @@ export const Default: Story = {
 
     // Check specific card content
     await expect(canvas.getByText('John Doe')).toBeInTheDocument();
-    await expect(canvas.getByText('Organic Honeycrisp Apples')).toBeInTheDocument();
+    await expect(canvas.getByText(/Organic Honeycrisp Apples/i)).toBeInTheDocument();
 
     // Test Hover Actions
-    const firstCard = canvas.getByText('Organic Honeycrisp Apples').closest('.group');
+    const firstCard = canvas.getByText(/Organic Honeycrisp Apples/i).closest('.group');
     if (firstCard) {
       await userEvent.hover(firstCard);
 

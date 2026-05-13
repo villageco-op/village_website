@@ -5,12 +5,22 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
+import type { ProduceStatus } from './produceStatus';
 import type { ResourceId } from './resourceId';
 
 export interface OrderItemDetail {
   id: ResourceId;
   productId: ResourceId;
   productName: string;
+  /** @nullable */
+  maxOrderQuantityOz: string | null;
+  /** @nullable */
+  isProduceSubscribable: boolean | null;
+  produceStatus: ProduceStatus & (unknown | null);
+  produceTotalOzInventory: string;
+  produceAvailableBy: string;
+  produceSeasonStart: string;
+  produceSeasonEnd: string;
   quantityOz: string;
   pricePerOz: string;
 }

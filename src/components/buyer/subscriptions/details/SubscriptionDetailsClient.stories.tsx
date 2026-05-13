@@ -102,7 +102,7 @@ export const Active: Story = {
     // Verify main components rendered
     await expect(await canvas.findByText(/Subscription Details/i)).toBeInTheDocument();
     await expect(canvas.getByText('Valley Farms')).toBeInTheDocument();
-    await expect(canvas.getByText('Gourmet Salad Mix')).toBeInTheDocument();
+    await expect(canvas.getByText(/Gourmet Salad Mix/i)).toBeInTheDocument();
 
     // Verify action buttons are present
     await expect(canvas.getByRole('button', { name: /Cancel/i })).toBeInTheDocument();

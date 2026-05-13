@@ -94,6 +94,13 @@ const MOCK_ORDER_DATA: OrderDetailResponse = {
       productName: 'Organic Carrots',
       quantityOz: '48', // 3 lbs
       pricePerOz: '0.125', // $2.00/lb
+      maxOrderQuantityOz: null,
+      isProduceSubscribable: true,
+      produceAvailableBy: new Date().toISOString(),
+      produceStatus: 'active',
+      produceSeasonStart: '2024-12-5',
+      produceSeasonEnd: '2025-5-12',
+      produceTotalOzInventory: '20.00',
     },
   ],
 };

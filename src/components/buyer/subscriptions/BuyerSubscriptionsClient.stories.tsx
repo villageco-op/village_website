@@ -81,7 +81,7 @@ export const Default: Story = {
     await expect(await canvas.findByText(/2 active subscriptions/i)).toBeInTheDocument();
 
     // Test Hover Interaction for hidden buttons
-    const firstCard = canvas.getByText('Premium Produce 1').closest('.group');
+    const firstCard = canvas.getByText(/Premium Produce 1 /i).closest('.group');
     if (firstCard) {
       await userEvent.hover(firstCard);
       // Verify buttons are now accessible (using the titles added in the previous step)
@@ -128,16 +128,16 @@ export const Paginated: Story = {
     const canvas = within(canvasElement);
 
     // Check Page 1 content
-    await expect(await canvas.findByText('Premium Produce 1')).toBeInTheDocument();
-    await expect(canvas.queryByText('Premium Produce 13')).not.toBeInTheDocument();
+    await expect(await canvas.findByText(/Premium Produce 1 /i)).toBeInTheDocument();
+    await expect(canvas.queryByText(/Premium Produce 13/i)).not.toBeInTheDocument();
 
     // Navigate to Page 2
     const nextButton = await canvas.findByRole('button', { name: /next|2/i });
     await userEvent.click(nextButton);
 
     // Verify Page 2 content
-    await expect(await canvas.findByText('Premium Produce 13')).toBeInTheDocument();
-    await expect(canvas.queryByText('Premium Produce 1')).not.toBeInTheDocument();
+    await expect(await canvas.findByText(/Premium Produce 13/i)).toBeInTheDocument();
+    await expect(canvas.queryByText(/Premium Produce 1 /i)).not.toBeInTheDocument();
   },
 };
 

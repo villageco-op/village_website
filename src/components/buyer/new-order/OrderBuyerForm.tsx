@@ -9,6 +9,7 @@ import { OrderSubscriptionToggle } from './OrderSubscriptionToggle';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { FormErrorState } from '@/components/ui/state-displays';
 import { useAddToCart } from '@/lib/api/generated/cart/cart';
 import type { ProduceDetail } from '@/lib/api/generated/models';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
@@ -16,6 +17,8 @@ import { useGetProduce } from '@/lib/api/generated/produce/produce';
 interface BuyerOrderFormProps {
   produceId: string;
   onClose?: () => void;
+  initialQuantityLbs?: number;
+  initialIsSubscription?: boolean;
 }
 
 /**
@@ -23,14 +26,21 @@ interface BuyerOrderFormProps {
  * @param props - Props for the order form
  * @param props.produceId - The produce listing Id
  * @param props.onClose - Called when closed
+ * @param props.initialQuantityLbs - Start with a quantity entered
+ * @param props.initialIsSubscription - Start with isSubscription set
  * @returns A small form component with order inputs
  */
-export function BuyerOrderForm({ produceId, onClose }: BuyerOrderFormProps) {
-  const { data: produceQuery, isLoading, error } = useGetProduce(produceId);
+export function BuyerOrderForm({
+  produceId,
+  onClose,
+  initialQuantityLbs,
+  initialIsSubscription,
+}: BuyerOrderFormProps) {
+  const { data: produceQuery, isLoading, error, refetch } = useGetProduce(produceId);
   const addToCartMutation = useAddToCart();
 
-  const [quantityLbs, setQuantityLbs] = useState<number>(1);
-  const [isSubscription, setIsSubscription] = useState<boolean>(false);
+  const [quantityLbs, setQuantityLbs] = useState<number>(initialQuantityLbs || 1);
+  const [isSubscription, setIsSubscription] = useState<boolean>(initialIsSubscription || false);
 
   const hasError = !!error || (!isLoading && (!produceQuery?.data || produceQuery.status !== 200));
 
@@ -47,6 +57,18 @@ export function BuyerOrderForm({ produceId, onClose }: BuyerOrderFormProps) {
           <Loader2 className="w-8 h-8 animate-spin text-lime" />
         </div>
       </Card>
+    );
+  }
+
+  if (hasError && !isLoading) {
+    return (
+      <div className="w-full max-w-lg sm:max-w-md mx-auto">
+        <FormErrorState
+          title="Failed to load order details"
+          description="We couldn't retrieve the information for this order. The service might be temporarily unavailable."
+          onRetry={() => void refetch()}
+        />
+      </div>
     );
   }
 
@@ -91,7 +113,7 @@ export function BuyerOrderForm({ produceId, onClose }: BuyerOrderFormProps) {
   };
 
   return (
-    <Card className="z-50 rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden relative">
+    <Card className="z-50 rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden relative max-w-[calc(100vw-2rem)] mx-auto w-full sm:max-w-md">
       <CardHeader className="bg-off-white border-b border-lime/20 pb-4 pr-12">
         <CardTitle className="font-heading text-xl text-deep-forest">
           Order {produce.title}

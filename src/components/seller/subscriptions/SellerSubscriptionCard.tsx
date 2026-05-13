@@ -2,6 +2,7 @@
 
 import { Copy, Filter } from 'lucide-react';
 import Link from 'next/link';
+import router from 'next/router';
 import { toast } from 'sonner';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -75,8 +76,11 @@ export function SellerSubscriptionCard({
             </Avatar>
             <div>
               <div className="flex items-center gap-2">
-                <div className="line-clamp-1 font-heading text-[0.92rem] font-bold text-ink">
-                  {productTitle}
+                <div
+                  className="cursor-pointer line-clamp-1 font-heading text-[0.92rem] font-bold text-ink hover:underline"
+                  onClick={() => void router.push(`/listings/${productId}/edit/`)}
+                >
+                  {productTitle} ↗
                 </div>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                   <Button
