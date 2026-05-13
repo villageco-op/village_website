@@ -7,6 +7,7 @@
  */
 import type { GetSellerReviewsSortBy } from './getSellerReviewsSortBy';
 import type { GetSellerReviewsSortOrder } from './getSellerReviewsSortOrder';
+import type { ResourceId } from './resourceId';
 
 export type GetSellerReviewsParams = {
 /**
@@ -28,4 +29,8 @@ sortBy?: GetSellerReviewsSortBy;
  * The direction of the sort
  */
 sortOrder?: GetSellerReviewsSortOrder;
+/**
+ * Include only reviews connected to orders for this product.
+ */
+productId?: ResourceId & unknown;
 };

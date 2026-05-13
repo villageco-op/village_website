@@ -2,6 +2,7 @@
 
 import { Search, Calendar } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { Eyebrow } from '../ui/eyebrow';
@@ -27,15 +28,17 @@ import { useGetProduceList } from '@/lib/api/generated/produce/produce';
 
 interface SellerListingsTabProps {
   sellerId: string;
+  onOrderItem: (id: string) => void;
 }
 
 /**
  * The tab for viewing the sellers listings within the public profile.
  * @param props - Props for the listings tab
  * @param props.sellerId - The seller Id
+ * @param props.onOrderItem - When order is clicked
  * @returns The seller listings tab component
  */
-export default function SellerListingsTab({ sellerId }: SellerListingsTabProps) {
+export default function SellerListingsTab({ sellerId, onOrderItem }: SellerListingsTabProps) {
   const { page, limit, setPage } = usePagination(12);
   const [searchInput, setSearchInput] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -170,9 +173,17 @@ export default function SellerListingsTab({ sellerId }: SellerListingsTabProps) 
                       </div>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="lime" className="flex-1">
+                  <div className="mt-auto gap-2 flex pt-2">
+                    <Button variant="lime" className="flex-1" onClick={() => onOrderItem(item.id)}>
                       + Order
+                    </Button>
+                    <Button
+                      variant="outline-forest"
+                      size="sm"
+                      asChild
+                      className="flex-1 text-xs font-semibold"
+                    >
+                      <Link href={`/produce/${item.id}`}>View Details</Link>
                     </Button>
                   </div>
                 </div>

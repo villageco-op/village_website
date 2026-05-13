@@ -1,5 +1,10 @@
 'use client';
 
+import { VisuallyHidden } from 'radix-ui';
+import { useState } from 'react';
+
+import { BuyerOrderForm } from '../buyer/new-order/OrderBuyerForm';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '../ui/dialog';
 import { NotFoundState } from '../ui/state-displays';
 
 import SellerAboutTab from './SellerAboutTab';
@@ -29,6 +34,8 @@ interface PublicSellerProfileProps {
  * @returns The seller profile page
  */
 export default function PublicSellerProfile({ sellerId }: PublicSellerProfileProps) {
+  const [selectedProduceId, setSelectedProduceId] = useState<string | null>(null); // Added state
+
   const { data: response, isLoading, isError } = useGetPublicUserProfile(sellerId);
 
   const { data: produceResponse, isLoading: isProduceLoading } = useGetProduceList({
@@ -100,7 +107,10 @@ export default function PublicSellerProfile({ sellerId }: PublicSellerProfilePro
               />
             </TabsContent>
             <TabsContent value="listings" className="w-full m-0 focus-visible:outline-none">
-              <SellerListingsTab sellerId={sellerId} />
+              <SellerListingsTab
+                sellerId={sellerId}
+                onOrderItem={(id) => setSelectedProduceId(id)}
+              />
             </TabsContent>
             <TabsContent value="reviews" className="m-0 focus-visible:outline-none">
               <SellerReviewsTab sellerId={sellerId} profile={profile} />
@@ -108,6 +118,24 @@ export default function PublicSellerProfile({ sellerId }: PublicSellerProfilePro
           </div>
         </div>
       </Tabs>
+
+      <Dialog
+        open={!!selectedProduceId}
+        onOpenChange={(open) => !open && setSelectedProduceId(null)}
+      >
+        <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
+          <VisuallyHidden.Root>
+            <DialogTitle>Order Form</DialogTitle>
+            <DialogDescription>Place an order for this produce item.</DialogDescription>
+          </VisuallyHidden.Root>
+          {selectedProduceId && (
+            <BuyerOrderForm
+              produceId={selectedProduceId}
+              onClose={() => setSelectedProduceId(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

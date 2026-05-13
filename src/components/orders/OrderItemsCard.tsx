@@ -1,6 +1,7 @@
 'use client';
 
 import { Package } from 'lucide-react';
+import router from 'next/router';
 
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -60,7 +61,11 @@ export function OrderItemsCard({ items }: OrderItemsCardProps) {
                   const subtotal = quantityLbs * pricePerLb;
 
                   return (
-                    <TableRow key={item.id} className="border-border/50">
+                    <TableRow
+                      key={item.id}
+                      className="cursor-pointer border-border/50 hover:bg-off-white"
+                      onClick={() => void router.push(`/produce/${item.id}`)}
+                    >
                       <TableCell className="font-medium text-ink">
                         {item.productName || 'Unknown Product'}
                       </TableCell>

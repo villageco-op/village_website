@@ -2,6 +2,7 @@
 
 import { Copy, Filter } from 'lucide-react';
 import Link from 'next/link';
+import router from 'next/router';
 import { toast } from 'sonner';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -53,7 +54,7 @@ export function SubscriptionCard({ subscription, index, onFilterSeller }: Subscr
     <Card className="group flex h-full flex-col rounded-xl border-none bg-white shadow-md transition-shadow hover:shadow-lg">
       <CardContent className="flex h-full flex-col p-6">
         {/* Header */}
-        <div className="mb-4 flex items-start justify-between gap-3">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10">
               <AvatarFallback
@@ -66,8 +67,11 @@ export function SubscriptionCard({ subscription, index, onFilterSeller }: Subscr
               </AvatarFallback>
             </Avatar>
             <div>
-              <div className="line-clamp-1 font-heading text-[0.92rem] font-bold text-ink">
-                {productTitle}
+              <div
+                className="cursor-pointer line-clamp-1 font-heading text-[0.92rem] font-bold text-ink hover:underline"
+                onClick={() => void router.push(`/produce/${subscription.productId}`)}
+              >
+                {productTitle} ↗
               </div>
               <div className="flex items-center gap-2 font-sans text-[0.74rem] text-ink-3">
                 <span className="truncate max-w-80">from {sellerName}</span>
@@ -95,7 +99,9 @@ export function SubscriptionCard({ subscription, index, onFilterSeller }: Subscr
               </div>
             </div>
           </div>
-          <StatusPill status={subscription.status} />
+          <div className="shrink-0">
+            <StatusPill status={subscription.status} />
+          </div>
         </div>
 
         {/* Details */}

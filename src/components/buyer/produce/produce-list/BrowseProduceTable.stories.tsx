@@ -37,6 +37,9 @@ const meta: Meta<typeof BrowseProduceTable> = {
   component: BrowseProduceTable,
   parameters: {
     layout: 'padded',
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ['autodocs'],
 };

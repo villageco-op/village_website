@@ -2,6 +2,7 @@
 
 import { Loader2, Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
+import router from 'next/router';
 import { useState, useRef, useEffect } from 'react';
 
 import { Button } from '../ui/button';
@@ -74,7 +75,10 @@ export function CartLineItem({
     item.subscriptionFrequencyDays > 0;
 
   return (
-    <div className="flex flex-col border-b border-cream-dark last:border-none">
+    <div
+      className="cursor-pointer flex flex-col border-b border-cream-dark last:border-none hover:bg-off-white"
+      onClick={() => void router.push(`/produce/${item.productId}`)}
+    >
       <div className="flex items-center gap-3 p-3.5 sm:px-4.5">
         <div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded bg-cream text-xl">
           {imageUrl ? (

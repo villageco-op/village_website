@@ -31,7 +31,7 @@ const meta: Meta<typeof BuyerOrderForm> = {
       return (
         <QueryClientProvider client={mockedQueryClient}>
           <Toaster />
-          <div className="w-100 p-4">
+          <div className="p-4">
             <Story />
           </div>
         </QueryClientProvider>

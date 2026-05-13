@@ -7,6 +7,7 @@
  */
 import type { GetOrdersRole } from './getOrdersRole';
 import type { OrderStatus } from './orderStatus';
+import type { ResourceId } from './resourceId';
 
 export type GetOrdersParams = {
 /**
@@ -21,6 +22,10 @@ status?: OrderStatus;
  * Optional timeframe filter (e.g., "7d", "30d", or ISO range)
  */
 timeframe?: string;
+/**
+ * Include only orders with order items for this product.
+ */
+productId?: ResourceId & unknown;
 /**
  * The page number for pagination
  * @minimum 1

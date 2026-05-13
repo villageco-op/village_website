@@ -1,6 +1,7 @@
 'use client';
 
 import { Calendar, Package, RefreshCw } from 'lucide-react';
+import router from 'next/router';
 
 import { Card, CardContent } from '@/components/ui/card';
 import type { SubscriptionDetailResponse } from '@/lib/api/generated/models';
@@ -35,8 +36,11 @@ export function SubscriptionSummaryCard({ subscription }: SubscriptionSummaryCar
         </h2>
 
         <div className="mb-6">
-          <h3 className="font-heading text-lg font-bold text-deep-forest">
-            {subscription.product?.title || 'Unknown Product'}
+          <h3
+            className="cursor-pointer font-heading text-lg font-bold text-deep-forest hover:underline"
+            onClick={() => void router.push(`/produce/${subscription.productId}`)}
+          >
+            {subscription.product?.title || 'Unknown Product'} ↗
           </h3>
           <p className="text-sm text-ink-3">${pricePerOz.toFixed(2)} per oz</p>
         </div>

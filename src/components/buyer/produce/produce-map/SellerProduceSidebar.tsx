@@ -2,6 +2,7 @@
 
 import { Store, X } from 'lucide-react';
 import Image from 'next/image';
+import router from 'next/router';
 
 import { Button } from '@/components/ui/button';
 import type { SellerMapGroup } from '@/lib/api/generated/models';
@@ -59,7 +60,8 @@ export function SellerProduceSidebar({
           group.produce.map((item) => (
             <div
               key={String(item.id)}
-              className="flex flex-col gap-3 p-3 border border-border/60 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow"
+              className="cursor-pointer flex flex-col gap-3 p-3 border border-border/60 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow"
+              onClick={() => void router.push(`/produce/${item.id}`)}
             >
               <div className="flex gap-3 items-center">
                 <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-forest-dark/10 bg-slate-50">
