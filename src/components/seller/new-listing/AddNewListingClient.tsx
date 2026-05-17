@@ -1,3 +1,5 @@
+'use client';
+
 import { ArrowLeft, Loader2, ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

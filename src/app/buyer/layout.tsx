@@ -1,3 +1,5 @@
+'use client';
+
 import { BuyerSidebar } from '@/components/buyer/BuyerSidebar';
 import { useAuth } from '@/hooks/useAuth';
 

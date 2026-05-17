@@ -71,7 +71,7 @@ export function Sidebar({
   const userName = user?.name || fallbackName;
 
   return (
-    <ScrollArea className="sticky top-16 h-[calc(100vh-64px)] w-58 shrink-0 bg-forest-dark [&>div>div]:block!">
+    <ScrollArea className="sticky h-[calc(100vh-64px)] w-58 shrink-0 bg-forest-dark [&>div>div]:block!">
       <div className="flex flex-col">
         {/* Profile Section */}
         <div className="group relative flex items-center gap-2.75 border-b border-white/5 p-[20px_18px_16px] transition-colors hover:bg-white/5">

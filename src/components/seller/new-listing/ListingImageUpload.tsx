@@ -1,3 +1,5 @@
+'use client';
+
 import { Trash2, Loader2, UploadCloud } from 'lucide-react';
 import Image from 'next/image';
 import { useRef } from 'react';
