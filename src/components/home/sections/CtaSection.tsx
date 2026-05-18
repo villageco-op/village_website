@@ -47,10 +47,11 @@ export default function CtaSection() {
             </Link>
           </Button>
           <Button
+            asChild
             variant="ghost"
             className="text-cream hover:bg-white/10 hover:text-white border-cream/40 hover:border-white border-2 rounded-md px-6 h-14 font-sans text-base font-semibold transition-colors"
           >
-            Talk to our team
+            <Link href="/contact">Talk to our team</Link>
           </Button>
         </div>
 
