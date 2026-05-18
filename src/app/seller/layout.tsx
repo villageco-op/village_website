@@ -26,7 +26,7 @@ export default function SellerLayout({
   return (
     <div className="flex min-h-[calc(100vh-64px)] w-full bg-off-white">
       <SellerSidebar user={user} />
-      <main className="flex-1 overflow-y-auto px-9 py-8">{children}</main>
+      <main className="flex-1 px-9 py-8">{children}</main>
     </div>
   );
 }

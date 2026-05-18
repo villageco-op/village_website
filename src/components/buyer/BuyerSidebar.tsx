@@ -1,17 +1,6 @@
 'use client';
 
-import {
-  Package,
-  Store,
-  ClipboardList,
-  Sprout,
-  MapPin,
-  CreditCard,
-  LineChart,
-  MessageCircle,
-  Settings,
-  Repeat,
-} from 'lucide-react';
+import { Package, Store, Sprout, MapPin, CreditCard, MessageCircle, Repeat } from 'lucide-react';
 
 import { Sidebar, type NavGroup } from '../layout/Sidebar';
 
@@ -29,7 +18,6 @@ const BUYER_NAV_GROUPS: NavGroup[] = [
         icon: Repeat,
         href: '/buyer/subscriptions',
       },
-      { name: 'Order History', sub: 'Past deliveries', icon: ClipboardList, href: '/buyer/orders' },
     ],
   },
   {
@@ -41,22 +29,18 @@ const BUYER_NAV_GROUPS: NavGroup[] = [
         icon: Sprout,
         href: '/buyer/growers',
       },
-      { name: 'Source Map', sub: 'Where food comes from', icon: MapPin, href: '/buyer/map' },
+      { name: 'Source Map', sub: 'Where food comes from', icon: MapPin, href: '/buyer/source-map' },
     ],
   },
   {
     label: 'Business',
     items: [
       { name: 'Billing', sub: 'Invoices & payments', icon: CreditCard, href: '/buyer/billing' },
-      { name: 'Impact Report', sub: 'Local food metrics', icon: LineChart, href: '/buyer/impact' },
     ],
   },
   {
     label: 'Support',
-    items: [
-      { name: 'Get Help', icon: MessageCircle, href: '/buyer/help' },
-      { name: 'Settings', icon: Settings, href: '/buyer/settings' },
-    ],
+    items: [{ name: 'Get Help', icon: MessageCircle, href: '/buyer/help' }],
   },
 ];
 

@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  LayoutDashboard,
-  Sprout,
-  CircleDollarSign,
-  Package,
-  HeartHandshake,
-  MessageCircle,
-  Settings,
-} from 'lucide-react';
+import { LayoutDashboard, Sprout, CircleDollarSign, Package, MessageCircle } from 'lucide-react';
 import type { ComponentType } from 'react';
 
 import { Sidebar } from '../layout/Sidebar';
@@ -69,22 +61,8 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: 'Resources',
-    items: [
-      {
-        name: 'Community Fund',
-        sub: 'Grants & support',
-        icon: HeartHandshake,
-        href: '/seller/fund',
-      },
-    ],
-  },
-  {
     label: 'Support',
-    items: [
-      { name: 'Get Help', sub: '', icon: MessageCircle, href: '/seller/help' },
-      { name: 'Settings', sub: '', icon: Settings, href: '/seller/settings' },
-    ],
+    items: [{ name: 'Get Help', sub: '', icon: MessageCircle, href: '/seller/help' }],
   },
 ];
 

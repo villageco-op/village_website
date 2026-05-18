@@ -32,7 +32,7 @@ const HOW_IT_WORKS_DATA = [
  */
 export default function HowItWorksSection() {
   return (
-    <section className="relative bg-deep-forest py-25 overflow-hidden" id="how">
+    <section className="relative bg-deep-forest py-25 overflow-hidden" id="how-it-works">
       {/* Top Right Decorative Radial Glow */}
       <div className="absolute -top-20 -right-20 w-100 h-100 rounded-full bg-[radial-gradient(circle,rgba(164,199,57,0.08)_0%,transparent_70%)] pointer-events-none" />
 
