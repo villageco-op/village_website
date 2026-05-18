@@ -8,7 +8,7 @@ import { SectionHeader } from '@/components/ui/section-header';
  */
 export default function WhatIsSection() {
   return (
-    <section className="relative bg-cream py-25 overflow-hidden" id="about">
+    <section className="relative bg-cream py-25 overflow-hidden" id="what-it-is">
       {/* Decorative Top-Right Circle */}
       <div className="absolute -top-25 -right-25 w-100 h-100 rounded-full bg-lime-pale/60 pointer-events-none" />
 

@@ -9,7 +9,7 @@ import { SectionHeader } from '@/components/ui/section-header';
  */
 export default function WhyItMattersSection() {
   return (
-    <section className="bg-off-white py-25 relative overflow-hidden" id="why">
+    <section className="bg-off-white py-25 relative overflow-hidden" id="why-it-matters">
       <GradientBar></GradientBar>
 
       <div className="container-custom">

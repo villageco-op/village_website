@@ -51,7 +51,7 @@ function MockFullDashboardLayout({ children }: { children?: React.ReactNode }) {
       <div className="flex min-h-[calc(100vh-64px)] w-full bg-off-white">
         <BuyerSidebar user={mockUser} />
 
-        <main className="flex-1 overflow-y-auto px-9 py-8">
+        <main className="flex-1 px-9 py-8">
           {children || (
             <div className="space-y-6">
               <div className="rounded-xl border border-dashed border-zinc-300 p-8 text-center">
@@ -64,6 +64,11 @@ function MockFullDashboardLayout({ children }: { children?: React.ReactNode }) {
                   Footer.
                 </p>
               </div>
+              <div className="py-120" />
+              <p className="text-muted-foreground max-w-md mx-auto text-sm">
+                This is the bottom of the dashboard component. The footer should now scroll into
+                view.
+              </p>
             </div>
           )}
         </main>
