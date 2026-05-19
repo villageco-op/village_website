@@ -38,7 +38,7 @@ export function SellerSubscriptionCard({
 }: SellerSubscriptionCardProps) {
   const nextDelivery = formatAppDate(subscription.nextDeliveryDate, 'full', 'Pending');
 
-  const buyerName = subscription.buyer?.name || 'Unknown Buyer';
+  const buyerName = subscription.buyer?.organization || subscription.buyer?.name || 'Unknown Buyer';
   const buyerId = subscription.buyer?.id || '';
   const productTitle = subscription.product?.title || 'Unknown Product';
   const productId = subscription.product?.id || '';

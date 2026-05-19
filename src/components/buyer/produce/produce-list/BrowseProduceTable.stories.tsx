@@ -8,6 +8,7 @@ const mockProduce = [
     id: '1',
     name: 'Organic Honeycrisp Apples',
     sellerName: 'Green Valley Farm',
+    sellerOrg: null,
     sellerId: 'grower-1',
     thumbnail: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=100&h=100&fit=crop',
     amount: '32', // 2 lbs
@@ -21,6 +22,7 @@ const mockProduce = [
     id: '2',
     name: 'Heirloom Carrots',
     sellerName: 'Sunken Garden',
+    sellerOrg: null,
     sellerId: 'grower-2',
     thumbnail: '',
     amount: '16', // 1 lb

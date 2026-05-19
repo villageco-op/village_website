@@ -24,6 +24,7 @@ type Story = StoryObj<typeof SellerInfoMapCard>;
 const mockSeller = {
   id: 'seller-123',
   name: 'Green Valley Organics',
+  organization: null,
   image: 'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=150&h=150&fit=crop',
   canDeliver: true,
   deliveryRangeMiles: 15,
@@ -61,6 +62,7 @@ export const Anonymous: Story = {
     seller: {
       id: 'anon-1',
       name: null,
+      organization: null,
       image: '',
       canDeliver: false,
       deliveryRangeMiles: null,

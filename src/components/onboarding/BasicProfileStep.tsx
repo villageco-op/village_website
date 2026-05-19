@@ -17,6 +17,7 @@ import { getAssetPath } from '@/lib/utils';
  */
 export interface BasicInfoData {
   name: string;
+  organization: string | null;
   imageFile: File | null;
   address: string;
   city: string;
@@ -43,6 +44,7 @@ interface BasicProfileStepProps {
  */
 export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileStepProps) {
   const [name, setName] = useState('');
+  const [organization, setOrganization] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('Gary');
   const [state, setState] = useState('IN');
@@ -72,6 +74,7 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
     if (!isValid || isPending) return;
     await onSubmit({
       name,
+      organization: organization.trim() || null,
       imageFile,
       address,
       city,
@@ -147,6 +150,19 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="organization" className="text-ink-2 font-semibold">
+              Organization <span className="text-ink-3 font-normal text-xs">(Optional)</span>
+            </Label>
+            <Input
+              id="organization"
+              placeholder="e.g. Green Earth Collective"
+              className="bg-white border-lime/50 focus-visible:ring-click-green"
+              value={organization}
+              onChange={(e) => setOrganization(e.target.value)}
             />
           </div>
 

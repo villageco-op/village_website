@@ -12,5 +12,7 @@ export interface ProduceOrderBuyer {
   id: UserId;
   /** @nullable */
   name: string | null;
+  /** @nullable */
+  organization: string | null;
   image: ImageUrl & (unknown | null);
 }

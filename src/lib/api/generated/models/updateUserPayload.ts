@@ -14,6 +14,8 @@ export interface UpdateUserPayload {
   name?: string;
   /** The url to the image in vercel blob from the upload image response. */
   image?: string;
+  /** The users organization they are representing if any. */
+  organization?: string;
   /** A brief bio or description of the farm/user */
   aboutMe?: string;
   /** List of product categories the user specializes in */

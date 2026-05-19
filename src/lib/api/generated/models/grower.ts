@@ -13,10 +13,15 @@ import type { UserId } from './userId';
 export interface Grower {
   sellerId: UserId;
   /**
-   * The display name of the grower
+   * The name of the grower
    * @nullable
    */
   name: string | null;
+  /**
+   * The organization of the grower
+   * @nullable
+   */
+  organization: string | null;
   location: Location & (unknown | null);
   /** @nullable */
   city: string | null;

@@ -11,4 +11,6 @@ export interface CartSeller {
   id: UserId;
   /** @nullable */
   name: string | null;
+  /** @nullable */
+  organization: string | null;
 }

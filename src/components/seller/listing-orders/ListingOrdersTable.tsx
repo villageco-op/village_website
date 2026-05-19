@@ -86,7 +86,7 @@ export function ListingOrdersTable({ orders, totalOrders }: ListingOrdersTablePr
                     >
                       <OrderIdentityCell
                         id={order.buyer.id}
-                        name={order.buyer.name ?? undefined}
+                        name={order.buyer.organization ?? order.buyer.name ?? undefined}
                         image={order.buyer.image}
                       />
                       <OrderIdCell id={order.id} className="font-medium text-xs" />

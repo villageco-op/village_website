@@ -96,7 +96,7 @@ export default function BrowseProduceMapClient({ onViewChange }: BrowseProduceMa
                 group={selectedGroup}
                 onClose={() => setSelectedGroup(null)}
                 onOrderItem={(id: string) => setSelectedProduceId(id)}
-                onGrowerClick={(id: string) => router.push(`/seller/${id}`)}
+                onGrowerClick={(id: string) => router.push(`/public-profile/${id}`)}
               />
             )}
           </>

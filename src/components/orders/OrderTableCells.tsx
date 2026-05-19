@@ -1,3 +1,5 @@
+import { Button } from '../ui/button';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { StatusPill } from '@/components/ui/status-pill';
 import { TableCell } from '@/components/ui/table';
@@ -12,6 +14,7 @@ import { cn } from '@/lib/utils';
  * @param props.image - User profile image
  * @param props.labelPrefix - Prefix used before ID if name isn't provided
  * @param props.className - CSS className
+ * @param props.onNameClick - When the name is clicked
  * @returns A TableCell component
  */
 export function OrderIdentityCell({
@@ -20,12 +23,14 @@ export function OrderIdentityCell({
   image,
   labelPrefix = '',
   className,
+  onNameClick,
 }: {
   name?: string;
   id: string;
   image?: string;
   labelPrefix?: string;
   className?: string;
+  onNameClick?: () => void;
 }) {
   const displayName = name || `${labelPrefix} ${id.slice(0, 4)}`.trim();
   const fallback = (name?.[0] || id.slice(0, 2)).toUpperCase();
@@ -37,9 +42,22 @@ export function OrderIdentityCell({
           {image && <AvatarImage src={image} alt={displayName} />}
           <AvatarFallback className="bg-transparent">{fallback}</AvatarFallback>
         </Avatar>
-        <span className="font-heading font-bold text-ink text-[0.82rem] truncate max-w-24">
-          {displayName}
-        </span>
+        {onNameClick !== undefined ? (
+          <Button
+            size="sm"
+            variant="link"
+            onClick={(e) => {
+              e.stopPropagation();
+              onNameClick();
+            }}
+          >
+            {displayName} ↗
+          </Button>
+        ) : (
+          <span className="font-heading font-bold text-ink text-[0.82rem] truncate max-w-24">
+            {displayName}
+          </span>
+        )}
       </div>
     </TableCell>
   );

@@ -152,7 +152,7 @@ export function CartDrawer() {
                   {/* Seller Bucket Header */}
                   <div className="flex items-center gap-2 px-1">
                     <span className="font-heading text-lg font-bold text-deep-forest">
-                      {bucket.seller.name || 'Unknown Farm'}
+                      {bucket.seller.organization || bucket.seller.name || 'Unknown Farm'}
                     </span>
                   </div>
 

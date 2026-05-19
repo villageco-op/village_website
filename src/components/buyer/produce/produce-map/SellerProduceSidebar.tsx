@@ -32,15 +32,16 @@ export function SellerProduceSidebar({
   return (
     <div className="absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl border-l border-forest-dark/10 z-40 flex flex-col animate-in slide-in-from-right-8 duration-300">
       <div className="flex items-center justify-between border-b border-border/50 p-4 bg-slate-50/80 backdrop-blur-sm">
-        <button
-          className="bg-transparent border-none cursor-pointer p-0 font-heading text-[1.05rem] font-bold text-deep-forest no-underline transition-colors hover:text-click-green hover:underline flex items-center"
+        <Button
+          size="sm"
+          variant="link"
           onClick={() => onGrowerClick(String(group.sellerId))}
           title="View Seller Profile"
         >
           <Store className="h-4 w-4 mr-2 shrink-0" />
-          <span className="truncate max-w-45 text-left">{group.name}</span>
+          <span className="truncate max-w-45 text-left">{group.organization || group.name}</span>
           <span className="ml-1 text-sm">↗</span>
-        </button>
+        </Button>
         <Button
           variant="ghost"
           size="icon"
@@ -93,7 +94,10 @@ export function SellerProduceSidebar({
               <Button
                 variant="lime"
                 size="sm"
-                onClick={() => onOrderItem(String(item.id))}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOrderItem(String(item.id));
+                }}
                 className="w-full font-semibold"
               >
                 + Order

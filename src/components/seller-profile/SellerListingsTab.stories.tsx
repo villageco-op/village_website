@@ -21,6 +21,7 @@ const generateMockListings = (count: number, namePrefix = 'Listing'): ProduceLis
     name: `${namePrefix} ${i + 1}`,
     sellerId: SELLER_ID,
     sellerName: 'Green Valley Farm',
+    sellerOrg: null,
     thumbnail:
       i % 3 === 0
         ? 'https://images.unsplash.com/photo-1597362868487-10501f930a04?w=400&h=300&fit=crop'

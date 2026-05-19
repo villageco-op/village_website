@@ -23,7 +23,7 @@ export default function SellerInfoMapCard({ seller }: { seller: ProduceDetail['s
             {seller.image ? (
               <Image
                 src={seller.image as string}
-                alt={seller.name || 'Seller'}
+                alt={seller.organization || seller.name || 'Seller'}
                 width={48}
                 height={48}
                 className="object-cover"

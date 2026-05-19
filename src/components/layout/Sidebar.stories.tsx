@@ -33,6 +33,7 @@ type Story = StoryObj<typeof Sidebar>;
 const mockUser: User = {
   id: 'user_generic_1',
   name: 'Sam Logistics',
+  organization: null,
   email: 'sam@transport.com',
   emailVerified: '2024-01-01T00:00:00Z',
   image:

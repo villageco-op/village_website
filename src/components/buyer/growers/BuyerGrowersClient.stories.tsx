@@ -19,6 +19,7 @@ const generateMockGrowers = (count: number) => {
   return Array.from({ length: count }, (_, i) => ({
     sellerId: `grower-${i + 1}`,
     name: `Grower ${i + 1}`,
+    organization: null,
     city: 'Austin',
     location: {
       lat: 30.2672,

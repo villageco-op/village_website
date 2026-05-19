@@ -86,7 +86,7 @@ export default function BrowseProduceListClient({ onViewChange }: BrowseProduceL
           <BrowseProduceTable
             produce={produceList}
             onOrderItem={(id: string) => void setSelectedProduceId(id)}
-            onGrowerClick={(id: string) => void router.push(`/seller/${id}`)}
+            onGrowerClick={(id: string) => void router.push(`/public-profile/${id}`)}
           />
           <PaginationControls meta={meta} onPageChange={setPage} />
         </div>

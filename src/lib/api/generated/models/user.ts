@@ -18,6 +18,8 @@ export interface User {
   /** @nullable */
   image: string | null;
   /** @nullable */
+  organization: string | null;
+  /** @nullable */
   aboutMe: string | null;
   specialties: UserSpecialties;
   /** @nullable */

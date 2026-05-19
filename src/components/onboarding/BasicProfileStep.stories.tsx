@@ -44,6 +44,7 @@ export const FilledForm: Story = {
     const canvas = within(canvasElement);
 
     await userEvent.type(canvas.getByLabelText(/Real Name/i), 'Jane Doe');
+    await userEvent.type(canvas.getByLabelText(/Organization/i), 'Green Earth Collective');
     await userEvent.type(canvas.getByLabelText(/Street Address/i), '123 Bluebell Lane');
 
     const cityInput = canvas.getByLabelText(/City/i);
@@ -72,6 +73,7 @@ export const FullInteractionTest: Story = {
     const canvas = within(canvasElement);
 
     await userEvent.type(canvas.getByLabelText(/Real Name/i), 'John Smith');
+    await userEvent.type(canvas.getByLabelText(/Organization/i), 'Tree Huggers Inc');
     await userEvent.type(canvas.getByLabelText(/Street Address/i), '456 Oak St');
 
     const cityInput = canvas.getByLabelText(/City/i);
@@ -91,6 +93,47 @@ export const FullInteractionTest: Story = {
     await expect(args.onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'John Smith',
+        address: '456 Oak St',
+        city: 'Portland',
+        state: 'OR',
+        zip: '97204',
+        country: 'United States',
+      }),
+    );
+  },
+};
+
+/**
+ * Verifies that the organization field remains optional, and
+ * submits a string value of `null` if left blank.
+ */
+export const EmptyOptionalFieldsTest: Story = {
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.type(canvas.getByLabelText(/Real Name/i), 'John Smith');
+    // Skipping Organization input completely to test the optional logic
+
+    await userEvent.type(canvas.getByLabelText(/Street Address/i), '456 Oak St');
+
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Portland');
+
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+    const orOption = await screen.findByRole('option', { name: 'Oregon' });
+    await userEvent.click(orOption);
+
+    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '97204');
+
+    const submitBtn = canvas.getByRole('button', { name: /continue/i });
+    await userEvent.click(submitBtn);
+
+    await expect(args.onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'John Smith',
+        organization: null,
         address: '456 Oak St',
         city: 'Portland',
         state: 'OR',

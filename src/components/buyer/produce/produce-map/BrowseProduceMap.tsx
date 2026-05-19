@@ -103,7 +103,7 @@ export function BrowseProduceMap({
             <div className="flex items-center justify-between border-b border-border/50 pb-2 mb-1 cursor-pointer">
               <div className="font-heading text-[0.85rem] font-bold text-deep-forest flex items-center hover:underline">
                 <MapPin className="h-3.5 w-3.5 mr-1 text-ink-3" />
-                {hoveredGroup.name}
+                {hoveredGroup.organization || hoveredGroup.name}
               </div>
             </div>
 

@@ -27,17 +27,18 @@ export default function ContactClient() {
   const [formData, setFormData] = useState<{
     name: string | null;
     email: string | null;
-    company: string;
+    company: string | null;
     message: string;
   }>({
     name: null,
     email: null,
-    company: '',
+    company: null,
     message: '',
   });
 
   const resolvedName = formData.name ?? user?.name ?? '';
   const resolvedEmail = formData.email ?? user?.email ?? '';
+  const resolvedCompany = formData.company ?? user?.organization ?? '';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -52,7 +53,7 @@ export default function ContactClient() {
         data: {
           name: resolvedName,
           email: resolvedEmail,
-          company: formData.company,
+          company: resolvedCompany,
           message: formData.message,
         },
       });
@@ -152,15 +153,18 @@ export default function ContactClient() {
 
                   {/* Company Field (Optional) */}
                   <div className="space-y-2">
-                    <Label htmlFor="company" className="text-sm font-semibold text-deep-forest">
-                      Company / Organization{' '}
+                    <Label
+                      htmlFor="organization"
+                      className="text-sm font-semibold text-deep-forest"
+                    >
+                      Organization{' '}
                       <span className="text-forest-dark/50 font-normal">(Optional)</span>
                     </Label>
                     <Input
-                      id="company"
-                      name="company"
+                      id="organization"
+                      name="organization"
                       type="text"
-                      value={formData.company}
+                      value={resolvedCompany}
                       onChange={handleChange}
                       placeholder="Your organization name"
                       className="flex h-12 w-full rounded-md border border-forest-dark/20 bg-transparent px-3 py-2 text-sm transition-colors placeholder:text-forest-dark/40 focus:outline-none focus:ring-2 focus:ring-lime focus:border-transparent disabled:opacity-50"

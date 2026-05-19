@@ -25,6 +25,7 @@ export default function SellerHelpClient() {
 
   const resolvedName = user?.name ?? '';
   const resolvedEmail = user?.email ?? '';
+  const resolvedOrg = user?.organization ?? '';
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -36,7 +37,7 @@ export default function SellerHelpClient() {
         data: {
           name: resolvedName,
           email: resolvedEmail,
-          company: '',
+          company: resolvedOrg,
           message: message,
         },
       });

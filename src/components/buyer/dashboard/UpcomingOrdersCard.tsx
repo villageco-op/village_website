@@ -79,7 +79,11 @@ export function UpcomingOrdersCard({ orders }: UpcomingOrdersCardProps) {
                       onClick={() => router.push(`/orders/${order.id}`)}
                       className="cursor-pointer border-border/50 transition-colors hover:bg-slate-50/80"
                     >
-                      <OrderIdentityCell id={order.sellerId} labelPrefix="Seller" />
+                      <OrderIdentityCell
+                        id={order.sellerId}
+                        labelPrefix="Seller"
+                        onNameClick={() => void router.push(`/public-profile/${order.sellerId}`)}
+                      />
                       <OrderIdCell id={order.id} />
                       <OrderAmountCell amount={order.totalAmount} />
                       <OrderDateCell
