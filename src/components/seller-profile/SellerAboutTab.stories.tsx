@@ -29,6 +29,7 @@ const mockQuickOrderItems: ProduceListItem[] = [
     thumbnail: '',
     name: 'Baby Spinach',
     sellerName: 'Farmer John',
+    sellerOrg: null,
     sellerId: 'user-123',
     price: '$2.90/lb',
     amount: '20 lbs',
@@ -42,6 +43,7 @@ const mockQuickOrderItems: ProduceListItem[] = [
     thumbnail: '',
     name: 'Cherry Tomatoes',
     sellerName: 'Farmer John',
+    sellerOrg: null,
     sellerId: 'user-123',
     price: '$4.10/lb',
     amount: '30 lbs',
@@ -57,6 +59,7 @@ export const Complete: Story = {
     profile: {
       id: 'user-123',
       name: 'Farmer John',
+      organization: null,
       aboutMe:
         "I've been growing organic vegetables in the Austin area for over 15 years. My focus is on soil health and heirloom varieties that you can't find in big-box grocery stores. Every harvest is hand-picked the morning of delivery.",
       specialties: ['Heirloom Tomatoes', 'Microgreens', 'Organic Spinach', 'Root Vegetables'],
@@ -80,6 +83,7 @@ export const Minimal: Story = {
     profile: {
       id: 'user-456',
       name: null,
+      organization: null,
       aboutMe: null,
       specialties: [],
       image: '',

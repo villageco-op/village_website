@@ -18,6 +18,7 @@ const SELLER_ID = 'seller_123';
 const MOCK_PROFILE: PublicUserProfile = {
   id: SELLER_ID,
   name: 'Green Valley Farm',
+  organization: null,
   image: '',
   aboutMe: 'Organic produce from the heart of the valley.',
   specialties: ['Leafy Greens', 'Root Vegetables'],

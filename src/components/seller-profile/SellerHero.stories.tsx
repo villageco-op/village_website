@@ -22,6 +22,7 @@ export const Default: Story = {
     profile: {
       id: 'user-1',
       name: 'Sarah Greenfield',
+      organization: null,
       city: 'Austin',
       state: 'TX',
       starRating: 4.9,
