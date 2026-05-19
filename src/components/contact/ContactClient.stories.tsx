@@ -109,7 +109,7 @@ export const AuthenticatedAutofill: Story = {
         // Mock authenticated session
         http.get('*/api/auth/session', () =>
           HttpResponse.json({
-            user: { name: 'Alice Farmer', email: 'alice@village.com' },
+            user: { name: 'Alice Farmer', organization: 'Green Farms', email: 'alice@village.com' },
             expires: '9999-12-31T23:59:59.999Z',
           }),
         ),
@@ -122,9 +122,11 @@ export const AuthenticatedAutofill: Story = {
     // Wait for the hook to finish loading and populate the inputs
     const nameInput = await canvas.findByDisplayValue('Alice Farmer');
     const emailInput = await canvas.findByDisplayValue('alice@village.com');
+    const orgInput = await canvas.findByDisplayValue('Green Farms');
 
     await expect(nameInput).toBeInTheDocument();
     await expect(emailInput).toBeInTheDocument();
+    await expect(orgInput).toBeInTheDocument();
   },
 };
 

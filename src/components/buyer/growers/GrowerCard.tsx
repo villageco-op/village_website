@@ -25,6 +25,7 @@ interface GrowerCardProps {
  */
 export function GrowerCard({ grower, index }: GrowerCardProps) {
   const startDate = formatAppDate(grower.firstOrderDate, 'monthYear');
+  const name = grower.organization || grower.name;
 
   const getPillColor = (index: number) => {
     const styles = [
@@ -52,12 +53,12 @@ export function GrowerCard({ grower, index }: GrowerCardProps) {
                 getAvatarFallbackColor(index),
               )}
             >
-              {getInitials(grower.name)}
+              {getInitials(name)}
             </AvatarFallback>
           </Avatar>
           <div>
             <div className="font-heading text-[0.92rem] font-bold text-ink">
-              {grower.name || 'Unknown Grower'}
+              {name || 'Unknown Grower'}
             </div>
             <div className="font-sans text-[0.74rem] text-ink-3">
               {grower.location?.address || 'No address provided'}

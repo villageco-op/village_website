@@ -11,6 +11,8 @@ export interface MapGrower {
   sellerId: UserId;
   /** @nullable */
   name: string | null;
+  /** @nullable */
+  organization: string | null;
   lat: number;
   lng: number;
   /**

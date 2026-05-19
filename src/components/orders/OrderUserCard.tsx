@@ -39,7 +39,9 @@ export function OrderUserCard({ title, user, role }: OrderUserCardProps) {
             </div>
             <div>
               <p className="text-xs text-ink-3 mb-0.5 capitalize">{role} Name</p>
-              <p className="font-medium text-sm text-ink">{user.name || 'Anonymous'}</p>
+              <p className="font-medium text-sm text-ink">
+                {user.organization || user.name || 'Anonymous'}
+              </p>
             </div>
           </div>
 

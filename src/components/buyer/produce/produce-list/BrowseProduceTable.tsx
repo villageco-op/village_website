@@ -85,12 +85,16 @@ export function BrowseProduceTable({
                     </div>
                   </TableCell>
                   <TableCell className="py-3">
-                    <button
-                      className="bg-transparent border-none cursor-pointer p-0 font-heading text-[0.82rem] font-semibold text-deep-forest no-underline transition-colors hover:text-click-green hover:underline"
-                      onClick={() => onGrowerClick(item.sellerId)}
+                    <Button
+                      size="sm"
+                      variant="link"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onGrowerClick(item.sellerId);
+                      }}
                     >
-                      {item.sellerName} ↗
-                    </button>
+                      {item.sellerOrg || item.sellerName} ↗
+                    </Button>
                   </TableCell>
                   <TableCell className="text-sm text-ink py-3">
                     {formatWeight(Number(item.amount) || 0)} · {getDayFromDate(item.availableBy)}
@@ -113,7 +117,10 @@ export function BrowseProduceTable({
                       <Button
                         variant="lime"
                         size="sm"
-                        onClick={() => onOrderItem(item.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onOrderItem(item.id);
+                        }}
                         className="w-full max-w-25"
                       >
                         + Order

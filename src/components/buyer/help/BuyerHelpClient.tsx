@@ -25,6 +25,7 @@ export default function BuyerHelpClient() {
 
   const resolvedName = user?.name ?? '';
   const resolvedEmail = user?.email ?? '';
+  const resolvedCompany = user?.organization ?? '';
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -36,7 +37,7 @@ export default function BuyerHelpClient() {
         data: {
           name: resolvedName,
           email: resolvedEmail,
-          company: '',
+          company: resolvedCompany,
           message: message,
         },
       });

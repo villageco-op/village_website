@@ -13,6 +13,8 @@ export type ProduceDetailsSeller = {
   id: UserId;
   /** @nullable */
   name: string | null;
+  /** @nullable */
+  organization: string | null;
   image: ImageUrl & (unknown | null);
   /** Does the seller do deliveries? */
   canDeliver?: boolean;

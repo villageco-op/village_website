@@ -15,6 +15,8 @@ export type OrderDetailResponseSeller = {
   /** @nullable */
   name?: string | null;
   /** @nullable */
+  organization?: string | null;
+  /** @nullable */
   email?: string | null;
   location?: Location & (unknown | null);
 } | null;

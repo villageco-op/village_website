@@ -12,6 +12,8 @@ export interface SellerMapGroup {
   sellerId: UserId;
   /** The sellers name */
   name: string;
+  /** @nullable */
+  organization: string | null;
   lat: number;
   lng: number;
   /** List of produce items available at this specific map location */

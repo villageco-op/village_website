@@ -14,6 +14,8 @@ export interface PublicUserProfile {
   /** @nullable */
   name: string | null;
   image: ImageUrl & (unknown | null);
+  /** @nullable */
+  organization: string | null;
   /**
    * Public bio displayed on the seller storefront
    * @nullable
