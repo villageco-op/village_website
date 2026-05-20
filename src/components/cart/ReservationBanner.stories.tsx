@@ -5,6 +5,39 @@ import { http, HttpResponse } from 'msw';
 import { ReservationBanner } from './ReservationBanner';
 
 import { CartProvider } from '@/hooks/useCartUI';
+import type { User } from '@/lib/api/generated/models/user';
+
+const mockUser: User = {
+  id: 'buyer_123',
+  name: 'County Fresh Mkt',
+  organization: null,
+  email: 'purchasing@countyfresh.com',
+  emailVerified: '2024-01-01T00:00:00Z',
+  image:
+    'https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=150&h=150&auto=format&fit=crop',
+  aboutMe: 'A local market bringing fresh valley produce to Gary, IN.',
+  deliveryRangeMiles: '0',
+  specialties: [],
+  goal: '90',
+  stripeAccountId: 'id',
+  stripeOnboardingComplete: false,
+  address: '456 Market Ave',
+  city: 'Gary',
+  lat: 41.59,
+  lng: -87.34,
+  state: 'IN',
+  country: 'United States',
+  zip: '92921',
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
+};
+
+const mockAuthSession = http.get('*/api/auth/session', () =>
+  HttpResponse.json({
+    user: mockUser,
+    expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+  }),
+);
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -24,7 +57,6 @@ const meta: Meta<typeof ReservationBanner> = {
       return (
         <QueryClientProvider client={mockedQueryClient}>
           <CartProvider>
-            {/* Give some padding so the sticky banner top-16 is clearly visible */}
             <div className="relative min-h-75 w-full bg-slate-50 pt-24">
               <Story />
             </div>
@@ -42,6 +74,7 @@ export const ActiveReservations: Story = {
   parameters: {
     msw: {
       handlers: [
+        mockAuthSession,
         http.get('*/cart*', () =>
           HttpResponse.json({
             status: 200,
@@ -78,10 +111,11 @@ export const EmptyHidden: Story = {
   parameters: {
     msw: {
       handlers: [
+        mockAuthSession,
         http.get('*/cart*', () =>
           HttpResponse.json({
             status: 200,
-            data: { data: [] }, // No items -> translates banner out of view
+            data: { data: [] },
           }),
         ),
       ],

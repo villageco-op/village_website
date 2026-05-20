@@ -96,7 +96,8 @@ export function AddressMap({
             ) : (
               <Copy className="mr-1.5 h-3.5 w-3.5" />
             )}
-            {copied ? 'Copied!' : 'Copy Address'}
+            <span className="hidden min-[360px]:inline">{copied ? 'Copied!' : 'Copy Address'}</span>
+            <span className="inline min-[360px]:hidden">{copied ? 'Copied!' : 'Copy'}</span>
           </Button>
           <Button
             variant="forest"

@@ -117,7 +117,6 @@ const MOCK_EMPTY_CART = {
   data: { data: [] },
 };
 
-// Helper component to auto-open the cart drawer on mount for viewing in Storybook
 const AutoOpenCartWrapper = ({ children }: { children: React.ReactNode }) => {
   const { openCart } = useCartUI();
   useEffect(() => {

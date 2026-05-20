@@ -1,6 +1,6 @@
 'use client';
 
-import { Package, Store, Sprout, MapPin, CreditCard, MessageCircle, Repeat } from 'lucide-react';
+import { Package, Store, CreditCard, MessageCircle, Repeat } from 'lucide-react';
 
 import { Sidebar, type NavGroup } from '../layout/Sidebar';
 
@@ -18,18 +18,6 @@ const BUYER_NAV_GROUPS: NavGroup[] = [
         icon: Repeat,
         href: '/buyer/subscriptions',
       },
-    ],
-  },
-  {
-    label: 'Sourcing',
-    items: [
-      {
-        name: 'Grower Profiles',
-        sub: 'Your trusted farmers',
-        icon: Sprout,
-        href: '/buyer/growers',
-      },
-      { name: 'Source Map', sub: 'Where food comes from', icon: MapPin, href: '/buyer/source-map' },
     ],
   },
   {

@@ -1,9 +1,9 @@
 'use client';
 
-import { ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -66,14 +66,34 @@ export function Sidebar({
   fallbackName = 'User',
 }: SidebarProps) {
   const pathname = usePathname();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const userImage = user?.image;
   const userName = user?.name || fallbackName;
 
   return (
-    <div className="sticky top-16 self-start h-[calc(100vh-64px)]">
-      <ScrollArea className="h-full w-58 bg-forest-dark [&>div>div]:block!">
+    <div
+      className={cn(
+        'sticky top-16 self-start h-[calc(100vh-64px)] transition-all duration-300 ease-in-out',
+        isCollapsed ? 'w-16' : 'w-58',
+        !isCollapsed && 'w-full md:w-58 md:h-[calc(100vh-64px)]',
+      )}
+    >
+      <ScrollArea
+        className={cn(
+          'h-full bg-forest-dark transition-all [&>div>div]:block!',
+          !isCollapsed && 'shadow-2xl md:shadow-none',
+        )}
+      >
         <div className="flex flex-col">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute -right-3 top-4 h-6 w-6 rounded-full bg-lime text-deep-forest"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+          </Button>
           {/* Profile Section */}
           <div className="group relative flex items-center gap-2.75 border-b border-white/5 p-[20px_18px_16px] transition-colors hover:bg-white/5">
             <Link href={settingsHref} className="absolute inset-0 z-0" aria-label="Edit Profile" />
@@ -87,15 +107,16 @@ export function Sidebar({
                   {getInitials(userName)}
                 </AvatarFallback>
               </Avatar>
-
-              <div className="flex-1 overflow-hidden">
-                <div className="truncate font-heading text-[0.8rem] font-bold leading-[1.2] text-cream">
-                  {userName}
+              {!isCollapsed && (
+                <div className="flex-1 overflow-hidden">
+                  <div className="truncate font-heading text-[0.8rem] font-bold leading-[1.2] text-cream">
+                    {userName}
+                  </div>
+                  <div className="truncate font-sans text-[0.68rem] text-lime-light/70">
+                    {roleLabel}
+                  </div>
                 </div>
-                <div className="truncate font-sans text-[0.68rem] text-lime-light/70">
-                  {roleLabel}
-                </div>
-              </div>
+              )}
             </div>
 
             {user?.id && publicProfileBaseUrl && (
@@ -122,10 +143,11 @@ export function Sidebar({
           <div className="flex-1 py-4.5">
             {navGroups.map((group, groupIndex) => (
               <div key={group.label} className="pb-1">
-                {/* Group Label */}
-                <div className="flex items-center gap-1.5 px-4.5 pb-2 font-heading text-[0.58rem] font-extrabold uppercase tracking-[0.14em] text-lime/50 before:block before:h-px before:w-3.5 before:bg-lime/30">
-                  {group.label}
-                </div>
+                {!isCollapsed && (
+                  <div className="flex items-center gap-1.5 px-4.5 pb-2 font-heading text-[0.58rem] font-extrabold uppercase tracking-[0.14em] text-lime/50 before:block before:h-px before:w-3.5 before:bg-lime/30">
+                    {group.label}
+                  </div>
+                )}
 
                 {/* Items */}
                 <div className="flex flex-col">
@@ -137,8 +159,9 @@ export function Sidebar({
                         key={item.name}
                         href={item.href}
                         className={cn(
-                          'group relative flex w-full cursor-pointer items-center gap-2.5 bg-transparent px-4.5 py-2.25 text-left transition-colors hover:bg-lime/5',
-                          isActive && 'bg-lime/10 hover:bg-lime/10',
+                          'relative flex w-full items-center gap-2.5 px-4.5 py-2.25 transition-colors hover:bg-lime/5',
+                          isActive && 'bg-lime/10',
+                          isCollapsed && 'justify-center px-0',
                         )}
                       >
                         {/* Active Indicator Line */}
@@ -158,37 +181,40 @@ export function Sidebar({
                             strokeWidth={isActive ? 2.5 : 2}
                           />
                         </div>
+                        {!isCollapsed && (
+                          <>
+                            {/* Text */}
+                            <div className="flex flex-1 flex-col">
+                              <span
+                                className={cn(
+                                  'font-heading text-[0.78rem] font-semibold leading-[1.2] text-cream/75 group-hover:text-cream',
+                                  isActive && 'font-bold text-lime-light',
+                                )}
+                              >
+                                {item.name}
+                              </span>
+                              {item.sub && (
+                                <span className="mt-px block font-sans text-[0.62rem] text-cream/60">
+                                  {item.sub}
+                                </span>
+                              )}
+                            </div>
 
-                        {/* Text */}
-                        <div className="flex flex-1 flex-col">
-                          <span
-                            className={cn(
-                              'font-heading text-[0.78rem] font-semibold leading-[1.2] text-cream/75 group-hover:text-cream',
-                              isActive && 'font-bold text-lime-light',
+                            {/* Badge */}
+                            {item.badge && (
+                              <Badge
+                                variant="secondary"
+                                className={cn(
+                                  'ml-auto shrink-0 border-0 rounded-full px-1.5 py-0.5 font-heading text-[0.58rem] font-extrabold leading-[1.4]',
+                                  item.badgeVariant === 'sun'
+                                    ? 'bg-sun text-black hover:bg-sun hover:text-black'
+                                    : 'bg-lime text-deep-forest hover:bg-lime hover:text-deep-forest',
+                                )}
+                              >
+                                {item.badge}
+                              </Badge>
                             )}
-                          >
-                            {item.name}
-                          </span>
-                          {item.sub && (
-                            <span className="mt-px block font-sans text-[0.62rem] text-cream/60">
-                              {item.sub}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Badge */}
-                        {item.badge && (
-                          <Badge
-                            variant="secondary"
-                            className={cn(
-                              'ml-auto shrink-0 border-0 rounded-full px-1.5 py-0.5 font-heading text-[0.58rem] font-extrabold leading-[1.4]',
-                              item.badgeVariant === 'sun'
-                                ? 'bg-sun text-black hover:bg-sun hover:text-black'
-                                : 'bg-lime text-deep-forest hover:bg-lime hover:text-deep-forest',
-                            )}
-                          >
-                            {item.badge}
-                          </Badge>
+                          </>
                         )}
                       </Link>
                     );
