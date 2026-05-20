@@ -217,10 +217,6 @@ export function SupplyMapCard({
                 </div>
               </Popup>
             )}
-
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 font-heading text-[0.65rem] font-bold tracking-[0.08em] uppercase text-deep-forest opacity-80 whitespace-nowrap bg-white/80 px-2 py-0.5 rounded shadow-sm pointer-events-none">
-              Gary, IN · Your sourcing network
-            </div>
           </Map>
         )}
       </div>

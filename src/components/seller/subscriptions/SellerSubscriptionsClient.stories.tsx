@@ -125,11 +125,9 @@ export const Default: Story = {
       await userEvent.hover(firstCard);
 
       // Verify Product Actions
-      await expect(canvas.getAllByTitle(/Copy Product ID/i)).toHaveLength(3);
       await expect(canvas.getAllByTitle(/Filter by Product/i)).toHaveLength(3);
 
       // Verify Buyer Actions
-      await expect(canvas.getAllByTitle(/Copy Buyer ID/i)).toHaveLength(3);
       await expect(canvas.getAllByTitle(/Filter by Buyer/i)).toHaveLength(3);
     }
   },

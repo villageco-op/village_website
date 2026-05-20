@@ -30,7 +30,7 @@ export default function SellerSuccessStep({ onStripeRedirect }: SellerSuccessSte
       </div>
 
       <div className="space-y-4">
-        <div className="p-5 bg-white border border-lime/50 rounded-xl shadow-sm flex items-start gap-4">
+        <div className="p-5 bg-white border border-lime/50 rounded-xl shadow-sm flex flex-col sm:flex-row items-start gap-4">
           <div className="w-10 h-10 bg-lime-pale text-click-green rounded-full flex items-center justify-center shrink-0">
             <CreditCard className="w-5 h-5" />
           </div>
@@ -50,7 +50,7 @@ export default function SellerSuccessStep({ onStripeRedirect }: SellerSuccessSte
           </div>
         </div>
 
-        <div className="p-5 bg-white border border-border/40 rounded-xl shadow-sm flex items-start gap-4 opacity-80">
+        <div className="p-5 bg-white border border-border/40 rounded-xl shadow-sm flex flex-col sm:flex-row items-start gap-4 opacity-80">
           <div className="w-10 h-10 bg-black/5 text-ink-3 rounded-full flex items-center justify-center shrink-0">
             <Sprout className="w-5 h-5" />
           </div>

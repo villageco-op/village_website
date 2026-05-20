@@ -1,5 +1,6 @@
 'use client';
 
+import { LogIn } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -8,6 +9,7 @@ import { ReservationBanner } from '../cart/ReservationBanner';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/hooks/useAuth';
 import { cn, getAssetPath } from '@/lib/utils';
 
 const navItems = [
@@ -49,18 +51,27 @@ const getSecondaryNavItems = (path: string) => {
 export function Header() {
   const pathname = usePathname();
   const secondaryNavItems = getSecondaryNavItems(pathname);
+  const { user } = useAuth();
 
   return (
     <>
       <header className="sticky top-0 z-50 w-full h-16 bg-primary border-b border-border/10">
         <div className="container-custom flex h-16 items-center">
-          <Link href="/" className="mr-6 hidden lg:flex items-center shrink-0">
+          <Link href="/" className="mr-6 flex items-center shrink-0">
             <Image
               src={getAssetPath('/icons/logo-horizontal.png')}
               alt="Village Logo"
               width={100}
               height={34}
-              className="h-8 w-auto"
+              className="hidden lg:block h-8 w-auto"
+              priority
+            />
+            <Image
+              src={getAssetPath('/icons/logo.png')}
+              alt="Village Icon"
+              width={34}
+              height={34}
+              className="block lg:hidden h-8 w-auto"
               priority
             />
           </Link>
@@ -88,31 +99,43 @@ export function Header() {
             })}
           </nav>
 
-          <Separator orientation="vertical" className="h-6 bg-cream/10 mx-4 my-auto" />
+          {secondaryNavItems.length > 0 && (
+            <>
+              <Separator
+                orientation="vertical"
+                className="hidden sm:block h-6 bg-cream/10 mx-4 my-auto"
+              />
+              <nav className="flex items-start gap-1" aria-label="Secondary Navigation">
+                <div className="hidden sm:flex items-start gap-1">
+                  {secondaryNavItems.map((item) => (
+                    <Button
+                      key={item.href}
+                      asChild
+                      variant="ghost"
+                      size="sm"
+                      className="font-heading text-xs font-semibold text-cream/50 hover:bg-white/5 hover:text-cream"
+                    >
+                      <Link href={item.href}>{item.name}</Link>
+                    </Button>
+                  ))}
+                </div>
+              </nav>
+            </>
+          )}
 
-          <nav className="flex items-center gap-1 ml-auto" aria-label="Secondary Navigation">
-            <div className="hidden sm:flex items-center gap-1">
-              {secondaryNavItems.map((item) => (
-                <Button
-                  key={item.href}
-                  asChild
-                  variant="ghost"
-                  size="sm"
-                  className="font-heading text-xs font-semibold text-cream/50 hover:bg-white/5 hover:text-cream"
-                >
-                  <Link href={item.href}>{item.name}</Link>
-                </Button>
-              ))}
-
-              <Button
-                asChild
-                size="sm"
-                className="ml-2 bg-lime text-forest-dark font-heading text-xs font-bold transition-transform hover:bg-lime-light hover:-translate-y-px"
-              >
-                <Link href="/login">Get involved &rarr;</Link>
-              </Button>
-            </div>
-          </nav>
+          {!user && (
+            <Button
+              size="sm"
+              className="ml-auto bg-lime text-forest-dark font-heading text-xs font-bold transition-transform hover:bg-lime-light hover:-translate-y-px"
+            >
+              <Link href="/login" className="hidden md:block">
+                Get involved &rarr;
+              </Link>
+              <Link href="/login" className="block md:hidden">
+                <LogIn />
+              </Link>
+            </Button>
+          )}
         </div>
       </header>
       <ReservationBanner />

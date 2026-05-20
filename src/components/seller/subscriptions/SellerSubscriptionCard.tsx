@@ -1,9 +1,8 @@
 'use client';
 
-import { Copy, Filter } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import Link from 'next/link';
 import router from 'next/router';
-import { toast } from 'sonner';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -43,16 +42,6 @@ export function SellerSubscriptionCard({
   const productTitle = subscription.product?.title || 'Unknown Product';
   const productId = subscription.product?.id || '';
 
-  const handleCopy = (e: React.MouseEvent, text: string, label: string) => {
-    e.preventDefault();
-    if (text) {
-      navigator.clipboard.writeText(text).catch(() => {
-        toast.error(`Failed to copy ${label} to clipboard`);
-      });
-      toast.success(`${label} copied to clipboard`);
-    }
-  };
-
   const getAvatarFallbackColor = (index: number) => {
     const styles = ['bg-lime/20', 'bg-sun/20', 'bg-clay/10', 'bg-sky-100'];
     return styles[index % styles.length];
@@ -63,7 +52,7 @@ export function SellerSubscriptionCard({
       <CardContent className="flex h-full flex-col p-6">
         {/* Header: Avatar, Product, Buyer & Status */}
         <div className="mb-4 flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <Avatar className="h-10 w-10">
               <AvatarFallback
                 className={cn(
@@ -74,27 +63,18 @@ export function SellerSubscriptionCard({
                 {getInitials(buyerName)}
               </AvatarFallback>
             </Avatar>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <div
-                  className="cursor-pointer line-clamp-1 font-heading text-[0.92rem] font-bold text-ink hover:underline"
+                  className="cursor-pointer font-heading text-[0.92rem] font-bold text-ink hover:underline"
                   onClick={() => void router.push(`/listings/${productId}/edit/`)}
                 >
                   {productTitle} ↗
                 </div>
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                  <Button
-                    onClick={(e) => handleCopy(e, productId, 'Product ID')}
-                    className="cursor-pointer text-ink-3 hover:text-forest"
-                    size="xs"
-                    variant="ghost"
-                    title="Copy Product ID"
-                  >
-                    <Copy size={12} />
-                  </Button>
+                <div className="flex items-start opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                   <Button
                     onClick={() => onFilterProduct?.(productId)}
-                    className="cursor-pointer text-ink-3 hover:text-forest"
+                    className="cursor-pointer text-ink-3 hover:text-forest hidden md:inline-flex"
                     size="xs"
                     variant="ghost"
                     title="Filter by Product"
@@ -105,22 +85,13 @@ export function SellerSubscriptionCard({
               </div>
               {/* Buyer Name Row */}
               <div className="flex items-center gap-2 font-sans text-[0.74rem] text-ink-3">
-                <span className="truncate">
+                <span>
                   Subscribed by <span className="font-medium text-ink/80">{buyerName}</span>
                 </span>
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                  <Button
-                    onClick={(e) => handleCopy(e, buyerId, 'Buyer ID')}
-                    className="cursor-pointer text-ink-3 hover:text-forest"
-                    size="xs"
-                    variant="ghost"
-                    title="Copy Buyer ID"
-                  >
-                    <Copy size={12} />
-                  </Button>
+                <div className="flex items-start opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                   <Button
                     onClick={() => onFilterBuyer?.(buyerId)}
-                    className="cursor-pointer text-ink-3 hover:text-forest"
+                    className="cursor-pointer text-ink-3 hover:text-forest hidden md:inline-flex"
                     variant="ghost"
                     size="xs"
                     title="Filter by Buyer"

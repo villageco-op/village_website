@@ -79,92 +79,95 @@ export function CartLineItem({
       className="cursor-pointer flex flex-col border-b border-cream-dark last:border-none hover:bg-off-white"
       onClick={() => void router.push(`/produce/${item.productId}`)}
     >
-      <div className="flex items-center gap-3 p-3.5 sm:px-4.5">
-        <div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded bg-cream text-xl">
-          {imageUrl ? (
-            <Image
-              width={32}
-              height={32}
-              src={imageUrl}
-              alt={item.title}
-              className={cn(
-                'h-full w-full object-cover transition-opacity',
-                isUpdating && 'opacity-40',
-              )}
-            />
-          ) : (
-            <span className={cn(isUpdating && 'opacity-40')}>
-              <ProduceIcon type={item.title} className="h-5 w-5 text-ink-3" />
-            </span>
-          )}
-
-          {/* Centralized Spinner */}
-          {isUpdating && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Loader2 className="h-4 w-4 animate-spin text-click-green" />
-            </div>
-          )}
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 truncate font-heading text-[0.85rem] font-bold text-ink">
-            {item.title}
-          </div>
-          <div className="mt-0.5 flex gap-2 font-sans text-[0.72rem] text-ink-3">
-            <span>${priceNum.toFixed(2)}/lb</span>
-            {item.isSubscription && item.subscriptionCostReductionPercent && (
-              <span className="font-bold text-lime">
-                ({item.subscriptionCostReductionPercent}% off)
+      <div className="flex flex-col items-start gap-3 p-3.5 sm:flex-row sm:items-center sm:px-4.5">
+        <div className="flex min-w-0 flex-1 items-center gap-3 w-full sm:w-auto">
+          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded bg-cream text-xl">
+            {imageUrl ? (
+              <Image
+                width={32}
+                height={32}
+                src={imageUrl}
+                alt={item.title}
+                className={cn(
+                  'h-full w-full object-cover transition-opacity',
+                  isUpdating && 'opacity-40',
+                )}
+              />
+            ) : (
+              <span className={cn(isUpdating && 'opacity-40')}>
+                <ProduceIcon type={item.title} className="h-5 w-5 text-ink-3" />
               </span>
             )}
-          </div>
-        </div>
 
-        {/* Cart Qty Controls */}
-        <div className="flex shrink-0 items-center gap-1.5 px-2">
-          <Button
-            variant="outline"
-            size="icon-xs"
-            className="rounded-full border-cream-dark bg-white text-ink-2 hover:border-deep-forest hover:bg-cream disabled:opacity-50"
-            onClick={handleDecrement}
-            title="Decrease quantity"
-            disabled={localQtyOz <= 16} // Disable if at 1lb minimum
-          >
-            <Minus className="size-3" />
-          </Button>
-          <span className="min-w-7 text-center font-heading text-[0.82rem] font-bold">
-            {qtyLbs}
-          </span>
-          <Button
-            variant="outline"
-            size="icon-xs"
-            className="rounded-full border-cream-dark bg-white text-ink-2 hover:border-deep-forest hover:bg-cream"
-            onClick={handleIncrement}
-            title="Increase quantity"
-          >
-            <Plus className="size-3" />
-          </Button>
-        </div>
-
-        {/* Pricing & Remove */}
-        <div className="flex shrink-0 flex-col items-end gap-1 text-right">
-          <div
-            className={cn(
-              'whitespace-nowrap font-heading text-[0.88rem] font-extrabold text-deep-forest transition-opacity duration-200',
-              isUpdating ? 'opacity-30' : 'opacity-100',
+            {/* Centralized Spinner */}
+            {isUpdating && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Loader2 className="h-4 w-4 animate-spin text-click-green" />
+              </div>
             )}
-          >
-            ${lineTotal.toFixed(2)}
           </div>
-          <Button
-            variant="link"
-            size="xs"
-            onClick={() => onRemove(item.reservationId)}
-            disabled={isPending || isUpdating}
-            className="h-auto p-0 font-heading text-[0.65rem] text-ink-3 hover:text-brick hover:no-underline"
-          >
-            Remove
-          </Button>
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 font-heading text-[0.85rem] font-bold text-ink">
+              {item.title}
+            </div>
+            <div className="mt-0.5 flex gap-2 font-sans text-[0.72rem] text-ink-3">
+              <span>${priceNum.toFixed(2)}/lb</span>
+              {item.isSubscription && item.subscriptionCostReductionPercent && (
+                <span className="font-bold text-lime">
+                  ({item.subscriptionCostReductionPercent}% off)
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full flex-wrap items-center justify-start gap-x-5 gap-y-2 pl-12 sm:w-auto sm:flex-nowrap sm:justify-end sm:gap-6 sm:pl-0">
+          {/* Cart Qty Controls */}
+          <div className="flex shrink-0 items-center gap-1.5">
+            <Button
+              variant="outline"
+              size="icon-xs"
+              className="rounded-full border-cream-dark bg-white text-ink-2 hover:border-deep-forest hover:bg-cream disabled:opacity-50"
+              onClick={handleDecrement}
+              title="Decrease quantity"
+              disabled={localQtyOz <= 16} // Disable if at 1lb minimum
+            >
+              <Minus className="size-3" />
+            </Button>
+            <span className="min-w-7 text-center font-heading text-[0.82rem] font-bold">
+              {qtyLbs}
+            </span>
+            <Button
+              variant="outline"
+              size="icon-xs"
+              className="rounded-full border-cream-dark bg-white text-ink-2 hover:border-deep-forest hover:bg-cream"
+              onClick={handleIncrement}
+              title="Increase quantity"
+            >
+              <Plus className="size-3" />
+            </Button>
+          </div>
+
+          {/* Pricing & Remove */}
+          <div className="flex shrink-0 flex-col items-start gap-0.5 sm:items-end">
+            <div
+              className={cn(
+                'whitespace-nowrap font-heading text-[0.88rem] font-extrabold text-deep-forest transition-opacity duration-200',
+                isUpdating ? 'opacity-30' : 'opacity-100',
+              )}
+            >
+              ${lineTotal.toFixed(2)}
+            </div>
+            <Button
+              variant="link"
+              size="xs"
+              onClick={() => onRemove(item.reservationId)}
+              disabled={isPending || isUpdating}
+              className="h-auto p-0 font-heading text-[0.65rem] text-ink-3 hover:text-brick hover:no-underline"
+            >
+              Remove
+            </Button>
+          </div>
         </div>
       </div>
 
