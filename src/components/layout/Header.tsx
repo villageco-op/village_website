@@ -13,32 +13,32 @@ import { useAuth } from '@/hooks/useAuth';
 import { cn, getAssetPath } from '@/lib/utils';
 
 const navItems = [
-  { name: 'Home', href: '/' },
-  { name: 'Seller', href: '/seller' },
-  { name: 'Buyer', href: '/buyer' },
+  { name: 'Home', href: '/', unAuthOnly: true },
+  { name: 'Sell', href: '/seller', unAuthOnly: false },
+  { name: 'Produce', href: '/buyer', unAuthOnly: false },
 ];
 
 const getSecondaryNavItems = (path: string) => {
   if (path.startsWith('/buyer')) {
     return [
-      { name: 'Dashboard', href: '/buyer' },
-      { name: 'Browse', href: '/buyer/browse' },
-      { name: 'Subscriptions', href: '/buyer/subscriptions' },
+      { name: 'Dashboard', href: '/buyer', protected: true },
+      { name: 'Browse', href: '/buyer/browse', protected: false },
+      { name: 'Subscriptions', href: '/buyer/subscriptions', protected: true },
     ];
   }
   if (path.startsWith('/seller')) {
     return [
-      { name: 'Dashboard', href: '/seller' },
-      { name: 'Orders', href: '/seller/orders' },
-      { name: 'Subscriptions', href: '/seller/subscriptions' },
+      { name: 'Dashboard', href: '/seller', protected: true },
+      { name: 'Orders', href: '/seller/orders', protected: true },
+      { name: 'Subscriptions', href: '/seller/subscriptions', protected: true },
     ];
   }
   if (path === '/') {
     return [
-      { name: 'What it is', href: '#what-it-is' },
-      { name: 'How it works', href: '#how-it-works' },
-      { name: 'Why it matters', href: '#why-it-matters' },
-      { name: 'Community', href: '#community' },
+      { name: 'What it is', href: '#what-it-is', protected: false },
+      { name: 'How it works', href: '#how-it-works', protected: false },
+      { name: 'Why it matters', href: '#why-it-matters', protected: false },
+      { name: 'Community', href: '#community', protected: false },
     ];
   }
   return [];
@@ -50,8 +50,13 @@ const getSecondaryNavItems = (path: string) => {
  */
 export function Header() {
   const pathname = usePathname();
-  const secondaryNavItems = getSecondaryNavItems(pathname);
-  const { user } = useAuth();
+  const { user, status } = useAuth();
+  const secondaryNavItems = getSecondaryNavItems(pathname).filter(
+    (item) => !item.protected || status == 'authenticated',
+  );
+  const filteredNavItems = navItems.filter(
+    (item) => !item.unAuthOnly || status == 'unauthenticated',
+  );
 
   return (
     <>
@@ -77,7 +82,7 @@ export function Header() {
           </Link>
 
           <nav className="flex items-center gap-1" aria-label="Main Navigation">
-            {navItems.map((item) => {
+            {filteredNavItems.map((item) => {
               const isActive = pathname === item.href;
 
               return (

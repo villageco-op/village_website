@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -40,8 +40,12 @@ interface SellerInfoData {
  */
 export default function OnboardingFlow() {
   const router = useRouter();
-  const [step, setStep] = useState<Step>('basic-info');
-  const [selectedRole, setSelectedRole] = useState<Role>(null);
+  const searchParams = useSearchParams();
+
+  const isUpgradingToSeller = searchParams?.get('upgrade') === 'seller';
+
+  const [step, setStep] = useState<Step>(isUpgradingToSeller ? 'seller-info' : 'basic-info');
+  const [selectedRole, setSelectedRole] = useState<Role>(isUpgradingToSeller ? 'seller' : null);
   const [isUploading, setIsUploading] = useState(false);
 
   const updateProfile = useUpdateCurrentUser();
@@ -165,18 +169,13 @@ export default function OnboardingFlow() {
     }
   };
 
-  const STEPS_ORDER: Step[] = [
-    'basic-info',
-    'role',
-    'seller-info',
-    'notifications',
-    'seller-success',
-  ];
+  const STEPS_ORDER: Step[] = isUpgradingToSeller
+    ? ['seller-info', 'notifications', 'seller-success']
+    : ['basic-info', 'role', 'seller-info', 'notifications', 'seller-success'];
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-off-white py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-xl w-full">
-        {/* Progress indicator */}
         <div className="flex justify-center mb-8 space-x-2">
           {STEPS_ORDER.map((s, i) => {
             if (selectedRole === 'buyer' && (s === 'seller-info' || s === 'seller-success'))

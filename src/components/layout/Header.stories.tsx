@@ -1,5 +1,8 @@
+'use client';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { http, HttpResponse } from 'msw';
 
 import { Header } from './Header';
 
@@ -39,53 +42,106 @@ export default meta;
 type Story = StoryObj<typeof Header>;
 
 /**
- * The default state of the header on the homepage.
+ * Guest user on the homepage.
+ * Shows the "Home" link, the "Get involved" CTA, and anchor landing page links.
  */
-export const Default: Story = {
+export const GuestHome: Story = {
   parameters: {
     nextjs: {
-      navigation: {
-        pathname: '/',
-      },
+      navigation: { pathname: '/' },
+    },
+    msw: {
+      handlers: [
+        http.get('*/api/auth/session', () => {
+          // Auth.js returns an empty object when no session exists
+          return HttpResponse.json({});
+        }),
+      ],
     },
   },
 };
 
 /**
- * Shows the "Producer" tab as the active link.
+ * Guest user on a sub-path.
+ * Unauthenticated nav links remain visible, protected links are filtered out.
  */
-export const ProducerActive: Story = {
+export const GuestBuyerBrowse: Story = {
   parameters: {
     nextjs: {
-      navigation: {
-        pathname: '/producer',
-      },
+      navigation: { pathname: '/buyer/browse' },
+    },
+    msw: {
+      handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({});
+        }),
+      ],
     },
   },
 };
 
 /**
- * Shows the "Buyer" tab as the active link.
+ * Logged-in user on the homepage.
+ * The "Home" link disappears (unAuthOnly: true) and the CTA button is hidden.
  */
-export const BuyerActive: Story = {
+export const AuthenticatedHome: Story = {
   parameters: {
     nextjs: {
-      navigation: {
-        pathname: '/buyer',
-      },
+      navigation: { pathname: '/' },
+    },
+    msw: {
+      handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: { id: '1', name: 'Jane Doe', email: 'jane@example.com' },
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
+      ],
     },
   },
 };
 
 /**
- * Shows the delivery link as active.
+ * Logged-in user on the Buyer Dashboard.
+ * Displays protected links like "Dashboard" and "Subscriptions".
  */
-export const DeliverActive: Story = {
+export const AuthenticatedBuyerDashboard: Story = {
   parameters: {
     nextjs: {
-      navigation: {
-        pathname: '/deliver',
-      },
+      navigation: { pathname: '/buyer' },
+    },
+    msw: {
+      handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: { id: '1', name: 'Jane Doe', email: 'jane@example.com' },
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
+      ],
+    },
+  },
+};
+
+/**
+ * Logged-in user on the Seller Dashboard.
+ * Displays the Seller secondary sub-navigation elements.
+ */
+export const AuthenticatedSellerDashboard: Story = {
+  parameters: {
+    nextjs: {
+      navigation: { pathname: '/seller' },
+    },
+    msw: {
+      handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: { id: '1', name: 'Jane Doe', email: 'jane@example.com' },
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
+      ],
     },
   },
 };

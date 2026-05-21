@@ -154,6 +154,41 @@ export const CompleteBuyerJourney: Story = {
 };
 
 /**
+ * Tests the Upgrade path for an existing buyer who is upgrading to become a seller.
+ * They should skip basic info & role selection completely.
+ */
+export const UpgradeToSellerJourney: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        query: {
+          upgrade: 'seller', // Trigger the bypass logic
+        },
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 1. Assert we start immediately at "Seller Info" (Skipping Basic Info and Role Selection)
+    const aboutInput = await canvas.findByLabelText(/About You/i);
+    await expect(aboutInput).toBeInTheDocument();
+
+    await userEvent.type(aboutInput, 'I decided to start selling my extra tomatoes!');
+    const continueBtn = canvas.getByRole('button', { name: /Continue/i });
+    await userEvent.click(continueBtn);
+
+    // 2. Notifications
+    const skipBtn = await canvas.findByRole('button', { name: /Not right now/i });
+    await userEvent.click(skipBtn);
+
+    // 3. Success Screen
+    const successHeading = await canvas.findByRole('heading', { name: /You're in!/i });
+    await expect(successHeading).toBeInTheDocument();
+  },
+};
+
+/**
  * Tests how the UI handles a server error during the first profile update step.
  */
 export const ProfileUpdateError: Story = {

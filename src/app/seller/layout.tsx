@@ -1,7 +1,5 @@
 'use client';
 
-import { redirect } from 'next/navigation';
-
 import { SellerSidebar } from '@/components/seller/SellerSidebar';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -17,11 +15,7 @@ export default function SellerLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { user, status } = useAuth();
-
-  if (status === 'unauthenticated') {
-    redirect('/login');
-  }
+  const { user } = useAuth();
 
   return (
     <div className="flex min-h-[calc(100vh-64px)] w-full bg-off-white">
