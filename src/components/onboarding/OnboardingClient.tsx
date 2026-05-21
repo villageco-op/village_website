@@ -176,7 +176,6 @@ export default function OnboardingFlow() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-off-white py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-xl w-full">
-        {/* Progress indicator */}
         <div className="flex justify-center mb-8 space-x-2">
           {STEPS_ORDER.map((s, i) => {
             if (selectedRole === 'buyer' && (s === 'seller-info' || s === 'seller-success'))
