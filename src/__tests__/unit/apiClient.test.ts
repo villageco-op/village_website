@@ -2,12 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { apiClient } from '@/lib/api/client';
 
-vi.mock('@/config/env', () => ({
-  env: {
-    NEXT_PUBLIC_API_URL: 'https://api.example.com',
-  },
-}));
-
 describe('apiClient', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn());
@@ -23,7 +17,7 @@ describe('apiClient', () => {
     const result = await apiClient('/test-endpoint', { method: 'GET' });
 
     expect(fetch).toHaveBeenCalledWith(
-      'https://api.example.com/test-endpoint',
+      '/test-endpoint',
       expect.objectContaining({
         method: 'GET',
         credentials: 'include',
