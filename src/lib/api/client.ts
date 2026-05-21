@@ -3,7 +3,9 @@ import { env } from '@/config/env';
 export const apiClient = async <T>(url: string, options: RequestInit): Promise<T> => {
   const baseUrl = env.NEXT_PUBLIC_API_URL;
 
-  const response = await fetch(`${baseUrl}${url}`, {
+  const formattedUrl = url.startsWith('/') ? url : `/${url}`;
+
+  const response = await fetch(`${baseUrl}${formattedUrl}`, {
     ...options,
     credentials: 'include',
     headers: {
