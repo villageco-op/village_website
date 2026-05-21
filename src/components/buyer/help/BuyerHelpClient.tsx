@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/useAuth';
@@ -23,9 +24,14 @@ export default function BuyerHelpClient() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [message, setMessage] = useState('');
 
-  const resolvedName = user?.name ?? '';
-  const resolvedEmail = user?.email ?? '';
-  const resolvedCompany = user?.organization ?? '';
+  const [guestName, setGuestName] = useState('');
+  const [guestEmail, setGuestEmail] = useState('');
+
+  const isAuthenticated = !!user;
+
+  const resolvedName = isAuthenticated ? (user?.name ?? '') : guestName;
+  const resolvedEmail = isAuthenticated ? (user?.email ?? '') : guestEmail;
+  const resolvedCompany = isAuthenticated ? (user?.organization ?? '') : '';
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -102,6 +108,39 @@ export default function BuyerHelpClient() {
 
               <CardContent className="pt-6">
                 <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
+                  {!isAuthenticated && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fadeIn">
+                      <div className="space-y-2">
+                        <Label htmlFor="name" className="text-sm font-semibold text-deep-forest">
+                          Your Name *
+                        </Label>
+                        <Input
+                          id="name"
+                          type="text"
+                          required
+                          value={guestName}
+                          onChange={(e) => setGuestName(e.target.value)}
+                          placeholder="Johnny Appleseed"
+                          className="border-forest-dark/20 focus:ring-2 focus:ring-lime"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="email" className="text-sm font-semibold text-deep-forest">
+                          Email Address *
+                        </Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          required
+                          value={guestEmail}
+                          onChange={(e) => setGuestEmail(e.target.value)}
+                          placeholder="johnny@example.com"
+                          className="border-forest-dark/20 focus:ring-2 focus:ring-lime"
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   <div className="space-y-2">
                     <Label htmlFor="message" className="text-sm font-semibold text-deep-forest">
                       Message *

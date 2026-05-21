@@ -142,3 +142,60 @@ export const ErrorSubmission: Story = {
     ).toBeInTheDocument();
   },
 };
+
+/**
+ * Unauthenticated / Guest view.
+ * Tests that guest inputs (Name & Email) are required and displayed
+ * correctly upon a successful submission.
+ */
+export const UnauthenticatedSubmission: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        // Mock unauthenticated session (no active user)
+        http.get('*/api/auth/session', () =>
+          HttpResponse.json({
+            user: null,
+            expires: '9999-12-31T23:59:59.999Z',
+          }),
+        ),
+        // Mock successful form submission
+        http.post('*/api/contact', async () => {
+          await delay(500);
+          return HttpResponse.json({ status: 200, data: { success: true } });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify guest input fields appear since the user is unauthenticated
+    const nameInput = await canvas.findByLabelText(/Your Name \*/i);
+    const emailInput = canvas.getByLabelText(/Email Address \*/i);
+    const messageInput = canvas.getByLabelText(/Message \*/i);
+
+    // Submit button should be disabled initially
+    const submitButton = canvas.getByRole('button', { name: /Send Message/i });
+    await expect(submitButton).toBeDisabled();
+
+    // Fill out guest information and message
+    await userEvent.type(nameInput, 'Alice Appleseed');
+    await userEvent.type(emailInput, 'alice@example.com');
+    await userEvent.type(
+      messageInput,
+      'Hello! I would like to know how to connect with nearby orchards.',
+    );
+
+    // Submit the form
+    await expect(submitButton).toBeEnabled();
+    await userEvent.click(submitButton);
+
+    // Verify loading and transition states
+    await expect(canvas.getByText(/Sending.../i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/Message Sent!/i)).toBeInTheDocument();
+
+    // Verify that the guest email is dynamically injected into the confirmation text
+    await expect(canvas.getByText(/alice@example.com/i)).toBeInTheDocument();
+  },
+};

@@ -10,25 +10,44 @@ const BUYER_NAV_GROUPS: NavGroup[] = [
   {
     label: 'Ordering',
     items: [
-      { name: 'Order Dashboard', sub: 'Weekly summary', icon: Package, href: '/buyer' },
-      { name: 'Browse Produce', sub: 'Available this week', icon: Store, href: '/buyer/browse' },
+      {
+        name: 'Order Dashboard',
+        sub: 'Weekly summary',
+        icon: Package,
+        href: '/buyer',
+        protected: true,
+      },
+      {
+        name: 'Browse Produce',
+        sub: 'Available this week',
+        icon: Store,
+        href: '/buyer/browse',
+        protected: false,
+      },
       {
         name: 'Subscriptions',
         sub: 'Recurring orders',
         icon: Repeat,
         href: '/buyer/subscriptions',
+        protected: true,
       },
     ],
   },
   {
     label: 'Business',
     items: [
-      { name: 'Billing', sub: 'Invoices & payments', icon: CreditCard, href: '/buyer/billing' },
+      {
+        name: 'Billing',
+        sub: 'Invoices & payments',
+        icon: CreditCard,
+        href: '/buyer/billing',
+        protected: true,
+      },
     ],
   },
   {
     label: 'Support',
-    items: [{ name: 'Get Help', icon: MessageCircle, href: '/buyer/help' }],
+    items: [{ name: 'Get Help', icon: MessageCircle, href: '/buyer/help', protected: false }],
   },
 ];
 

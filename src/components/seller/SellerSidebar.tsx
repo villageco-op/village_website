@@ -1,43 +1,29 @@
 'use client';
 
 import { LayoutDashboard, Sprout, CircleDollarSign, Package, MessageCircle } from 'lucide-react';
-import type { ComponentType } from 'react';
 
-import { Sidebar } from '../layout/Sidebar';
+import { type NavGroup, Sidebar } from '../layout/Sidebar';
 
 import type { User } from '@/lib/api/generated/models/user';
-
-/**
- * A navigation item in the side bar.
- */
-export interface NavItem {
-  name: string;
-  sub: string;
-  icon: ComponentType<{ className?: string; strokeWidth?: number }>;
-  href: string;
-  badge?: number | string;
-  badgeVariant?: 'default' | 'sun';
-}
-
-/**
- * A group of navigation items with a label.
- */
-export interface NavGroup {
-  label: string;
-  items: NavItem[];
-}
 
 const SELLER_NAV_GROUPS: NavGroup[] = [
   {
     label: 'Overview',
     items: [
-      { name: 'Dashboard', sub: 'This week at a glance', icon: LayoutDashboard, href: '/seller' },
+      {
+        name: 'Dashboard',
+        sub: 'This week at a glance',
+        icon: LayoutDashboard,
+        href: '/seller',
+        protected: true,
+      },
       {
         name: 'My Listings',
         sub: 'Active produce for sale',
         icon: Sprout,
         href: '/seller/listings',
         badge: 3,
+        protected: true,
       },
     ],
   },
@@ -49,6 +35,7 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
         sub: 'Revenue & payouts',
         icon: CircleDollarSign,
         href: '/seller/earnings',
+        protected: true,
       },
       {
         name: 'Orders',
@@ -57,12 +44,15 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
         href: '/seller/orders',
         badge: 2,
         badgeVariant: 'sun',
+        protected: true,
       },
     ],
   },
   {
     label: 'Support',
-    items: [{ name: 'Get Help', sub: '', icon: MessageCircle, href: '/seller/help' }],
+    items: [
+      { name: 'Get Help', sub: '', icon: MessageCircle, href: '/seller/help', protected: true },
+    ],
   },
 ];
 

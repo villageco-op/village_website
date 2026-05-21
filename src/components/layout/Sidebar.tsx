@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, type ComponentType } from 'react';
@@ -24,6 +24,7 @@ export interface NavItem {
   href: string;
   badge?: number | string;
   badgeVariant?: 'default' | 'sun';
+  protected?: boolean;
 }
 
 /**
@@ -71,6 +72,13 @@ export function Sidebar({
   const userImage = user?.image;
   const userName = user?.name || fallbackName;
 
+  const visibleNavGroups = navGroups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => !item.protected || (user !== null && user !== undefined)),
+    }))
+    .filter((group) => group.items.length > 0);
+
   return (
     <div
       className={cn(
@@ -86,62 +94,82 @@ export function Sidebar({
         )}
       >
         <div className="flex flex-col">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute -right-3 top-4 h-6 w-6 rounded-full bg-lime text-deep-forest"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-          </Button>
           {/* Profile Section */}
-          <div className="group relative flex items-center gap-2.75 border-b border-white/5 p-[20px_18px_16px] transition-colors hover:bg-white/5">
-            <Link href={settingsHref} className="absolute inset-0 z-0" aria-label="Edit Profile" />
-
-            <div className="z-10 flex flex-1 items-center gap-2.75 pointer-events-none">
-              <Avatar className="h-9 w-9 bg-lime">
-                {userImage && (
-                  <AvatarImage src={userImage} alt={userName} className="object-cover" />
-                )}
-                <AvatarFallback className="bg-transparent font-heading text-xs font-extrabold text-deep-forest">
-                  {getInitials(userName)}
-                </AvatarFallback>
-              </Avatar>
-              {!isCollapsed && (
-                <div className="flex-1 overflow-hidden">
-                  <div className="truncate font-heading text-[0.8rem] font-bold leading-[1.2] text-cream">
-                    {userName}
-                  </div>
-                  <div className="truncate font-sans text-[0.68rem] text-lime-light/70">
-                    {roleLabel}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {user?.id && publicProfileBaseUrl && (
+          {!user ? (
+            <div className="flex border-b border-white/5 p-[20px_14px_16px] justify-center">
               <Button
                 asChild
-                variant="ghost"
-                size="icon"
-                title="View Public Profile"
-                className="relative z-20 h-6 w-6 shrink-0 rounded-md text-lime-light/40 hover:bg-lime/20 hover:text-lime-light"
+                size={isCollapsed ? 'icon' : 'sm'}
+                className={cn(
+                  'bg-lime text-forest-dark font-heading font-bold transition-transform hover:bg-lime-light hover:-translate-y-px',
+                  isCollapsed ? 'h-9 w-9 rounded-full' : 'w-full text-xs',
+                )}
               >
-                <Link
-                  href={`${publicProfileBaseUrl}/${user.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="h-3.5 w-3.5" />
-                  <span className="sr-only">View Public Profile</span>
+                <Link href="/login" className="flex items-center justify-center gap-1.5">
+                  {isCollapsed ? (
+                    <>
+                      <LogIn size={16} />
+                      <span className="sr-only">Log In</span>
+                    </>
+                  ) : (
+                    <>Get involved &rarr;</>
+                  )}
                 </Link>
               </Button>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="group relative flex items-center gap-2.75 border-b border-white/5 p-[20px_18px_16px] transition-colors hover:bg-white/5">
+              <Link
+                href={settingsHref}
+                className="absolute inset-0 z-0"
+                aria-label="Edit Profile"
+              />
+
+              <div className="z-10 flex flex-1 items-center gap-2.75 pointer-events-none">
+                <Avatar className="h-9 w-9 bg-lime">
+                  {userImage && (
+                    <AvatarImage src={userImage} alt={userName} className="object-cover" />
+                  )}
+                  <AvatarFallback className="bg-transparent font-heading text-xs font-extrabold text-deep-forest">
+                    {getInitials(userName)}
+                  </AvatarFallback>
+                </Avatar>
+                {!isCollapsed && (
+                  <div className="flex-1 overflow-hidden">
+                    <div className="truncate font-heading text-[0.8rem] font-bold leading-[1.2] text-cream">
+                      {userName}
+                    </div>
+                    <div className="truncate font-sans text-[0.68rem] text-lime-light/70">
+                      {roleLabel}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {user?.id && publicProfileBaseUrl && (
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="icon"
+                  title="View Public Profile"
+                  className="relative z-20 h-6 w-6 shrink-0 rounded-md text-lime-light/40 hover:bg-lime/20 hover:text-lime-light"
+                >
+                  <Link
+                    href={`${publicProfileBaseUrl}/${user.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    <span className="sr-only">View Public Profile</span>
+                  </Link>
+                </Button>
+              )}
+            </div>
+          )}
 
           {/* Navigation Groups */}
           <div className="flex-1 py-4.5">
-            {navGroups.map((group, groupIndex) => (
+            {visibleNavGroups.map((group, groupIndex) => (
               <div key={group.label} className="pb-1">
                 {!isCollapsed && (
                   <div className="flex items-center gap-1.5 px-4.5 pb-2 font-heading text-[0.58rem] font-extrabold uppercase tracking-[0.14em] text-lime/50 before:block before:h-px before:w-3.5 before:bg-lime/30">
@@ -227,6 +255,26 @@ export function Sidebar({
                 )}
               </div>
             ))}
+          </div>
+
+          <div className="w-full pb-4 pt-2">
+            <Separator className="mx-4.5 mb-4 w-auto bg-white/5" />
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className={cn(
+                'flex w-full items-center gap-2.5 px-4.5 py-2.25 text-cream/75 transition-colors hover:bg-lime/5 hover:text-lime-light',
+                isCollapsed && 'justify-center px-0',
+              )}
+            >
+              <div className="flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-lg bg-white/5">
+                {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+              </div>
+              {!isCollapsed && (
+                <span className="font-heading text-[0.78rem] font-semibold leading-[1.2]">
+                  Collapse Sidebar
+                </span>
+              )}
+            </button>
           </div>
         </div>
       </ScrollArea>
