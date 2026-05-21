@@ -7,7 +7,6 @@ const optionalUrl = z.preprocess(
 
 const schema = z.object({
   NEXT_PUBLIC_API_URL: z.string(),
-  BACKEND_URL: z.string().url(),
   NEXT_PUBLIC_STAGING_SECRET_KEY: z.string().optional(),
   NEXTAUTH_URL: optionalUrl,
 });
