@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { getAssetPath } from '@/lib/utils';
+import { env } from '@/config/env';
 
 /**
  * The client component for the login page.
@@ -123,7 +124,7 @@ export default function LoginClient() {
           {/* Google OAuth Form */}
           <form action="/api/auth/signin/google" method="POST">
             <input type="hidden" name="csrfToken" value={csrfToken} />
-            <input type="hidden" name="callbackUrl" value="/" />
+            <input type="hidden" name="callbackUrl" value={env.NEXT_PUBLIC_APP_URL} />
             <Button
               type="submit"
               variant="outline"
@@ -154,7 +155,7 @@ export default function LoginClient() {
             className="space-y-4"
           >
             <input type="hidden" name="csrfToken" value={csrfToken} />
-            <input type="hidden" name="callbackUrl" value="/" />
+            <input type="hidden" name="callbackUrl" value={env.NEXT_PUBLIC_APP_URL} />
             <input type="hidden" name="redirect" value="false" />
 
             <div className="space-y-2">
