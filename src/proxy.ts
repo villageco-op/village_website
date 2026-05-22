@@ -3,11 +3,11 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { hasSessionToken } from '@/lib/auth';
 
 /**
- * Middleware for handling redirecting for protected pages.
+ * Proxy for handling redirecting for protected pages.
  * @param request - The NextRequest
  * @returns The NextResponse redirect or passthrough
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAuthenticated = hasSessionToken(request);
 
@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
   const isSellerRoute = pathname.startsWith('/seller');
 
   if (isProtectedBuyerRoute && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL('/buyer/browse', request.url));
   }
 
   if (isSellerRoute && !isAuthenticated) {
