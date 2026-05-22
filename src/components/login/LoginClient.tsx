@@ -3,7 +3,7 @@
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -23,6 +23,7 @@ export default function LoginClient() {
   const [csrfToken, setCsrfToken] = useState<string>('');
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const error = searchParams.get('error');
@@ -62,6 +63,16 @@ export default function LoginClient() {
       });
 
       if (!res.ok) throw new Error();
+      const data = await res.json();
+
+      if (data?.url) {
+        if (data.url.startsWith('http') && !data.url.includes(window.location.host)) {
+          window.location.href = data.url;
+        } else {
+          router.push(data.url);
+        }
+      }
+
       return res;
     })();
 
@@ -108,6 +119,7 @@ export default function LoginClient() {
           <form action="/api/auth/signin/google" method="POST">
             <input type="hidden" name="csrfToken" value={csrfToken} />
             <input type="hidden" name="callbackUrl" value="/" />
+            <input type="hidden" name="redirect" value="false" />
             <Button
               type="submit"
               variant="outline"
@@ -139,6 +151,7 @@ export default function LoginClient() {
           >
             <input type="hidden" name="csrfToken" value={csrfToken} />
             <input type="hidden" name="callbackUrl" value="/" />
+            <input type="hidden" name="redirect" value="false" />
 
             <div className="space-y-2">
               <Label htmlFor="email" className="text-ink-2 font-semibold">
