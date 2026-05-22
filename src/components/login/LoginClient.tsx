@@ -124,7 +124,6 @@ export default function LoginClient() {
           <form action="/api/auth/signin/google" method="POST">
             <input type="hidden" name="csrfToken" value={csrfToken} />
             <input type="hidden" name="callbackUrl" value="/" />
-            <input type="hidden" name="redirect" value="false" />
             <Button
               type="submit"
               variant="outline"
