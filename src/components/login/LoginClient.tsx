@@ -12,8 +12,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { getAssetPath } from '@/lib/utils';
 import { env } from '@/config/env';
+import { getAssetPath } from '@/lib/utils';
 
 /**
  * The client component for the login page.
