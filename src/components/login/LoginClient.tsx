@@ -56,10 +56,15 @@ export default function LoginClient() {
 
     const formData = new FormData(e.currentTarget);
 
+    const entries = Object.fromEntries(formData.entries()) as Record<string, string>;
+
     const signInPromise = (async () => {
       const res = await fetch('/api/auth/signin/nodemailer', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(entries),
       });
 
       if (!res.ok) throw new Error();
