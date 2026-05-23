@@ -72,7 +72,7 @@ jobs:
       container:
         image: mcr.microsoft.com/playwright:v1.59.1-noble
       env:
-        NEXT_PUBLIC_API_URL: http://localhost:3000
+        NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
       steps:
         - uses: actions/checkout@v4
         - uses: pnpm/action-setup@v3
