@@ -3,7 +3,7 @@
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { env } from '@/config/env';
 import { getAssetPath } from '@/lib/utils';
 
 /**
@@ -23,6 +24,7 @@ export default function LoginClient() {
   const [csrfToken, setCsrfToken] = useState<string>('');
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const error = searchParams.get('error');
@@ -55,13 +57,28 @@ export default function LoginClient() {
 
     const formData = new FormData(e.currentTarget);
 
+    const entries = Object.fromEntries(formData.entries()) as Record<string, string>;
+
     const signInPromise = (async () => {
       const res = await fetch('/api/auth/signin/nodemailer', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(entries),
       });
 
       if (!res.ok) throw new Error();
+      const data = await res.json();
+
+      if (data?.url) {
+        if (data.url.startsWith('http') && !data.url.includes(window.location.host)) {
+          window.location.href = data.url;
+        } else {
+          router.push(data.url);
+        }
+      }
+
       return res;
     })();
 
@@ -107,7 +124,7 @@ export default function LoginClient() {
           {/* Google OAuth Form */}
           <form action="/api/auth/signin/google" method="POST">
             <input type="hidden" name="csrfToken" value={csrfToken} />
-            <input type="hidden" name="callbackUrl" value="/" />
+            <input type="hidden" name="callbackUrl" value={env.NEXT_PUBLIC_APP_URL} />
             <Button
               type="submit"
               variant="outline"
@@ -138,7 +155,8 @@ export default function LoginClient() {
             className="space-y-4"
           >
             <input type="hidden" name="csrfToken" value={csrfToken} />
-            <input type="hidden" name="callbackUrl" value="/" />
+            <input type="hidden" name="callbackUrl" value={env.NEXT_PUBLIC_APP_URL} />
+            <input type="hidden" name="redirect" value="false" />
 
             <div className="space-y-2">
               <Label htmlFor="email" className="text-ink-2 font-semibold">
