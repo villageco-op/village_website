@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
+import { DeleteListingDialog } from './DeleteListingDialog';
+import { EditListingSkeleton } from './EditListingSkeleton';
+
 import { ListingStatusActions } from '@/components/seller/edit-listing/ListingStatusActions';
 import type { ListingFormData } from '@/components/seller/new-listing/AddNewListingClient';
 import { ListingBasicInfo } from '@/components/seller/new-listing/ListingBasicInfo';
@@ -44,6 +47,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
   const [status, setStatus] = useState<string>('draft');
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     if (produceQuery.isSuccess && produceQuery.data?.data) {
@@ -117,19 +121,16 @@ export default function EditListingClient({ id }: EditListingClientProps) {
     }
   };
 
-  const handleDelete = async () => {
-    if (
-      !window.confirm('Are you sure you want to delete this listing? This action cannot be undone.')
-    )
-      return;
-
+  const handleConfirmDelete = async () => {
     const toastId = toast.loading('Deleting listing...');
     try {
       await deleteProduceMutation.mutateAsync({ id });
       toast.success('Listing deleted successfully', { id: toastId });
+      setIsDeleteDialogOpen(false);
       router.push('/seller/listings');
     } catch (error) {
       toast.error('Failed to delete listing', { id: toastId });
+      setIsDeleteDialogOpen(false);
     }
   };
 
@@ -187,11 +188,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
   };
 
   if ((!produceQuery.isError && !formData) || produceQuery.isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-off-white">
-        <Loader2 className="w-10 h-10 animate-spin text-lime-600" />
-      </div>
-    );
+    return <EditListingSkeleton />;
   }
 
   if (produceQuery.isError || !formData) {
@@ -252,7 +249,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
           <ListingStatusActions
             status={status}
             onToggleStatus={() => void handleToggleStatus()}
-            onDelete={() => void handleDelete()}
+            onDelete={() => setIsDeleteDialogOpen(true)}
             isPending={isPendingMutations || isSubmitting}
           />
 
@@ -281,6 +278,13 @@ export default function EditListingClient({ id }: EditListingClientProps) {
           </div>
         </form>
       </div>
+
+      <DeleteListingDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isPending={deleteProduceMutation.isPending}
+      />
     </div>
   );
 }

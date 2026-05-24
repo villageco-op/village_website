@@ -255,6 +255,96 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getUpdateCurrentUserMutationOptions(options), queryClient);
     }
     /**
+ * Delete user account, anonymizing personal data to preserve historical orders.
+ */
+export type deleteAccountResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type deleteAccountResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type deleteAccountResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type deleteAccountResponseSuccess = (deleteAccountResponse200) & {
+  headers: Headers;
+};
+export type deleteAccountResponseError = (deleteAccountResponse401 | deleteAccountResponse404) & {
+  headers: Headers;
+};
+
+export type deleteAccountResponse = (deleteAccountResponseSuccess | deleteAccountResponseError)
+
+export const getDeleteAccountUrl = () => {
+
+
+  
+
+  return `/api/users/me`
+}
+
+export const deleteAccount = async ( options?: RequestInit): Promise<deleteAccountResponse> => {
+  
+  return apiClient<deleteAccountResponse>(getDeleteAccountUrl(),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+  
+
+
+
+export const getDeleteAccountMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAccount>>, TError,void, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAccount>>, TError,void, TContext> => {
+
+const mutationKey = ['deleteAccount'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAccount>>, void> = () => {
+          
+
+          return  deleteAccount(requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAccountMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAccount>>>
+    
+    export type DeleteAccountMutationError = ErrorResponse
+
+    export const useDeleteAccount = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAccount>>, TError,void, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAccount>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getDeleteAccountMutationOptions(options), queryClient);
+    }
+    /**
  * Store the user's Firebase Cloud Messaging token for push notifications.
  */
 export type registerFcmTokenResponse200 = {
