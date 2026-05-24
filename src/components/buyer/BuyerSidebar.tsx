@@ -66,9 +66,9 @@ export function BuyerSidebar({ user }: BuyerSidebarProps) {
     <Sidebar
       user={user}
       roleLabel="Buyer"
-      fallbackName="County Fresh Mkt"
-      settingsHref="/buyer/settings"
-      publicProfileBaseUrl="/buyer"
+      fallbackName="New Neighbor"
+      settingsHref="/settings"
+      publicProfileBaseUrl={undefined}
       navGroups={BUYER_NAV_GROUPS}
     />
   );

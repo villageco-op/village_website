@@ -74,9 +74,9 @@ export function SellerSidebar({ user }: SellerSidebarProps) {
     <Sidebar
       user={user}
       roleLabel="Producer"
-      fallbackName="Producer"
-      settingsHref="/seller/settings"
-      publicProfileBaseUrl="/producer"
+      fallbackName="New Neighbor"
+      settingsHref="/settings"
+      publicProfileBaseUrl="/public-profile"
       navGroups={SELLER_NAV_GROUPS}
     />
   );
