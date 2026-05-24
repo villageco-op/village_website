@@ -48,5 +48,19 @@ export function useAuth() {
     void fetchSession();
   }, []);
 
-  return { session, user: session?.user, status };
+  const logout = async () => {
+    try {
+      await fetch('/api/auth/signout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Failed to logout', error);
+    }
+  };
+
+  return { session, user: session?.user, status, logout };
 }
