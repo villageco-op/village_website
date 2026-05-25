@@ -50,12 +50,21 @@ export function useAuth() {
 
   const logout = async () => {
     try {
+      const csrfRes = await fetch('/api/auth/csrf');
+      if (!csrfRes.ok) throw new Error('Failed to fetch CSRF token');
+
+      const { csrfToken } = await csrfRes.json();
+
       await fetch('/api/auth/signout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
+        body: new URLSearchParams({
+          csrfToken: csrfToken,
+        }),
       });
+
       window.location.href = '/';
     } catch (error) {
       console.error('Failed to logout', error);
