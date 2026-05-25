@@ -128,6 +128,7 @@ describe('proxy', () => {
         city: 'Madison',
         state: 'WI',
         country: 'US',
+        zip: 53714,
         stripeOnboardingComplete: true,
       } as any);
       const req = new NextRequest('http://localhost/login/success');
@@ -145,6 +146,7 @@ describe('proxy', () => {
         city: 'Madison',
         state: 'WI',
         country: 'US',
+        zip: 53715,
         stripeOnboardingComplete: false,
       } as any);
       const req = new NextRequest('http://localhost/login/success');

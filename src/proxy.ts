@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 import { fetchCurrentUser } from '@/lib/api/user';
 import { hasSessionToken } from '@/lib/auth';
+import { hasCompletedOnboarding } from '@/lib/user-utils';
 
 /**
  * Proxy for handling redirecting for protected pages.
@@ -13,9 +14,11 @@ export async function proxy(request: NextRequest) {
   const isAuthenticated = hasSessionToken(request);
 
   const unprotectedRoutes = ['/buyer/browse', '/buyer/help'];
+  const otherProtectedRoutes = ['/orders'];
   const isProtectedBuyerRoute =
     pathname.startsWith('/buyer') && !unprotectedRoutes.includes(pathname);
   const isSellerRoute = pathname.startsWith('/seller');
+  const isGeneralProtectedRoute = otherProtectedRoutes.includes(pathname);
 
   if (isProtectedBuyerRoute && !isAuthenticated) {
     return NextResponse.redirect(new URL('/buyer/browse', request.url));
@@ -23,6 +26,10 @@ export async function proxy(request: NextRequest) {
 
   if (isSellerRoute && !isAuthenticated) {
     return NextResponse.redirect(new URL('/become-seller', request.url));
+  }
+
+  if (isGeneralProtectedRoute && !isAuthenticated) {
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   if (pathname === '/login' && isAuthenticated) {
@@ -37,11 +44,7 @@ export async function proxy(request: NextRequest) {
     const user = await fetchCurrentUser(request);
 
     if (user) {
-      const hasCompletedOnboarding = Boolean(
-        user.name && user.address && user.city && user.state && user.country,
-      );
-
-      if (!hasCompletedOnboarding) {
+      if (!hasCompletedOnboarding(user)) {
         return NextResponse.redirect(new URL('/onboarding', request.url));
       }
 
@@ -62,5 +65,5 @@ export async function proxy(request: NextRequest) {
  * Middleware config defining the path matching.
  */
 export const config = {
-  matcher: ['/buyer/:path*', '/seller/:path*', '/login/success', '/login'],
+  matcher: ['/buyer/:path*', '/seller/:path*', '/login/success', '/login', '/orders/:path*'],
 };

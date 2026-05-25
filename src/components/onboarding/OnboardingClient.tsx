@@ -79,6 +79,10 @@ export default function OnboardingFlow() {
           image: imageUrl,
           address: data.address,
           city: data.city,
+          state: data.state,
+          zip: data.zip,
+          country: data.country,
+          organization: data.organization ?? undefined,
         },
       });
 

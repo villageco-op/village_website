@@ -69,11 +69,30 @@ export default function LoginClient() {
         body: new URLSearchParams(entries),
       });
 
-      if (!res.ok) throw new Error();
-      const data = await res.json();
+      if (!res.ok) throw new Error('Network response was not ok');
 
-      if (data?.url && new URL(data.url, window.location.href).searchParams.has('error')) {
-        throw new Error('Authentication failed');
+      if (res.url) {
+        const finalUrl = new URL(res.url);
+
+        if (finalUrl.searchParams.has('error')) {
+          throw new Error('Authentication failed');
+        }
+
+        if (finalUrl.pathname.includes('verify-request')) {
+          return res;
+        }
+      }
+
+      try {
+        const textData = await res.text();
+        if (textData) {
+          const data = JSON.parse(textData);
+          if (data?.url && new URL(data.url, window.location.href).searchParams.has('error')) {
+            throw new Error('Authentication failed');
+          }
+        }
+      } catch (e) {
+        console.warn('Response was not JSON, continuing execution path.');
       }
 
       return res;
