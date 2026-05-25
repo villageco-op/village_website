@@ -1,5 +1,6 @@
 'use client';
 
+import { AuthGuard } from '@/components/auth-guard';
 import { SellerSidebar } from '@/components/seller/SellerSidebar';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -15,12 +16,14 @@ export default function SellerLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { user } = useAuth();
+  const { user, status } = useAuth();
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)] w-full bg-off-white">
-      <SellerSidebar user={user} />
-      <main className="flex-1 px-9 py-8">{children}</main>
-    </div>
+    <AuthGuard user={user} status={status}>
+      <div className="flex min-h-[calc(100vh-64px)] w-full bg-off-white">
+        <SellerSidebar user={user} />
+        <main className="flex-1 px-9 py-8">{children}</main>
+      </div>
+    </AuthGuard>
   );
 }

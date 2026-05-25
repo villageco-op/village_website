@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { useAuth } from './useAuth';
 
 import { useGetCart } from '@/lib/api/generated/cart/cart';
+import { hasCompletedOnboarding } from '@/lib/user-utils';
 
 interface CartContextValue {
   isOpen: boolean;
@@ -59,23 +60,21 @@ export function useCartUI() {
  * @returns The result of the useGetCart query.
  */
 export function useCartData() {
-  const { status } = useAuth();
+  const { status, user } = useAuth();
   const { showErrorToast } = useCartUI();
+  const enabled = status === 'authenticated' && hasCompletedOnboarding(user);
 
   const query = useGetCart({
     query: {
-      enabled: status === 'authenticated',
+      enabled,
     },
   });
 
   useEffect(() => {
-    if (
-      status === 'authenticated' &&
-      (query.isError || (query.data && query.data.status !== 200))
-    ) {
+    if (enabled && (query.isError || (query.data && query.data.status !== 200))) {
       showErrorToast();
     }
-  }, [query.isError, query.data, query.data?.status, showErrorToast, status]);
+  }, [query.isError, query.data, query.data?.status, showErrorToast, enabled]);
 
   return query;
 }
