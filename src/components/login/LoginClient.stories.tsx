@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, userEvent, within } from '@storybook/test';
 import { http, HttpResponse } from 'msw';
 import { Suspense } from 'react';
 
@@ -33,7 +34,7 @@ const meta: Meta<typeof LoginClient> = {
         <Suspense fallback={<div>Loading...</div>}>
           <Story />
         </Suspense>
-        <Toaster></Toaster>
+        <Toaster />
       </>
     ),
   ],
@@ -105,5 +106,41 @@ export const ApiError: Story = {
         }),
       ],
     },
+  },
+};
+
+/**
+ * "Check your email" success state triggered after a valid magic link submission.
+ */
+export const EmailSentState: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: '/login',
+      },
+    },
+    msw: {
+      handlers: [
+        // Intercept the magic link POST request and return a success response
+        http.post('/api/auth/signin/nodemailer', () => {
+          return HttpResponse.json({ url: 'http://localhost:3000/api/auth/verify-request' });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 1. Find the email input and type an address
+    const emailInput = canvas.getByLabelText(/Email Address/i);
+    await userEvent.type(emailInput, 'farmer@valley.com', { delay: 50 });
+
+    // 2. Find the submit button and click it
+    const submitBtn = canvas.getByRole('button', { name: /Email me a login link/i });
+    await userEvent.click(submitBtn);
+
+    // 3. Wait for the state to flip to the success view and assert it is visible
+    const successHeading = await canvas.findByText('Check your email');
+    await expect(successHeading).toBeInTheDocument();
   },
 };
