@@ -19,8 +19,7 @@ const MOCK_USER: User = {
   name: 'Jane Doe',
   email: 'jane@example.com',
   emailVerified: null,
-  image:
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80',
+  image: null,
   organization: 'Green Earth Collective',
   aboutMe: 'Passionate urban farmer growing organic microgreens.',
   specialties: ['Heirloom Tomatoes', 'Honey', 'Sourdough'],
@@ -43,6 +42,10 @@ const handlers = [
   // Mock image upload endpoint
   http.post('*/api/upload/image', () => {
     return HttpResponse.json({ url: 'https://mocked-url.com/uploaded.png' }, { status: 200 });
+  }),
+  // Mock geocode address endpoint
+  http.post('*/api/location/geocode', () => {
+    return HttpResponse.json({ data: { lat: 0.0, lng: 0.0 }, status: 200 });
   }),
   // Mock profile updates endpoint
   http.patch('*/api/users/me', async ({ request }) => {

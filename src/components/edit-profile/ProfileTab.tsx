@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import type { User } from '@/lib/api/generated/models/user';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 import { useUpdateCurrentUser } from '@/lib/api/generated/users/users';
@@ -59,6 +60,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
 
   const updateProfile = useUpdateCurrentUser();
   const uploadImageMutation = useUploadImage();
+  const geocodeAddressMutation = useGeocodeAddress();
 
   // Populate data on mount
   useEffect(() => {
@@ -109,6 +111,21 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
         }
       }
 
+      const geocodeRes = await geocodeAddressMutation.mutateAsync({
+        data: {
+          address,
+          city,
+          state,
+          zip,
+        },
+      });
+
+      if (geocodeRes.status !== 200) {
+        throw new Error(geocodeRes.data.error || 'Failed to geocode address');
+      }
+
+      const { lat, lng } = geocodeRes.data;
+
       const specialtiesArray = isSeller
         ? specialties
             .split(',')
@@ -126,6 +143,8 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
           state,
           country: 'United States',
           zip,
+          lat,
+          lng,
           ...(isSeller && {
             aboutMe,
             specialties: specialtiesArray,
@@ -175,6 +194,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
                 fill
                 className="object-cover"
                 sizes="96px"
+                priority
               />
             ) : (
               <Camera className="w-8 h-8 text-click-green group-hover:scale-110 transition-transform" />
