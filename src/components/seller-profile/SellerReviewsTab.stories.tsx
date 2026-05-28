@@ -95,10 +95,8 @@ export const Default: Story = {
       handlers: [
         http.get(`*/api/users/${SELLER_ID}/reviews`, () => {
           return HttpResponse.json({
-            data: {
-              reviews: ALL_REVIEWS.slice(0, 10),
-              pagination: { total: 25, page: 1, limit: 10, totalPages: 3 },
-            },
+            reviews: ALL_REVIEWS.slice(0, 10),
+            pagination: { total: 25, page: 1, limit: 10, totalPages: 3 },
           });
         }),
       ],
@@ -128,10 +126,8 @@ export const Paginated: Story = {
           const items = ALL_REVIEWS.slice(start, start + limit);
 
           return HttpResponse.json({
-            data: {
-              reviews: items,
-              pagination: { total: ALL_REVIEWS.length, page, limit, totalPages: 3 },
-            },
+            reviews: items,
+            pagination: { total: ALL_REVIEWS.length, page, limit, totalPages: 3 },
           });
         }),
       ],
@@ -188,10 +184,8 @@ export const NoReviews: Story = {
       handlers: [
         http.get(`*/api/users/${SELLER_ID}/reviews`, () => {
           return HttpResponse.json({
-            data: {
-              reviews: [],
-              pagination: { total: 0, page: 1, limit: 10, totalPages: 0 },
-            },
+            reviews: [],
+            pagination: { total: 0, page: 1, limit: 10, totalPages: 0 },
           });
         }),
       ],

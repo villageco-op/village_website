@@ -23,35 +23,29 @@ const meta: Meta<typeof BrowseProduceClient> = {
       handlers: [
         http.get('*/api/produce/list', () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: [
-                {
-                  id: '1',
-                  name: 'List View Item',
-                  sellerName: 'Farmer Joe',
-                  price: '0.10',
-                  amount: '100',
-                },
-              ],
-              meta: { total: 1, page: 1, limit: 20, totalPages: 1 },
-            },
+            data: [
+              {
+                id: '1',
+                name: 'List View Item',
+                sellerName: 'Farmer Joe',
+                price: '0.10',
+                amount: '100',
+              },
+            ],
+            meta: { total: 1, page: 1, limit: 20, totalPages: 1 },
           });
         }),
         http.get('*/api/produce/map', () => {
-          return HttpResponse.json({
-            status: 200,
-            data: [
-              {
-                sellerId: 'seller-1',
-                lat: 41.602,
-                lng: -87.3371,
-                produce: [
-                  { id: 'p1', name: 'Map View Item', price: '0.15', availableInventory: '160' },
-                ],
-              },
-            ],
-          });
+          return HttpResponse.json([
+            {
+              sellerId: 'seller-1',
+              lat: 41.602,
+              lng: -87.3371,
+              produce: [
+                { id: 'p1', name: 'Map View Item', price: '0.15', availableInventory: '160' },
+              ],
+            },
+          ]);
         }),
       ],
     },

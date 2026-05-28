@@ -17,39 +17,36 @@ const mockedQueryClient = new QueryClient({
 });
 
 const MOCK_SELLER_SUBSCRIPTIONS = {
-  status: 200,
-  data: {
-    data: [
-      {
-        id: 'sub-seller-1',
-        quantityOz: '16',
-        status: SubscriptionStatus.active,
-        fulfillmentType: 'delivery',
-        nextDeliveryDate: '2026-05-20T10:00:00Z',
-        product: { id: 'prod_honeycrisp', title: 'Organic Honeycrisp Apples' },
-        buyer: { id: 'user_john', name: 'John Doe' },
-      },
-      {
-        id: 'sub-seller-2',
-        quantityOz: '32',
-        status: SubscriptionStatus.active,
-        fulfillmentType: 'pickup',
-        nextDeliveryDate: '2026-05-21T09:00:00Z',
-        product: { id: 'prod_goat_milk', title: 'Raw Goat Milk' },
-        buyer: { id: 'user_jane', name: 'Jane Smith' },
-      },
-      {
-        id: 'sub-seller-3',
-        quantityOz: '4',
-        status: SubscriptionStatus.paused,
-        fulfillmentType: 'delivery',
-        nextDeliveryDate: null,
-        product: { id: 'prod_saffron', title: 'Saffron Threads' },
-        buyer: { id: 'user_robert', name: 'Robert Miller' },
-      },
-    ],
-    meta: { total: 3, page: 1, limit: 12, totalPages: 1, activeCount: 2 },
-  },
+  data: [
+    {
+      id: 'sub-seller-1',
+      quantityOz: '16',
+      status: SubscriptionStatus.active,
+      fulfillmentType: 'delivery',
+      nextDeliveryDate: '2026-05-20T10:00:00Z',
+      product: { id: 'prod_honeycrisp', title: 'Organic Honeycrisp Apples' },
+      buyer: { id: 'user_john', name: 'John Doe' },
+    },
+    {
+      id: 'sub-seller-2',
+      quantityOz: '32',
+      status: SubscriptionStatus.active,
+      fulfillmentType: 'pickup',
+      nextDeliveryDate: '2026-05-21T09:00:00Z',
+      product: { id: 'prod_goat_milk', title: 'Raw Goat Milk' },
+      buyer: { id: 'user_jane', name: 'Jane Smith' },
+    },
+    {
+      id: 'sub-seller-3',
+      quantityOz: '4',
+      status: SubscriptionStatus.paused,
+      fulfillmentType: 'delivery',
+      nextDeliveryDate: null,
+      product: { id: 'prod_saffron', title: 'Saffron Threads' },
+      buyer: { id: 'user_robert', name: 'Robert Miller' },
+    },
+  ],
+  meta: { total: 3, page: 1, limit: 12, totalPages: 1, activeCount: 2 },
 };
 
 const generateMockSubscriptions = (count: number) => {
@@ -147,16 +144,13 @@ export const Paginated: Story = {
           const items = PAGINATED_DATA.slice(start, end);
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: items,
-              meta: {
-                total: PAGINATED_DATA.length,
-                page,
-                limit,
-                totalPages: Math.ceil(PAGINATED_DATA.length / limit),
-                activeCount: 12,
-              },
+            data: items,
+            meta: {
+              total: PAGINATED_DATA.length,
+              page,
+              limit,
+              totalPages: Math.ceil(PAGINATED_DATA.length / limit),
+              activeCount: 12,
             },
           });
         }),
@@ -196,8 +190,8 @@ export const EmptyState: Story = {
       handlers: [
         http.get('*/api/subscriptions', () => {
           return HttpResponse.json({
-            status: 200,
-            data: { data: [], meta: { total: 0, page: 1, limit: 12, totalPages: 0 } },
+            data: [],
+            meta: { total: 0, page: 1, limit: 12, totalPages: 0 },
           });
         }),
       ],

@@ -35,51 +35,45 @@ const MOCK_PROFILE: PublicUserProfile = {
 
 const handlers = [
   http.get(`*/api/users/${SELLER_ID}`, () => {
-    return HttpResponse.json({ data: MOCK_PROFILE, status: 200 });
+    return HttpResponse.json(MOCK_PROFILE);
   }),
   http.get('*/api/produce/list', () => {
     return HttpResponse.json({
-      status: 200,
-      data: {
-        data: [
-          {
-            id: 'p1',
-            thumbnail: null,
-            name: 'Baby Spinach',
-            sellerName: 'Oak Creek Organics',
-            sellerId: SELLER_ID,
-            price: '$3.50/lb',
-            amount: '20 lbs',
-            availableBy: new Date().toISOString(),
-            distance: 5,
-            isSubscribable: true,
-            description: 'Tender baby spinach leaves.',
-          },
-          {
-            id: 'p2',
-            thumbnail: null,
-            name: 'Cherry Tomatoes',
-            sellerName: 'Oak Creek Organics',
-            sellerId: SELLER_ID,
-            price: '$4.10/lb',
-            amount: '30 lbs',
-            availableBy: new Date().toISOString(),
-            distance: 5,
-            isSubscribable: false,
-            description: 'Sweet and juicy cherry tomatoes.',
-          },
-        ],
-        meta: { total: 2, page: 1, limit: 12, totalPages: 1 },
-      },
+      data: [
+        {
+          id: 'p1',
+          thumbnail: null,
+          name: 'Baby Spinach',
+          sellerName: 'Oak Creek Organics',
+          sellerId: SELLER_ID,
+          price: '$3.50/lb',
+          amount: '20 lbs',
+          availableBy: new Date().toISOString(),
+          distance: 5,
+          isSubscribable: true,
+          description: 'Tender baby spinach leaves.',
+        },
+        {
+          id: 'p2',
+          thumbnail: null,
+          name: 'Cherry Tomatoes',
+          sellerName: 'Oak Creek Organics',
+          sellerId: SELLER_ID,
+          price: '$4.10/lb',
+          amount: '30 lbs',
+          availableBy: new Date().toISOString(),
+          distance: 5,
+          isSubscribable: false,
+          description: 'Sweet and juicy cherry tomatoes.',
+        },
+      ],
+      meta: { total: 2, page: 1, limit: 12, totalPages: 1 },
     });
   }),
   http.get(`*/api/users/${SELLER_ID}/reviews`, () => {
     return HttpResponse.json({
-      status: 200,
-      data: {
-        reviews: [],
-        pagination: { total: 0, page: 1, limit: 10, totalPages: 0 },
-      },
+      reviews: [],
+      meta: { total: 0, page: 1, limit: 10, totalPages: 0 },
     });
   }),
 ];

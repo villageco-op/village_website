@@ -97,13 +97,13 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get('*/api/produce/list', () => {
-          return HttpResponse.json({
-            status: 200,
-            data: {
+          return HttpResponse.json(
+            {
               data: PAGINATED_DATA.slice(0, 20),
               meta: { total: 45, page: 1, limit: 20, totalPages: 3 },
             },
-          });
+            { status: 200 },
+          );
         }),
         AUTH_HANDLER,
       ],
@@ -130,13 +130,13 @@ export const Searching: Story = {
             ? PAGINATED_DATA.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
             : PAGINATED_DATA;
 
-          return HttpResponse.json({
-            status: 200,
-            data: {
+          return HttpResponse.json(
+            {
               data: filtered.slice(0, 5),
               meta: { total: filtered.length, page: 1, limit: 20, totalPages: 1 },
             },
-          });
+            { status: 200 },
+          );
         }),
         AUTH_HANDLER,
       ],
@@ -183,10 +183,10 @@ export const EmptyState: Story = {
     msw: {
       handlers: [
         http.get('*/api/produce/list', () => {
-          return HttpResponse.json({
-            status: 200,
-            data: { data: [], meta: { total: 0, page: 1, limit: 20, totalPages: 0 } },
-          });
+          return HttpResponse.json(
+            { data: [], meta: { total: 0, page: 1, limit: 20, totalPages: 0 } },
+            { status: 200 },
+          );
         }),
         AUTH_HANDLER,
       ],

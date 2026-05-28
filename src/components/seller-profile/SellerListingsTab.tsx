@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 import { Eyebrow } from '../ui/eyebrow';
 import { ProduceIcon } from '../ui/produce-icon';
+import { PageErrorState } from '../ui/state-displays';
 
 import { SellerListingsTabSkeleton } from './SellerProfileSkeletons';
 
@@ -52,7 +53,12 @@ export default function SellerListingsTab({ sellerId, onOrderItem }: SellerListi
     return () => clearTimeout(timer);
   }, [searchInput, setPage]);
 
-  const { data: response, isLoading } = useGetProduceList({
+  const {
+    data: response,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetProduceList({
     sellerId: sellerId,
     page,
     limit,
@@ -62,6 +68,10 @@ export default function SellerListingsTab({ sellerId, onOrderItem }: SellerListi
 
   if (isLoading) {
     return <SellerListingsTabSkeleton />;
+  }
+
+  if (response?.status !== 200 || isError) {
+    return <PageErrorState title="Failed to load listings." onRetry={() => void refetch()} />;
   }
 
   const listings = response?.data?.data || [];

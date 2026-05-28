@@ -113,7 +113,7 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get(`*/api/orders/${MOCK_ORDER_ID}`, () => {
-          return HttpResponse.json({ status: 200, data: MOCK_ORDER_DATA });
+          return HttpResponse.json(MOCK_ORDER_DATA);
         }),
       ],
     },
@@ -144,7 +144,7 @@ export const NotFound: Story = {
     msw: {
       handlers: [
         http.get(`*/api/orders/${MOCK_ORDER_ID}`, () => {
-          return HttpResponse.json({ status: 404 }, { status: 404 });
+          return HttpResponse.json(null, { status: 404 });
         }),
       ],
     },
@@ -160,8 +160,8 @@ export const CompletedOrder: Story = {
       handlers: [
         http.get(`*/api/orders/${MOCK_ORDER_ID}`, () => {
           return HttpResponse.json({
-            status: 200,
-            data: { ...MOCK_ORDER_DATA, status: 'completed' },
+            ...MOCK_ORDER_DATA,
+            status: 'completed',
           });
         }),
       ],
@@ -177,11 +177,11 @@ export const CancelFlow: Story = {
     msw: {
       handlers: [
         http.get(`*/api/orders/${MOCK_ORDER_ID}`, () => {
-          return HttpResponse.json({ status: 200, data: MOCK_ORDER_DATA });
+          return HttpResponse.json(MOCK_ORDER_DATA);
         }),
         http.put(`*/api/orders/${MOCK_ORDER_ID}/cancel`, async () => {
           await delay(800);
-          return HttpResponse.json({ status: 200 });
+          return HttpResponse.json(null, { status: 200 });
         }),
       ],
     },
@@ -215,7 +215,7 @@ export const RescheduleFlow: Story = {
         ...Default.parameters!.msw.handlers,
         http.put(`*/api/orders/${MOCK_ORDER_ID}/schedule`, async () => {
           await delay(800);
-          return HttpResponse.json({ status: 200 });
+          return HttpResponse.json(null, { status: 200 });
         }),
       ],
     },
