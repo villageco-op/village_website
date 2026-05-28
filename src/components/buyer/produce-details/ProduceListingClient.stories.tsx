@@ -78,11 +78,11 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get(`*/api/produce/${MOCK_ID}`, () => {
-          return HttpResponse.json({ data: MOCK_PRODUCE });
+          return HttpResponse.json(MOCK_PRODUCE);
         }),
         // Mocking reviews call since ProduceListingClient renders ProduceReviews
         http.get(`*/api/users/${MOCK_PRODUCE.seller.id}/reviews`, () => {
-          return HttpResponse.json({ data: { reviews: [], pagination: {} } });
+          return HttpResponse.json({ reviews: [], meta: {} });
         }),
       ],
     },

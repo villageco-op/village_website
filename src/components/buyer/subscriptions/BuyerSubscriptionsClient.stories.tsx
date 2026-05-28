@@ -31,11 +31,8 @@ const generateMockSubscriptions = (count: number) => {
 const PAGINATED_DATA = generateMockSubscriptions(25);
 
 const MOCK_SUBSCRIPTIONS = {
-  status: 200,
-  data: {
-    data: PAGINATED_DATA.slice(0, 3),
-    meta: { total: 3, page: 1, limit: 12, totalPages: 1, activeCount: 2 },
-  },
+  data: PAGINATED_DATA.slice(0, 3),
+  meta: { total: 3, page: 1, limit: 12, totalPages: 1, activeCount: 2 },
 };
 
 const meta: Meta<typeof BuyerSubscriptionsClient> = {
@@ -108,16 +105,13 @@ export const Paginated: Story = {
           const items = PAGINATED_DATA.slice(start, end);
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: items,
-              meta: {
-                total: PAGINATED_DATA.length,
-                page,
-                limit,
-                totalPages: Math.ceil(PAGINATED_DATA.length / limit),
-                activeCount: 19,
-              },
+            data: items,
+            meta: {
+              total: PAGINATED_DATA.length,
+              page,
+              limit,
+              totalPages: Math.ceil(PAGINATED_DATA.length / limit),
+              activeCount: 19,
             },
           });
         }),
@@ -160,11 +154,8 @@ export const EmptyState: Story = {
       handlers: [
         http.get('*/api/subscriptions', () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: [],
-              meta: { total: 0, page: 1, limit: 12, totalPages: 0, activeCount: 0 },
-            },
+            data: [],
+            meta: { total: 0, page: 1, limit: 12, totalPages: 0, activeCount: 0 },
           });
         }),
       ],

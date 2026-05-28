@@ -16,105 +16,101 @@ const mockedQueryClient = new QueryClient({
 });
 
 const MOCK_FULL_CART = {
-  status: 200,
-  data: {
-    data: [
-      {
-        groupId: 'group_1',
-        isSubscription: false,
-        frequencyDays: 0,
-        fulfillmentType: 'pickup',
-        availableBy: new Date().toISOString(),
-        deliveryFee: '0.00',
-        seller: { id: 'seller_1', name: 'Green Valley Farms' },
-        items: [
-          {
-            reservationId: 'res_101',
-            productId: 'prod_1',
-            title: 'Organic Honeycrisp Apples',
-            pricePerOz: '0.25', // $4.00 / lb
-            quantityOz: '32', // 2 lbs
-            maxOrderQuantityOz: '160',
-            isSubscribable: true,
-            isSubscription: false,
-            subscriptionFrequencyDays: null,
-            subscriptionCostReductionPercent: null,
-            expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
-            images: ['https://placehold.co/100x100/4CAF50/FFF?text=Apples'],
-          },
-          {
-            reservationId: 'res_103',
-            productId: 'prod_3',
-            title: 'Heirloom Carrots',
-            pricePerOz: '0.15', // $2.40 / lb
-            quantityOz: '16', // 1 lb
-            maxOrderQuantityOz: '80',
-            isSubscribable: true,
-            isSubscription: false,
-            subscriptionFrequencyDays: null,
-            subscriptionCostReductionPercent: null,
-            expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
-            images: [],
-          },
-        ],
-      },
-      {
-        groupId: 'group_2',
-        isSubscription: true,
-        frequencyDays: 8,
-        fulfillmentType: 'delivery',
-        availableBy: new Date().toISOString(),
-        deliveryFee: '5.00',
-        seller: { id: 'seller_1', name: 'Green Valley Farms' },
-        items: [
-          {
-            reservationId: 'res_102',
-            productId: 'prod_2',
-            title: 'Weekly Fresh Strawberries',
-            pricePerOz: '0.50', // $8.00 / lb
-            quantityOz: '16', // 1 lb
-            maxOrderQuantityOz: '80',
-            isSubscribable: true,
-            isSubscription: true,
-            subscriptionFrequencyDays: 7,
-            subscriptionCostReductionPercent: 10,
-            expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
-            images: [],
-          },
-        ],
-      },
-      {
-        groupId: 'group_3',
-        isSubscription: false,
-        frequencyDays: 0,
-        fulfillmentType: 'pickup',
-        availableBy: new Date().toISOString(),
-        deliveryFee: '4.50',
-        seller: { id: 'seller_2', name: 'Sunny Side Dairy' },
-        items: [
-          {
-            reservationId: 'res_201',
-            productId: 'prod_4',
-            title: 'Raw Whole Milk (Half Gallon)',
-            pricePerOz: '0.12',
-            quantityOz: '64',
-            maxOrderQuantityOz: '128',
-            isSubscribable: false,
-            isSubscription: false,
-            subscriptionFrequencyDays: null,
-            subscriptionCostReductionPercent: null,
-            expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
-            images: [],
-          },
-        ],
-      },
-    ],
-  },
+  data: [
+    {
+      groupId: 'group_1',
+      isSubscription: false,
+      frequencyDays: 0,
+      fulfillmentType: 'pickup',
+      availableBy: new Date().toISOString(),
+      deliveryFee: '0.00',
+      seller: { id: 'seller_1', name: 'Green Valley Farms' },
+      items: [
+        {
+          reservationId: 'res_101',
+          productId: 'prod_1',
+          title: 'Organic Honeycrisp Apples',
+          pricePerOz: '0.25', // $4.00 / lb
+          quantityOz: '32', // 2 lbs
+          maxOrderQuantityOz: '160',
+          isSubscribable: true,
+          isSubscription: false,
+          subscriptionFrequencyDays: null,
+          subscriptionCostReductionPercent: null,
+          expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
+          images: ['https://placehold.co/100x100/4CAF50/FFF?text=Apples'],
+        },
+        {
+          reservationId: 'res_103',
+          productId: 'prod_3',
+          title: 'Heirloom Carrots',
+          pricePerOz: '0.15', // $2.40 / lb
+          quantityOz: '16', // 1 lb
+          maxOrderQuantityOz: '80',
+          isSubscribable: true,
+          isSubscription: false,
+          subscriptionFrequencyDays: null,
+          subscriptionCostReductionPercent: null,
+          expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
+          images: [],
+        },
+      ],
+    },
+    {
+      groupId: 'group_2',
+      isSubscription: true,
+      frequencyDays: 8,
+      fulfillmentType: 'delivery',
+      availableBy: new Date().toISOString(),
+      deliveryFee: '5.00',
+      seller: { id: 'seller_1', name: 'Green Valley Farms' },
+      items: [
+        {
+          reservationId: 'res_102',
+          productId: 'prod_2',
+          title: 'Weekly Fresh Strawberries',
+          pricePerOz: '0.50', // $8.00 / lb
+          quantityOz: '16', // 1 lb
+          maxOrderQuantityOz: '80',
+          isSubscribable: true,
+          isSubscription: true,
+          subscriptionFrequencyDays: 7,
+          subscriptionCostReductionPercent: 10,
+          expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
+          images: [],
+        },
+      ],
+    },
+    {
+      groupId: 'group_3',
+      isSubscription: false,
+      frequencyDays: 0,
+      fulfillmentType: 'pickup',
+      availableBy: new Date().toISOString(),
+      deliveryFee: '4.50',
+      seller: { id: 'seller_2', name: 'Sunny Side Dairy' },
+      items: [
+        {
+          reservationId: 'res_201',
+          productId: 'prod_4',
+          title: 'Raw Whole Milk (Half Gallon)',
+          pricePerOz: '0.12',
+          quantityOz: '64',
+          maxOrderQuantityOz: '128',
+          isSubscribable: false,
+          isSubscription: false,
+          subscriptionFrequencyDays: null,
+          subscriptionCostReductionPercent: null,
+          expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
+          images: [],
+        },
+      ],
+    },
+  ],
 };
 
 const MOCK_EMPTY_CART = {
-  status: 200,
-  data: { data: [] },
+  data: [],
 };
 
 const AutoOpenCartWrapper = ({ children }: { children: React.ReactNode }) => {

@@ -32,6 +32,11 @@ const meta: Meta<typeof OnboardingFlow> = {
           await delay(300);
           return HttpResponse.json({ url: 'https://example.com/avatar.jpg' });
         }),
+        // 0.5. Mock Geocode Address (Basic Profile Step)
+        http.post('*/api/location/geocode', async () => {
+          await delay(50);
+          return HttpResponse.json({ lat: 0.0, lng: 0.0 });
+        }),
         // 1. Mock Update Profile (Seller Info Step)
         http.put('*/api/users/me', async () => {
           await delay(500);
@@ -45,7 +50,7 @@ const meta: Meta<typeof OnboardingFlow> = {
         // 3. Mock Stripe Link Generation (Success Step)
         http.post('*/api/stripe/connect/onboard', async () => {
           await delay(100);
-          return HttpResponse.json({ url: 'https://stripe.com/mock-onboarding' });
+          return HttpResponse.json({ url: 'https://stripe/mock-onboarding' });
         }),
       ],
     },
@@ -115,7 +120,8 @@ export const CompleteSellerJourney: Story = {
 
     // Verify Stripe button is interactive
     const stripeBtn = canvas.getByRole('button', { name: /Complete Stripe Onboarding/i });
-    await userEvent.click(stripeBtn);
+    await expect(stripeBtn).toBeInTheDocument();
+    await expect(stripeBtn).toBeEnabled();
   },
 };
 

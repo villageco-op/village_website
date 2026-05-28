@@ -127,10 +127,7 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get('*/api/produce/map', () => {
-          return HttpResponse.json({
-            status: 200,
-            data: MOCK_MAP_DATA,
-          });
+          return HttpResponse.json(MOCK_MAP_DATA, { status: 200 });
         }),
         AUTH_HANDLER,
       ],
@@ -169,10 +166,7 @@ export const NoResults: Story = {
     msw: {
       handlers: [
         http.get('*/api/produce/map', () => {
-          return HttpResponse.json({
-            status: 200,
-            data: [],
-          });
+          return HttpResponse.json([], { status: 200 });
         }),
         AUTH_HANDLER,
       ],

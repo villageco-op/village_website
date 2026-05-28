@@ -28,6 +28,8 @@ export * from './entityId';
 export * from './entityParam';
 export * from './errorResponse';
 export * from './fulfillmentType';
+export * from './geocodeCoordinates';
+export * from './geocodePayload';
 export * from './getAvailabilityParams';
 export * from './getBuyerGrowersParams';
 export * from './getCartResponse';

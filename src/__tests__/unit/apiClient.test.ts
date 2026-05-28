@@ -26,7 +26,11 @@ describe('apiClient', () => {
         }),
       }),
     );
-    expect(result).toEqual(mockData);
+    expect(result).toMatchObject({
+      data: mockData,
+      headers: undefined,
+      status: undefined,
+    });
   });
 
   it('should throw an error when the response is not ok', async () => {

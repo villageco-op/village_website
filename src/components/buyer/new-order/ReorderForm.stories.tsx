@@ -51,40 +51,37 @@ export default meta;
 type Story = StoryObj<typeof ReorderForm>;
 
 const MOCK_ORDER_DATA = {
-  status: 200,
-  data: {
-    id: MOCK_ORDER_ID,
-    items: [
-      {
-        id: 'item_1',
-        productId: 'prod_apple',
-        productName: 'Honeycrisp Apples',
-        quantityOz: '32',
-        maxOrderQuantityOz: '64',
-        isProduceSubscribable: true,
-        produceStatus: 'active',
-        produceTotalOzInventory: '100',
-        produceAvailableBy: PAST_DATE,
-        produceSeasonStart: IN_SEASON_START,
-        produceSeasonEnd: IN_SEASON_END,
-        pricePerOz: '0.30',
-      },
-      {
-        id: 'item_2',
-        productId: 'prod_kale',
-        productName: 'Organic Kale',
-        quantityOz: '16',
-        maxOrderQuantityOz: null,
-        isProduceSubscribable: true,
-        produceStatus: 'active',
-        produceTotalOzInventory: '32',
-        produceAvailableBy: PAST_DATE,
-        produceSeasonStart: IN_SEASON_START,
-        produceSeasonEnd: IN_SEASON_END,
-        pricePerOz: '0.65',
-      },
-    ],
-  },
+  id: MOCK_ORDER_ID,
+  items: [
+    {
+      id: 'item_1',
+      productId: 'prod_apple',
+      productName: 'Honeycrisp Apples',
+      quantityOz: '32',
+      maxOrderQuantityOz: '64',
+      isProduceSubscribable: true,
+      produceStatus: 'active',
+      produceTotalOzInventory: '100',
+      produceAvailableBy: PAST_DATE,
+      produceSeasonStart: IN_SEASON_START,
+      produceSeasonEnd: IN_SEASON_END,
+      pricePerOz: '0.30',
+    },
+    {
+      id: 'item_2',
+      productId: 'prod_kale',
+      productName: 'Organic Kale',
+      quantityOz: '16',
+      maxOrderQuantityOz: null,
+      isProduceSubscribable: true,
+      produceStatus: 'active',
+      produceTotalOzInventory: '32',
+      produceAvailableBy: PAST_DATE,
+      produceSeasonStart: IN_SEASON_START,
+      produceSeasonEnd: IN_SEASON_END,
+      pricePerOz: '0.65',
+    },
+  ],
 };
 
 export const Default: Story = {
@@ -106,30 +103,27 @@ export const MixedAvailability: Story = {
       handlers: [
         http.get(`*/api/orders/${MOCK_ORDER_ID}`, () =>
           HttpResponse.json({
-            status: 200,
-            data: {
-              id: MOCK_ORDER_ID,
-              items: [
-                {
-                  ...MOCK_ORDER_DATA.data.items[0],
-                  productName: 'Out of Season Berries',
-                  produceSeasonStart: OUT_OF_SEASON,
-                  produceSeasonEnd: OUT_OF_SEASON,
-                },
-                {
-                  ...MOCK_ORDER_DATA.data.items[1],
-                  productName: 'Inactive Spinach',
-                  produceStatus: 'archived',
-                },
-                {
-                  ...MOCK_ORDER_DATA.data.items[0],
-                  id: 'item_3',
-                  productId: 'prod_future',
-                  productName: 'Future Garlic',
-                  produceAvailableBy: FUTURE_DATE,
-                },
-              ],
-            },
+            id: MOCK_ORDER_ID,
+            items: [
+              {
+                ...MOCK_ORDER_DATA.items[0],
+                productName: 'Out of Season Berries',
+                produceSeasonStart: OUT_OF_SEASON,
+                produceSeasonEnd: OUT_OF_SEASON,
+              },
+              {
+                ...MOCK_ORDER_DATA.items[1],
+                productName: 'Inactive Spinach',
+                produceStatus: 'archived',
+              },
+              {
+                ...MOCK_ORDER_DATA.items[0],
+                id: 'item_3',
+                productId: 'prod_future',
+                productName: 'Future Garlic',
+                produceAvailableBy: FUTURE_DATE,
+              },
+            ],
           }),
         ),
       ],

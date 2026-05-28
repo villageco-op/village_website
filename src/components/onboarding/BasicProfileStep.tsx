@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { US_STATES } from '@/lib/constants/location-constants';
-import { getAssetPath } from '@/lib/utils';
 
 /**
  * Data structure for the basic profile information step.
@@ -55,8 +54,15 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
     }
@@ -107,7 +113,7 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
           >
             {imagePreview ? (
               <Image
-                src={getAssetPath(imagePreview)}
+                src={imagePreview}
                 alt="Profile preview"
                 fill
                 className="object-cover"

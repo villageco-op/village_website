@@ -7,7 +7,6 @@ import SellerListingsClient from '../listings/SellerListingsClient';
 
 import type { ProduceType } from '@/lib/api/generated/models';
 import type { ProduceStatusProperty } from '@/lib/api/generated/models/produceStatusProperty';
-import type { getSellerListingsResponse200 } from '@/lib/api/generated/produce/produce';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -51,12 +50,9 @@ const generateMockListings = (count: number) => {
 
 const PAGINATED_LISTINGS_DATA = generateMockListings(25);
 
-const MOCK_LISTINGS: getSellerListingsResponse200 = {
-  data: {
-    data: PAGINATED_LISTINGS_DATA.slice(0, 2),
-    meta: { total: 2, page: 1, limit: 2, totalPages: 1 },
-  },
-  status: 200,
+const MOCK_LISTINGS = {
+  data: PAGINATED_LISTINGS_DATA.slice(0, 2),
+  meta: { total: 2, page: 1, limit: 2, totalPages: 1 },
 };
 
 const meta: Meta<typeof SellerListingsClient> = {
@@ -124,15 +120,12 @@ export const Paginated: Story = {
           const items = PAGINATED_LISTINGS_DATA.slice(start, end);
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: items,
-              meta: {
-                total: PAGINATED_LISTINGS_DATA.length,
-                page,
-                limit: PAGE_LIMIT,
-                totalPages: Math.ceil(PAGINATED_LISTINGS_DATA.length / PAGE_LIMIT),
-              },
+            data: items,
+            meta: {
+              total: PAGINATED_LISTINGS_DATA.length,
+              page,
+              limit: PAGE_LIMIT,
+              totalPages: Math.ceil(PAGINATED_LISTINGS_DATA.length / PAGE_LIMIT),
             },
           });
         }),
@@ -181,8 +174,8 @@ export const EmptyState: Story = {
       handlers: [
         http.get('*/api/produce/me', () => {
           return HttpResponse.json({
-            status: 200,
-            data: { data: [], meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 } },
+            data: [],
+            meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 },
           });
         }),
       ],

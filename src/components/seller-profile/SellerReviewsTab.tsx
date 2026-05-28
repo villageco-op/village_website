@@ -4,6 +4,7 @@ import { Star } from 'lucide-react';
 import { useState } from 'react';
 
 import { Eyebrow } from '../ui/eyebrow';
+import { PageErrorState } from '../ui/state-displays';
 
 import { SellerReviewCardSkeleton } from './SellerProfileSkeletons';
 
@@ -58,12 +59,21 @@ export default function SellerReviewsTab({ sellerId, profile }: SellerReviewsTab
     sortOrder = 'asc';
   }
 
-  const { data: response, isLoading } = useGetSellerReviews(sellerId, {
+  const {
+    data: response,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetSellerReviews(sellerId, {
     page,
     limit,
     sortBy,
     sortOrder,
   });
+
+  if (!isLoading && (response?.status !== 200 || isError)) {
+    return <PageErrorState title="Failed to load reviews." onRetry={() => void refetch()} />;
+  }
 
   const reviews = response?.data?.reviews || [];
   const meta = response?.data?.pagination || { total: 0, page: 1, limit: 10, totalPages: 1 };

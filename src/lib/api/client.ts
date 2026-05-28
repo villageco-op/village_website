@@ -1,17 +1,28 @@
+import { ApiError } from './types/ApiError';
+
 export const apiClient = async <T>(url: string, options: RequestInit): Promise<T> => {
+  const isFormData = options.body instanceof FormData;
+
   const response = await fetch(url, {
     ...options,
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...options.headers,
     },
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Unknown Error' }));
-    throw new Error(error.error || 'Network response was not ok');
+    const errorBody = await response.json().catch(() => ({ error: 'Unknown Error' }));
+
+    throw new ApiError(response.status, errorBody);
   }
 
-  return response.json() as Promise<T>;
+  const data = await response.json();
+
+  return {
+    data: data,
+    status: response.status,
+    headers: response.headers,
+  } as T;
 };

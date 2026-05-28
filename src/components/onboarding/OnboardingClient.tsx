@@ -10,6 +10,7 @@ import RoleStep from './RoleStep';
 import SellerInfoStep from './SellerInfoStep';
 import SellerSuccessStep from './SellerSuccessStep';
 
+import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import { useGenerateStripeOnboardingLink } from '@/lib/api/generated/stripe/stripe';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 import { useUpdateCurrentUser, useRegisterFcmToken } from '@/lib/api/generated/users/users';
@@ -52,6 +53,7 @@ export default function OnboardingFlow() {
   const registerToken = useRegisterFcmToken();
   const generateStripe = useGenerateStripeOnboardingLink();
   const uploadImageMutation = useUploadImage();
+  const geocodeAddressMutation = useGeocodeAddress();
 
   const handleBasicInfoSubmit = async (data: BasicInfoData) => {
     const toastId = toast.loading('Uploading your profile picture...');
@@ -73,6 +75,21 @@ export default function OnboardingFlow() {
         }
       }
 
+      const geocodeRes = await geocodeAddressMutation.mutateAsync({
+        data: {
+          address: data.address,
+          city: data.city,
+          state: data.state,
+          zip: data.zip,
+        },
+      });
+
+      if (geocodeRes.status !== 200) {
+        throw new Error(geocodeRes.data.error || 'Failed to geocode address');
+      }
+
+      const { lat, lng } = geocodeRes.data;
+
       await updateProfile.mutateAsync({
         data: {
           name: data.name,
@@ -83,6 +100,8 @@ export default function OnboardingFlow() {
           zip: data.zip,
           country: data.country,
           organization: data.organization ?? undefined,
+          lat,
+          lng,
         },
       });
 

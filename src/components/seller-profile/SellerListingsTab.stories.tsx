@@ -73,11 +73,8 @@ export const Default: Story = {
       handlers: [
         http.get('*/api/produce/list', () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: ALL_MOCK_LISTINGS.slice(0, 12),
-              meta: { total: 12, page: 1, limit: 12, totalPages: 1 },
-            },
+            data: ALL_MOCK_LISTINGS.slice(0, 12),
+            meta: { total: 12, page: 1, limit: 12, totalPages: 1 },
           });
         }),
       ],
@@ -105,15 +102,12 @@ export const Paginated: Story = {
           const data = ALL_MOCK_LISTINGS.slice(start, start + limit);
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data,
-              meta: {
-                total: ALL_MOCK_LISTINGS.length,
-                page,
-                limit,
-                totalPages: Math.ceil(ALL_MOCK_LISTINGS.length / limit),
-              },
+            data,
+            meta: {
+              total: ALL_MOCK_LISTINGS.length,
+              page,
+              limit,
+              totalPages: Math.ceil(ALL_MOCK_LISTINGS.length / limit),
             },
           });
         }),
@@ -154,11 +148,8 @@ export const Searching: Story = {
           }
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: filtered.slice(0, 12),
-              meta: { total: filtered.length, page: 1, limit: 12, totalPages: 1 },
-            },
+            data: filtered.slice(0, 12),
+            meta: { total: filtered.length, page: 1, limit: 12, totalPages: 1 },
           });
         }),
       ],
@@ -191,11 +182,8 @@ export const NoResults: Story = {
       handlers: [
         http.get('*/api/produce/list', () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: [],
-              meta: { total: 0, page: 1, limit: 12, totalPages: 0 },
-            },
+            data: [],
+            meta: { total: 0, page: 1, limit: 12, totalPages: 0 },
           });
         }),
       ],

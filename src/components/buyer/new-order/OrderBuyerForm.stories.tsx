@@ -52,15 +52,12 @@ export const Default: Story = {
       handlers: [
         http.get(`*/api/produce/${MOCK_PRODUCE_ID}`, () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              id: MOCK_PRODUCE_ID,
-              title: 'Heirloom Tomatoes',
-              pricePerOz: '0.25', // $4.00 per lb
-              totalOzInventory: '160', // 10 lbs
-              isSubscribable: true,
-              harvestFrequencyDays: 7,
-            },
+            id: MOCK_PRODUCE_ID,
+            title: 'Heirloom Tomatoes',
+            pricePerOz: '0.25', // $4.00 per lb
+            totalOzInventory: '160', // 10 lbs
+            isSubscribable: true,
+            harvestFrequencyDays: 7,
           });
         }),
       ],
@@ -104,14 +101,11 @@ export const OutOfStock: Story = {
       handlers: [
         http.get(`*/api/produce/${MOCK_PRODUCE_ID}`, () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              id: MOCK_PRODUCE_ID,
-              title: 'Out of Stock Peaches',
-              pricePerOz: '0.50',
-              totalOzInventory: '0',
-              isSubscribable: false,
-            },
+            id: MOCK_PRODUCE_ID,
+            title: 'Out of Stock Peaches',
+            pricePerOz: '0.50',
+            totalOzInventory: '0',
+            isSubscribable: false,
           });
         }),
       ],
@@ -204,15 +198,12 @@ export const BiWeeklySubscription: Story = {
       handlers: [
         http.get(`*/api/produce/${MOCK_PRODUCE_ID}`, () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              id: MOCK_PRODUCE_ID,
-              title: 'Bi-Weekly Kale',
-              pricePerOz: '0.10',
-              totalOzInventory: '160',
-              isSubscribable: true,
-              harvestFrequencyDays: 14,
-            },
+            id: MOCK_PRODUCE_ID,
+            title: 'Bi-Weekly Kale',
+            pricePerOz: '0.10',
+            totalOzInventory: '160',
+            isSubscribable: true,
+            harvestFrequencyDays: 14,
           });
         }),
       ],

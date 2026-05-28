@@ -99,6 +99,7 @@ export default function SellerSubscriptionDetailClient({
     );
   }
 
+  console.log('Subscription: ' + JSON.stringify(query.data.data));
   const subscription = query.data.data;
   const isCanceled = subscription.status === 'canceled';
   const isPaused = subscription.status === 'paused';
