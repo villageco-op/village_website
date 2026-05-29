@@ -1,10 +1,21 @@
 import { NextRequest } from 'next/server';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import type { User } from '@/lib/api/generated/models/user';
 import { fetchCurrentUser } from '@/lib/api/user';
 
 describe('fetchCurrentUser', () => {
+  const originalBackendUrl = process.env.BACKEND_URL;
+  const NEW_BACKEND_URL = 'http://localhost:3000';
+
+  beforeAll(() => {
+    process.env.BACKEND_URL = NEW_BACKEND_URL;
+  });
+
+  afterAll(() => {
+    process.env.BACKEND_URL = originalBackendUrl;
+  });
+
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -33,9 +44,13 @@ describe('fetchCurrentUser', () => {
     const result = await fetchCurrentUser(req);
 
     // Verify it called the correct endpoint with the forwarded Cookie header
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost/api/users/me', {
+    expect(mockFetch).toHaveBeenCalledWith(NEW_BACKEND_URL + '/api/users/me', {
       method: 'GET',
-      headers: { Cookie: 'authjs.session-token=fake-token' },
+      headers: {
+        Cookie: 'authjs.session-token=fake-token',
+        Host: 'localhost:3000',
+        'Content-Type': 'application/json',
+      },
     });
     expect(result).toEqual(mockUser);
   });
@@ -52,9 +67,12 @@ describe('fetchCurrentUser', () => {
 
     await fetchCurrentUser(req);
 
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost/api/users/me', {
+    expect(mockFetch).toHaveBeenCalledWith(NEW_BACKEND_URL + '/api/users/me', {
       method: 'GET',
-      headers: {},
+      headers: {
+        Host: 'localhost:3000',
+        'Content-Type': 'application/json',
+      },
     });
   });
 
