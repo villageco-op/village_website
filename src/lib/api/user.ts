@@ -9,16 +9,23 @@ import type { User } from './generated/models/user';
  * @returns The user or null
  */
 export async function fetchCurrentUser(request: NextRequest): Promise<User | null> {
-  const apiUrl = new URL('/api/users/me', request.url);
+  const backendBase = process.env.BACKEND_URL || 'http://localhost:8080';
+  const apiUrl = new URL('/api/users/me', backendBase);
+
   const cookieHeader = request.headers.get('cookie');
 
   try {
     const res = await fetch(apiUrl.toString(), {
       method: 'GET',
-      headers: cookieHeader ? { Cookie: cookieHeader } : {},
+      headers: {
+        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+        Host: apiUrl.host,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!res.ok) {
+      console.warn(`Fetch current user failed with status: ${res.status}`);
       return null;
     }
 
