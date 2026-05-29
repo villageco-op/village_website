@@ -2,7 +2,6 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 import { fetchCurrentUser } from '@/lib/api/user';
 import { hasSessionToken } from '@/lib/auth';
-import { hasCompletedOnboarding } from '@/lib/user-utils';
 
 /**
  * Proxy for handling redirecting for protected pages.
@@ -44,7 +43,7 @@ export async function proxy(request: NextRequest) {
     const user = await fetchCurrentUser(request);
 
     if (user) {
-      if (!hasCompletedOnboarding(user)) {
+      if (!user.isOnboardingComplete) {
         return NextResponse.redirect(new URL('/onboarding', request.url));
       }
 

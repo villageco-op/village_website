@@ -112,6 +112,7 @@ describe('proxy', () => {
         state: 'WI',
         country: 'US',
         stripeOnboardingComplete: false,
+        isOnboardingComplete: false,
       } as any);
       const req = new NextRequest('http://localhost/login/success');
 
@@ -130,6 +131,7 @@ describe('proxy', () => {
         country: 'US',
         zip: 53714,
         stripeOnboardingComplete: true,
+        isOnboardingComplete: true,
       } as any);
       const req = new NextRequest('http://localhost/login/success');
 
@@ -148,6 +150,7 @@ describe('proxy', () => {
         country: 'US',
         zip: 53715,
         stripeOnboardingComplete: false,
+        isOnboardingComplete: true,
       } as any);
       const req = new NextRequest('http://localhost/login/success');
 

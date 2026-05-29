@@ -19,7 +19,7 @@ export default function SellerLayout({
   const { user, status } = useAuth();
 
   return (
-    <AuthGuard user={user} status={status}>
+    <AuthGuard user={user} status={status} requireStripeOnboarding>
       <div className="flex min-h-[calc(100vh-64px)] w-full bg-off-white">
         <SellerSidebar user={user} />
         <main className="flex-1 px-9 py-8">{children}</main>

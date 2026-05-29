@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 import { useAuth } from './useAuth';
 
 import { useGetCart } from '@/lib/api/generated/cart/cart';
-import { hasCompletedOnboarding } from '@/lib/user-utils';
 
 interface CartContextValue {
   isOpen: boolean;
@@ -62,7 +61,7 @@ export function useCartUI() {
 export function useCartData() {
   const { status, user } = useAuth();
   const { showErrorToast } = useCartUI();
-  const enabled = status === 'authenticated' && hasCompletedOnboarding(user);
+  const enabled = status === 'authenticated' && user?.isOnboardingComplete;
 
   const query = useGetCart({
     query: {
