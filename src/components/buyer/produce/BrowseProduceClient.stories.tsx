@@ -75,14 +75,14 @@ export const ToggleViewFlow: Story = {
     await expect(await canvas.findByText('List View Item')).toBeInTheDocument();
 
     // 2. Find and click the Map toggle button
-    const mapButton = canvas.getByRole('button', { name: /map/i });
+    const mapButton = await canvas.findByRole('button', { name: /map/i });
     await userEvent.click(mapButton);
 
     // 3. Verify Map view elements appear
     await expect(await canvas.findByText(/Active Sellers/i)).toBeInTheDocument();
 
     // 4. Switch back to List View
-    const listButton = canvas.getByRole('button', { name: /list/i });
+    const listButton = await canvas.findByRole('button', { name: /list/i });
     await userEvent.click(listButton);
 
     await expect(await canvas.findByText('List View Item')).toBeInTheDocument();
