@@ -51,8 +51,8 @@ const mockUser: User = {
   country: 'United States',
   zip: '45678',
   deliveryRangeMiles: '15',
-  stripeAccountId: 'acct_123',
   stripeOnboardingComplete: true,
+  isOnboardingComplete: true,
   createdAt: '2024-01-01T00:00:00Z',
   updatedAt: '2024-01-01T00:00:00Z',
 };

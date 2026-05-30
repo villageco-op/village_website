@@ -49,11 +49,10 @@ export interface User {
   /** @nullable */
   deliveryRangeMiles: string | null;
   /** @nullable */
-  stripeAccountId: string | null;
-  /** @nullable */
   stripeOnboardingComplete: boolean | null;
   /** @nullable */
   createdAt: string | null;
   /** @nullable */
   updatedAt: string | null;
+  isOnboardingComplete: boolean;
 }

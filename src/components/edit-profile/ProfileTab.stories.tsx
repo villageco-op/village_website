@@ -32,8 +32,8 @@ const MOCK_USER: User = {
   lat: null,
   lng: null,
   deliveryRangeMiles: '15',
-  stripeAccountId: null,
   stripeOnboardingComplete: null,
+  isOnboardingComplete: false,
   createdAt: null,
   updatedAt: null,
 };
