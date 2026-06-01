@@ -26,11 +26,14 @@ import type {
 
 import type {
   ErrorResponse,
+  FcmStatusResponse,
+  GetFcmStatusParams,
   GetSellerReviewsParams,
   PaginatedReviewsResponse,
   PublicUserProfile,
   RegisterFcmTokenPayload,
   SuccessResponse,
+  UnregisterFcmTokenPayload,
   UpdateScheduleRulesPayload,
   UpdateUserPayload,
   User,
@@ -357,15 +360,10 @@ export type registerFcmTokenResponse401 = {
   status: 401
 }
 
-export type registerFcmTokenResponse404 = {
-  data: ErrorResponse
-  status: 404
-}
-
 export type registerFcmTokenResponseSuccess = (registerFcmTokenResponse200) & {
   headers: Headers;
 };
-export type registerFcmTokenResponseError = (registerFcmTokenResponse401 | registerFcmTokenResponse404) & {
+export type registerFcmTokenResponseError = (registerFcmTokenResponse401) & {
   headers: Headers;
 };
 
@@ -436,6 +434,213 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getRegisterFcmTokenMutationOptions(options), queryClient);
     }
     /**
+ * Remove the user's Firebase Cloud Messaging token for the given platform.
+ */
+export type unregisterFcmTokenResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type unregisterFcmTokenResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type unregisterFcmTokenResponseSuccess = (unregisterFcmTokenResponse200) & {
+  headers: Headers;
+};
+export type unregisterFcmTokenResponseError = (unregisterFcmTokenResponse401) & {
+  headers: Headers;
+};
+
+export type unregisterFcmTokenResponse = (unregisterFcmTokenResponseSuccess | unregisterFcmTokenResponseError)
+
+export const getUnregisterFcmTokenUrl = () => {
+
+
+  
+
+  return `/api/users/fcm-token`
+}
+
+export const unregisterFcmToken = async (unregisterFcmTokenPayload: UnregisterFcmTokenPayload, options?: RequestInit): Promise<unregisterFcmTokenResponse> => {
+  
+  return apiClient<unregisterFcmTokenResponse>(getUnregisterFcmTokenUrl(),
+  {      
+    ...options,
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      unregisterFcmTokenPayload,)
+  }
+);}
+  
+
+
+
+export const getUnregisterFcmTokenMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unregisterFcmToken>>, TError,{data: UnregisterFcmTokenPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof unregisterFcmToken>>, TError,{data: UnregisterFcmTokenPayload}, TContext> => {
+
+const mutationKey = ['unregisterFcmToken'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof unregisterFcmToken>>, {data: UnregisterFcmTokenPayload}> = (props) => {
+          const {data} = props ?? {};
+
+          return  unregisterFcmToken(data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UnregisterFcmTokenMutationResult = NonNullable<Awaited<ReturnType<typeof unregisterFcmToken>>>
+    export type UnregisterFcmTokenMutationBody = UnregisterFcmTokenPayload
+    export type UnregisterFcmTokenMutationError = ErrorResponse
+
+    export const useUnregisterFcmToken = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unregisterFcmToken>>, TError,{data: UnregisterFcmTokenPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof unregisterFcmToken>>,
+        TError,
+        {data: UnregisterFcmTokenPayload},
+        TContext
+      > => {
+      return useMutation(getUnregisterFcmTokenMutationOptions(options), queryClient);
+    }
+    /**
+ * Checks if a token exists for the current user and a given platform.
+ */
+export type getFcmStatusResponse200 = {
+  data: FcmStatusResponse
+  status: 200
+}
+
+export type getFcmStatusResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type getFcmStatusResponseSuccess = (getFcmStatusResponse200) & {
+  headers: Headers;
+};
+export type getFcmStatusResponseError = (getFcmStatusResponse401) & {
+  headers: Headers;
+};
+
+export type getFcmStatusResponse = (getFcmStatusResponseSuccess | getFcmStatusResponseError)
+
+export const getGetFcmStatusUrl = (params: GetFcmStatusParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/users/fcm-status?${stringifiedParams}` : `/api/users/fcm-status`
+}
+
+export const getFcmStatus = async (params: GetFcmStatusParams, options?: RequestInit): Promise<getFcmStatusResponse> => {
+  
+  return apiClient<getFcmStatusResponse>(getGetFcmStatusUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetFcmStatusQueryKey = (params?: GetFcmStatusParams,) => {
+    return [
+    `/api/users/fcm-status`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+    
+export const getGetFcmStatusQueryOptions = <TData = Awaited<ReturnType<typeof getFcmStatus>>, TError = ErrorResponse>(params: GetFcmStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFcmStatusQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFcmStatus>>> = ({ signal }) => getFcmStatus(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFcmStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getFcmStatus>>>
+export type GetFcmStatusQueryError = ErrorResponse
+
+
+export function useGetFcmStatus<TData = Awaited<ReturnType<typeof getFcmStatus>>, TError = ErrorResponse>(
+ params: GetFcmStatusParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFcmStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getFcmStatus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFcmStatus<TData = Awaited<ReturnType<typeof getFcmStatus>>, TError = ErrorResponse>(
+ params: GetFcmStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFcmStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getFcmStatus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFcmStatus<TData = Awaited<ReturnType<typeof getFcmStatus>>, TError = ErrorResponse>(
+ params: GetFcmStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetFcmStatus<TData = Awaited<ReturnType<typeof getFcmStatus>>, TError = ErrorResponse>(
+ params: GetFcmStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFcmStatusQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
  * Seller defines their base availability.
  */
 export type updateScheduleRulesResponse200 = {

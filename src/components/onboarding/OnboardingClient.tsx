@@ -14,6 +14,7 @@ import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import { useGenerateStripeOnboardingLink } from '@/lib/api/generated/stripe/stripe';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 import { useUpdateCurrentUser, useRegisterFcmToken } from '@/lib/api/generated/users/users';
+import { initFcmListener } from '@/lib/firebase';
 
 /**
  * The different steps within the onboarding flow.
@@ -152,11 +153,18 @@ export default function OnboardingFlow() {
       const permission = await Notification.requestPermission();
 
       if (permission === 'granted') {
-        const mockFcmToken = 'mock-fcm-token-123';
-        await registerToken.mutateAsync({
-          data: { token: mockFcmToken, platform: 'web' },
+        await initFcmListener((fid) => {
+          void (async () => {
+            try {
+              await registerToken.mutateAsync({
+                data: { token: fid, platform: 'web' },
+              });
+              toast.success('Push notifications enabled!', { id: toastId });
+            } catch (error) {
+              toast.error('Failed to save notification settings.', { id: toastId });
+            }
+          });
         });
-        toast.success('Notifications enabled!', { id: toastId });
       } else {
         toast.warning('Notifications were blocked. You can enable them in browser settings.', {
           id: toastId,

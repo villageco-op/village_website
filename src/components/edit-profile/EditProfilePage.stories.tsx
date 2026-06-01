@@ -45,7 +45,13 @@ const childComponentHandlers = [
     const body = await request.json();
     return HttpResponse.json({ data: body, status: 200 });
   }),
-  http.post('*/api/users/notifications/register', () => {
+  http.post('*/api/users/fcm-token', () => {
+    return HttpResponse.json({ success: true }, { status: 200 });
+  }),
+  http.get('*/api/users/fcm-status', () => {
+    return HttpResponse.json({ status: false }, { status: 200 });
+  }),
+  http.delete('*/api/users/fcm-token', () => {
     return HttpResponse.json({ success: true }, { status: 200 });
   }),
   http.delete('*/api/users/account', () => {

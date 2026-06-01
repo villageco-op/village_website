@@ -15,12 +15,17 @@ const mockedQueryClient = new QueryClient({
 
 const MOCK_ORDER_ID = 'order_123';
 
-// Helper for dates in 2026 (per system time)
-const IN_SEASON_START = '2026-01-01T00:00:00Z';
-const IN_SEASON_END = '2026-12-31T23:59:59Z';
-const OUT_OF_SEASON = '2025-01-01T00:00:00Z';
-const FUTURE_DATE = '2026-06-01T00:00:00Z';
-const PAST_DATE = '2026-01-01T00:00:00Z';
+const getRelativeDateISO = (daysOffset: number) => {
+  const date = new Date();
+  date.setDate(date.getDate() + daysOffset);
+  return date.toISOString();
+};
+
+const IN_SEASON_START = getRelativeDateISO(-30); // 30 days ago
+const IN_SEASON_END = getRelativeDateISO(30); // 30 days from now
+const OUT_OF_SEASON = getRelativeDateISO(-60); // 60 days ago (ended in past)
+const FUTURE_DATE = getRelativeDateISO(5); // Always 5 days in the future
+const PAST_DATE = getRelativeDateISO(-5); // Always 5 days in the past
 
 const meta: Meta<typeof ReorderForm> = {
   title: 'Buyer/NewOrder/ReorderForm',
