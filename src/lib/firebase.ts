@@ -28,6 +28,7 @@ export const messaging = typeof window !== 'undefined' ? getMessaging(app) : nul
 export const initFcmListener = async (onTokenReceived: (fid: string) => void) => {
   if (!messaging) return () => {};
   try {
+    await navigator.serviceWorker.register('/firebase-messaging-sw.js');
     const swRegistration = await navigator.serviceWorker.ready;
     const unsubscribe = onRegistered(messaging, (fid: string) => {
       if (fid) onTokenReceived(fid);
