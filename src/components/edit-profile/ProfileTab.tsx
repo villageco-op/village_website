@@ -197,9 +197,9 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
             {imagePreview ? (
               <Image
                 src={getAssetPath(imagePreview)}
-                alt="Profile preview"
+                alt="Profile Image"
                 fill
-                className="object-cover"
+                className="object-cover text-center"
                 sizes="96px"
                 priority
               />
