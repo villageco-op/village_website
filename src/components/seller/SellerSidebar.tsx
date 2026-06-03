@@ -61,18 +61,26 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
  */
 interface SellerSidebarProps {
   user?: User;
+  status: 'loading' | 'authenticated' | 'unauthenticated';
 }
 
 /**
  * The left aligned sidebar for navigating the seller pages.
  * @param props - Props for the seller user object
  * @param props.user - The user object for the seller
+ * @param props.status - The user authentication status
  * @returns A sidebar component with navigation links
  */
-export function SellerSidebar({ user }: SellerSidebarProps) {
+export function SellerSidebar({ user, status }: SellerSidebarProps) {
+  if (user && !user.stripeOnboardingComplete) {
+    // AuthGaurd will redirect so hide nav items
+    status = 'loading';
+  }
+
   return (
     <Sidebar
       user={user}
+      status={status}
       roleLabel="Producer"
       fallbackName="New Neighbor"
       settingsHref="/settings"

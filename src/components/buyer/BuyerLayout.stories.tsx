@@ -50,7 +50,7 @@ function MockFullDashboardLayout({ children }: { children?: React.ReactNode }) {
 
       {/* 2. Main content block imitating BuyerLayout's structure */}
       <div className="flex min-h-[calc(100vh-64px)] w-full bg-off-white">
-        <BuyerSidebar user={mockUser} />
+        <BuyerSidebar user={mockUser} status="authenticated" />
 
         <main className="flex-1 px-9 py-8">
           {children || (

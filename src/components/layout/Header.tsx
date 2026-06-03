@@ -58,6 +58,8 @@ export function Header() {
     (item) => !item.unAuthOnly || status == 'unauthenticated',
   );
 
+  const isLoading = status === 'loading';
+
   return (
     <>
       <header className="sticky top-0 z-50 w-full h-16 bg-primary border-b border-border/10">
@@ -128,7 +130,7 @@ export function Header() {
             </>
           )}
 
-          {!user && (
+          {!user && !isLoading && (
             <Button
               size="sm"
               className="ml-auto bg-lime text-forest-dark font-heading text-xs font-bold transition-transform hover:bg-lime-light hover:-translate-y-px"

@@ -63,6 +63,7 @@ const mockUser: User = {
 export const DashboardActive: Story = {
   args: {
     user: mockUser,
+    status: 'authenticated',
   },
   parameters: {
     nextjs: {
@@ -83,6 +84,7 @@ export const InitialsFallback: Story = {
       name: 'Sarah Smith',
       image: null,
     },
+    status: 'authenticated',
   },
   parameters: {
     nextjs: {
@@ -99,6 +101,7 @@ export const InitialsFallback: Story = {
 export const ListingsActive: Story = {
   args: {
     user: mockUser,
+    status: 'authenticated',
   },
   parameters: {
     nextjs: {
@@ -115,6 +118,7 @@ export const ListingsActive: Story = {
 export const OrdersActive: Story = {
   args: {
     user: mockUser,
+    status: 'authenticated',
   },
   parameters: {
     nextjs: {
@@ -131,6 +135,7 @@ export const OrdersActive: Story = {
 export const SettingsActive: Story = {
   args: {
     user: mockUser,
+    status: 'authenticated',
   },
   parameters: {
     nextjs: {
@@ -147,6 +152,24 @@ export const SettingsActive: Story = {
 export const Anonymous: Story = {
   args: {
     user: undefined,
+    status: 'unauthenticated',
+  },
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: '/seller',
+      },
+    },
+  },
+};
+
+/**
+ * Sidebar state when user status is loading.
+ */
+export const Loading: Story = {
+  args: {
+    user: undefined,
+    status: 'loading',
   },
   parameters: {
     nextjs: {
