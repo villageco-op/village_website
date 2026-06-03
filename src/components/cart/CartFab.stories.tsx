@@ -77,18 +77,15 @@ export const Visible: Story = {
         mockAuthSession,
         http.get('*/cart*', () =>
           HttpResponse.json({
-            status: 200,
-            data: {
-              data: [
-                {
-                  seller: { id: 'test', name: 'Test' },
-                  items: [
-                    { reservationId: '1', quantityOz: '16', pricePerOz: '0.1' },
-                    { reservationId: '2', quantityOz: '32', pricePerOz: '0.2' },
-                  ],
-                },
-              ],
-            },
+            data: [
+              {
+                seller: { id: 'test', name: 'Test' },
+                items: [
+                  { reservationId: '1', quantityOz: '16', pricePerOz: '0.1' },
+                  { reservationId: '2', quantityOz: '32', pricePerOz: '0.2' },
+                ],
+              },
+            ],
           }),
         ),
       ],
@@ -103,8 +100,7 @@ export const Hidden: Story = {
         mockAuthSession,
         http.get('*/cart*', () =>
           HttpResponse.json({
-            status: 200,
-            data: { data: [] }, // Empty cart -> hidden FAB
+            data: [],
           }),
         ),
       ],

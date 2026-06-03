@@ -7,12 +7,9 @@
  */
 
 export interface GeocodePayload {
-  /** @minLength 1 */
-  address: string;
-  /** @minLength 1 */
-  city: string;
-  /** @minLength 2 */
-  state: string;
+  address?: string;
+  city?: string;
+  state?: string;
   /** @minLength 5 */
   zip: string;
 }

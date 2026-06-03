@@ -65,7 +65,7 @@ export function useCartData() {
 
   const query = useGetCart({
     query: {
-      enabled,
+      enabled: !!enabled,
     },
   });
 

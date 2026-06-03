@@ -11,9 +11,8 @@ import { CartLineItem } from './CartLineItem';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { useCartUI } from '@/hooks/useCartUI';
+import { useCartData, useCartUI } from '@/hooks/useCartUI';
 import {
-  useGetCart,
   useRemoveFromCart,
   useUpdateCartItem,
   useUpdateCartGroup,
@@ -30,7 +29,7 @@ import { cn } from '@/lib/utils';
 export function CartDrawer() {
   const { isOpen, setIsOpen, closeCart } = useCartUI();
 
-  const { data: cartResponse, refetch, isError: isGetCartError } = useGetCart();
+  const { data: cartResponse, refetch, isError: isGetCartError } = useCartData();
   const removeMutation = useRemoveFromCart();
   const updateMutation = useUpdateCartItem();
   const updateGroupMutation = useUpdateCartGroup();

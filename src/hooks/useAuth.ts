@@ -33,7 +33,7 @@ export function useAuth() {
         const data = await res.json();
 
         // Auth.js returns an empty object {} if no session exists
-        if (Object.keys(data).length > 0) {
+        if (data && Object.keys(data).length > 0) {
           setSession(data);
           setStatus('authenticated');
         } else {
