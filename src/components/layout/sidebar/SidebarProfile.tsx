@@ -28,7 +28,7 @@ export default function SidebarProfile({
   publicProfileBaseUrl,
   fallbackName = 'User',
   isCollapsed,
-}: Omit<SidebarProps, 'navGroups'> & { isCollapsed: boolean }) {
+}: Omit<SidebarProps, 'navGroups' | 'status'> & { isCollapsed: boolean }) {
   if (!user) {
     return (
       <div className="flex justify-center border-b border-white/5 p-[20px_14px_16px]">

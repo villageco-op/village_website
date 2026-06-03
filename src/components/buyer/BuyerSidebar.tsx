@@ -53,18 +53,21 @@ const BUYER_NAV_GROUPS: NavGroup[] = [
 
 interface BuyerSidebarProps {
   user?: User;
+  status: 'loading' | 'authenticated' | 'unauthenticated';
 }
 
 /**
  * The left aligned sidebar for navigating the buyer pages.
  * @param props - Props for the buyer user object
  * @param props.user - The user object for the buyer
+ * @param props.status - The users authentication status
  * @returns A sidebar component with navigation links
  */
-export function BuyerSidebar({ user }: BuyerSidebarProps) {
+export function BuyerSidebar({ user, status }: BuyerSidebarProps) {
   return (
     <Sidebar
       user={user}
+      status={status}
       roleLabel="Buyer"
       fallbackName="New Neighbor"
       settingsHref="/settings"

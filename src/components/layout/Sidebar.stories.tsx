@@ -78,6 +78,7 @@ const mockNavGroups: NavGroup[] = [
 export const CustomLogisticsView: Story = {
   args: {
     user: mockUser,
+    status: 'authenticated',
     roleLabel: 'Driver',
     fallbackName: 'Driver',
     navGroups: mockNavGroups,
@@ -99,6 +100,7 @@ export const CustomLogisticsView: Story = {
 export const InitialsFallback: Story = {
   args: {
     user: { ...mockUser, image: null, name: 'Warehouse Admin' },
+    status: 'authenticated',
     roleLabel: 'Admin',
     fallbackName: 'Admin',
     navGroups: mockNavGroups,
@@ -119,6 +121,28 @@ export const InitialsFallback: Story = {
 export const Anonymous: Story = {
   args: {
     user: undefined,
+    status: 'unauthenticated',
+    roleLabel: 'Guest',
+    fallbackName: 'Guest User',
+    navGroups: mockNavGroups,
+    settingsHref: '/login',
+  },
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: '/dashboard',
+      },
+    },
+  },
+};
+
+/**
+ * What the generic sidebar looks like when the user is loading.
+ */
+export const Loading: Story = {
+  args: {
+    user: undefined,
+    status: 'loading',
     roleLabel: 'Guest',
     fallbackName: 'Guest User',
     navGroups: mockNavGroups,

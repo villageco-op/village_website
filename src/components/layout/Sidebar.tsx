@@ -6,6 +6,7 @@ import { useState, type ComponentType } from 'react';
 
 import SidebarNavItem from './sidebar/SidebarNavItem';
 import SidebarProfile from './sidebar/SidebarProfile';
+import { SidebarSkeleton } from './sidebar/SidebarSkeleton';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -38,6 +39,7 @@ export interface NavGroup {
  */
 export interface SidebarProps {
   user?: User;
+  status: 'loading' | 'authenticated' | 'unauthenticated';
   roleLabel: string;
   navGroups: NavGroup[];
   settingsHref: string;
@@ -49,6 +51,7 @@ export interface SidebarProps {
  * A shared, deep-forest themed sidebar for navigating role-specific pages.
  * @param props - Customizations for the different pages
  * @param props.user - The user object
+ * @param props.status - The users status
  * @param props.roleLabel - The users role (e.g., buyer, seller, delivery)
  * @param props.navGroups - Array defining the sections and nav items
  * @param props.settingsHref - The path to the settings page
@@ -58,6 +61,7 @@ export interface SidebarProps {
  */
 export function Sidebar({
   user,
+  status,
   roleLabel,
   navGroups,
   settingsHref,
@@ -66,6 +70,10 @@ export function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const isLoading = status === 'loading';
+
+  if (isLoading) return SidebarSkeleton();
 
   const visibleNavGroups = navGroups
     .map((group) => ({
