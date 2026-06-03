@@ -77,29 +77,26 @@ export const ActiveReservations: Story = {
         mockAuthSession,
         http.get('*/cart*', () =>
           HttpResponse.json({
-            status: 200,
-            data: {
-              data: [
-                {
-                  seller: { id: 'seller_1', name: 'Sunny Farms' },
-                  items: [
-                    {
-                      reservationId: '1',
-                      expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
-                    },
-                  ],
-                },
-                {
-                  seller: { id: 'seller_2', name: 'Local Orchard' },
-                  items: [
-                    {
-                      reservationId: '2',
-                      expiresAt: new Date(Date.now() + 5 * 60000).toISOString(),
-                    },
-                  ],
-                },
-              ],
-            },
+            data: [
+              {
+                seller: { id: 'seller_1', name: 'Sunny Farms' },
+                items: [
+                  {
+                    reservationId: '1',
+                    expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
+                  },
+                ],
+              },
+              {
+                seller: { id: 'seller_2', name: 'Local Orchard' },
+                items: [
+                  {
+                    reservationId: '2',
+                    expiresAt: new Date(Date.now() + 5 * 60000).toISOString(),
+                  },
+                ],
+              },
+            ],
           }),
         ),
       ],
@@ -114,8 +111,7 @@ export const EmptyHidden: Story = {
         mockAuthSession,
         http.get('*/cart*', () =>
           HttpResponse.json({
-            status: 200,
-            data: { data: [] },
+            data: [],
           }),
         ),
       ],

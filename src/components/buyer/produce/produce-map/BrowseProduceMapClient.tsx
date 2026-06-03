@@ -12,23 +12,26 @@ import { SellerProduceSidebar } from './SellerProduceSidebar';
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { PageErrorState } from '@/components/ui/state-displays';
-import { useAuth } from '@/hooks/useAuth';
-import type { GetProduceMapParams, SellerMapGroup } from '@/lib/api/generated/models';
+import type { GetProduceMapParams, SellerMapGroup, User } from '@/lib/api/generated/models';
 import { useGetProduceMap } from '@/lib/api/generated/produce/produce';
 
 interface BrowseProduceMapClientProps {
   onViewChange: (view: 'list' | 'map') => void;
+  user?: User;
 }
 
 /**
  * The buyer browse produce page (Map View) with search and filter controls.
  * @param props - Browse produce list props
  * @param props.onViewChange - When the view toggle is clicked
+ * @param props.user - The user object
  * @returns The client for the browse produce map view page
  */
-export default function BrowseProduceMapClient({ onViewChange }: BrowseProduceMapClientProps) {
+export default function BrowseProduceMapClient({
+  onViewChange,
+  user,
+}: BrowseProduceMapClientProps) {
   const router = useRouter();
-  const { user } = useAuth();
 
   const [selectedProduceId, setSelectedProduceId] = useState<string | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<SellerMapGroup | null>(null);
@@ -39,9 +42,7 @@ export default function BrowseProduceMapClient({ onViewChange }: BrowseProduceMa
   // Use map specific params
   const [filters, setFilters] = useState<Omit<GetProduceMapParams, 'search' | 'lat' | 'lng'>>({});
 
-  // Default to user coordinates or fallback
-  const baseLat = user?.lat ?? 41.602;
-  const baseLng = user?.lng ?? -87.3371;
+  const [browserCoords, setBrowserCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -49,6 +50,27 @@ export default function BrowseProduceMapClient({ onViewChange }: BrowseProduceMa
     }, 500);
     return () => clearTimeout(timer);
   }, [searchInput]);
+
+  useEffect(() => {
+    if (!user && typeof window !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setBrowserCoords({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.log('Map client fallback: Browser geolocation prompt declined or failed.', error);
+        },
+        { enableHighAccuracy: false, timeout: 30000 },
+      );
+    }
+  }, [user]);
+
+  // Default to user coordinates or fallback
+  const baseLat = user?.lat ?? browserCoords?.lat ?? 41.602;
+  const baseLng = user?.lng ?? browserCoords?.lng ?? -87.3371;
 
   const queryParams: GetProduceMapParams = {
     lat: baseLat,
@@ -68,7 +90,7 @@ export default function BrowseProduceMapClient({ onViewChange }: BrowseProduceMa
   const mapGroups = response?.data || [];
 
   return (
-    <>
+    <div className="flex flex-col h-screen w-full">
       <BrowseProduceMapFilters
         searchInput={searchInput}
         setSearchInput={setSearchInput}
@@ -78,7 +100,7 @@ export default function BrowseProduceMapClient({ onViewChange }: BrowseProduceMa
         onViewChange={onViewChange}
       />
 
-      <div className="relative flex-1 min-h-125 w-full overflow-hidden rounded-xl border border-forest-dark/20 bg-slate-50 shadow-sm">
+      <div className="relative flex-1 min-h-125 w-full pt-4 overflow-hidden rounded-xl border border-forest-dark/20 bg-slate-50 shadow-sm">
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center bg-slate-50/50">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-deep-forest border-t-transparent" />
@@ -122,6 +144,6 @@ export default function BrowseProduceMapClient({ onViewChange }: BrowseProduceMa
           )}
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }

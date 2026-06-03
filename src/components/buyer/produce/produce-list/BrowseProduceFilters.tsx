@@ -1,7 +1,7 @@
 'use client';
 
-import { ChevronDown, ChevronUp, List, MapIcon, X } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronDown, ChevronUp, List, Loader2, LocateFixed, MapIcon, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import {
   type GetProduceListParams,
   ProduceType,
@@ -32,6 +33,8 @@ interface BrowseProduceFiltersProps {
   >;
   currentView: 'list' | 'map';
   onViewChange: (view: 'list' | 'map') => void;
+  onLocationChange: (lat: number, lng: number) => void;
+  currentLocationName?: string;
 }
 
 const formatEnum = (str: string) =>
@@ -49,6 +52,8 @@ const formatEnum = (str: string) =>
  * @param props.setFilters - When any of the filter inputs are edited
  * @param props.currentView - The current map view (list or map)
  * @param props.onViewChange - When the view toggle is clicked
+ * @param props.onLocationChange - When the location filters are edited
+ * @param props.currentLocationName -
  * @returns A horizontal row of filters with an advanced expandable section
  */
 export function BrowseProduceFilters({
@@ -58,8 +63,55 @@ export function BrowseProduceFilters({
   setFilters,
   currentView,
   onViewChange,
+  onLocationChange,
+  currentLocationName,
 }: BrowseProduceFiltersProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [zipInput, setZipInput] = useState('');
+  const [isLocating, setIsLocating] = useState(false);
+
+  const geocodeAddressMutation = useGeocodeAddress();
+
+  useEffect(() => {
+    if (/^\d{5}$/.test(zipInput)) {
+      const triggerGeocode = async () => {
+        try {
+          const geocodeRes = await geocodeAddressMutation.mutateAsync({
+            data: {
+              zip: zipInput,
+            },
+          });
+
+          if (geocodeRes.status === 200) {
+            const { lat, lng } = geocodeRes.data;
+            onLocationChange(lat, lng);
+          }
+        } catch (error) {
+          console.error('Failed to resolve address coordinates:', error);
+        }
+      };
+
+      void triggerGeocode();
+    }
+  }, [zipInput, onLocationChange, geocodeAddressMutation]);
+
+  const handleBrowserLocation = () => {
+    if (!navigator.geolocation) return;
+
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        onLocationChange(position.coords.latitude, position.coords.longitude);
+        setZipInput('');
+        setIsLocating(false);
+      },
+      (error) => {
+        console.error('Error retrieving device position:', error);
+        setIsLocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 8000 },
+    );
+  };
 
   const handleFilterChange = (key: keyof typeof filters, value: any) => {
     setFilters((prev) => ({
@@ -70,11 +122,14 @@ export function BrowseProduceFilters({
 
   const clearAllFilters = () => {
     setSearchInput('');
+    setZipInput('');
     setFilters({});
   };
 
   const hasActiveFilters =
-    searchInput !== '' || Object.values(filters).some((val) => val !== undefined);
+    searchInput !== '' ||
+    zipInput !== '' ||
+    Object.values(filters).some((val) => val !== undefined);
 
   return (
     <div className="flex flex-col gap-4">
@@ -105,6 +160,30 @@ export function BrowseProduceFilters({
           onChange={(e) => setSearchInput(e.target.value)}
           className="max-w-xs bg-white h-9"
         />
+
+        {/* Location / Zip input container */}
+        <div className="relative flex items-center max-w-40">
+          <Input
+            placeholder={currentLocationName || 'Enter ZIP code'}
+            value={zipInput}
+            maxLength={5}
+            onChange={(e) => setZipInput(e.target.value.replace(/\D/g, ''))}
+            className="bg-white h-9 pr-8"
+          />
+          <button
+            type="button"
+            onClick={handleBrowserLocation}
+            disabled={isLocating}
+            className="absolute right-2.5 text-slate-400 hover:text-slate-700 disabled:opacity-50 transition-colors"
+            title="Use my current location"
+          >
+            {isLocating ? (
+              <Loader2 className="h-4 w-4 animate-spin text-primary" />
+            ) : (
+              <LocateFixed className="h-4 w-4" />
+            )}
+          </button>
+        </div>
 
         <Select
           value={filters.produceType || 'all'}

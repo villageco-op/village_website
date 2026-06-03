@@ -8,6 +8,7 @@ import { CartDrawer } from './CartDrawer';
 
 import { Toaster } from '@/components/ui/sonner';
 import { CartProvider, useCartUI } from '@/hooks/useCartUI';
+import type { User } from '@/lib/api/generated/models';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -113,6 +114,38 @@ const MOCK_EMPTY_CART = {
   data: [],
 };
 
+const mockUser: User = {
+  id: 'buyer_123',
+  name: 'County Fresh Mkt',
+  organization: null,
+  email: 'purchasing@countyfresh.com',
+  emailVerified: '2024-01-01T00:00:00Z',
+  image:
+    'https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=150&h=150&auto=format&fit=crop',
+  aboutMe: 'A local market bringing fresh valley produce to Gary, IN.',
+  deliveryRangeMiles: '0',
+  specialties: [],
+  goal: '90',
+  stripeOnboardingComplete: false,
+  isOnboardingComplete: true,
+  address: '456 Market Ave',
+  city: 'Gary',
+  lat: 41.59,
+  lng: -87.34,
+  state: 'IN',
+  country: 'United States',
+  zip: '92921',
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
+};
+
+const mockAuthSession = http.get('*/api/auth/session', () =>
+  HttpResponse.json({
+    user: mockUser,
+    expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+  }),
+);
+
 const AutoOpenCartWrapper = ({ children }: { children: React.ReactNode }) => {
   const { openCart } = useCartUI();
   useEffect(() => {
@@ -153,7 +186,7 @@ type Story = StoryObj<typeof CartDrawer>;
 export const Populated: Story = {
   parameters: {
     msw: {
-      handlers: [http.get('*/api/cart*', () => HttpResponse.json(MOCK_FULL_CART))],
+      handlers: [http.get('*/api/cart*', () => HttpResponse.json(MOCK_FULL_CART)), mockAuthSession],
     },
   },
 };
@@ -164,7 +197,10 @@ export const Populated: Story = {
 export const Empty: Story = {
   parameters: {
     msw: {
-      handlers: [http.get('*/api/cart*', () => HttpResponse.json(MOCK_EMPTY_CART))],
+      handlers: [
+        http.get('*/api/cart*', () => HttpResponse.json(MOCK_EMPTY_CART)),
+        mockAuthSession,
+      ],
     },
   },
 };
@@ -175,7 +211,10 @@ export const Empty: Story = {
 export const ErrorState: Story = {
   parameters: {
     msw: {
-      handlers: [http.get('*/api/cart*', () => new HttpResponse(null, { status: 500 }))],
+      handlers: [
+        http.get('*/api/cart*', () => new HttpResponse(null, { status: 500 })),
+        mockAuthSession,
+      ],
     },
   },
 };
@@ -192,6 +231,7 @@ export const RemoveItemSuccess: Story = {
           await delay(400);
           return HttpResponse.json({ success: true }, { status: 200 });
         }),
+        mockAuthSession,
       ],
     },
   },
@@ -222,6 +262,7 @@ export const UpdateQuantitySuccess: Story = {
           await delay(400); // Simulate network delay
           return HttpResponse.json({ success: true }, { status: 200 });
         }),
+        mockAuthSession,
       ],
     },
   },
@@ -254,6 +295,7 @@ export const ToggleSubscriptionSuccess: Story = {
           await delay(400);
           return HttpResponse.json({ success: true }, { status: 200 });
         }),
+        mockAuthSession,
       ],
     },
   },
@@ -288,6 +330,7 @@ export const UpdateGroupFulfillmentSuccess: Story = {
           await delay(400);
           return HttpResponse.json({ success: true }, { status: 200 });
         }),
+        mockAuthSession,
       ],
     },
   },
