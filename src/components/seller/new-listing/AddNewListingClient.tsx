@@ -14,6 +14,7 @@ import { ListingPricingInventory } from './ListingPricingInventory';
 
 import type { CreateProducePayload, ProduceType } from '@/lib/api/generated/models';
 import { useCreateProduce } from '@/lib/api/generated/produce/produce';
+import { formatLocalDate } from '@/lib/date-utils';
 
 /**
  * Interface for the new listing form.
@@ -110,8 +111,8 @@ export default function AddNewListingClient() {
         maxOrderQuantityOz,
         harvestFrequencyDays: Number(formData.harvestFrequencyDays),
         availableBy: formData.availableBy ? new Date(formData.availableBy).toISOString() : null,
-        seasonStart: new Date(formData.seasonStart).toISOString(),
-        seasonEnd: new Date(formData.seasonEnd).toISOString(),
+        seasonStart: formatLocalDate(formData.seasonStart),
+        seasonEnd: formatLocalDate(formData.seasonEnd),
         isSubscribable: formData.isSubscribable,
         images: formData.images.length > 0 ? formData.images : undefined,
       };

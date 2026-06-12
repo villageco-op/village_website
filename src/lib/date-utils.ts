@@ -42,6 +42,20 @@ export const isoStringToLocalTime = (isoString: string) => {
 };
 
 /**
+ * Formats a date without a time preserving timezone.
+ * @param dateInput - Input Date or date string
+ * @returns A formatted ISO Date string (YYYY-MM-DD)
+ */
+export const formatLocalDate = (dateInput: string | Date) => {
+  const d = new Date(dateInput);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
+
+/**
  * Gets the day from a given date string.
  * @param dateStr - The source ISO date string
  * @returns The day or TBD
