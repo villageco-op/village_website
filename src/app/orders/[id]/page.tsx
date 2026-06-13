@@ -9,6 +9,7 @@ import OrderDetailClient from '../../../components/orders/OrderDetailClient';
  * @param props.params.id - The order ID
  * @returns The order detail client component
  */
-export default function OrderDetailPage({ params }: { params: { id: string } }) {
-  return <OrderDetailClient id={params.id} />;
+export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <OrderDetailClient id={id} />;
 }

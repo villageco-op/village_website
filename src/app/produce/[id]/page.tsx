@@ -7,6 +7,7 @@ import ProduceListingClient from '@/components/buyer/produce-details/ProduceList
  * @param props.params.id - The produce ID
  * @returns The produce details client component
  */
-export default function ProduceDetailPage({ params }: { params: { id: string } }) {
-  return <ProduceListingClient id={params.id} />;
+export default async function ProduceDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <ProduceListingClient id={id} />;
 }

@@ -9,6 +9,11 @@ import SubscriptionDetailClient from '@/components/buyer/subscriptions/details/S
  * @param props.params.id - The subscription ID
  * @returns The subscription detail client component
  */
-export default function SubscriptionDetailPage({ params }: { params: { id: string } }) {
-  return <SubscriptionDetailClient id={params.id} />;
+export default async function SubscriptionDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return <SubscriptionDetailClient id={id} />;
 }

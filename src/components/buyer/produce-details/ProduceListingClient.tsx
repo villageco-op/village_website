@@ -33,7 +33,7 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
   const router = useRouter();
   const [showOrderForm, setShowOrderForm] = useState(false);
 
-  const { isError, isLoading, data } = useGetProduce(id);
+  const { isError, isLoading, data } = useGetProduce(id, { query: { enabled: !!id } });
 
   if (isLoading) {
     return <ProduceListingSkeleton />;

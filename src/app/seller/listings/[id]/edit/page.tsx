@@ -7,6 +7,7 @@ import EditListingClient from '../../../../../components/seller/edit-listing/Edi
  * @param props.params.id - The listing ID
  * @returns The edit listing client
  */
-export default function EditListingPage({ params }: { params: { id: string } }) {
-  return <EditListingClient id={params.id} />;
+export default async function EditListingPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <EditListingClient id={id} />;
 }
