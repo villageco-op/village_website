@@ -7,6 +7,7 @@ import PublicSellerProfile from '@/components/seller-profile/PublicSellerProfile
  * @param props.params.id - The user ID
  * @returns The public seller profile client component
  */
-export default function PublicProfilePage({ params }: { params: { id: string } }) {
-  return <PublicSellerProfile sellerId={params.id} />;
+export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <PublicSellerProfile sellerId={id} />;
 }

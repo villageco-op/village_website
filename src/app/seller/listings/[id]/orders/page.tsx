@@ -9,6 +9,7 @@ import ListingOrdersClient from '../../../../../components/seller/listing-orders
  * @param props.params.id - The listing ID
  * @returns The listing orders client component
  */
-export default function ListingOrdersPage({ params }: { params: { id: string } }) {
-  return <ListingOrdersClient id={params.id} />;
+export default async function ListingOrdersPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <ListingOrdersClient id={id} />;
 }
