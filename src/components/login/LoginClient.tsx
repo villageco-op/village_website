@@ -61,12 +61,20 @@ export default function LoginClient() {
     const entries = Object.fromEntries(formData.entries()) as Record<string, string>;
 
     const signInPromise = (async () => {
+      const csrfRes = await fetch('/api/auth/csrf');
+      const { csrfToken } = await csrfRes.json();
+
+      const bodyParams = new URLSearchParams({
+        ...entries,
+        csrfToken,
+      });
+
       const res = await fetch('/api/auth/signin/nodemailer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: new URLSearchParams(entries),
+        body: bodyParams,
       });
 
       if (!res.ok) throw new Error('Network response was not ok');

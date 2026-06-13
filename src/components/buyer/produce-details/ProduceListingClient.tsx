@@ -17,7 +17,6 @@ import SellerInfoMapCard from './SellerInfoMapCard';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { NotFoundState } from '@/components/ui/state-displays';
-import type { ProduceDetail } from '@/lib/api/generated/models';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
 
 interface ProduceListingClientProps {
@@ -34,14 +33,13 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
   const router = useRouter();
   const [showOrderForm, setShowOrderForm] = useState(false);
 
-  const produceQuery = useGetProduce(id, { query: { enabled: !!id } });
-  const produce = produceQuery.data?.data as ProduceDetail | undefined;
+  const { isError, isLoading, data } = useGetProduce(id);
 
-  if (produceQuery.isLoading) {
+  if (isLoading) {
     return <ProduceListingSkeleton />;
   }
 
-  if (produceQuery.isError || !produce) {
+  if (isError || data?.status !== 200 || !data.data) {
     return (
       <NotFoundState
         title="Listing not found"
@@ -49,6 +47,8 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
       />
     );
   }
+
+  const produce = data.data;
 
   return (
     <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">

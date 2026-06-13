@@ -125,6 +125,11 @@ export const EmailSentState: Story = {
         http.post('/api/auth/signin/nodemailer', () => {
           return HttpResponse.json({ url: 'http://localhost:3000/api/auth/verify-request' });
         }),
+        http.get('/api/auth/csrf', () => {
+          return HttpResponse.json({
+            csrfToken: 'mocked-csrf-token-123',
+          });
+        }),
       ],
     },
   },

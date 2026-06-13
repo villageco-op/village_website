@@ -44,4 +44,6 @@ next-env.d.ts
 storybook-static
 local-test
 
+playwright/.auth
+
 .vscode/settings.json
