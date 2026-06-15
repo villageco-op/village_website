@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { Loader2, ShoppingCart, CalendarDays, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
@@ -10,7 +11,7 @@ import { OrderSubscriptionToggle } from './OrderSubscriptionToggle';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormErrorState } from '@/components/ui/state-displays';
-import { useAddToCart } from '@/lib/api/generated/cart/cart';
+import { getGetCartQueryKey, useAddToCart } from '@/lib/api/generated/cart/cart';
 import type { ProduceDetail } from '@/lib/api/generated/models';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
 
@@ -38,6 +39,7 @@ export function BuyerOrderForm({
 }: BuyerOrderFormProps) {
   const { data: produceQuery, isLoading, error, refetch } = useGetProduce(produceId);
   const addToCartMutation = useAddToCart();
+  const queryClient = useQueryClient();
 
   const [quantityLbs, setQuantityLbs] = useState<number>(initialQuantityLbs || 1);
   const [isSubscription, setIsSubscription] = useState<boolean>(initialIsSubscription || false);
@@ -106,8 +108,9 @@ export function BuyerOrderForm({
         },
       });
       toast.success('Added to cart!');
+      void queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
+      if (onClose) onClose();
     } catch (err) {
-      console.error('Failed to add to cart:', err);
       toast.error('Failed to add item to cart.');
     }
   };
