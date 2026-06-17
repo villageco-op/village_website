@@ -72,7 +72,7 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
 
           {/* Right Column: Order Actions, Seller Map, & Buyer Activity */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6 items-start">
-            <div className="md:col-start-2 md:row-start-2">
+            <div className="md:col-start-2 md:row-start-2 lg:col-start-1 lg:row-start-1">
               <OrderActionCard onOrder={() => setShowOrderForm(true)} />
             </div>
 
