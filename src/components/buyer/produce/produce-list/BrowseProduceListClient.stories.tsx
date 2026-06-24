@@ -21,7 +21,7 @@ const MOCK_USER = {
   image:
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=faces',
   aboutMe: 'I love local fresh produce!',
-  specialties: [], // Assuming UserSpecialties is an array
+  specialties: [],
   goal: 'Eat healthy',
   address: '123 Main St',
   city: 'Gary',

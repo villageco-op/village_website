@@ -15,8 +15,6 @@ export interface ProduceListItem {
   name: string;
   /** @nullable */
   sellerName: string | null;
-  /** @nullable */
-  sellerOrg: string | null;
   sellerId: UserId;
   /** Formatted price string */
   price: string;

@@ -4,7 +4,7 @@ import { fn } from '@storybook/test';
 import RoleStep from './RoleStep';
 
 const meta: Meta<typeof RoleStep> = {
-  title: 'Onboarding/RoleStep',
+  title: 'Onboarding/Individual/RoleStep',
   component: RoleStep,
   parameters: {
     layout: 'centered',

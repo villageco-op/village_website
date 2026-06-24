@@ -4,7 +4,7 @@ import { fn, userEvent, within, expect } from '@storybook/test';
 import SellerInfoStep from './SellerInfoStep';
 
 const meta: Meta<typeof SellerInfoStep> = {
-  title: 'Onboarding/SellerInfoStep',
+  title: 'Onboarding/Individual/SellerInfoStep',
   component: SellerInfoStep,
   parameters: {
     layout: 'centered',

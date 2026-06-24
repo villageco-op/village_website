@@ -25,7 +25,7 @@ interface GrowerCardProps {
  */
 export function GrowerCard({ grower, index }: GrowerCardProps) {
   const startDate = formatAppDate(grower.firstOrderDate, 'monthYear');
-  const name = grower.organization || grower.name;
+  const name = grower.name;
 
   const getPillColor = (index: number) => {
     const styles = [

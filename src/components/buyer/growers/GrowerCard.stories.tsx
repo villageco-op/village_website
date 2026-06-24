@@ -29,7 +29,6 @@ export const Default: Story = {
     grower: {
       sellerId: 'user-1',
       name: 'Green Valley Farm',
-      organization: null,
       city: 'Austin',
       location: {
         lat: 30.2672,

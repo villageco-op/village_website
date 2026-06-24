@@ -10,7 +10,8 @@ import type { User } from '@/lib/api/generated/models/user';
 const mockUser: User = {
   id: 'buyer_123',
   name: 'County Fresh Mkt',
-  organization: null,
+  organizationId: null,
+  orgRole: null,
   email: 'purchasing@countyfresh.com',
   emailVerified: '2024-01-01T00:00:00Z',
   image:

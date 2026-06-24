@@ -2,7 +2,7 @@
 
 import { Bell } from 'lucide-react';
 
-import type { Role } from './OnboardingClient';
+import type { Role } from './IndividualOnboardingFlow';
 
 import { Button } from '@/components/ui/button';
 

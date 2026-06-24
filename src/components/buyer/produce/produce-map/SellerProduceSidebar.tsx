@@ -39,7 +39,7 @@ export function SellerProduceSidebar({
           title="View Seller Profile"
         >
           <Store className="h-4 w-4 mr-2 shrink-0" />
-          <span className="truncate max-w-45 text-left">{group.organization || group.name}</span>
+          <span className="truncate max-w-45 text-left">{group.name}</span>
           <span className="ml-1 text-sm">↗</span>
         </Button>
         <Button

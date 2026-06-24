@@ -5,6 +5,7 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
+import type { EntityId } from './entityId';
 import type { ImageUrl } from './imageUrl';
 import type { ReviewBreakdown } from './reviewBreakdown';
 import type { UserId } from './userId';
@@ -16,6 +17,7 @@ export interface PublicUserProfile {
   image: ImageUrl & (unknown | null);
   /** @nullable */
   organization: string | null;
+  organizationId: EntityId & (unknown | null);
   /**
    * Public bio displayed on the seller storefront
    * @nullable

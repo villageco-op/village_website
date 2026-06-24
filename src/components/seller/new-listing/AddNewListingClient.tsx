@@ -110,7 +110,9 @@ export default function AddNewListingClient() {
         totalOzInventory,
         maxOrderQuantityOz,
         harvestFrequencyDays: Number(formData.harvestFrequencyDays),
-        availableBy: formData.availableBy ? new Date(formData.availableBy).toISOString() : null,
+        availableBy: formData.availableBy
+          ? new Date(formData.availableBy).toISOString()
+          : undefined,
         seasonStart: formatLocalDate(formData.seasonStart),
         seasonEnd: formatLocalDate(formData.seasonEnd),
         isSubscribable: formData.isSubscribable,

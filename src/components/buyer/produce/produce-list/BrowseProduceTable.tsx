@@ -93,7 +93,7 @@ export function BrowseProduceTable({
                         onGrowerClick(item.sellerId);
                       }}
                     >
-                      {item.sellerOrg || item.sellerName} ↗
+                      {item.sellerName} ↗
                     </Button>
                   </TableCell>
                   <TableCell className="text-sm text-ink py-3">

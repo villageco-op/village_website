@@ -19,6 +19,7 @@ const MOCK_PROFILE: PublicUserProfile = {
   id: SELLER_ID,
   name: 'Oak Creek Organics',
   organization: null,
+  organizationId: '',
   image: '',
   aboutMe:
     'We are a small family-run farm specializing in heirloom vegetables and sustainable growing practices. Our mission is to bring the freshest, most nutrient-dense produce directly to our neighbors.',

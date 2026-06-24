@@ -164,7 +164,9 @@ export default function EditListingClient({ id }: EditListingClientProps) {
         totalOzInventory: totalOzInventory,
         maxOrderQuantityOz: maxOrderQuantityOz,
         harvestFrequencyDays: Number(formData.harvestFrequencyDays),
-        availableBy: formData.availableBy ? new Date(formData.availableBy).toISOString() : null,
+        availableBy: formData.availableBy
+          ? new Date(formData.availableBy).toISOString()
+          : undefined,
         seasonStart: new Date(formData.seasonStart).toISOString(),
         seasonEnd: new Date(formData.seasonEnd).toISOString(),
         isSubscribable: formData.isSubscribable,

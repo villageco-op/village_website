@@ -40,7 +40,6 @@ interface ProfileTabProps {
 export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
   // Basic Info State
   const [name, setName] = useState('');
-  const [organization, setOrganization] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -66,7 +65,6 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
   useEffect(() => {
     if (user) {
       setName(user.name || '');
-      setOrganization(user.organization || '');
       setAddress(user.address || '');
       setCity(user.city || '');
       setState(user.state || '');
@@ -143,7 +141,6 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
       await updateProfile.mutateAsync({
         data: {
           name,
-          organization: organization.trim() || undefined,
           image: imageUrl,
           address,
           city,
@@ -236,18 +233,6 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="organization" className="text-ink-2 font-semibold">
-              Organization <span className="text-ink-3 font-normal text-xs">(Optional)</span>
-            </Label>
-            <Input
-              id="organization"
-              placeholder="e.g. Green Earth Collective"
-              value={organization}
-              onChange={(e) => setOrganization(e.target.value)}
             />
           </div>
 

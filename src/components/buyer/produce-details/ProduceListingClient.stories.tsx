@@ -34,7 +34,6 @@ const MOCK_PRODUCE: ProduceDetail = {
   seller: {
     id: 'seller_99',
     name: 'Sunshine Orchards',
-    organization: null,
     image: '',
     canDeliver: true,
     deliveryRangeMiles: 15,

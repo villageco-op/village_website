@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 
-import OnboardingFlow from '../../components/onboarding/OnboardingClient';
-
+import OnboardingFlow from '@/components/onboarding/OnboardingClient';
 import { OnboardingSkeleton } from '@/components/onboarding/OnboardingSkeleton';
 
 /**

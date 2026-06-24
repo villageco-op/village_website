@@ -1,22 +1,26 @@
 'use client';
 
-import { Sprout, ShoppingBasket, Truck } from 'lucide-react';
+import { Sprout, ShoppingBasket, Truck, ArrowLeft } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 /**
  * Props for the RoleStep component.
  */
 export interface RoleStepProps {
   onSelectRole: (role: 'buyer' | 'seller') => void | Promise<void>;
+  onBack: () => void;
 }
 
 /**
  * A choice-based onboarding step where users select their primary interaction mode.
  * Displays interactive cards for 'Buyer' and 'Seller' roles.
- * @param props - Component properties.
- * @param props.onSelectRole - Callback triggered when a role button is clicked.
- * @returns A grid of selection cards and a "Coming Soon" section for deliverers.
+ * @param props - Component properties
+ * @param props.onSelectRole - Callback triggered when a role button is clicked
+ * @param props.onBack - When the back button is pressed
+ * @returns A grid of selection cards and a "Coming Soon" section for logisitics
  */
-export default function RoleStep({ onSelectRole }: RoleStepProps) {
+export default function RoleStep({ onSelectRole, onBack }: RoleStepProps) {
   return (
     <div className="animate-in fade-in slide-in-from-right-8 duration-500 space-y-6">
       <div className="text-center mb-8">
@@ -24,7 +28,7 @@ export default function RoleStep({ onSelectRole }: RoleStepProps) {
           How do you want to get involved?
         </h2>
         <p className="font-sans text-ink-3 mt-2">
-          You can always change this later. Sellers and Deliverers can buy produce too!
+          You can always change this later. Sellers and Logistics can buy produce too!
         </p>
       </div>
 
@@ -33,7 +37,7 @@ export default function RoleStep({ onSelectRole }: RoleStepProps) {
           onClick={() => {
             void onSelectRole('buyer');
           }}
-          className="flex flex-col items-center justify-center p-6 bg-white border-2 border-transparent rounded-xl shadow-sm hover:border-lime hover:shadow-md transition-all group"
+          className="cursor-pointer flex flex-col items-center justify-center p-6 bg-white border-2 border-transparent rounded-xl shadow-sm hover:border-lime hover:shadow-md transition-all group"
         >
           <div className="w-12 h-12 bg-lime-pale text-click-green rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <ShoppingBasket className="w-6 h-6" />
@@ -46,7 +50,7 @@ export default function RoleStep({ onSelectRole }: RoleStepProps) {
           onClick={() => {
             void onSelectRole('seller');
           }}
-          className="flex flex-col items-center justify-center p-6 bg-white border-2 border-transparent rounded-xl shadow-sm hover:border-lime hover:shadow-md transition-all group"
+          className="cursor-pointer flex flex-col items-center justify-center p-6 bg-white border-2 border-transparent rounded-xl shadow-sm hover:border-lime hover:shadow-md transition-all group"
         >
           <div className="w-12 h-12 bg-lime-pale text-click-green rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <Sprout className="w-6 h-6" />
@@ -61,9 +65,20 @@ export default function RoleStep({ onSelectRole }: RoleStepProps) {
           <Truck className="w-5 h-5" />
         </div>
         <div>
-          <h3 className="font-heading font-bold text-ink">Deliverer (Coming Soon)</h3>
+          <h3 className="font-heading font-bold text-ink">Logistics (Coming Soon)</h3>
           <p className="text-sm text-ink-3">Earn money delivering local goods to your neighbors.</p>
         </div>
+      </div>
+
+      <div className="flex justify-between items-center pt-6 border-t border-border/10">
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={onBack}
+          className="text-ink-2 hover:text-ink hover:bg-black/5 font-semibold"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" /> Back
+        </Button>
       </div>
     </div>
   );

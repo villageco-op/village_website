@@ -4,7 +4,7 @@ import { fn } from '@storybook/test';
 import SellerSuccessStep from './SellerSuccessStep';
 
 const meta: Meta<typeof SellerSuccessStep> = {
-  title: 'Onboarding/SellerSuccessStep',
+  title: 'Onboarding/Individual/SellerSuccessStep',
   component: SellerSuccessStep,
   parameters: {
     layout: 'centered',

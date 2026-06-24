@@ -38,7 +38,7 @@ export default function ContactClient() {
 
   const resolvedName = formData.name ?? user?.name ?? '';
   const resolvedEmail = formData.email ?? user?.email ?? '';
-  const resolvedCompany = formData.company ?? user?.organization ?? '';
+  const resolvedCompany = formData.company ?? '';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

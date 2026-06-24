@@ -31,8 +31,7 @@ interface SubscriptionCardProps {
 export function SubscriptionCard({ subscription, index, onFilterSeller }: SubscriptionCardProps) {
   const nextDelivery = formatAppDate(subscription.nextDeliveryDate, 'full', 'Pending');
 
-  const sellerName =
-    subscription.seller?.organization || subscription.seller?.name || 'Unknown Grower';
+  const sellerName = subscription.seller?.name || 'Unknown Grower';
   const sellerId = subscription.seller?.id || '';
   const productTitle = subscription.product?.title || 'Unknown Product';
 

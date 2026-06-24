@@ -4,7 +4,7 @@ import { fn } from '@storybook/test';
 import NotificationsStep from './NotificationStep';
 
 const meta: Meta<typeof NotificationsStep> = {
-  title: 'Onboarding/NotificationsStep',
+  title: 'Onboarding/Individual/NotificationsStep',
   component: NotificationsStep,
   parameters: {
     layout: 'centered',
