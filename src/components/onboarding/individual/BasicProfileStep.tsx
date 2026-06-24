@@ -1,10 +1,10 @@
 'use client';
 
-import { ArrowRight, Camera, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Camera, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useRef } from 'react';
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,17 +31,19 @@ export interface BasicInfoData {
 interface BasicProfileStepProps {
   onSubmit: (data: BasicInfoData) => void | Promise<void>;
   isPending?: boolean;
+  onBack: () => void;
 }
 
 /**
  * A form component that collects basic user identity and location information.
  * Features a circular image upload preview and validated input fields.
- * @param props - Component properties.
- * @param props.onSubmit - Submission handler receiving form data.
- * @param props.isPending - Indicates if the form is currently being processed.
- * @returns A slide-in animated form containing profile image upload and location inputs.
+ * @param props - Component properties
+ * @param props.onSubmit - Submission handler receiving form data
+ * @param props.isPending - Indicates if the form is currently being processed
+ * @param props.onBack - When the back button is pressed
+ * @returns A slide-in animated form containing profile image upload and location inputs
  */
-export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileStepProps) {
+export default function BasicProfileStep({ onSubmit, isPending, onBack }: BasicProfileStepProps) {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('Gary');
@@ -222,7 +224,6 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
                   className="bg-white border-lime/50 focus-visible:ring-click-green"
                   value={zip}
                   onChange={(e) => {
-                    // Only allow numerical input for US Zip codes
                     const value = e.target.value.replace(/[^0-9]/g, '');
                     setZip(value);
                   }}
@@ -234,11 +235,19 @@ export default function BasicProfileStep({ onSubmit, isPending }: BasicProfileSt
         </div>
 
         {/* Actions */}
-        <div className="flex pt-4">
+        <div className="flex justify-between items-center pt-6 border-t border-border/10">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onBack}
+            className="text-ink-2 hover:text-ink hover:bg-black/5 font-semibold"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" /> Back
+          </Button>
           <Button
             type="submit"
             disabled={!isValid || isPending}
-            className="w-full bg-lime text-forest-dark hover:bg-lime-light font-bold"
+            className="bg-lime text-forest-dark hover:bg-lime-light font-bold"
           >
             {isPending ? (
               <>

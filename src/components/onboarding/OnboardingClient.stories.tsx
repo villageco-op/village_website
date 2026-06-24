@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, userEvent, expect, screen } from '@storybook/test';
+import { userEvent, within, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
-import { Toaster } from '../ui/sonner';
-
 import OnboardingFlow from './OnboardingClient';
+
+import { Toaster } from '@/components/ui/sonner';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -15,7 +15,7 @@ const mockedQueryClient = new QueryClient({
 });
 
 const meta: Meta<typeof OnboardingFlow> = {
-  title: 'Onboarding/OnboardingPage',
+  title: 'Onboarding/RootOrchestratorFlow',
   component: OnboardingFlow,
   parameters: {
     layout: 'fullscreen',
@@ -27,30 +27,38 @@ const meta: Meta<typeof OnboardingFlow> = {
     },
     msw: {
       handlers: [
-        // 0. Mock Image Upload (Basic Profile Step)
+        http.get('*/api/organizations/subdomain/check', async () => {
+          await delay(100);
+          return HttpResponse.json({ available: true });
+        }),
         http.post('*/api/upload', async () => {
-          await delay(300);
-          return HttpResponse.json({ url: 'https://example.com/avatar.jpg' });
+          await delay(100);
+          return HttpResponse.json({ url: 'https://example.com/logo.jpg' });
         }),
-        // 0.5. Mock Geocode Address (Basic Profile Step)
         http.post('*/api/location/geocode', async () => {
-          await delay(50);
-          return HttpResponse.json({ lat: 0.0, lng: 0.0 });
+          await delay(100);
+          return HttpResponse.json({ lat: 41.59, lng: -87.34 });
         }),
-        // 1. Mock Update Profile (Seller Info Step)
-        http.put('*/api/users/me', async () => {
-          await delay(500);
+        http.post('*/api/organizations', async () => {
+          await delay(200);
+          return HttpResponse.json({ id: 'org_123', success: true }, { status: 201 });
+        }),
+        http.post('*/api/invites/invite', async () => {
+          await delay(100);
           return HttpResponse.json({ success: true });
         }),
-        // 2. Mock FCM Registration (Notifications Step)
+
+        http.put('*/api/users/me', async () => {
+          await delay(200);
+          return HttpResponse.json({ success: true });
+        }),
         http.post('*/api/users/fcm-token', async () => {
           await delay(100);
           return HttpResponse.json({ success: true });
         }),
-        // 3. Mock Stripe Link Generation (Success Step)
         http.post('*/api/stripe/connect/onboard', async () => {
           await delay(100);
-          return HttpResponse.json({ url: 'https://stripe/mock-onboarding' });
+          return HttpResponse.json({ url: 'https://stripe.mock/onboarding' });
         }),
       ],
     },
@@ -59,7 +67,7 @@ const meta: Meta<typeof OnboardingFlow> = {
     (Story) => (
       <QueryClientProvider client={mockedQueryClient}>
         <Story />
-        <Toaster></Toaster>
+        <Toaster />
       </QueryClientProvider>
     ),
   ],
@@ -70,105 +78,55 @@ export default meta;
 type Story = StoryObj<typeof OnboardingFlow>;
 
 /**
- * The initial state of the flow. Shows the role selection.
+ * Default starting root state. Renders the top-level selection step
+ * to branch out into either an Individual or Organization flow.
  */
-export const InitialState: Story = {};
+export const InitialGateway: Story = {};
 
 /**
- * Full Seller Journey walkthrough.
- * This tests the logic: Basic -> Role -> Info -> Notifications -> Success.
+ * Journey selecting "Individual" account type and traversing the primary branch.
  */
-export const CompleteSellerJourney: Story = {
+export const SelectIndividualJourney: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // 1. Basic Info
-    await userEvent.type(await canvas.findByLabelText(/Real Name/i), 'Jane Doe');
-    await userEvent.type(canvas.getByLabelText(/Street Address/i), '123 Farm Lane');
+    // 1. Gate selection step
+    const individualBtn = await canvas.findByRole('button', { name: /Individual/i });
+    await userEvent.click(individualBtn);
 
-    const cityInput = canvas.getByLabelText(/City/i);
-    await userEvent.clear(cityInput);
-    await userEvent.type(cityInput, 'Austin');
-
-    const stateDropdown = canvas.getByRole('combobox');
-    await userEvent.click(stateDropdown);
-    const txOption = await screen.findByRole('option', { name: 'Texas' });
-    await userEvent.click(txOption);
-
-    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '78701');
-
-    await userEvent.click(canvas.getByRole('button', { name: /Continue/i }));
-
-    // 2. Role Selection
-    const sellerBtn = await canvas.findByRole('button', { name: /Seller/i });
-    await userEvent.click(sellerBtn);
-
-    // 3. Seller Info
-    const aboutInput = await canvas.findByLabelText(/About You/i);
-    await userEvent.type(aboutInput, 'I grow organic strawberries in the valley.');
-    const continueBtn = canvas.getByRole('button', { name: /Continue/i });
-    await userEvent.click(continueBtn);
-
-    // 4. Notifications
-    // Wait for the slide-in animation/state change
-    const enableBtn = await canvas.findByRole('button', { name: /Enable Push Notifications/i });
-    await userEvent.click(enableBtn);
-
-    // 5. Success Screen
-    const successHeading = await canvas.findByRole('heading', { name: /You're in!/i });
-    await expect(successHeading).toBeInTheDocument();
-
-    // Verify Stripe button is interactive
-    const stripeBtn = canvas.getByRole('button', { name: /Complete Stripe Onboarding/i });
-    await expect(stripeBtn).toBeInTheDocument();
-    await expect(stripeBtn).toBeEnabled();
+    // 2. Asserts we have branched into IndividualOnboardingFlow step 1
+    const individualNameInput = await canvas.findByLabelText(/Real Name/i);
+    await expect(individualNameInput).toBeInTheDocument();
   },
 };
 
 /**
- * Tests the Buyer path, which is shorter and skips the Seller Info and Success steps.
+ * Journey selecting "Organization" account type and traversing the organizational branch.
  */
-export const CompleteBuyerJourney: Story = {
+export const SelectOrganizationJourney: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // 1. Basic Info
-    await userEvent.type(await canvas.findByLabelText(/Real Name/i), 'John Smith');
-    await userEvent.type(canvas.getByLabelText(/Street Address/i), '456 Oak St');
+    // 1. Gate selection step
+    const orgBtn = await canvas.findByRole('button', { name: /Organization/i });
+    await userEvent.click(orgBtn);
 
-    const cityInput = canvas.getByLabelText(/City/i);
-    await userEvent.clear(cityInput);
-    await userEvent.type(cityInput, 'Portland');
-
-    const stateDropdown = canvas.getByRole('combobox');
-    await userEvent.click(stateDropdown);
-    const orOption = await screen.findByRole('option', { name: 'Oregon' });
-    await userEvent.click(orOption);
-
-    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '97204');
-
-    await userEvent.click(canvas.getByRole('button', { name: /Continue/i }));
-
-    // 2. Role Selection
-    const buyerBtn = await canvas.findByRole('button', { name: /Buyer/i });
-    await userEvent.click(buyerBtn);
-
-    // 3. Notifications (Skipped Seller Info automatically)
-    const skipBtn = await canvas.findByRole('button', { name: /Not right now/i });
-    await userEvent.click(skipBtn);
+    // 2. Asserts we have branched into OrganizationOnboardingFlow step 1
+    const foodPantryCard = await canvas.findByRole('button', { name: /Food Pantry/i });
+    await expect(foodPantryCard).toBeInTheDocument();
   },
 };
 
 /**
- * Tests the Upgrade path for an existing buyer who is upgrading to become a seller.
- * They should skip basic info & role selection completely.
+ * Uses Next.js mock parameters to simulate an existing account navigating
+ * back with query params to upgrade directly into a Seller role bypass path.
  */
-export const UpgradeToSellerJourney: Story = {
+export const UpgradeToSellerBypass: Story = {
   parameters: {
     nextjs: {
       navigation: {
         query: {
-          upgrade: 'seller', // Trigger the bypass logic
+          upgrade: 'seller',
         },
       },
     },
@@ -176,63 +134,8 @@ export const UpgradeToSellerJourney: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // 1. Assert we start immediately at "Seller Info" (Skipping Basic Info and Role Selection)
-    const aboutInput = await canvas.findByLabelText(/About You/i);
-    await expect(aboutInput).toBeInTheDocument();
-
-    await userEvent.type(aboutInput, 'I decided to start selling my extra tomatoes!');
-    const continueBtn = canvas.getByRole('button', { name: /Continue/i });
-    await userEvent.click(continueBtn);
-
-    // 2. Notifications
-    const skipBtn = await canvas.findByRole('button', { name: /Not right now/i });
-    await userEvent.click(skipBtn);
-
-    // 3. Success Screen
-    const successHeading = await canvas.findByRole('heading', { name: /You're in!/i });
-    await expect(successHeading).toBeInTheDocument();
-  },
-};
-
-/**
- * Tests how the UI handles a server error during the first profile update step.
- */
-export const ProfileUpdateError: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.put('*/api/users/me', () => {
-          return new HttpResponse(null, { status: 500 });
-        }),
-      ],
-    },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    // Fill out the required basic info
-    await userEvent.type(await canvas.findByLabelText(/Real Name/i), 'Error Test');
-    await userEvent.type(canvas.getByLabelText(/Street Address/i), 'Nowhere');
-
-    const cityInput = canvas.getByLabelText(/City/i);
-    await userEvent.clear(cityInput);
-    await userEvent.type(cityInput, 'Void');
-
-    const stateDropdown = canvas.getByRole('combobox');
-    await userEvent.click(stateDropdown);
-    const wyOption = await screen.findByRole('option', { name: 'Wyoming' });
-    await userEvent.click(wyOption);
-
-    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '82001');
-
-    // Submit
-    const continueBtn = canvas.getByRole('button', { name: /Continue/i });
-    await userEvent.click(continueBtn);
-
-    // Verify that we do NOT progress to the role selection step
-    // (the button should revert to normal or stay on the basic info form)
-    await delay(600); // Wait for mock network failure
-    const roleHeading = canvas.queryByText(/Welcome to the Village/i);
-    await expect(roleHeading).toBeInTheDocument(); // We should still be on step 1
+    // Bypasses AccountTypeStep and starts directly at the Individual "About You" seller setup
+    const aboutMeInput = await canvas.findByLabelText(/About You/i);
+    await expect(aboutMeInput).toBeInTheDocument();
   },
 };

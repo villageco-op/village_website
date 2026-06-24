@@ -4,7 +4,7 @@ import { fn, userEvent, within, expect, screen } from '@storybook/test';
 import BasicProfileStep from './BasicProfileStep';
 
 const meta: Meta<typeof BasicProfileStep> = {
-  title: 'Onboarding/BasicProfileStep',
+  title: 'Onboarding/Individual/BasicProfileStep',
   component: BasicProfileStep,
   parameters: {
     layout: 'centered',

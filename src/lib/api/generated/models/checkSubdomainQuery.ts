@@ -5,8 +5,11 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { CheckSubdomainQuery as __CheckSubdomainQuery } from './checkSubdomainQuery';
 
 export interface CheckSubdomainQuery {
-  subdomain: __CheckSubdomainQuery;
+  /**
+   * @minLength 1
+   * @pattern ^[a-z0-9]+(?:-[a-z0-9]+)*$
+   */
+  subdomain: string;
 }

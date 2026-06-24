@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -25,16 +25,24 @@ interface SellerInfoData {
  */
 export interface SellerInfoStepProps {
   onSubmit: (data: SellerInfoData) => void | Promise<void>;
+  onBack: () => void;
+  isUpgradingToSeller: boolean;
 }
 
 /**
  * A form for sellers to provide operation details like specialties and delivery preferences.
  * Includes conditional logic for delivery range based on the user's selection.
- * @param props - Component properties.
- * @param props.onSubmit - Callback triggered with the seller's form data or on skip.
- * @returns A form with text inputs, a textarea for biography, and delivery configuration.
+ * @param props - Component properties
+ * @param props.onSubmit - Callback triggered with the seller's form data or on skip
+ * @param props.onBack - When the back button is pressed
+ * @param props.isUpgradingToSeller - Indicates this is an buyer returning to become a seller
+ * @returns A form with text inputs, a textarea for biography, and delivery configuration
  */
-export default function SellerInfoStep({ onSubmit }: { onSubmit: (data: SellerInfoData) => void }) {
+export default function SellerInfoStep({
+  onSubmit,
+  onBack,
+  isUpgradingToSeller,
+}: SellerInfoStepProps) {
   const [aboutMe, setAboutMe] = useState('');
   const [specialties, setSpecialties] = useState('');
   const [goal, setGoal] = useState<number | ''>('');
@@ -43,7 +51,7 @@ export default function SellerInfoStep({ onSubmit }: { onSubmit: (data: SellerIn
 
   const handleSubmit = (e?: React.SubmitEvent) => {
     if (e) e.preventDefault();
-    onSubmit({ aboutMe, specialties, goal, willDeliver, deliveryRangeMiles });
+    void onSubmit({ aboutMe, specialties, goal, willDeliver, deliveryRangeMiles });
   };
 
   return (
@@ -128,19 +136,26 @@ export default function SellerInfoStep({ onSubmit }: { onSubmit: (data: SellerIn
           )}
         </div>
 
-        <div className="flex gap-3 pt-4">
+        <div className="flex justify-between items-center pt-4 border-t border-border/10 gap-3">
+          {!isUpgradingToSeller && (
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={onBack}
+              className="text-ink-2 hover:text-ink hover:bg-black/5 font-semibold h-9"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back
+            </Button>
+          )}
           <Button
             type="button"
             variant="ghost"
-            className="text-ink-3"
+            className="text-ink-3 ml-auto"
             onClick={() => handleSubmit()}
           >
             Skip
           </Button>
-          <Button
-            type="submit"
-            className="ml-auto bg-lime text-forest-dark hover:bg-lime-light font-bold"
-          >
+          <Button type="submit" className="bg-lime text-forest-dark hover:bg-lime-light font-bold">
             Continue <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
