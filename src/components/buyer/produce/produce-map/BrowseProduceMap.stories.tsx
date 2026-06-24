@@ -9,7 +9,6 @@ const mockMapGroups = [
   {
     sellerId: 'seller-1',
     name: 'Jonah',
-    organization: null,
     lat: 30.2672,
     lng: -97.7431,
     produce: [
@@ -43,7 +42,6 @@ const mockMapGroups = [
   {
     sellerId: 'seller-2',
     name: 'Sarah',
-    organization: null,
     lat: 30.2856,
     lng: -97.7341,
     produce: [

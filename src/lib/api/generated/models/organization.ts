@@ -5,28 +5,21 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { UserOrgRole } from './userOrgRole';
-import type { UserSpecialties } from './userSpecialties';
+import type { OrgType } from './orgType';
 
-export interface User {
+export interface Organization {
   id: string;
-  /** @nullable */
-  name: string | null;
+  type: OrgType;
+  name: string;
+  subdomain: string;
   /** @nullable */
   email: string | null;
   /** @nullable */
-  emailVerified: string | null;
+  website: string | null;
+  /** @nullable */
+  phone: string | null;
   /** @nullable */
   image: string | null;
-  /** @nullable */
-  organizationId: string | null;
-  /** @nullable */
-  orgRole: UserOrgRole;
-  /** @nullable */
-  aboutMe: string | null;
-  specialties: UserSpecialties;
-  /** @nullable */
-  goal: string | null;
   /** @nullable */
   address: string | null;
   /** @nullable */
@@ -50,12 +43,7 @@ export interface User {
    */
   lng: number | null;
   /** @nullable */
-  deliveryRangeMiles: string | null;
-  /** @nullable */
-  stripeOnboardingComplete: boolean | null;
-  /** @nullable */
   createdAt: string | null;
   /** @nullable */
   updatedAt: string | null;
-  isOnboardingComplete: boolean;
 }

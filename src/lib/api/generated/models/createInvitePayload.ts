@@ -5,10 +5,9 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { UserId } from './userId';
+import type { OrgRole } from './orgRole';
 
-export interface CartSeller {
-  id: UserId;
-  /** @nullable */
-  name: string | null;
+export interface CreateInvitePayload {
+  email: string;
+  role?: OrgRole;
 }

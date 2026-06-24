@@ -62,7 +62,6 @@ export const Anonymous: Story = {
     seller: {
       id: 'anon-1',
       name: null,
-      organization: null,
       image: '',
       canDeliver: false,
       deliveryRangeMiles: null,

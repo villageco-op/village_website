@@ -5,10 +5,8 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { UserId } from './userId';
 
-export interface CartSeller {
-  id: UserId;
-  /** @nullable */
-  name: string | null;
+export interface CheckSubdomainResponse {
+  available: boolean;
+  suggestion?: string;
 }

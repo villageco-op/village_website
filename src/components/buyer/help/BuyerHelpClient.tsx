@@ -31,7 +31,6 @@ export default function BuyerHelpClient() {
 
   const resolvedName = isAuthenticated ? (user?.name ?? '') : guestName;
   const resolvedEmail = isAuthenticated ? (user?.email ?? '') : guestEmail;
-  const resolvedCompany = isAuthenticated ? (user?.organization ?? '') : '';
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -43,7 +42,7 @@ export default function BuyerHelpClient() {
         data: {
           name: resolvedName,
           email: resolvedEmail,
-          company: resolvedCompany,
+          company: '',
           message: message,
         },
       });

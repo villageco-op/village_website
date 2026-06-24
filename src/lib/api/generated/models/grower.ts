@@ -17,11 +17,6 @@ export interface Grower {
    * @nullable
    */
   name: string | null;
-  /**
-   * The organization of the grower
-   * @nullable
-   */
-  organization: string | null;
   location: Location & (unknown | null);
   /** @nullable */
   city: string | null;

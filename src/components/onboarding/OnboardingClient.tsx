@@ -100,7 +100,6 @@ export default function OnboardingFlow() {
           state: data.state,
           zip: data.zip,
           country: data.country,
-          organization: data.organization ?? undefined,
           lat,
           lng,
         },

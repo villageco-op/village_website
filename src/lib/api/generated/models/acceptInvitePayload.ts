@@ -5,10 +5,10 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { UserId } from './userId';
+import type { EntityId } from './entityId';
 
-export interface CartSeller {
-  id: UserId;
-  /** @nullable */
-  name: string | null;
+export interface AcceptInvitePayload {
+  email: string;
+  code: string;
+  orgId: EntityId & unknown;
 }
