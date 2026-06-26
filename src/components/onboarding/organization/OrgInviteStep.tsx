@@ -92,24 +92,26 @@ export default function OrgInviteStep({ onInvite, onFinish, onBack }: OrgInviteS
           <Mail className="w-4 h-4 text-click-green" /> New Invite Card
         </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
-          <div className="sm:col-span-6 space-y-1.5">
-            <Label htmlFor="inviteEmail" className="text-xs font-semibold text-ink-3">
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch">
+          {/* Email Input */}
+          <div className="w-full sm:flex-3 flex flex-col justify-between gap-1.5">
+            <Label htmlFor="inviteEmail" className="text-xs font-semibold text-ink-3 leading-none">
               Member Email Address
             </Label>
             <Input
               id="inviteEmail"
               type="email"
               placeholder="colleague@example.com"
-              className="bg-white border-lime/50 focus-visible:ring-click-green h-9 text-sm"
+              className="bg-white border-lime/50 focus-visible:ring-click-green h-9 text-sm w-full"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isInviting}
             />
           </div>
 
-          <div className="sm:col-span-4 space-y-1.5">
-            <Label htmlFor="inviteRole" className="text-xs font-semibold text-ink-3">
+          {/* Role Select */}
+          <div className="w-full sm:w-48 flex flex-col justify-between gap-1.5">
+            <Label htmlFor="inviteRole" className="text-xs font-semibold text-ink-3 leading-none">
               Permission Role
             </Label>
             <Select
@@ -119,7 +121,7 @@ export default function OrgInviteStep({ onInvite, onFinish, onBack }: OrgInviteS
             >
               <SelectTrigger
                 id="inviteRole"
-                className="bg-white border-lime/50 focus-visible:ring-click-green h-9 text-sm"
+                className="bg-white border-lime/50 focus-visible:ring-click-green h-9 text-sm w-full leading-none flex items-center"
               >
                 <SelectValue placeholder="Role" />
               </SelectTrigger>
@@ -130,11 +132,12 @@ export default function OrgInviteStep({ onInvite, onFinish, onBack }: OrgInviteS
             </Select>
           </div>
 
-          <div className="sm:col-span-2">
+          <div className="w-full sm:flex-1 flex items-end">
             <Button
               type="submit"
               disabled={!email || isInviting}
-              className="w-full bg-lime text-forest-dark hover:bg-lime-light font-bold h-9 flex items-center justify-center gap-1 text-sm"
+              variant="lime"
+              className="w-full h-9 flex items-center justify-center gap-1 text-sm"
             >
               {isInviting ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -197,13 +200,7 @@ export default function OrgInviteStep({ onInvite, onFinish, onBack }: OrgInviteS
 
       {/* Navigation and Submission Buttons */}
       <div className="flex justify-between items-center pt-4 border-t border-border/10 gap-3">
-        <Button
-          type="button"
-          variant="ghost"
-          onClick={onBack}
-          disabled={isInviting}
-          className="text-ink-2 hover:text-ink hover:bg-black/5 font-semibold h-9"
-        >
+        <Button type="button" variant="ghost" onClick={onBack} disabled={isInviting}>
           <ArrowLeft className="w-4 h-4 mr-2" /> Back
         </Button>
 
@@ -211,7 +208,8 @@ export default function OrgInviteStep({ onInvite, onFinish, onBack }: OrgInviteS
           type="button"
           onClick={onFinish}
           disabled={isInviting}
-          className="flex-1 bg-click-green hover:bg-click-green/95 text-white font-bold h-9 flex items-center justify-center gap-2"
+          variant="forest"
+          className="ml-auto"
         >
           Finish & Go to Dashboard <Check className="w-4 h-4" />
         </Button>

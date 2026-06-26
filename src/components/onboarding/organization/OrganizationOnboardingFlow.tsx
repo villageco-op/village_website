@@ -8,12 +8,10 @@ import OrgDetailsStep, { type OrgDetailsData } from './OrgDetailsStep';
 import OrgInviteStep from './OrgInviteStep';
 import OrgTypeStep from './OrgTypeStep';
 
+import { useInviteToOrg } from '@/lib/api/generated/invites/invites';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import type { OrgRole } from '@/lib/api/generated/models/orgRole';
-import {
-  useCreateOrganization,
-  useInviteToOrg,
-} from '@/lib/api/generated/organizations/organizations';
+import { useCreateOrganization } from '@/lib/api/generated/organizations/organizations';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 
 type OrgStep = 'org-type' | 'org-details' | 'org-invite';

@@ -13,7 +13,6 @@ export function OnboardingSkeleton() {
       <div className="max-w-xl w-full">
         {/* Step Progress Indicators Bar */}
         <div className="flex justify-center mb-8 space-x-2">
-          {/* Matches the single active dot layout from the new root orchestrator */}
           <Skeleton className="h-2 w-8 rounded-full bg-black/5" />
         </div>
 

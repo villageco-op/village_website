@@ -53,7 +53,6 @@ export const GuestHome: Story = {
     msw: {
       handlers: [
         http.get('*/api/auth/session', () => {
-          // Auth.js returns an empty object when no session exists
           return HttpResponse.json({});
         }),
       ],
