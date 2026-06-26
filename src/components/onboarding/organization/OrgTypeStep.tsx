@@ -73,19 +73,15 @@ export default function OrgTypeStep({ onSelectType, onBack }: OrgTypeStepProps) 
       </div>
 
       <div className="flex justify-between items-center pt-6 border-t border-border/10">
-        <Button
-          type="button"
-          variant="ghost"
-          onClick={onBack}
-          className="text-ink-2 hover:text-ink hover:bg-black/5 font-semibold"
-        >
+        <Button type="button" variant="ghost" onClick={onBack}>
           <ArrowLeft className="w-4 h-4 mr-2" /> Back
         </Button>
         <Button
           type="button"
           onClick={handleContinue}
           disabled={!selected}
-          className="bg-lime text-forest-dark hover:bg-lime-light font-bold"
+          variant="lime"
+          className="ml-auto"
         >
           Continue <ArrowRight className="w-4 h-4 ml-2" />
         </Button>

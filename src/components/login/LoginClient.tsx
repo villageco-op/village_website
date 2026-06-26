@@ -26,7 +26,10 @@ export default function LoginClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
 
-  const callbackUrl = `${env.NEXT_PUBLIC_APP_URL.replace(/\/$/, '')}/login/success`;
+  const rawCallbackUrl = searchParams.get('callbackUrl');
+  const callbackUrl = rawCallbackUrl
+    ? decodeURIComponent(rawCallbackUrl)
+    : `${env.NEXT_PUBLIC_APP_URL.replace(/\/$/, '')}/login/success`;
 
   useEffect(() => {
     const error = searchParams.get('error');

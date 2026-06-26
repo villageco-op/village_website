@@ -25,10 +25,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  AcceptInvitePayload,
   CheckSubdomainParams,
   CheckSubdomainResponse,
-  CreateInvitePayload,
   CreateOrganizationPayload,
   EntityId,
   ErrorResponse,
@@ -454,190 +452,116 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getDeleteOrganizationMutationOptions(options), queryClient);
     }
     /**
- * Invite a user to the organization by email.
+ * Retrieve an organization using its ID.
  */
-export type inviteToOrgResponse200 = {
-  data: SuccessResponse
+export type getOrganizationResponse200 = {
+  data: Organization
   status: 200
 }
 
-export type inviteToOrgResponse400 = {
-  data: ErrorResponse
-  status: 400
-}
-
-export type inviteToOrgResponse401 = {
-  data: ErrorResponse
-  status: 401
-}
-
-export type inviteToOrgResponse502 = {
-  data: ErrorResponse
-  status: 502
-}
-
-export type inviteToOrgResponseSuccess = (inviteToOrgResponse200) & {
-  headers: Headers;
-};
-export type inviteToOrgResponseError = (inviteToOrgResponse400 | inviteToOrgResponse401 | inviteToOrgResponse502) & {
-  headers: Headers;
-};
-
-export type inviteToOrgResponse = (inviteToOrgResponseSuccess | inviteToOrgResponseError)
-
-export const getInviteToOrgUrl = () => {
-
-
-  
-
-  return `/api/invites/invite`
-}
-
-export const inviteToOrg = async (createInvitePayload: CreateInvitePayload, options?: RequestInit): Promise<inviteToOrgResponse> => {
-  
-  return apiClient<inviteToOrgResponse>(getInviteToOrgUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      createInvitePayload,)
-  }
-);}
-  
-
-
-
-export const getInviteToOrgMutationOptions = <TError = ErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inviteToOrg>>, TError,{data: CreateInvitePayload}, TContext>, request?: SecondParameter<typeof apiClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof inviteToOrg>>, TError,{data: CreateInvitePayload}, TContext> => {
-
-const mutationKey = ['inviteToOrg'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inviteToOrg>>, {data: CreateInvitePayload}> = (props) => {
-          const {data} = props ?? {};
-
-          return  inviteToOrg(data,requestOptions)
-        }
-
-
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type InviteToOrgMutationResult = NonNullable<Awaited<ReturnType<typeof inviteToOrg>>>
-    export type InviteToOrgMutationBody = CreateInvitePayload
-    export type InviteToOrgMutationError = ErrorResponse
-
-    export const useInviteToOrg = <TError = ErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inviteToOrg>>, TError,{data: CreateInvitePayload}, TContext>, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof inviteToOrg>>,
-        TError,
-        {data: CreateInvitePayload},
-        TContext
-      > => {
-      return useMutation(getInviteToOrgMutationOptions(options), queryClient);
-    }
-    /**
- * Accept an invitation and update user profile roles.
- */
-export type acceptInviteResponse200 = {
-  data: SuccessResponse
-  status: 200
-}
-
-export type acceptInviteResponse400 = {
-  data: ErrorResponse
-  status: 400
-}
-
-export type acceptInviteResponse404 = {
+export type getOrganizationResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-export type acceptInviteResponseSuccess = (acceptInviteResponse200) & {
+export type getOrganizationResponseSuccess = (getOrganizationResponse200) & {
   headers: Headers;
 };
-export type acceptInviteResponseError = (acceptInviteResponse400 | acceptInviteResponse404) & {
+export type getOrganizationResponseError = (getOrganizationResponse404) & {
   headers: Headers;
 };
 
-export type acceptInviteResponse = (acceptInviteResponseSuccess | acceptInviteResponseError)
+export type getOrganizationResponse = (getOrganizationResponseSuccess | getOrganizationResponseError)
 
-export const getAcceptInviteUrl = () => {
+export const getGetOrganizationUrl = (id: EntityId,) => {
 
 
   
 
-  return `/api/invites/accept`
+  return `/api/organizations/${id}`
 }
 
-export const acceptInvite = async (acceptInvitePayload: AcceptInvitePayload, options?: RequestInit): Promise<acceptInviteResponse> => {
+export const getOrganization = async (id: EntityId, options?: RequestInit): Promise<getOrganizationResponse> => {
   
-  return apiClient<acceptInviteResponse>(getAcceptInviteUrl(),
+  return apiClient<getOrganizationResponse>(getGetOrganizationUrl(id),
   {      
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      acceptInvitePayload,)
+    method: 'GET'
+    
+    
   }
 );}
   
 
 
 
-export const getAcceptInviteMutationOptions = <TError = ErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof acceptInvite>>, TError,{data: AcceptInvitePayload}, TContext>, request?: SecondParameter<typeof apiClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof acceptInvite>>, TError,{data: AcceptInvitePayload}, TContext> => {
 
-const mutationKey = ['acceptInvite'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetOrganizationQueryKey = (id: EntityId,) => {
+    return [
+    `/api/organizations/${id}`
+    ] as const;
+    }
+
+    
+export const getGetOrganizationQueryOptions = <TData = Awaited<ReturnType<typeof getOrganization>>, TError = ErrorResponse>(id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrganization>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetOrganizationQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrganization>>> = ({ signal }) => getOrganization(id, { signal, ...requestOptions });
 
       
 
+      
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof acceptInvite>>, {data: AcceptInvitePayload}> = (props) => {
-          const {data} = props ?? {};
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrganization>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-          return  acceptInvite(data,requestOptions)
-        }
-
-
-
-        
+export type GetOrganizationQueryResult = NonNullable<Awaited<ReturnType<typeof getOrganization>>>
+export type GetOrganizationQueryError = ErrorResponse
 
 
-  return  { mutationFn, ...mutationOptions }}
+export function useGetOrganization<TData = Awaited<ReturnType<typeof getOrganization>>, TError = ErrorResponse>(
+ id: EntityId, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrganization>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrganization>>,
+          TError,
+          Awaited<ReturnType<typeof getOrganization>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOrganization<TData = Awaited<ReturnType<typeof getOrganization>>, TError = ErrorResponse>(
+ id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrganization>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrganization>>,
+          TError,
+          Awaited<ReturnType<typeof getOrganization>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOrganization<TData = Awaited<ReturnType<typeof getOrganization>>, TError = ErrorResponse>(
+ id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrganization>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-    export type AcceptInviteMutationResult = NonNullable<Awaited<ReturnType<typeof acceptInvite>>>
-    export type AcceptInviteMutationBody = AcceptInvitePayload
-    export type AcceptInviteMutationError = ErrorResponse
+export function useGetOrganization<TData = Awaited<ReturnType<typeof getOrganization>>, TError = ErrorResponse>(
+ id: EntityId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrganization>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-    export const useAcceptInvite = <TError = ErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof acceptInvite>>, TError,{data: AcceptInvitePayload}, TContext>, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof acceptInvite>>,
-        TError,
-        {data: AcceptInvitePayload},
-        TContext
-      > => {
-      return useMutation(getAcceptInviteMutationOptions(options), queryClient);
-    }
-    
+  const queryOptions = getGetOrganizationQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+

@@ -138,12 +138,7 @@ export default function SellerInfoStep({
 
         <div className="flex justify-between items-center pt-4 border-t border-border/10 gap-3">
           {!isUpgradingToSeller && (
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={onBack}
-              className="text-ink-2 hover:text-ink hover:bg-black/5 font-semibold h-9"
-            >
+            <Button type="button" variant="ghost" onClick={onBack}>
               <ArrowLeft className="w-4 h-4 mr-2" /> Back
             </Button>
           )}
@@ -155,7 +150,7 @@ export default function SellerInfoStep({
           >
             Skip
           </Button>
-          <Button type="submit" className="bg-lime text-forest-dark hover:bg-lime-light font-bold">
+          <Button type="submit" variant="lime">
             Continue <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
