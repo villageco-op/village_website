@@ -15,7 +15,7 @@ import { cn, getAssetPath } from '@/lib/utils';
 const navItems = [
   { name: 'Home', href: '/', unAuthOnly: true },
   { name: 'Sell', href: '/seller', unAuthOnly: false },
-  { name: 'Produce', href: '/buyer', unAuthOnly: false },
+  { name: 'Shop', href: '/buyer', unAuthOnly: false },
 ];
 
 const getSecondaryNavItems = (path: string) => {

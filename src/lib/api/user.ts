@@ -1,18 +1,14 @@
-import { type NextRequest } from 'next/server';
-
 import type { User } from './generated/models/user';
 
 /**
  * Fetches the current authenticated user's profile.
  * Designed to be used safely inside Next.js Edge Middleware.
- * @param request - The NextRequest
+ * @param cookieHeader - The NextRequest cookie header
  * @returns The user or null
  */
-export async function fetchCurrentUser(request: NextRequest): Promise<User | null> {
+export async function fetchCurrentUser(cookieHeader: string | null): Promise<User | null> {
   const backendBase = process.env.BACKEND_URL || 'http://localhost:8080';
   const apiUrl = new URL('/api/users/me', backendBase);
-
-  const cookieHeader = request.headers.get('cookie');
 
   try {
     const res = await fetch(apiUrl.toString(), {

@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import type { User } from '@/lib/api/generated/models/user';
@@ -31,17 +30,15 @@ describe('fetchCurrentUser', () => {
       stripeOnboardingComplete: true,
     } as any;
 
-    // Mock global fetch for a successful 200 OK JSON response
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
       json: () => mockUser,
     });
     vi.stubGlobal('fetch', mockFetch);
 
-    const req = new NextRequest('http://localhost/dashboard');
-    req.headers.set('cookie', 'authjs.session-token=fake-token');
+    const cookieHeader = 'authjs.session-token=fake-token';
 
-    const result = await fetchCurrentUser(req);
+    const result = await fetchCurrentUser(cookieHeader);
 
     // Verify it called the correct endpoint with the forwarded Cookie header
     expect(mockFetch).toHaveBeenCalledWith(NEW_BACKEND_URL + '/api/users/me', {
@@ -62,10 +59,9 @@ describe('fetchCurrentUser', () => {
     });
     vi.stubGlobal('fetch', mockFetch);
 
-    const req = new NextRequest('http://localhost/dashboard');
-    // Notice: no cookie header is set on the request
+    const cookieHeader = null;
 
-    await fetchCurrentUser(req);
+    await fetchCurrentUser(cookieHeader);
 
     expect(mockFetch).toHaveBeenCalledWith(NEW_BACKEND_URL + '/api/users/me', {
       method: 'GET',
@@ -83,8 +79,8 @@ describe('fetchCurrentUser', () => {
     });
     vi.stubGlobal('fetch', mockFetch);
 
-    const req = new NextRequest('http://localhost/dashboard');
-    const result = await fetchCurrentUser(req);
+    const cookieHeader = 'authjs.session-token=fake-token';
+    const result = await fetchCurrentUser(cookieHeader);
 
     expect(result).toBeNull();
   });
@@ -92,12 +88,11 @@ describe('fetchCurrentUser', () => {
   it('catches network errors, logs them, and returns null', async () => {
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    // Simulate a network failure or DNS timeout
     const mockFetch = vi.fn().mockRejectedValue(new Error('Network connection failed'));
     vi.stubGlobal('fetch', mockFetch);
 
-    const req = new NextRequest('http://localhost/dashboard');
-    const result = await fetchCurrentUser(req);
+    const cookieHeader = 'authjs.session-token=fake-token';
+    const result = await fetchCurrentUser(cookieHeader);
 
     expect(result).toBeNull();
     expect(consoleErrorSpy).toHaveBeenCalled();

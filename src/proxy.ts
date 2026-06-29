@@ -1,68 +1,51 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
-import { fetchCurrentUser } from '@/lib/api/user';
-import { hasSessionToken } from '@/lib/auth';
+import { hasSessionToken } from './lib/auth';
+import { checkOrgAuth } from './middleware/checkOrgAuth';
+import { checkStandardAuth } from './middleware/standardAuthProxy';
 
 /**
- * Proxy for handling redirecting for protected pages.
- * @param request - The NextRequest
- * @returns The NextResponse redirect or passthrough
+ * Main app proxy. Handles auth protection and org subdomains.
+ * @param request The NextRequest
+ * @returns A NextResponse next, redirect or rewrite
  */
 export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const url = request.nextUrl;
+  const { pathname } = url;
+  const hostname = request.headers.get('host') || '';
   const isAuthenticated = hasSessionToken(request);
+  const cookieHeader = request.headers.get('cookie');
 
-  const unprotectedRoutes = ['/buyer/browse', '/buyer/help'];
-  const otherProtectedRoutes = ['/orders'];
-  const isProtectedBuyerRoute =
-    pathname.startsWith('/buyer') && !unprotectedRoutes.includes(pathname);
-  const isSellerRoute = pathname.startsWith('/seller');
-  const isGeneralProtectedRoute = otherProtectedRoutes.includes(pathname);
+  const allowedDomains = ['localhost:3000', 'localhost:3001', 'villageco-op.com'];
+  const isCustomDomain = !allowedDomains.some((domain) => hostname.includes(domain));
 
-  if (isProtectedBuyerRoute && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/buyer/browse', request.url));
+  let subdomain = '';
+  if (!isCustomDomain) {
+    const parts = hostname.split('.');
+    if (parts.length > 1 && parts[1] != 'com' && parts[0] != 'staging') subdomain = parts[0];
   }
 
-  if (isSellerRoute && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/become-seller', request.url));
-  }
-
-  if (isGeneralProtectedRoute && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
-  if (pathname === '/login' && isAuthenticated) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
-  if (pathname === '/login/success') {
-    if (!isAuthenticated) {
-      return NextResponse.redirect(new URL('/', request.url));
+  if (subdomain && subdomain !== 'www') {
+    const redirectUrl = await checkOrgAuth(pathname, isAuthenticated, subdomain);
+    if (redirectUrl) {
+      return NextResponse.redirect(new URL(redirectUrl, request.url));
     }
 
-    const user = await fetchCurrentUser(request);
-
-    if (user) {
-      if (!user.isOnboardingComplete) {
-        return NextResponse.redirect(new URL('/onboarding', request.url));
-      }
-
-      if (user.stripeOnboardingComplete) {
-        return NextResponse.redirect(new URL('/seller/dashboard', request.url));
-      } else {
-        return NextResponse.redirect(new URL('/buyer/dashboard', request.url));
-      }
+    if (!pathname.startsWith(`/org/${subdomain}`)) {
+      url.pathname = `/org/${subdomain}${pathname}`;
+      return NextResponse.rewrite(url);
     }
+    return NextResponse.next();
+  }
 
-    return NextResponse.redirect(new URL('/onboarding', request.url));
+  const standardRedirect = await checkStandardAuth(pathname, isAuthenticated, cookieHeader);
+  if (standardRedirect) {
+    return NextResponse.redirect(new URL(standardRedirect, request.url));
   }
 
   return NextResponse.next();
 }
 
-/**
- * Middleware config defining the path matching.
- */
 export const config = {
-  matcher: ['/buyer/:path*', '/seller/:path*', '/login/success', '/login', '/orders/:path*'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
