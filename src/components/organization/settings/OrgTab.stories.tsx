@@ -3,7 +3,7 @@ import { within, expect, userEvent } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse } from 'msw';
 
-import OrgTab from './OrgSettingsClient';
+import OrgTab from './OrgTab';
 
 import type { User, Organization } from '@/lib/api/generated/models';
 

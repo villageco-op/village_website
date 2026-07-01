@@ -1,97 +1,63 @@
-'use client';
-
 import { Loader2, Trash2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { DeleteOrganizationDialog } from './DeleteConfirmationDialog';
-import { SettingsSkeleton } from './SettingsSkeleton';
 import { SubdomainInput } from './SubdomainInput';
 
-import { AddressFormFields, type AddressValue } from '@/components/edit-profile/AddressFormFields';
+import { AddressFormFields } from '@/components/edit-profile/AddressFormFields';
 import { AvatarPicker } from '@/components/edit-profile/AvatarPicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PageErrorState } from '@/components/ui/state-displays';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
-import type { User } from '@/lib/api/generated/models';
+import type { Organization, User } from '@/lib/api/generated/models';
 import {
-  useGetOrganization,
   useUpdateOrganization,
   useDeleteOrganization,
 } from '@/lib/api/generated/organizations/organizations';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 
-interface OrgTabProps {
+interface OrgSettingsFormProps {
+  orgData: Organization | null;
+  orgId: string;
   user: User;
+  refetchOrg: () => void;
   onDeleteOrganization: () => void;
 }
 
 /**
- * A tab content component for fully managing organization details and identity.
- * Designed to sit inside a tabbed view area.
+ * The org settings tab form with org details and the delete org button.
  * @param props - Component props
+ * @param props.orgData - The organization
+ * @param props.orgId - The organization Id
  * @param props.user - The current user
- * @param props.onDeleteOrganization - When delete org is pressed
- * @returns A form component
+ * @param props.refetchOrg - Refetch the organization data
+ * @param props.onDeleteOrganization - When the delete org button is pressed
+ * @returns A form with inputs and query management
  */
-export default function OrgTab({ user, onDeleteOrganization }: OrgTabProps) {
+export default function OrgSettingsForm({
+  orgData,
+  orgId,
+  user,
+  refetchOrg,
+  onDeleteOrganization,
+}: OrgSettingsFormProps) {
+  const [name, setName] = useState(orgData?.name || '');
+  const [subdomain, setSubdomain] = useState(orgData?.subdomain || '');
+  const [isSubdomainValid, setIsSubdomainValid] = useState(true);
+  const [addressInfo, setAddressInfo] = useState({
+    address: orgData?.address || '',
+    city: orgData?.city || 'Gary',
+    state: orgData?.state || 'IN',
+    zip: orgData?.zip || '',
+  });
+  const [email, setEmail] = useState(orgData?.email || '');
+  const [website, setWebsite] = useState(orgData?.website || '');
+  const [currentAvatar, setCurrentAvatar] = useState(orgData?.image || null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
-
-  const [name, setName] = useState('');
-  const [subdomain, setSubdomain] = useState('');
-  const [isSubdomainValid, setIsSubdomainValid] = useState(true);
-  const [addressInfo, setAddressInfo] = useState<AddressValue>({
-    address: '',
-    city: 'Gary',
-    state: 'IN',
-    zip: '',
-  });
-  const [email, setEmail] = useState('');
-  const [website, setWebsite] = useState('');
-
-  const [imageFile, setImageFile] = useState<File | null>(null);
-
-  const orgId = user?.organizationId;
-
-  const {
-    data: orgResult,
-    isLoading: isLoadingOrg,
-    refetch: refetchOrg,
-  } = useGetOrganization(orgId || '', {
-    query: {
-      enabled: !!orgId,
-    },
-  });
-
-  const orgData = orgResult?.status === 200 ? orgResult.data : null;
-
-  const [currentAvatar, setCurrentAvatar] = useState<string | null>(orgData?.image || null);
-
-  const orgName = orgData?.name || '';
-  const orgSubdomain = orgData?.subdomain || '';
-  const orgEmail = orgData?.email || '';
-  const orgWebsite = orgData?.website || '';
-  const orgImage = orgData?.image || null;
-  const addr = orgData?.address || '';
-  const city = orgData?.city || '';
-  const state = orgData?.state || '';
-  const zip = orgData?.zip || '';
-
-  useEffect(() => {
-    if (orgData) {
-      setName(orgName);
-      setSubdomain(orgSubdomain);
-      setAddressInfo({ address: addr, city, state, zip });
-      setEmail(orgEmail);
-      setWebsite(orgWebsite);
-      if (orgImage) {
-        setCurrentAvatar(orgImage);
-      }
-    }
-  }, [orgName, orgSubdomain, orgEmail, orgWebsite, orgImage, addr, city, state, zip, orgData]);
 
   const updateOrgMutation = useUpdateOrganization();
   const deleteOrgMutation = useDeleteOrganization();
@@ -177,19 +143,6 @@ export default function OrgTab({ user, onDeleteOrganization }: OrgTabProps) {
       toast.error('Failed to delete organization. Please try again.');
     }
   };
-
-  if (!orgId) {
-    return (
-      <PageErrorState
-        title="No Organization Associated"
-        description="Your personal profile is not associated with an organization."
-      />
-    );
-  }
-
-  if (isLoadingOrg) {
-    return <SettingsSkeleton />;
-  }
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">

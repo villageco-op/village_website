@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import OrgTab from '../organization/settings/OrgSettingsClient';
+import OrgTab from '../organization/settings/OrgTab';
 import { Button } from '../ui/button';
 import { NotFoundState } from '../ui/state-displays';
 
