@@ -93,7 +93,7 @@ export default function OrganizationOnboardingFlow({ onBack }: OrganizationOnboa
       });
 
       if (createRes.status !== 201) {
-        throw new Error((createRes.data as any)?.error || 'Organization registration failed');
+        throw new Error(createRes.data?.error || 'Organization registration failed');
       }
 
       toast.success('Organization registered!', { id: toastId });

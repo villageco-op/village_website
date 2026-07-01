@@ -1,29 +1,22 @@
 'use client';
 
-import { Camera, ExternalLink, Loader2, Save } from 'lucide-react';
-import Image from 'next/image';
+import { ExternalLink, Loader2, Save } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+
+import { AddressFormFields, type AddressValue } from './AddressFormFields';
+import { AvatarPicker } from './AvatarPicker';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import type { User } from '@/lib/api/generated/models/user';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 import { useUpdateCurrentUser } from '@/lib/api/generated/users/users';
-import { US_STATES } from '@/lib/constants/location-constants';
-import { getAssetPath } from '@/lib/utils';
 
 interface ProfileTabProps {
   user: User;
@@ -38,16 +31,16 @@ interface ProfileTabProps {
  * @returns The component with input fields and a save button
  */
 export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
-  // Basic Info State
   const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [zip, setZip] = useState('');
+  const [addressInfo, setAddressInfo] = useState<AddressValue>({
+    address: '',
+    city: 'Gary',
+    state: 'IN',
+    zip: '',
+  });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  // Seller Info State
   const [aboutMe, setAboutMe] = useState('');
   const [specialties, setSpecialties] = useState('');
   const [goal, setGoal] = useState<string | ''>('');
@@ -55,20 +48,20 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
   const [deliveryRangeMiles, setDeliveryRangeMiles] = useState<string | ''>('');
 
   const [isSaving, setIsSaving] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const updateProfile = useUpdateCurrentUser();
   const uploadImageMutation = useUploadImage();
   const geocodeAddressMutation = useGeocodeAddress();
 
-  // Populate data on mount
   useEffect(() => {
     if (user) {
       setName(user.name || '');
-      setAddress(user.address || '');
-      setCity(user.city || '');
-      setState(user.state || '');
-      setZip(user.zip || '');
+      setAddressInfo({
+        address: user.address || '',
+        city: user.city || '',
+        state: user.state || '',
+        zip: user.zip || '',
+      });
       setImagePreview(user.image || null);
 
       if (isSeller) {
@@ -81,22 +74,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
     }
   }, [user, isSeller]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
-  };
-
-  const handleSaveProfile = async (e: React.FormEvent) => {
+  const handleSaveProfile = async (e: React.SubmitEvent) => {
     e.preventDefault();
     const toastId = toast.loading('Saving your profile...');
 
@@ -118,10 +96,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
 
       const geocodeRes = await geocodeAddressMutation.mutateAsync({
         data: {
-          address,
-          city,
-          state,
-          zip,
+          ...addressInfo,
         },
       });
 
@@ -142,11 +117,8 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
         data: {
           name,
           image: imageUrl,
-          address,
-          city,
-          state,
+          ...addressInfo,
           country: 'United States',
-          zip,
           lat,
           lng,
           ...(isSeller && {
@@ -186,41 +158,16 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
           )}
         </div>
 
-        <div className="flex flex-col gap-3 mb-2">
-          <div
-            className="w-24 h-24 rounded-full bg-lime/20 border-2 border-dashed border-lime flex items-center justify-center cursor-pointer overflow-hidden relative group transition-colors hover:border-click-green"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            {imagePreview ? (
-              <Image
-                src={getAssetPath(imagePreview)}
-                alt="Profile Image"
-                fill
-                className="object-cover text-center"
-                sizes="96px"
-                priority
-              />
-            ) : (
-              <Camera className="w-8 h-8 text-click-green group-hover:scale-110 transition-transform" />
-            )}
-            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <Camera className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-            accept="image/jpeg, image/png, image/webp"
-            className="hidden"
-          />
-          <Label
-            className="text-xs font-semibold text-ink-3 cursor-pointer"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            Change Photo
-          </Label>
-        </div>
+        <AvatarPicker
+          label="Update Profile Photo"
+          value={imagePreview}
+          onChange={(preview, file) => {
+            if (!file) return;
+
+            setImagePreview(preview);
+            setImageFile(file);
+          }}
+        />
 
         <div className="space-y-4">
           <div className="space-y-2">
@@ -236,59 +183,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="address" className="text-ink-2 font-semibold">
-              Street Address
-            </Label>
-            <Input
-              id="address"
-              placeholder="e.g. 123 Farm Lane"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="city" className="text-ink-2 font-semibold">
-                City
-              </Label>
-              <Input id="city" value={city} onChange={(e) => setCity(e.target.value)} required />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="state" className="text-ink-2 font-semibold">
-                  State
-                </Label>
-                <Select value={state} onValueChange={setState} required>
-                  <SelectTrigger id="state">
-                    <SelectValue placeholder="State" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {US_STATES.map((s) => (
-                      <SelectItem key={s.value} value={s.value}>
-                        {s.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="zip" className="text-ink-2 font-semibold">
-                  ZIP Code
-                </Label>
-                <Input
-                  id="zip"
-                  inputMode="numeric"
-                  maxLength={5}
-                  value={zip}
-                  onChange={(e) => setZip(e.target.value.replace(/[^0-9]/g, ''))}
-                  required
-                />
-              </div>
-            </div>
-          </div>
+          <AddressFormFields value={addressInfo} onChange={setAddressInfo} required />
         </div>
       </div>
 

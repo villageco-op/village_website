@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import type { User } from '@/lib/api/generated/models/user';
 
@@ -19,6 +19,12 @@ export interface Session {
 export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
   const [status, setStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
+  const [trigger, setTrigger] = useState(0);
+
+  const refetch = useCallback(() => {
+    setStatus('loading');
+    setTrigger((prev) => prev + 1);
+  }, []);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -46,7 +52,7 @@ export function useAuth() {
     };
 
     void fetchSession();
-  }, []);
+  }, [trigger]);
 
   const logout = async () => {
     try {
@@ -71,5 +77,5 @@ export function useAuth() {
     }
   };
 
-  return { session, user: session?.user, status, logout };
+  return { session, user: session?.user, status, logout, refetch };
 }

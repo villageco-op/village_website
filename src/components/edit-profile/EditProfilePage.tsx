@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import OrgTab from '../organization/settings/OrgTab';
 import { Button } from '../ui/button';
 import { NotFoundState } from '../ui/state-displays';
 
@@ -12,14 +13,14 @@ import SettingsTab from './SettingsTab';
 
 import { useAuth } from '@/hooks/useAuth';
 
-type Tab = 'profile' | 'settings';
+type Tab = 'profile' | 'settings' | 'org';
 
 /**
  * A page for editing a users account information. Includes additonal inputs for sellers.
  * @returns A page with profile and settings tabs.
  */
 export default function EditProfilePage() {
-  const { user, status, logout } = useAuth();
+  const { user, status, logout, refetch } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>('profile');
   const router = useRouter();
 
@@ -38,6 +39,12 @@ export default function EditProfilePage() {
   }
 
   const isSeller = user.stripeOnboardingComplete === true;
+  const hasOrg = !!user.organizationId;
+
+  const handleDeleteOrganization = () => {
+    refetch();
+    setActiveTab('profile');
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 bg-off-white">
@@ -57,6 +64,19 @@ export default function EditProfilePage() {
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-lime" />
             )}
           </button>
+          {hasOrg && (
+            <button
+              onClick={() => setActiveTab('org')}
+              className={`pb-3 font-semibold text-sm transition-colors relative ${
+                activeTab === 'org' ? 'text-deep-forest' : 'text-ink-3 hover:text-ink-2'
+              }`}
+            >
+              Organization
+              {activeTab === 'org' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-lime" />
+              )}
+            </button>
+          )}
           <button
             onClick={() => setActiveTab('settings')}
             className={`pb-3 font-semibold text-sm transition-colors relative ${
@@ -73,6 +93,10 @@ export default function EditProfilePage() {
         {/* Tab Content Area */}
         <div className="bg-cream/30 border border-border/20 shadow-sm rounded-xl p-6 sm:p-8">
           {activeTab === 'profile' && <ProfileTab user={user} isSeller={isSeller} />}
+
+          {activeTab === 'org' && hasOrg && (
+            <OrgTab user={user} onDeleteOrganization={handleDeleteOrganization} />
+          )}
 
           {activeTab === 'settings' && <SettingsTab onLogout={() => void logout()} />}
         </div>

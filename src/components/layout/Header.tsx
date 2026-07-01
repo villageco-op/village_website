@@ -41,6 +41,12 @@ const getSecondaryNavItems = (path: string) => {
       { name: 'Community', href: '#community', protected: false },
     ];
   }
+  if (path.startsWith('/org')) {
+    return [
+      { name: 'Dashboard', href: '/org', protected: true },
+      { name: 'Members', href: '/org/members', protected: true },
+    ];
+  }
   return [];
 };
 

@@ -94,9 +94,6 @@ export const CompleteOnboardingJourney: Story = {
     const pantryBtn = await canvas.findByRole('button', { name: /Food Pantry/i });
     await userEvent.click(pantryBtn);
 
-    const step1ContinueBtn = canvas.getByRole('button', { name: /Continue/i });
-    await userEvent.click(step1ContinueBtn);
-
     // --- STEP 2: Fill Organization Details ---
     const orgNameInput = await canvas.findByLabelText(/Organization Name/i);
     await userEvent.type(orgNameInput, 'Gary Food Network');
@@ -164,16 +161,13 @@ export const ServerErrorJourney: Story = {
 
     // Transition straight into Details form configuration
     await userEvent.click(await canvas.findByRole('button', { name: /Food Pantry/i }));
-    await userEvent.click(canvas.getByRole('button', { name: /Continue/i }));
 
     await userEvent.type(await canvas.findByLabelText(/Organization Name/i), 'Fail Hub');
     await userEvent.type(canvas.getByLabelText(/Custom Subdomain/i), 'fail-hub');
     await userEvent.type(canvas.getByLabelText(/Street Address/i), '999 Broken Way');
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '46404');
 
-    await waitFor(async () => {
-      await expect(await canvas.findByText(/Subdomain is available!/i)).toBeInTheDocument();
-    });
+    await expect(await canvas.findByText(/Subdomain is available!/i)).toBeInTheDocument();
 
     await userEvent.click(canvas.getByRole('button', { name: /Create Organization/i }));
 
