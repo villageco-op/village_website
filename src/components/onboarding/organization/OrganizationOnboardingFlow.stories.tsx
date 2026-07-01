@@ -94,9 +94,6 @@ export const CompleteOnboardingJourney: Story = {
     const pantryBtn = await canvas.findByRole('button', { name: /Food Pantry/i });
     await userEvent.click(pantryBtn);
 
-    const step1ContinueBtn = canvas.getByRole('button', { name: /Continue/i });
-    await userEvent.click(step1ContinueBtn);
-
     // --- STEP 2: Fill Organization Details ---
     const orgNameInput = await canvas.findByLabelText(/Organization Name/i);
     await userEvent.type(orgNameInput, 'Gary Food Network');

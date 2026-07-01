@@ -1,7 +1,6 @@
 'use client';
 
-import { ArrowLeft, ArrowRight, Store, Utensils } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowLeft, Store, Utensils } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
@@ -21,14 +20,6 @@ export interface OrgTypeStepProps {
  * @returns Component with large buttons for the org types
  */
 export default function OrgTypeStep({ onSelectType, onBack }: OrgTypeStepProps) {
-  const [selected, setSelected] = useState<'pantry' | null>(null);
-
-  const handleContinue = () => {
-    if (selected) {
-      onSelectType(selected);
-    }
-  };
-
   return (
     <div className="animate-in fade-in slide-in-from-right-8 duration-500 space-y-6">
       <div className="text-center mb-8">
@@ -42,19 +33,15 @@ export default function OrgTypeStep({ onSelectType, onBack }: OrgTypeStepProps) 
 
       <div className="grid gap-4 sm:grid-cols-2">
         <button
-          onClick={() => setSelected('pantry')}
-          className={`cursor-pointer flex flex-col items-center justify-center p-6 bg-white border-2 rounded-xl shadow-sm transition-all group text-left ${
-            selected === 'pantry'
-              ? 'border-lime ring-2 ring-lime/20'
-              : 'border-transparent hover:border-lime hover:shadow-md'
-          }`}
+          onClick={() => onSelectType('pantry')}
+          className={`cursor-pointer flex flex-col items-center justify-center p-6 bg-white border-2 rounded-xl shadow-sm transition-all group text-left border-transparent hover:border-lime hover:shadow-md`}
         >
           <div className="w-12 h-12 bg-lime-pale text-click-green rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <Store className="w-6 h-6" />
           </div>
           <h3 className="font-heading font-bold text-lg text-ink text-center">Food Pantry</h3>
           <p className="text-sm text-ink-3 mt-1 text-center">
-            Distribute fresh produce and surplus items to community members.
+            Manage distribution with simple check-ins and refferal tracking.
           </p>
         </button>
 
@@ -67,7 +54,7 @@ export default function OrgTypeStep({ onSelectType, onBack }: OrgTypeStepProps) 
           </div>
           <h3 className="font-heading font-bold text-lg text-ink-3 text-center">Restaurant</h3>
           <p className="text-sm text-ink-3 mt-1 text-center">
-            Source local surplus harvests for commercial dining.
+            Easy website setup with optional support for online orders.
           </p>
         </div>
       </div>
@@ -75,15 +62,6 @@ export default function OrgTypeStep({ onSelectType, onBack }: OrgTypeStepProps) 
       <div className="flex justify-between items-center pt-6 border-t border-border/10">
         <Button type="button" variant="ghost" onClick={onBack}>
           <ArrowLeft className="w-4 h-4 mr-2" /> Back
-        </Button>
-        <Button
-          type="button"
-          onClick={handleContinue}
-          disabled={!selected}
-          variant="lime"
-          className="ml-auto"
-        >
-          Continue <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
     </div>

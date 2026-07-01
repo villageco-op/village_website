@@ -118,7 +118,7 @@ export const DomainTakenFlow: Story = {
       await expect(errorText).toBeInTheDocument();
     });
 
-    const suggestionBtn = await canvas.findByRole('button', { name: /Use suggest: “taken-1”/i });
+    const suggestionBtn = await canvas.findByRole('button', { name: /“taken-1” is available./i });
     await userEvent.click(suggestionBtn);
 
     // Verify it updates and re-validates to a successful state

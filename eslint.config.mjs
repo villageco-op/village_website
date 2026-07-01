@@ -20,6 +20,8 @@ const eslintConfig = [
       '.storybook',
       'storybook-static/**',
       'local-test/**',
+      'deps/**',
+      'docs/**',
     ],
   },
   ...nextVitals,
