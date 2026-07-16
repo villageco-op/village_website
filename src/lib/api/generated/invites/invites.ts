@@ -6,19 +6,30 @@
  * OpenAPI spec version: 1.0.0
  */
 import {
-  useMutation
+  useMutation,
+  useQuery
 } from '@tanstack/react-query';
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
-  UseMutationResult
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
   AcceptInvitePayload,
   CreateInvitePayload,
   ErrorResponse,
+  GetOrgInvitesParams,
+  InvitesListResponse,
   SuccessResponse
 } from '../models';
 
@@ -216,4 +227,139 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getAcceptInviteMutationOptions(options), queryClient);
     }
+    /**
+ * Retrieve paginated invites for an organization. Accessible only by admins.
+ */
+export type getOrgInvitesResponse200 = {
+  data: InvitesListResponse
+  status: 200
+}
+
+export type getOrgInvitesResponse400 = {
+  data: ErrorResponse
+  status: 400
+}
+
+export type getOrgInvitesResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type getOrgInvitesResponse403 = {
+  data: ErrorResponse
+  status: 403
+}
+
+export type getOrgInvitesResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type getOrgInvitesResponseSuccess = (getOrgInvitesResponse200) & {
+  headers: Headers;
+};
+export type getOrgInvitesResponseError = (getOrgInvitesResponse400 | getOrgInvitesResponse401 | getOrgInvitesResponse403 | getOrgInvitesResponse404) & {
+  headers: Headers;
+};
+
+export type getOrgInvitesResponse = (getOrgInvitesResponseSuccess | getOrgInvitesResponseError)
+
+export const getGetOrgInvitesUrl = (params?: GetOrgInvitesParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
     
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/invites/list?${stringifiedParams}` : `/api/invites/list`
+}
+
+export const getOrgInvites = async (params?: GetOrgInvitesParams, options?: RequestInit): Promise<getOrgInvitesResponse> => {
+  
+  return apiClient<getOrgInvitesResponse>(getGetOrgInvitesUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetOrgInvitesQueryKey = (params?: GetOrgInvitesParams,) => {
+    return [
+    `/api/invites/list`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+    
+export const getGetOrgInvitesQueryOptions = <TData = Awaited<ReturnType<typeof getOrgInvites>>, TError = ErrorResponse>(params?: GetOrgInvitesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrgInvites>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetOrgInvitesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrgInvites>>> = ({ signal }) => getOrgInvites(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrgInvites>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetOrgInvitesQueryResult = NonNullable<Awaited<ReturnType<typeof getOrgInvites>>>
+export type GetOrgInvitesQueryError = ErrorResponse
+
+
+export function useGetOrgInvites<TData = Awaited<ReturnType<typeof getOrgInvites>>, TError = ErrorResponse>(
+ params: undefined |  GetOrgInvitesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrgInvites>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrgInvites>>,
+          TError,
+          Awaited<ReturnType<typeof getOrgInvites>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOrgInvites<TData = Awaited<ReturnType<typeof getOrgInvites>>, TError = ErrorResponse>(
+ params?: GetOrgInvitesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrgInvites>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrgInvites>>,
+          TError,
+          Awaited<ReturnType<typeof getOrgInvites>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOrgInvites<TData = Awaited<ReturnType<typeof getOrgInvites>>, TError = ErrorResponse>(
+ params?: GetOrgInvitesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrgInvites>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetOrgInvites<TData = Awaited<ReturnType<typeof getOrgInvites>>, TError = ErrorResponse>(
+ params?: GetOrgInvitesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrgInvites>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetOrgInvitesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+

@@ -5,15 +5,13 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { EntityId } from './entityId';
-import type { Location } from './location';
+import type { OrgRole } from './orgRole';
 
-export interface UserBasicInfo {
+export interface OrgMember {
   id: string;
   /** @nullable */
   name?: string | null;
-  organizationId?: EntityId & (unknown | null);
   /** @nullable */
   email?: string | null;
-  location?: Location & (unknown | null);
+  orgRole: OrgRole & (unknown | null);
 }
