@@ -30,9 +30,14 @@ import type {
   CreateOrganizationPayload,
   EntityId,
   ErrorResponse,
+  GetOrganizationMembersParams,
+  OrgMembersListResponse,
   Organization,
+  RemoveUserFromOrgPayload,
   SuccessResponse,
-  UpdateOrganizationPayload
+  UpdateOrganizationPayload,
+  UpdateUserRolePayload,
+  UpdateUserRoleResponse
 } from '../models';
 
 import { apiClient } from '../../client';
@@ -556,6 +561,342 @@ export function useGetOrganization<TData = Awaited<ReturnType<typeof getOrganiza
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetOrganizationQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Remove a user from the organization (Admin only).
+ */
+export type removeOrgMemberResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type removeOrgMemberResponse400 = {
+  data: ErrorResponse
+  status: 400
+}
+
+export type removeOrgMemberResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type removeOrgMemberResponse403 = {
+  data: ErrorResponse
+  status: 403
+}
+
+export type removeOrgMemberResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type removeOrgMemberResponseSuccess = (removeOrgMemberResponse200) & {
+  headers: Headers;
+};
+export type removeOrgMemberResponseError = (removeOrgMemberResponse400 | removeOrgMemberResponse401 | removeOrgMemberResponse403 | removeOrgMemberResponse404) & {
+  headers: Headers;
+};
+
+export type removeOrgMemberResponse = (removeOrgMemberResponseSuccess | removeOrgMemberResponseError)
+
+export const getRemoveOrgMemberUrl = () => {
+
+
+  
+
+  return `/api/organizations/members/remove`
+}
+
+export const removeOrgMember = async (removeUserFromOrgPayload: RemoveUserFromOrgPayload, options?: RequestInit): Promise<removeOrgMemberResponse> => {
+  
+  return apiClient<removeOrgMemberResponse>(getRemoveOrgMemberUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      removeUserFromOrgPayload,)
+  }
+);}
+  
+
+
+
+export const getRemoveOrgMemberMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeOrgMember>>, TError,{data: RemoveUserFromOrgPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeOrgMember>>, TError,{data: RemoveUserFromOrgPayload}, TContext> => {
+
+const mutationKey = ['removeOrgMember'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeOrgMember>>, {data: RemoveUserFromOrgPayload}> = (props) => {
+          const {data} = props ?? {};
+
+          return  removeOrgMember(data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveOrgMemberMutationResult = NonNullable<Awaited<ReturnType<typeof removeOrgMember>>>
+    export type RemoveOrgMemberMutationBody = RemoveUserFromOrgPayload
+    export type RemoveOrgMemberMutationError = ErrorResponse
+
+    export const useRemoveOrgMember = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeOrgMember>>, TError,{data: RemoveUserFromOrgPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof removeOrgMember>>,
+        TError,
+        {data: RemoveUserFromOrgPayload},
+        TContext
+      > => {
+      return useMutation(getRemoveOrgMemberMutationOptions(options), queryClient);
+    }
+    /**
+ * Update a user's role within the organization (Admin only).
+ */
+export type updateOrgMemberRoleResponse200 = {
+  data: UpdateUserRoleResponse
+  status: 200
+}
+
+export type updateOrgMemberRoleResponse400 = {
+  data: ErrorResponse
+  status: 400
+}
+
+export type updateOrgMemberRoleResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type updateOrgMemberRoleResponse403 = {
+  data: ErrorResponse
+  status: 403
+}
+
+export type updateOrgMemberRoleResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type updateOrgMemberRoleResponseSuccess = (updateOrgMemberRoleResponse200) & {
+  headers: Headers;
+};
+export type updateOrgMemberRoleResponseError = (updateOrgMemberRoleResponse400 | updateOrgMemberRoleResponse401 | updateOrgMemberRoleResponse403 | updateOrgMemberRoleResponse404) & {
+  headers: Headers;
+};
+
+export type updateOrgMemberRoleResponse = (updateOrgMemberRoleResponseSuccess | updateOrgMemberRoleResponseError)
+
+export const getUpdateOrgMemberRoleUrl = () => {
+
+
+  
+
+  return `/api/organizations/members/role`
+}
+
+export const updateOrgMemberRole = async (updateUserRolePayload: UpdateUserRolePayload, options?: RequestInit): Promise<updateOrgMemberRoleResponse> => {
+  
+  return apiClient<updateOrgMemberRoleResponse>(getUpdateOrgMemberRoleUrl(),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateUserRolePayload,)
+  }
+);}
+  
+
+
+
+export const getUpdateOrgMemberRoleMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrgMemberRole>>, TError,{data: UpdateUserRolePayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateOrgMemberRole>>, TError,{data: UpdateUserRolePayload}, TContext> => {
+
+const mutationKey = ['updateOrgMemberRole'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateOrgMemberRole>>, {data: UpdateUserRolePayload}> = (props) => {
+          const {data} = props ?? {};
+
+          return  updateOrgMemberRole(data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateOrgMemberRoleMutationResult = NonNullable<Awaited<ReturnType<typeof updateOrgMemberRole>>>
+    export type UpdateOrgMemberRoleMutationBody = UpdateUserRolePayload
+    export type UpdateOrgMemberRoleMutationError = ErrorResponse
+
+    export const useUpdateOrgMemberRole = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrgMemberRole>>, TError,{data: UpdateUserRolePayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateOrgMemberRole>>,
+        TError,
+        {data: UpdateUserRolePayload},
+        TContext
+      > => {
+      return useMutation(getUpdateOrgMemberRoleMutationOptions(options), queryClient);
+    }
+    /**
+ * Retrieve a paginated and filterable list of members belonging to an organization.
+ */
+export type getOrganizationMembersResponse200 = {
+  data: OrgMembersListResponse
+  status: 200
+}
+
+export type getOrganizationMembersResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type getOrganizationMembersResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type getOrganizationMembersResponseSuccess = (getOrganizationMembersResponse200) & {
+  headers: Headers;
+};
+export type getOrganizationMembersResponseError = (getOrganizationMembersResponse401 | getOrganizationMembersResponse404) & {
+  headers: Headers;
+};
+
+export type getOrganizationMembersResponse = (getOrganizationMembersResponseSuccess | getOrganizationMembersResponseError)
+
+export const getGetOrganizationMembersUrl = (id: EntityId,
+    params?: GetOrganizationMembersParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/organizations/${id}/members?${stringifiedParams}` : `/api/organizations/${id}/members`
+}
+
+export const getOrganizationMembers = async (id: EntityId,
+    params?: GetOrganizationMembersParams, options?: RequestInit): Promise<getOrganizationMembersResponse> => {
+  
+  return apiClient<getOrganizationMembersResponse>(getGetOrganizationMembersUrl(id,params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetOrganizationMembersQueryKey = (id: EntityId,
+    params?: GetOrganizationMembersParams,) => {
+    return [
+    `/api/organizations/${id}/members`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+    
+export const getGetOrganizationMembersQueryOptions = <TData = Awaited<ReturnType<typeof getOrganizationMembers>>, TError = ErrorResponse>(id: EntityId,
+    params?: GetOrganizationMembersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrganizationMembers>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetOrganizationMembersQueryKey(id,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrganizationMembers>>> = ({ signal }) => getOrganizationMembers(id,params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrganizationMembers>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetOrganizationMembersQueryResult = NonNullable<Awaited<ReturnType<typeof getOrganizationMembers>>>
+export type GetOrganizationMembersQueryError = ErrorResponse
+
+
+export function useGetOrganizationMembers<TData = Awaited<ReturnType<typeof getOrganizationMembers>>, TError = ErrorResponse>(
+ id: EntityId,
+    params: undefined |  GetOrganizationMembersParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrganizationMembers>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrganizationMembers>>,
+          TError,
+          Awaited<ReturnType<typeof getOrganizationMembers>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOrganizationMembers<TData = Awaited<ReturnType<typeof getOrganizationMembers>>, TError = ErrorResponse>(
+ id: EntityId,
+    params?: GetOrganizationMembersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrganizationMembers>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrganizationMembers>>,
+          TError,
+          Awaited<ReturnType<typeof getOrganizationMembers>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOrganizationMembers<TData = Awaited<ReturnType<typeof getOrganizationMembers>>, TError = ErrorResponse>(
+ id: EntityId,
+    params?: GetOrganizationMembersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrganizationMembers>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetOrganizationMembers<TData = Awaited<ReturnType<typeof getOrganizationMembers>>, TError = ErrorResponse>(
+ id: EntityId,
+    params?: GetOrganizationMembersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrganizationMembers>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetOrganizationMembersQueryOptions(id,params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

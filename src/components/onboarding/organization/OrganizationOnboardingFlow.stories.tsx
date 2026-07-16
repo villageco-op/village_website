@@ -6,6 +6,7 @@ import { http, HttpResponse, delay } from 'msw';
 import OrganizationOnboardingFlow from './OrganizationOnboardingFlow';
 
 import { Toaster } from '@/components/ui/sonner';
+import { type Invite, OrgInviteStatus, OrgRole } from '@/lib/api/generated/models';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -13,6 +14,8 @@ const mockedQueryClient = new QueryClient({
     mutations: { retry: false },
   },
 });
+
+let mockInvites: Array<Invite> = [];
 
 const meta: Meta<typeof OrganizationOnboardingFlow> = {
   title: 'Onboarding/Organization/OnboardingFlow',
@@ -52,9 +55,51 @@ const meta: Meta<typeof OrganizationOnboardingFlow> = {
           return HttpResponse.json({ id: 'org_123', success: true }, { status: 201 });
         }),
 
-        http.post('*/api/invites/invite', async () => {
+        http.get('*/api/invites/list', async ({ request }) => {
+          const url = new URL(request.url);
+          const page = parseInt(url.searchParams.get('page') || '1', 10);
+          const limit = parseInt(url.searchParams.get('limit') || '10', 10);
+
+          await delay(100);
+
+          return HttpResponse.json(
+            {
+              data: mockInvites,
+              meta: {
+                total: mockInvites.length,
+                page,
+                limit,
+                totalPages: Math.ceil(mockInvites.length / limit),
+              },
+            },
+            { status: 200 },
+          );
+        }),
+
+        http.post('*/api/invites/invite', async ({ request }) => {
+          const body = (await request.json()) as { email?: string; role?: OrgRole };
+          const email = body.email;
+          const role = body.role || OrgRole.member;
+
+          if (!email) {
+            return HttpResponse.json({ error: 'Email is required' }, { status: 400 });
+          }
+
           await delay(200);
-          return HttpResponse.json({ success: true });
+
+          const newInvite = {
+            id: `invite_${Math.random().toString(36).substring(2, 11)}`,
+            email,
+            orgId: 'org_123',
+            code: 'abc123',
+            role,
+            status: OrgInviteStatus.pending,
+            expiresAt: new Date(Date.now() + 86400000).toISOString(),
+            createdAt: new Date().toISOString(),
+          };
+          mockInvites.push(newInvite);
+
+          return HttpResponse.json({ success: true }, { status: 200 });
         }),
       ],
     },
@@ -87,6 +132,9 @@ export const InitialState: Story = {};
  * Org Type Selection -> Profile Configuration Form -> Network registration -> Team Invitations.
  */
 export const CompleteOnboardingJourney: Story = {
+  beforeEach: () => {
+    mockInvites = [];
+  },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
 
@@ -120,7 +168,8 @@ export const CompleteOnboardingJourney: Story = {
     const inviteEmailInput = await canvas.findByLabelText(/Member Email Address/i);
     await userEvent.type(inviteEmailInput, 'partner@garyfood.org');
 
-    const inviteBtn = canvas.getByRole('button', { name: /Invite/i });
+    const inviteBtn = await canvas.findByRole('button', { name: /Invite/i });
+    await waitFor(() => expect(inviteBtn).toBeEnabled());
     await userEvent.click(inviteBtn);
 
     // Verify row item append inside list array layout table
