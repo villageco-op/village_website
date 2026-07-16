@@ -154,8 +154,8 @@ export const DefaultWithInvites: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByText('existing.member@example.com')).toBeInTheDocument();
-    await expect(canvas.getByText('administrator@example.com')).toBeInTheDocument();
+    await expect(await canvas.findByText('existing.member@example.com')).toBeInTheDocument();
+    await expect(await canvas.findByText('administrator@example.com')).toBeInTheDocument();
   },
 };
 
@@ -177,7 +177,7 @@ export const SendingInvitationFlow: Story = {
     const canvas = within(canvasElement);
 
     await step('Enter email address', async () => {
-      const emailInput = canvas.getByLabelText(/Member Email Address/i);
+      const emailInput = await canvas.findByLabelText(/Member Email Address/i);
       await userEvent.type(emailInput, 'new.designer@example.com');
     });
 
@@ -195,7 +195,7 @@ export const SendingInvitationFlow: Story = {
 
     await step('Verify toast alerts success', async () => {
       await expect(
-        screen.getByText('Invitation sent to new.designer@example.com'),
+        await screen.findByText('Invitation sent to new.designer@example.com'),
       ).toBeInTheDocument();
     });
   },
@@ -240,7 +240,7 @@ export const DuplicateInvitationErrorFlow: Story = {
     const canvas = within(canvasElement);
 
     await step('Type duplicate email address', async () => {
-      const emailInput = canvas.getByLabelText(/Member Email Address/i);
+      const emailInput = await canvas.findByLabelText(/Member Email Address/i);
       await userEvent.type(emailInput, 'already.invited@example.com');
     });
 
