@@ -157,3 +157,26 @@ export const Loading: Story = {
     },
   },
 };
+
+/**
+ * What the generic sidebar looks like when an error occurs fetching data.
+ */
+export const ErrorState: Story = {
+  args: {
+    user: mockUser,
+    status: 'authenticated',
+    roleLabel: 'Driver',
+    fallbackName: 'Driver',
+    navGroups: mockNavGroups,
+    settingsHref: '/settings',
+    isError: true,
+    onRefetch: () => console.log('Refetch triggered'),
+  },
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: '/dashboard',
+      },
+    },
+  },
+};

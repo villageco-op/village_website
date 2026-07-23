@@ -130,20 +130,12 @@ export function InvoiceHistoryCard({
         ) : (
           <Table className="w-full">
             <TableHeader>
-              <TableRow className="border-[rgba(42,75,40,0.08)] hover:bg-transparent">
-                <TableHead className="font-heading text-[0.66rem] font-bold uppercase tracking-[0.08em] text-ink-3">
-                  Date
-                </TableHead>
-                <TableHead className="font-heading text-[0.66rem] font-bold uppercase tracking-[0.08em] text-ink-3">
-                  Order ID
-                </TableHead>
-                <TableHead className="font-heading text-[0.66rem] font-bold uppercase tracking-[0.08em] text-ink-3">
-                  Type
-                </TableHead>
-                <TableHead className="font-heading text-[0.66rem] font-bold uppercase tracking-[0.08em] text-ink-3">
-                  Total
-                </TableHead>
-                <TableHead className="font-heading text-[0.66rem] font-bold uppercase tracking-[0.08em] text-ink-3"></TableHead>
+              <TableRow className="hover:bg-transparent">
+                <TableHead>Date</TableHead>
+                <TableHead>Order ID</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Total</TableHead>
+                <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -153,22 +145,16 @@ export function InvoiceHistoryCard({
                 return (
                   <TableRow
                     key={order.id}
-                    className="cursor-pointer border-[rgba(42,75,40,0.05)] hover:bg-off-white"
+                    className="cursor-pointer"
                     onClick={() => router.push(`/orders/${order.id}`)}
                   >
-                    <TableCell className="py-3.5 font-sans text-[0.82rem] text-ink-2">
-                      {dateStr}
-                    </TableCell>
-                    <TableCell className="py-3.5 font-heading font-bold text-ink">
+                    <TableCell>{dateStr}</TableCell>
+                    <TableCell className="font-heading font-bold text-table-body-foreground-highlighted">
                       #{order.id.slice(0, 8).toUpperCase()}
                     </TableCell>
-                    <TableCell className="py-3.5 font-sans text-[0.82rem] capitalize text-ink-2">
-                      {order.fulfillmentType}
-                    </TableCell>
-                    <TableCell className="py-3.5 font-sans text-[0.82rem] text-ink-2">
-                      ${Number(order.totalAmount || 0).toFixed(2)}
-                    </TableCell>
-                    <TableCell className="py-3.5 text-right">
+                    <TableCell className="capitalize">{order.fulfillmentType}</TableCell>
+                    <TableCell>${Number(order.totalAmount || 0).toFixed(2)}</TableCell>
+                    <TableCell className="text-right">
                       <Button
                         variant="outline"
                         size="sm"

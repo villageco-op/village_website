@@ -5,10 +5,10 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { OrgMember } from './orgMember';
+import type { ClientResponse } from './clientResponse';
 import type { PaginationMetadata } from './paginationMetadata';
 
-export interface OrgMembersListResponse {
-  data: OrgMember[];
+export interface ClientsListResponse {
+  data: ClientResponse[];
   meta: PaginationMetadata;
 }

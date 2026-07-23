@@ -10,6 +10,7 @@ interface AuthGuardProps {
   user: User | undefined;
   status: 'loading' | 'authenticated' | 'unauthenticated';
   requireStripeOnboarding?: boolean;
+  requireOrganization?: boolean;
 }
 
 /**
@@ -19,9 +20,16 @@ interface AuthGuardProps {
  * @param props.user - The user object
  * @param props.status - User authentication status
  * @param props.requireStripeOnboarding - Is it required for stripe onboarding to be complete
+ * @param props.requireOrganization - Is it required for the user to have an organization associated
  * @returns The children components
  */
-export function AuthGuard({ children, user, status, requireStripeOnboarding }: AuthGuardProps) {
+export function AuthGuard({
+  children,
+  user,
+  status,
+  requireStripeOnboarding,
+  requireOrganization,
+}: AuthGuardProps) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -42,7 +50,12 @@ export function AuthGuard({ children, user, status, requireStripeOnboarding }: A
     if (requireStripeOnboarding && !user?.stripeOnboardingComplete) {
       router.replace('/become-seller');
     }
-  }, [user, status, pathname, router, requireStripeOnboarding]);
+
+    if (requireOrganization && !user?.organizationId) {
+      router.replace('/org/join');
+      return;
+    }
+  }, [user, status, pathname, router, requireStripeOnboarding, requireOrganization]);
 
   return <>{children}</>;
 }

@@ -76,7 +76,6 @@ const meta: Meta<typeof OrgMembersClient> = {
     layout: 'padded',
     msw: {
       handlers: [
-        // Default: Mock active admin session for useAuth()
         http.get('*/api/auth/session', () => {
           return HttpResponse.json({
             user: MOCK_ADMIN_USER,
@@ -84,7 +83,7 @@ const meta: Meta<typeof OrgMembersClient> = {
           });
         }),
 
-        http.get('*/api/organizations/:orgId/members', async ({ params, request }) => {
+        http.get('*/api/organizations/:orgId/members', async ({ request }) => {
           const url = new URL(request.url);
           const search = url.searchParams.get('search')?.toLowerCase() || '';
           const role = url.searchParams.get('role');
@@ -123,7 +122,10 @@ const meta: Meta<typeof OrgMembersClient> = {
         }),
 
         http.put('*/api/organizations/members/role', async ({ request }) => {
-          const body = (await request.json()) as { userId?: string; role?: OrgRole };
+          const body = (await request.json()) as {
+            userId?: string;
+            role?: OrgRole;
+          };
 
           if (!body.userId || !body.role) {
             return HttpResponse.json({ error: 'Missing parameters' }, { status: 400 });
@@ -174,9 +176,6 @@ const meta: Meta<typeof OrgMembersClient> = {
 export default meta;
 type Story = StoryObj<typeof OrgMembersClient>;
 
-/**
- * Standard administrative interface showing the active members dashboard table.
- */
 export const Default: Story = {
   beforeEach: () => {
     mockMembers = [
@@ -202,15 +201,10 @@ export const Default: Story = {
   },
 };
 
-/**
- * Ensures strict security checks render a full-screen block error
- * if a user attempts to view this panel without Admin privileges.
- */
 export const AccessDenied: Story = {
   parameters: {
     msw: {
       handlers: [
-        // Override session handler to return a normal member (not Admin)
         http.get('*/api/auth/session', () => {
           return HttpResponse.json({
             user: {
@@ -225,15 +219,10 @@ export const AccessDenied: Story = {
   },
 };
 
-/**
- * Renders an alternative error state if the user accounts exist
- * without an associated active workspace context.
- */
 export const NoOrganizationFound: Story = {
   parameters: {
     msw: {
       handlers: [
-        // Override session handler to return a user with no organization context
         http.get('*/api/auth/session', () => {
           return HttpResponse.json({
             user: {
@@ -248,9 +237,6 @@ export const NoOrganizationFound: Story = {
   },
 };
 
-/**
- * Simulates a successful role modification event with mock network feedback.
- */
 export const ChangeMemberRoleFlow: Story = {
   beforeEach: () => {
     mockMembers = [
@@ -271,19 +257,23 @@ export const ChangeMemberRoleFlow: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    // Wait for client to finish fetching active member lists
     await expect(await canvas.findByText('bob@vancerefrig.com')).toBeInTheDocument();
 
-    await step('Click the change role action button for Bob', async () => {
-      const changeRoleBtns = canvas.getAllByRole('button', { name: /Change Role/i });
-      // Index 0 is the self-admin row (disabled), Index 1 targets Bob
-      await userEvent.click(changeRoleBtns[1]);
+    await step('Select Bob Vance in the table', async () => {
+      const bobRow = canvas.getByText('bob@vancerefrig.com');
+      await userEvent.click(bobRow);
     });
 
-    // Access dialog content from Document body portal
+    await step('Click the top Change Role button', async () => {
+      const changeRoleBtn = canvas.getByRole('button', {
+        name: /Change Role/i,
+      });
+      await userEvent.click(changeRoleBtn);
+    });
+
     const body = within(canvasElement.ownerDocument.body);
 
-    await step('Verify modal is open and choose Admin role option', async () => {
+    await step('Verify modal is open and select Admin role', async () => {
       const adminButton = body.getByRole('button', {
         name: /Administrator Full administrative access/i,
       });
@@ -295,15 +285,12 @@ export const ChangeMemberRoleFlow: Story = {
       await userEvent.click(submitBtn);
     });
 
-    await step('Assert successful feedback Toast appears', async () => {
+    await step('Assert successful feedback toast appears', async () => {
       await expect(await screen.findByText('Role updated successfully.')).toBeInTheDocument();
     });
   },
 };
 
-/**
- * Simulates removing a member from the workspace with network confirmation.
- */
 export const RemoveMemberFlow: Story = {
   beforeEach: () => {
     mockMembers = [
@@ -324,20 +311,25 @@ export const RemoveMemberFlow: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    // Wait for members list render
     await expect(await canvas.findByText('bob@vancerefrig.com')).toBeInTheDocument();
 
-    await step('Click the remove member button for Bob', async () => {
-      const removeButtons = canvas.getAllByRole('button', { name: /Remove/i });
-      // Index 0 is self-admin (disabled/hidden), Index 1 targets Bob
-      await userEvent.click(removeButtons[1]);
+    await step('Select Bob Vance in the table', async () => {
+      const bobRow = canvas.getByText('bob@vancerefrig.com');
+      await userEvent.click(bobRow);
+    });
+
+    await step('Click the top Remove button', async () => {
+      const removeBtn = canvas.getByRole('button', { name: /Remove/i });
+      await userEvent.click(removeBtn);
     });
 
     const body = within(canvasElement.ownerDocument.body);
 
-    await step('Verify confirmation warning is displayed and submit removal', async () => {
+    await step('Confirm member removal', async () => {
       await expect(body.getByText(/immediately lose access/i)).toBeInTheDocument();
-      const confirmButton = body.getByRole('button', { name: /Confirm Removal/i });
+      const confirmButton = body.getByRole('button', {
+        name: /Confirm Removal/i,
+      });
       await userEvent.click(confirmButton);
     });
 
