@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, User, X } from 'lucide-react';
+import { Edit2, Search, Trash2, X } from 'lucide-react';
 
 import { MembersTableSkeleton } from './MembersTableSkeleton';
 
@@ -43,6 +43,8 @@ interface MembersTableProps {
   meta?: PaginationMetadata;
   setPage: (page: number) => void;
   onRefetch: () => void;
+  selectedMember: OrgMember | null;
+  setSelectedMember: (member: OrgMember | null) => void;
   onChangeRoleClick: (member: OrgMember) => void;
   onRemoveClick: (member: OrgMember) => void;
 }
@@ -61,6 +63,8 @@ interface MembersTableProps {
  * @param props.meta - Pagination metadata
  * @param props.setPage - Update the pagination page
  * @param props.onRefetch - Retry the get members query
+ * @param props.selectedMember - The currently selected member
+ * @param props.setSelectedMember - When a member row is selected
  * @param props.onChangeRoleClick - When the change role button is pressed
  * @param props.onRemoveClick - When the remove from org button is pressed
  * @returns A table with pagination and filter controls
@@ -77,12 +81,16 @@ export function MembersTable({
   meta,
   setPage,
   onRefetch,
+  selectedMember,
+  setSelectedMember,
   onChangeRoleClick,
   onRemoveClick,
 }: MembersTableProps) {
+  const isSelfSelected = selectedMember?.id === currentUser.id;
+
   return (
-    <Card className="rounded-xl border border-[rgba(42,75,40,0.08)] bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
-      <CardContent className="p-6">
+    <Card>
+      <CardContent>
         {/* Filters section */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
@@ -92,13 +100,13 @@ export function MembersTable({
                 placeholder="Search name or email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 bg-white w-full h-9 text-sm"
+                className="pl-9 w-full"
               />
             </div>
 
             <div className="w-full sm:w-48">
               <Select value={roleFilter} onValueChange={setRoleFilter}>
-                <SelectTrigger className="w-full h-9 bg-white text-sm">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="All Roles" />
                 </SelectTrigger>
                 <SelectContent>
@@ -124,6 +132,42 @@ export function MembersTable({
               </Button>
             )}
           </div>
+
+          <div className="flex items-center gap-4">
+            <div className="text-xs text-muted-foreground">
+              {selectedMember && (
+                <span>
+                  Selected:{' '}
+                  <strong className="text-foreground">
+                    {selectedMember.name || 'Unnamed User'} {isSelfSelected && '(You)'}
+                  </strong>
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={!selectedMember || isSelfSelected}
+                onClick={() => selectedMember && onChangeRoleClick(selectedMember)}
+                className="h-8 gap-1.5 px-3 text-xs"
+              >
+                <Edit2 className="h-3.5 w-3.5" />
+                Change Role
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                disabled={!selectedMember || isSelfSelected}
+                onClick={() => selectedMember && onRemoveClick(selectedMember)}
+                className="h-8 gap-1.5 px-3 text-xs"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                Remove
+              </Button>
+            </div>
+          </div>
         </div>
 
         {/* Table display */}
@@ -144,45 +188,42 @@ export function MembersTable({
           />
         ) : (
           <div className="overflow-x-auto">
-            <Table className="w-full">
+            <Table>
               <TableHeader>
-                <TableRow className="border-[rgba(42,75,40,0.08)]">
-                  <TableHead className="font-heading text-[0.7rem] font-bold uppercase tracking-wider text-ink-3">
-                    Member Information
-                  </TableHead>
-                  <TableHead className="font-heading text-[0.7rem] font-bold uppercase tracking-wider text-ink-3">
-                    Role Designation
-                  </TableHead>
-                  <TableHead className="font-heading text-[0.7rem] font-bold uppercase tracking-wider text-ink-3 text-right">
-                    Actions
-                  </TableHead>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead>Select</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Role</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {members.map((member) => {
                   const isSelf = member.id === currentUser.id;
+                  const isSelected = selectedMember?.id === member.id;
 
                   return (
                     <TableRow
                       key={member.id}
-                      className="border-[rgba(42,75,40,0.05)] hover:bg-off-white"
+                      onClick={() => setSelectedMember(member)}
+                      className={`cursor-pointer ${isSelected ? 'bg-muted/60' : ''}`}
                     >
-                      <TableCell className="py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-forest/10 text-forest">
-                            <User className="h-4 w-4" />
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="font-heading text-sm font-semibold text-ink">
-                              {member.name || 'Unnamed User'} {isSelf && '(You)'}
-                            </span>
-                            <span className="text-xs text-ink-3">
-                              {member.email || 'No email provided'}
-                            </span>
-                          </div>
-                        </div>
+                      <TableCell>
+                        <input
+                          type="radio"
+                          name="member-selection"
+                          checked={isSelected}
+                          onChange={() => setSelectedMember(member)}
+                          className="h-4 w-4 cursor-pointer accent-primary"
+                        />
                       </TableCell>
-                      <TableCell className="py-4">
+                      <TableCell className="font-heading font-semibold text-ink">
+                        {member.name || 'Unnamed User'} {isSelf && '(You)'}
+                      </TableCell>
+                      <TableCell className="text-ink-3">
+                        {member.email || 'No email provided'}
+                      </TableCell>
+                      <TableCell>
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
                             member.orgRole === OrgRole.admin
@@ -192,29 +233,6 @@ export function MembersTable({
                         >
                           {member.orgRole}
                         </span>
-                      </TableCell>
-                      <TableCell className="py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs font-medium flex items-center gap-1"
-                            onClick={() => onChangeRoleClick(member)}
-                            disabled={isSelf}
-                          >
-                            Change Role
-                          </Button>
-
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="h-8 text-xs font-medium flex items-center gap-1"
-                            onClick={() => onRemoveClick(member)}
-                            disabled={isSelf}
-                          >
-                            Remove
-                          </Button>
-                        </div>
                       </TableCell>
                     </TableRow>
                   );

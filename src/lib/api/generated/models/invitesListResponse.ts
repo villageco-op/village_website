@@ -6,9 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { Invite } from './invite';
-import type { InvitesListResponseMeta } from './invitesListResponseMeta';
+import type { PaginationMetadata } from './paginationMetadata';
 
 export interface InvitesListResponse {
   data: Invite[];
-  meta: InvitesListResponseMeta;
+  meta: PaginationMetadata;
 }

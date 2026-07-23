@@ -6,9 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type InvitesListResponseMeta = {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-};
+export interface SearchReferrerQuery {
+  /**
+   * Search string matching name, email, or phone number
+   * @minLength 1
+   */
+  q: string;
+}

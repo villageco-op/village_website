@@ -36,6 +36,7 @@ export default function OrgMembersClient() {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
 
+  const [selectedMember, setSelectedMember] = useState<OrgMember | null>(null);
   const [selectedMemberForRole, setSelectedMemberForRole] = useState<OrgMember | null>(null);
   const [targetRole, setTargetRole] = useState<OrgRole>(OrgRole.member);
   const [selectedMemberForRemoval, setSelectedMemberForRemoval] = useState<OrgMember | null>(null);
@@ -100,6 +101,7 @@ export default function OrgMembersClient() {
         toast.success(`Role updated successfully.`);
         void refetchMembers();
         setSelectedMemberForRole(null);
+        setSelectedMember(null);
       }
     } catch (e) {
       toast.error('Could not complete the role change.');
@@ -114,6 +116,7 @@ export default function OrgMembersClient() {
         toast.success(`Member was removed.`);
         void refetchMembers();
         setSelectedMemberForRemoval(null);
+        setSelectedMember(null);
       }
     } catch (e) {
       toast.error('Could not complete the removal request.');
@@ -145,12 +148,26 @@ export default function OrgMembersClient() {
         isLoading={isMembersLoading}
         isError={isMembersError}
         searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
+        setSearchQuery={(q) => {
+          setSearchQuery(q);
+          setSelectedMember(null);
+        }}
         roleFilter={roleFilter}
-        setRoleFilter={setRoleFilter}
+        setRoleFilter={(r) => {
+          setRoleFilter(r);
+          setSelectedMember(null);
+        }}
         meta={meta}
-        setPage={setPage}
-        onRefetch={() => void refetchMembers()}
+        setPage={(p) => {
+          setPage(p);
+          setSelectedMember(null);
+        }}
+        onRefetch={() => {
+          void refetchMembers();
+          setSelectedMember(null);
+        }}
+        selectedMember={selectedMember}
+        setSelectedMember={setSelectedMember}
         onChangeRoleClick={(member) => {
           setSelectedMemberForRole(member);
           setTargetRole(member.orgRole);

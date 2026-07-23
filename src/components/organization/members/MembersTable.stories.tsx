@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { MembersTable } from './MembersTable';
 
-import { OrgRole } from '@/lib/api/generated/models';
+import { OrgRole, type OrgMember } from '@/lib/api/generated/models';
 
 const MOCK_CURRENT_USER = {
   id: 'usr_admin',
@@ -32,7 +32,7 @@ const MOCK_CURRENT_USER = {
   zip: '45678',
 };
 
-const MOCK_MEMBERS = [
+const MOCK_MEMBERS: OrgMember[] = [
   {
     id: 'usr_admin',
     name: 'Admin User',
@@ -82,12 +82,15 @@ const meta: Meta<typeof MembersTable> = {
     },
     setPage: fn(),
     onRefetch: fn(),
+    selectedMember: null,
+    setSelectedMember: fn(),
     onChangeRoleClick: fn(),
     onRemoveClick: fn(),
   },
   render: (args) => {
     const [query, setQuery] = useState(args.searchQuery);
     const [role, setRole] = useState(args.roleFilter);
+    const [selectedMember, setSelectedMember] = useState<OrgMember | null>(args.selectedMember);
 
     return (
       <MembersTable
@@ -102,6 +105,11 @@ const meta: Meta<typeof MembersTable> = {
           setRole(r);
           args.setRoleFilter(r);
         }}
+        selectedMember={selectedMember}
+        setSelectedMember={(member) => {
+          setSelectedMember(member);
+          args.setSelectedMember(member);
+        }}
       />
     );
   },
@@ -111,6 +119,12 @@ export default meta;
 type Story = StoryObj<typeof MembersTable>;
 
 export const Default: Story = {};
+
+export const MemberSelected: Story = {
+  args: {
+    selectedMember: MOCK_MEMBERS[2], // Bob Vance
+  },
+};
 
 export const Loading: Story = {
   args: {
@@ -149,13 +163,27 @@ export const InteractionTest: Story = {
     // 2. Verify "You" badge on current user
     await expect(canvas.getByText(/Admin User \(You\)/i)).toBeInTheDocument();
 
-    // 3. Test Action Clicks
-    const changeRoleBtns = canvas.getAllByRole('button', { name: /Change Role/i });
-    // Note: The first button (Admin) is disabled for 'isSelf', so we click the second
-    await userEvent.click(changeRoleBtns[1]);
-    await expect(args.onChangeRoleClick).toHaveBeenCalled();
+    // 3. Verify top action buttons are disabled initially
+    const changeRoleBtn = canvas.getByRole('button', { name: /Change Role/i });
+    const removeBtn = canvas.getByRole('button', { name: /Remove/i });
+    await expect(changeRoleBtn).toBeDisabled();
+    await expect(removeBtn).toBeDisabled();
 
-    // 4. Test Filter Clearing
+    // 4. Select Bob Vance row to enable actions
+    const bobRow = canvas.getByText('bob@vancerefrig.com');
+    await userEvent.click(bobRow);
+    await expect(args.setSelectedMember).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'usr_2' }),
+    );
+
+    // 5. Test Action Button Clicks after selection
+    await expect(changeRoleBtn).toBeEnabled();
+    await userEvent.click(changeRoleBtn);
+    await expect(args.onChangeRoleClick).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'usr_2' }),
+    );
+
+    // 6. Test Filter Clearing
     const clearBtn = canvas.getByRole('button', { name: /Clear Filters/i });
     await userEvent.click(clearBtn);
     await expect(args.setSearchQuery).toHaveBeenCalledWith('');

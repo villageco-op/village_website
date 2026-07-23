@@ -4,6 +4,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState, type ComponentType } from 'react';
 
+import { InlineErrorState } from '../ui/state-displays';
+
 import SidebarNavItem from './sidebar/SidebarNavItem';
 import SidebarProfile from './sidebar/SidebarProfile';
 import { SidebarSkeleton } from './sidebar/SidebarSkeleton';
@@ -45,6 +47,9 @@ export interface SidebarProps {
   settingsHref: string;
   publicProfileBaseUrl?: string; // e.g., '/producer' or '/buyer'. If omitted, external link is hidden.
   fallbackName?: string;
+  isError?: boolean;
+  onRefetch?: () => void;
+  errorMessage?: string;
 }
 
 /**
@@ -57,6 +62,9 @@ export interface SidebarProps {
  * @param props.settingsHref - The path to the settings page
  * @param props.publicProfileBaseUrl - The base for the public profile page (e.g., /buyer, /seller)
  * @param props.fallbackName - The display name when user.name is missing
+ * @param props.isError - Was their an error loading the sidebar data
+ * @param props.onRefetch - When the retry button is clicked
+ * @param props.errorMessage - The error message displayed in the error state
  * @returns A side nav bar
  */
 export function Sidebar({
@@ -67,6 +75,9 @@ export function Sidebar({
   settingsHref,
   publicProfileBaseUrl,
   fallbackName = 'User',
+  isError,
+  onRefetch,
+  errorMessage,
 }: SidebarProps) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -74,6 +85,20 @@ export function Sidebar({
   const isLoading = status === 'loading';
 
   if (isLoading) return SidebarSkeleton();
+
+  const containerClasses = cn(
+    'sticky top-16 self-start flex flex-col h-[calc(100vh-64px)] bg-forest-dark transition-all duration-300 ease-in-out',
+    isCollapsed ? 'w-16' : 'w-58',
+    !isCollapsed && 'w-full md:w-58 md:h-[calc(100vh-64px)] shadow-2xl md:shadow-none',
+  );
+
+  if (isError) {
+    return (
+      <div className={containerClasses}>
+        <InlineErrorState title={errorMessage ?? 'An error occured.'} onRetry={onRefetch} />
+      </div>
+    );
+  }
 
   const visibleNavGroups = navGroups
     .map((group) => ({
@@ -83,13 +108,7 @@ export function Sidebar({
     .filter((group) => group.items.length > 0);
 
   return (
-    <div
-      className={cn(
-        'sticky top-16 self-start flex flex-col h-[calc(100vh-64px)] bg-forest-dark transition-all duration-300 ease-in-out',
-        isCollapsed ? 'w-16' : 'w-58',
-        !isCollapsed && 'w-full md:w-58 md:h-[calc(100vh-64px)] shadow-2xl md:shadow-none',
-      )}
-    >
+    <div className={containerClasses}>
       {/* Scrollable Main Section */}
       <ScrollArea className="flex-1 overflow-hidden [&>div>div]:block!">
         <div className="flex flex-col">
