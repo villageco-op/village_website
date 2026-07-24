@@ -2,6 +2,7 @@
 
 import {
   CircleQuestionMark,
+  Printer,
   IdCardLanyard,
   MessageCircle,
   Settings,
@@ -53,6 +54,13 @@ const PANTRY_NAV_GROUPS: NavGroup[] = [
         sub: 'Add New Client',
         icon: UserPlus,
         href: '/org/new-client',
+        protected: true,
+      },
+      {
+        name: 'Export Clients',
+        sub: 'Download or Print Clients',
+        icon: Printer,
+        href: '/org/export',
         protected: true,
       },
     ],

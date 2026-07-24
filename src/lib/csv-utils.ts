@@ -1,4 +1,4 @@
-import type { Order, Payout } from './api/generated/models';
+import type { ClientResponse, Order, Payout } from './api/generated/models';
 
 /**
  * Generates a CSV file from the payouts data and triggers a browser download.
@@ -57,6 +57,54 @@ export const handleDownloadBuyerInvoicesCSV = (orders: Order[]) => {
 
   link.setAttribute('href', url);
   link.setAttribute('download', `invoice_history_${new Date().toISOString().split('T')[0]}.csv`);
+  link.style.visibility = 'hidden';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+/**
+ * Generates a csv file containing client information.
+ * @param clients - The list of clients
+ */
+export const handleDownloadClientsCSV = (clients: ClientResponse[]) => {
+  const headers = [
+    'Name',
+    'Email',
+    'Phone Number',
+    'Street Address',
+    'City',
+    'State',
+    'Zip Code',
+    'Country',
+    'Referrals Used',
+    'Date Created',
+  ];
+
+  const rows = clients.map((client) => [
+    `"${(client.name || '').replace(/"/g, '""')}"`,
+    `"${(client.email || '').replace(/"/g, '""')}"`,
+    `"${(client.phone || '').replace(/"/g, '""')}"`,
+    `"${(client.address || '').replace(/"/g, '""')}"`,
+    `"${(client.city || '').replace(/"/g, '""')}"`,
+    `"${(client.state || '').replace(/"/g, '""')}"`,
+    `"${(client.zip || '').replace(/"/g, '""')}"`,
+    `"${(client.country || '').replace(/"/g, '""')}"`,
+    client.referralCount || 0,
+    client.createdAt ? new Date(client.createdAt).toLocaleDateString() : '',
+  ]);
+
+  const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+  const blob = new Blob([`\ufeff${csvContent}`], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.setAttribute('href', url);
+  link.setAttribute(
+    'download',
+    `organization_clients_${new Date().toISOString().split('T')[0]}.csv`,
+  );
   link.style.visibility = 'hidden';
 
   document.body.appendChild(link);

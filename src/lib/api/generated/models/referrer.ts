@@ -7,14 +7,11 @@
  */
 import type { EntityId } from './entityId';
 
-/**
- * @nullable
- */
-export type ReferredBy = {
+export interface Referrer {
   id: EntityId;
   name: string;
   /** @nullable */
   email: string | null;
   /** @nullable */
   phone: string | null;
-} | null;
+}

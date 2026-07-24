@@ -5,9 +5,9 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { SearchReferrerResponseResultsItem } from './searchReferrerResponseResultsItem';
+import type { Referrer } from './referrer';
 
 export interface SearchReferrerResponse {
   exactMatch: boolean;
-  results: SearchReferrerResponseResultsItem[];
+  results: Referrer[];
 }

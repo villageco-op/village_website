@@ -75,11 +75,6 @@ export function ClientsTable({
   onDeleteClick,
   onViewReferralsClick,
 }: ClientsTableProps) {
-  const getReferralsCount = (client: ClientResponse): number => {
-    const mockValue = (client.id.charCodeAt(client.id.length - 1) || 0) % 5;
-    return Math.min(mockValue, 4);
-  };
-
   return (
     <Card>
       <CardContent>
@@ -186,7 +181,7 @@ export function ClientsTable({
               </TableHeader>
               <TableBody>
                 {clients.map((client) => {
-                  const usedCount = getReferralsCount(client);
+                  const usedCount = client.referralCount || 0;
                   const isMaxedOut = usedCount >= 4;
                   const isSelected = selectedClient?.id === client.id;
 
