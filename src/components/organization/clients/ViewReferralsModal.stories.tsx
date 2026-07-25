@@ -33,7 +33,7 @@ const mockClient: ClientResponse = {
   zip: '53703',
   organizationId: 'org-1',
   createdById: 'user-1',
-  referredBy: null,
+  referredBy: null as any,
   active: true,
   createdAt: '2024-01-01T00:00:00Z',
   updatedAt: '2024-01-01T00:00:00Z',

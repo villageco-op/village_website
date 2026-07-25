@@ -16,5 +16,5 @@ export function formatAddress(address: AddressFields): string {
     (part): part is string => Boolean(part && part.trim().length > 0),
   );
 
-  return parts.length > 0 ? parts.join(', ') : 'No address provided';
+  return parts.length > 0 ? parts.join(', ') : '';
 }

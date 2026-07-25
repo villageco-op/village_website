@@ -6,8 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { Client } from './client';
-import type { ReferredBy } from './referredBy';
+import type { Referrer } from './referrer';
 
 export type ClientResponse = Client & ({
-  referredBy: ReferredBy | null;
+  referredBy: Referrer & (unknown | null);
+  /** The number of referrals used by the client. */
+  referralCount?: number;
 });

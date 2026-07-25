@@ -9,11 +9,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { EmptyState } from '@/components/ui/state-displays';
 import { useSearchReferrer } from '@/lib/api/generated/clients/clients';
-import type { SearchReferrerResponseResultsItem } from '@/lib/api/generated/models';
+import type { Referrer } from '@/lib/api/generated/models';
 
 interface ReferralSelectorProps {
-  selectedReferrer: SearchReferrerResponseResultsItem | null;
-  onSelect: (referrer: SearchReferrerResponseResultsItem | null) => void;
+  selectedReferrer: Referrer | null;
+  onSelect: (referrer: Referrer | null) => void;
 }
 
 /**

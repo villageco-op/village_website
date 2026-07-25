@@ -12,7 +12,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCreateClient } from '@/lib/api/generated/clients/clients';
-import type { SearchReferrerResponseResultsItem } from '@/lib/api/generated/models';
+import type { Referrer } from '@/lib/api/generated/models';
 
 /**
  * Page component for registering a new client in the system.
@@ -31,8 +31,7 @@ export default function NewClientPageClient() {
     zip: '',
   });
 
-  const [selectedReferrer, setSelectedReferrer] =
-    useState<SearchReferrerResponseResultsItem | null>(null);
+  const [selectedReferrer, setSelectedReferrer] = useState<Referrer | null>(null);
 
   const { mutateAsync: createClient, isPending: isSubmitting } = useCreateClient();
 

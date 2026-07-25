@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { ReferralSelector } from './ReferralSelector';
 
 import { Toaster } from '@/components/ui/sonner';
-import type { SearchReferrerResponseResultsItem } from '@/lib/api/generated/models';
+import type { Referrer } from '@/lib/api/generated/models';
 
 const createQueryClient = () =>
   new QueryClient({
@@ -23,7 +23,7 @@ const createQueryClient = () =>
     },
   });
 
-const MOCK_REFERRERS: SearchReferrerResponseResultsItem[] = [
+const MOCK_REFERRERS: Referrer[] = [
   {
     id: 'ref_1',
     name: 'John Doe',
@@ -48,7 +48,7 @@ const MOCK_REFERRERS: SearchReferrerResponseResultsItem[] = [
  * Interactive wrapper to let Storybook capture state updates correctly.
  */
 function ReferralSelectorStoryWrapper() {
-  const [selected, setSelected] = useState<SearchReferrerResponseResultsItem | null>(null);
+  const [selected, setSelected] = useState<Referrer | null>(null);
 
   return (
     <div className="mx-auto max-w-md rounded-xl border border-border bg-white p-6 shadow-sm">
