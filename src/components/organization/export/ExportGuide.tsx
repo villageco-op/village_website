@@ -78,8 +78,8 @@ export function ExportGuides({ clients, loading, onTriggerPrint }: ExportGuidesP
               <li>Opens standard printer window; works directly with physical printers</li>
               <li>
                 To save a digital document: choose{' '}
-                <strong className="text-ink">"Save as PDF"</strong> in the printer destination
-                options
+                <strong className="text-ink">&quot;Save as PDF&quot;</strong> in the printer
+                destination options
               </li>
             </ul>
           </div>

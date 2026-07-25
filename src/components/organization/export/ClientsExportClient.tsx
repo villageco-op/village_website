@@ -32,7 +32,6 @@ export default function ClientsExportClient() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
 
-  // Controller to abort in-flight requests on cancel
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const fetchAllClients = async (): Promise<ClientResponse[] | null> => {
@@ -100,7 +99,6 @@ export default function ClientsExportClient() {
 
     if (action === 'print') {
       setIsModalOpen(false);
-      // Brief delay allows DOM layout to settle outside the modal context before triggering print window
       setTimeout(() => {
         window.print();
       }, 300);
@@ -128,7 +126,6 @@ export default function ClientsExportClient() {
         </p>
       </div>
 
-      {/* EXPORT ACTION CARDS */}
       <ExportGuides
         clients={clients}
         loading={loading}
@@ -139,10 +136,12 @@ export default function ClientsExportClient() {
       <Card className="print:border-none print:shadow-none">
         <CardHeader className="px-6 py-4 flex flex-row items-center justify-between print:bg-transparent print:px-0">
           <CardTitle className="print:text-2xl print:font-bold">Clients List</CardTitle>
-          <div className="text-sm font-medium text-ink-3 print:hidden">Total: {clients.length}</div>
+          <div className="text-sm font-medium text-ink-3 print:hidden">
+            {!hasFetched ? 'Data not loaded' : `Total: ${clients.length}`}
+          </div>
         </CardHeader>
         <CardContent className="px-0 py-0">
-          <ExportClientTable clients={clients} />
+          <ExportClientTable clients={clients} hasFetched />
         </CardContent>
       </Card>
 

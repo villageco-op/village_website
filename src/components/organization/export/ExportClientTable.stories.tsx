@@ -67,6 +67,7 @@ const meta: Meta<typeof ExportClientTable> = {
   tags: ['autodocs'],
   args: {
     clients: mockClients,
+    hasFetched: true,
   },
 };
 
@@ -102,6 +103,7 @@ export const PartialDataAndFallbacks: Story = {
         updatedAt: '2024-01-01T00:00:00Z',
       },
     ],
+    hasFetched: true,
   },
 };
 
@@ -111,5 +113,16 @@ export const PartialDataAndFallbacks: Story = {
 export const Empty: Story = {
   args: {
     clients: [],
+    hasFetched: true,
+  },
+};
+
+/**
+ * Not yet fetched state rendered when no clients have been loaded yet.
+ */
+export const NotYetLoaded: Story = {
+  args: {
+    clients: [],
+    hasFetched: false,
   },
 };
