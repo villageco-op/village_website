@@ -52,7 +52,7 @@ export function AuthGuard({
     }
 
     if (requireOrganization && !user?.organizationId) {
-      router.replace('/org/join');
+      router.replace('/join-org');
       return;
     }
   }, [user, status, pathname, router, requireStripeOnboarding, requireOrganization]);

@@ -14,9 +14,10 @@ import OrganizationOnboardingFlow from './organization/OrganizationOnboardingFlo
 export default function OnboardingFlow() {
   const searchParams = useSearchParams();
   const isUpgradingToSeller = searchParams?.get('upgrade') === 'seller';
+  const isUpgradingToOrg = searchParams?.get('upgrade') === 'org';
 
   const [flowType, setFlowType] = useState<'individual' | 'organization' | null>(
-    isUpgradingToSeller ? 'individual' : null,
+    isUpgradingToSeller ? 'individual' : isUpgradingToOrg ? 'organization' : null,
   );
 
   if (flowType === 'individual') {
@@ -29,7 +30,7 @@ export default function OnboardingFlow() {
   }
 
   if (flowType === 'organization') {
-    return <OrganizationOnboardingFlow onBack={() => setFlowType(null)} />;
+    return <OrganizationOnboardingFlow isUpgradingToOrg onBack={() => setFlowType(null)} />;
   }
 
   return (

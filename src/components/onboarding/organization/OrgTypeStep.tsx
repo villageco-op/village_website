@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 export interface OrgTypeStepProps {
   onSelectType: (type: 'pantry') => void;
   onBack: () => void;
+  isUpgradingToOrg: boolean;
 }
 
 /**
@@ -17,9 +18,10 @@ export interface OrgTypeStepProps {
  * @param props - Component props
  * @param props.onSelectType - When a org type is selected
  * @param props.onBack - When back is pressed
+ * @param props.isUpgradingToOrg - Indicates the user is returning to join an org
  * @returns Component with large buttons for the org types
  */
-export default function OrgTypeStep({ onSelectType, onBack }: OrgTypeStepProps) {
+export default function OrgTypeStep({ onSelectType, onBack, isUpgradingToOrg }: OrgTypeStepProps) {
   return (
     <div className="animate-in fade-in slide-in-from-right-8 duration-500 space-y-6">
       <div className="text-center mb-8">
@@ -57,11 +59,13 @@ export default function OrgTypeStep({ onSelectType, onBack }: OrgTypeStepProps) 
         </div>
       </div>
 
-      <div className="flex justify-between items-center pt-6 border-t border-border/10">
-        <Button type="button" variant="ghost" onClick={onBack}>
-          <ArrowLeft className="w-4 h-4 mr-2" /> Back
-        </Button>
-      </div>
+      {!isUpgradingToOrg && (
+        <div className="flex justify-between items-center pt-6 border-t border-border/10">
+          <Button type="button" variant="ghost" onClick={onBack}>
+            <ArrowLeft className="w-4 h-4 mr-2" /> Back
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
