@@ -18,16 +18,21 @@ import { useUploadImage } from '@/lib/api/generated/upload/upload';
 type OrgStep = 'org-type' | 'org-details' | 'org-invite';
 
 interface OrganizationOnboardingFlowProps {
+  isUpgradingToOrg: boolean;
   onBack: () => void;
 }
 
 /**
  * The organization onboarding handler component.
  * @param props - Component props
+ * @param props.isUpgradingToOrg - Indicates the user is returning to join an org
  * @param props.onBack - When back is pressed
  * @returns The onboarding flow component for organizations
  */
-export default function OrganizationOnboardingFlow({ onBack }: OrganizationOnboardingFlowProps) {
+export default function OrganizationOnboardingFlow({
+  isUpgradingToOrg,
+  onBack,
+}: OrganizationOnboardingFlowProps) {
   const router = useRouter();
   const { completeOnboarding } = useTutorial();
 
@@ -159,7 +164,11 @@ export default function OrganizationOnboardingFlow({ onBack }: OrganizationOnboa
         {/* Form Node Card */}
         <div className="bg-cream/30 border border-border/20 shadow-sm rounded-xl p-8 min-h-100 flex flex-col justify-center relative">
           {step === 'org-type' && (
-            <OrgTypeStep onSelectType={() => setStep('org-details')} onBack={onBack} />
+            <OrgTypeStep
+              onSelectType={() => setStep('org-details')}
+              onBack={onBack}
+              isUpgradingToOrg
+            />
           )}
 
           {step === 'org-details' && (

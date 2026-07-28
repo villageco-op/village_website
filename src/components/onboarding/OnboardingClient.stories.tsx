@@ -143,3 +143,21 @@ export const UpgradeToSellerBypass: Story = {
     await expect(aboutMeInput).toBeInTheDocument();
   },
 };
+
+export const UpgradeToOrgBypass: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        query: {
+          upgrade: 'org',
+        },
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const orgTypeTitle = await canvas.findByText(/Select Organization Type/i);
+    await expect(orgTypeTitle).toBeInTheDocument();
+  },
+};
