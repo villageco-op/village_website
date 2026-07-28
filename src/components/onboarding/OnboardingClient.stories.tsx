@@ -3,6 +3,8 @@ import { userEvent, within, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
+import { TutorialProvider } from '../providers/TutorialProvider';
+
 import OnboardingFlow from './OnboardingClient';
 
 import { Toaster } from '@/components/ui/sonner';
@@ -66,8 +68,10 @@ const meta: Meta<typeof OnboardingFlow> = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={mockedQueryClient}>
-        <Story />
-        <Toaster />
+        <TutorialProvider>
+          <Story />
+          <Toaster />
+        </TutorialProvider>
       </QueryClientProvider>
     ),
   ],

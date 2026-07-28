@@ -1,5 +1,3 @@
-import type { User } from './api/generated/models';
-
 /**
  * Determines initials from a name.
  * @param name - User name

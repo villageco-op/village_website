@@ -5,6 +5,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import OrganizationOnboardingFlow from './OrganizationOnboardingFlow';
 
+import { TutorialProvider } from '@/components/providers/TutorialProvider';
 import { Toaster } from '@/components/ui/sonner';
 import { type Invite, OrgInviteStatus, OrgRole } from '@/lib/api/generated/models';
 
@@ -107,8 +108,10 @@ const meta: Meta<typeof OrganizationOnboardingFlow> = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={mockedQueryClient}>
-        <Story />
-        <Toaster />
+        <TutorialProvider>
+          <Story />
+          <Toaster />
+        </TutorialProvider>
       </QueryClientProvider>
     ),
   ],

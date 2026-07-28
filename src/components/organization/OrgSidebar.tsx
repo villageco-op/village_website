@@ -37,7 +37,7 @@ const DEFUALT_NAV_GROUPS: NavGroup[] = [
         name: 'Tutorials',
         sub: '',
         icon: CircleQuestionMark,
-        href: '/org/tutorials',
+        href: '/tutorials',
         protected: true,
       },
     ],

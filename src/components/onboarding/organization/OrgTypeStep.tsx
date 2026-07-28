@@ -40,9 +40,7 @@ export default function OrgTypeStep({ onSelectType, onBack }: OrgTypeStepProps) 
             <Store className="w-6 h-6" />
           </div>
           <h3 className="font-heading font-bold text-lg text-ink text-center">Food Pantry</h3>
-          <p className="text-sm text-ink-3 mt-1 text-center">
-            Manage distribution with simple check-ins and refferal tracking.
-          </p>
+          <p className="text-sm text-ink-3 mt-1 text-center">Manage clients and track refferals.</p>
         </button>
 
         <div className="flex flex-col items-center justify-center p-6 bg-black/5 border border-dashed border-border/40 rounded-xl opacity-60 relative cursor-not-allowed">

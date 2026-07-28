@@ -7,6 +7,7 @@ import { CartFab } from '@/components/cart/CartFab';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import Providers from '@/components/providers';
+import { TutorialOverlay } from '@/components/tutorial/TutorialOverlay';
 import { Toaster } from '@/components/ui/sonner';
 import { CartProvider } from '@/hooks/useCartUI';
 
@@ -60,6 +61,7 @@ export default function RootLayout({
             {children}
             <CartFab />
             <CartDrawer />
+            <TutorialOverlay />
           </CartProvider>
         </Providers>
         <Toaster />
