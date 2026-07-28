@@ -157,7 +157,7 @@ export const UpgradeToOrgBypass: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const orgTypeTitle = await canvas.findByLabelText(/Select Organization Type/i);
+    const orgTypeTitle = await canvas.findByText(/Select Organization Type/i);
     await expect(orgTypeTitle).toBeInTheDocument();
   },
 };
