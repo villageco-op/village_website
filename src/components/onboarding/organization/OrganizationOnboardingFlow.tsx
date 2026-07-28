@@ -8,6 +8,7 @@ import OrgDetailsStep, { type OrgDetailsData } from './OrgDetailsStep';
 import OrgInviteStep from './OrgInviteStep';
 import OrgTypeStep from './OrgTypeStep';
 
+import { useTutorial } from '@/components/providers/TutorialProvider';
 import { useInviteToOrg } from '@/lib/api/generated/invites/invites';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import type { OrgRole } from '@/lib/api/generated/models/orgRole';
@@ -28,6 +29,7 @@ interface OrganizationOnboardingFlowProps {
  */
 export default function OrganizationOnboardingFlow({ onBack }: OrganizationOnboardingFlowProps) {
   const router = useRouter();
+  const { completeOnboarding } = useTutorial();
 
   const [step, setStep] = useState<OrgStep>('org-type');
   const [isUploading, setIsUploading] = useState(false);
@@ -128,6 +130,7 @@ export default function OrganizationOnboardingFlow({ onBack }: OrganizationOnboa
   };
 
   const handleFinishOrgOnboarding = () => {
+    completeOnboarding();
     router.push('/org-dashboard');
   };
 

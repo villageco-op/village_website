@@ -148,9 +148,7 @@ export default function OrgSettingsForm({
     <div className="space-y-6 animate-in fade-in duration-300">
       <div>
         <h2 className="font-heading text-xl font-bold text-deep-forest">Organization Details</h2>
-        <p className="text-sm text-ink-3 mt-1">
-          Manage visual identity, addresses, and physical locations.
-        </p>
+        <p className="text-sm text-ink-3 mt-1">Manage visual identity, address, and subdomain.</p>
       </div>
 
       <form onSubmit={(e) => void handleUpdateOrganization(e)} className="space-y-5">
