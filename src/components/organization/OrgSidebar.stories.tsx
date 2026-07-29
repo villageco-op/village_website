@@ -80,6 +80,7 @@ const mockPantryOrg: Organization = {
   zip: null,
   lat: null,
   lng: null,
+  maxReferrals: 4,
 };
 
 /**
@@ -103,6 +104,7 @@ const mockRestaurantOrg: Organization = {
   zip: null,
   lat: null,
   lng: null,
+  maxReferrals: null,
 };
 
 /**
