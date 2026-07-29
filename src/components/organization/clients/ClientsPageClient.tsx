@@ -15,6 +15,7 @@ import {
   useDeleteClient,
 } from '@/lib/api/generated/clients/clients';
 import type { ClientResponse, UpdateClientPayload } from '@/lib/api/generated/models';
+import { useGetCurrentUserOrganization } from '@/lib/api/generated/users/users';
 
 /**
  * Main dashboard container managing state and action handlers for the clients registry.
@@ -55,6 +56,12 @@ export default function ClientsPageClient() {
     limit,
   });
 
+  const {
+    data: orgRes,
+    isLoading: isOrgLoading,
+    isError: isOrgError,
+  } = useGetCurrentUserOrganization();
+
   const { mutateAsync: updateClient, isPending: isUpdating } = useUpdateClient();
   const { mutateAsync: deleteClient, isPending: isDeleting } = useDeleteClient();
 
@@ -86,6 +93,8 @@ export default function ClientsPageClient() {
     }
   };
 
+  const maxReferrals = orgRes?.status === 200 ? orgRes.data.maxReferrals : 4;
+
   const clients = clientsRes?.status === 200 ? clientsRes.data?.data : [];
   const meta = clientsRes?.status === 200 ? clientsRes.data?.meta : undefined;
 
@@ -98,8 +107,9 @@ export default function ClientsPageClient() {
 
       <ClientsTable
         clients={clients || []}
-        isLoading={isLoading}
-        isError={isError}
+        maxReferrals={maxReferrals || 4}
+        isLoading={isLoading || isOrgLoading}
+        isError={isError || isOrgError}
         searchQuery={searchQuery}
         setSearchQuery={(query) => {
           setSearchQuery(query);
@@ -147,6 +157,7 @@ export default function ClientsPageClient() {
       {referralViewingClient && (
         <ViewReferralsModal
           client={referralViewingClient}
+          maxReferrals={maxReferrals || 4}
           onClose={() => setReferralViewingClient(null)}
         />
       )}

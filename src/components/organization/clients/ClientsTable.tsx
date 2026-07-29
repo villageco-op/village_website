@@ -22,6 +22,7 @@ import type { ClientResponse, PaginationMetadata } from '@/lib/api/generated/mod
 
 interface ClientsTableProps {
   clients: ClientResponse[];
+  maxReferrals: number;
   isLoading: boolean;
   isError: boolean;
   searchQuery: string;
@@ -42,6 +43,7 @@ interface ClientsTableProps {
  * Table displaying clients with actions and filters.
  * @param props - Component props
  * @param props.clients - The clients list
+ * @param props.maxReferrals - The max referrals per client
  * @param props.isLoading - Are the clients loading
  * @param props.isError - Did an error occur loading the clients
  * @param props.searchQuery - The current search input
@@ -60,6 +62,7 @@ interface ClientsTableProps {
  */
 export function ClientsTable({
   clients,
+  maxReferrals,
   isLoading,
   isError,
   searchQuery,
@@ -182,7 +185,7 @@ export function ClientsTable({
               <TableBody>
                 {clients.map((client) => {
                   const usedCount = client.referralCount || 0;
-                  const isMaxedOut = usedCount >= 4;
+                  const isMaxedOut = usedCount >= maxReferrals;
                   const isSelected = selectedClient?.id === client.id;
 
                   return (
@@ -217,7 +220,7 @@ export function ClientsTable({
                               isMaxedOut ? 'text-amber-600' : 'text-forest'
                             }`}
                           >
-                            {usedCount} of 4
+                            {usedCount} of {maxReferrals}
                           </span>
                         </button>
                       </TableCell>

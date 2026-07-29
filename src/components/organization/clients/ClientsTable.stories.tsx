@@ -93,6 +93,7 @@ const meta: Meta<typeof ClientsTable> = {
   tags: ['autodocs'],
   args: {
     clients: mockClients,
+    maxReferrals: 4,
     isLoading: false,
     isError: false,
     searchQuery: '',

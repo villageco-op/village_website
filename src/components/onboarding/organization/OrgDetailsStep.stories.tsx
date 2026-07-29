@@ -5,6 +5,8 @@ import { http, HttpResponse, delay } from 'msw';
 
 import OrgDetailsStep from './OrgDetailsStep';
 
+import { OrgType } from '@/lib/api/generated/models';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -54,6 +56,7 @@ const meta: Meta<typeof OrgDetailsStep> = {
   ],
   tags: ['autodocs'],
   args: {
+    type: OrgType.pantry,
     onSubmit: fn(),
     onBack: fn(),
     isPending: false,
@@ -68,6 +71,20 @@ type Story = StoryObj<typeof OrgDetailsStep>;
  * until required fields are filled and the subdomain is verified.
  */
 export const Default: Story = {};
+
+/**
+ * Pantry organization type showing the Max Referrals field.
+ */
+export const PantryOrgType: Story = {
+  args: {
+    type: OrgType.pantry,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const maxReferralsInput = canvas.getByLabelText(/Client Referral Limit/i);
+    await expect(maxReferralsInput).toBeInTheDocument();
+  },
+};
 
 /**
  * UI state during submission. The button shows a loading spinner
@@ -130,9 +147,13 @@ export const DomainTakenFlow: Story = {
 };
 
 /**
- * Submits the completed data structure back up to the wrapper lifecycle hooks.
+ * Submits the completed data structure back up to the wrapper lifecycle hooks,
+ * including maxReferrals for pantry organization types.
  */
 export const FullInteractionTest: Story = {
+  args: {
+    type: OrgType.pantry,
+  },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
 
@@ -140,6 +161,10 @@ export const FullInteractionTest: Story = {
     await userEvent.type(canvas.getByLabelText(/Custom Subdomain/i), 'village-harvest');
     await userEvent.type(canvas.getByLabelText(/Street Address/i), '789 Sprout St');
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '46403');
+
+    const maxReferralsInput = canvas.getByLabelText(/Client Referral Limit/i);
+    await userEvent.clear(maxReferralsInput);
+    await userEvent.type(maxReferralsInput, '10');
 
     await waitFor(async () => {
       const successText = await canvas.findByText(/Subdomain is available!/i);
@@ -159,6 +184,7 @@ export const FullInteractionTest: Story = {
           state: 'IN',
           zip: '46403',
           country: 'United States',
+          maxReferrals: 10,
         }),
       );
     });

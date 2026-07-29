@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
-import type { Organization, User } from '@/lib/api/generated/models';
+import { OrgType, type Organization, type User } from '@/lib/api/generated/models';
 import {
   useUpdateOrganization,
   useDeleteOrganization,
@@ -54,6 +54,11 @@ export default function OrgSettingsForm({
   });
   const [email, setEmail] = useState(orgData?.email || '');
   const [website, setWebsite] = useState(orgData?.website || '');
+  const [maxReferrals, setMaxReferrals] = useState<string>(
+    orgData?.maxReferrals !== undefined && orgData?.maxReferrals !== null
+      ? String(orgData.maxReferrals)
+      : '4',
+  );
   const [currentAvatar, setCurrentAvatar] = useState(orgData?.image || null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -63,6 +68,8 @@ export default function OrgSettingsForm({
   const deleteOrgMutation = useDeleteOrganization();
   const uploadImageMutation = useUploadImage();
   const geocodeAddressMutation = useGeocodeAddress();
+
+  const isPantry = orgData?.type === OrgType.pantry;
 
   const handleUpdateOrganization = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -107,6 +114,8 @@ export default function OrgSettingsForm({
 
     const { lat, lng } = geocodeRes.data;
 
+    const parsedMaxReferrals = maxReferrals !== '' ? Number.parseInt(maxReferrals, 10) : undefined;
+
     try {
       await updateOrgMutation.mutateAsync({
         id: orgId,
@@ -117,6 +126,8 @@ export default function OrgSettingsForm({
           country: 'United States',
           email: email.trim() || undefined,
           website: website.trim() || undefined,
+          maxReferrals:
+            isPantry && !Number.isNaN(parsedMaxReferrals) ? parsedMaxReferrals : undefined,
           image: imageUrl,
           lat,
           lng,
@@ -218,6 +229,26 @@ export default function OrgSettingsForm({
               />
             </div>
           </div>
+
+          {isPantry && (
+            <div className="space-y-1.5">
+              <Label htmlFor="maxReferrals" className="text-ink-2 font-semibold text-sm">
+                Client Referral Limit
+              </Label>
+              <p className="text-xs text-ink-3 mt-1 mb-4">
+                The number of referrals a single client is allowed to make.
+              </p>
+              <Input
+                id="maxReferrals"
+                type="number"
+                min={0}
+                placeholder="e.g. 4"
+                className="bg-white border-lime/50 focus-visible:ring-click-green h-9 max-w-40"
+                value={maxReferrals}
+                onChange={(e) => setMaxReferrals(e.target.value)}
+              />
+            </div>
+          )}
         </div>
 
         <div className="pt-4 border-t border-border/10 flex justify-end">

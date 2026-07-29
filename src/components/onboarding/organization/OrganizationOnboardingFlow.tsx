@@ -12,6 +12,7 @@ import { useTutorial } from '@/components/providers/TutorialProvider';
 import { useInviteToOrg } from '@/lib/api/generated/invites/invites';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import type { OrgRole } from '@/lib/api/generated/models/orgRole';
+import type { OrgType } from '@/lib/api/generated/models/orgType';
 import { useCreateOrganization } from '@/lib/api/generated/organizations/organizations';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 
@@ -38,6 +39,7 @@ export default function OrganizationOnboardingFlow({
 
   const [step, setStep] = useState<OrgStep>('org-type');
   const [isUploading, setIsUploading] = useState(false);
+  const [orgType, setOrgType] = useState<OrgType>('pantry');
 
   const uploadImageMutation = useUploadImage();
   const geocodeAddressMutation = useGeocodeAddress();
@@ -165,14 +167,18 @@ export default function OrganizationOnboardingFlow({
         <div className="bg-cream/30 border border-border/20 shadow-sm rounded-xl p-8 min-h-100 flex flex-col justify-center relative">
           {step === 'org-type' && (
             <OrgTypeStep
-              onSelectType={() => setStep('org-details')}
+              onSelectType={(type) => {
+                setOrgType(type);
+                setStep('org-details');
+              }}
               onBack={onBack}
-              isUpgradingToOrg
+              isUpgradingToOrg={isUpgradingToOrg}
             />
           )}
 
           {step === 'org-details' && (
             <OrgDetailsStep
+              type={orgType}
               onSubmit={(data) => {
                 void handleOrgDetailsSubmit(data);
               }}
