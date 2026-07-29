@@ -61,6 +61,7 @@ const MOCK_ORGANIZATION: Organization = {
   zip: '46402',
   lat: 41.5934,
   lng: -87.3464,
+  maxReferrals: 5,
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
 };
@@ -132,6 +133,7 @@ export const DefaultConfigured: Story = {
     );
     await expect(canvas.getByLabelText(/Contact Email/i)).toHaveValue('contact@garypantry.org');
     await expect(canvas.getByLabelText(/Website/i)).toHaveValue('https://garypantry.org');
+    await expect(canvas.getByLabelText(/Client Referral Limit/i)).toHaveValue(5);
     await expect(canvas.getByRole('button', { name: /Save Changes/i })).toBeInTheDocument();
   },
 };
@@ -153,7 +155,7 @@ export const NoOrganizationAssociated: Story = {
 };
 
 /**
- * Evaluates the updating mutation lifecycle and user feedback notifications upon processing updates.
+ * Evaluates updating maxReferrals alongside standard fields during form submission.
  */
 export const FormSubmissionSuccess: Story = {
   args: {
@@ -162,7 +164,11 @@ export const FormSubmissionSuccess: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const saveButton = await canvas.findByRole('button', { name: /Save Changes/i });
+    const maxReferralsInput = await canvas.findByLabelText(/Client Referral Limit/i);
+    await userEvent.clear(maxReferralsInput);
+    await userEvent.type(maxReferralsInput, '12');
+
+    const saveButton = canvas.getByRole('button', { name: /Save Changes/i });
     await userEvent.click(saveButton);
 
     // Instant switch to pending asynchronous operation state

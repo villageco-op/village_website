@@ -6,7 +6,7 @@ import { http, HttpResponse, delay } from 'msw';
 import ClientsPageClient from './ClientsPageClient';
 
 import { Toaster } from '@/components/ui/sonner';
-import type { ClientResponse } from '@/lib/api/generated/models';
+import type { ClientResponse, Organization } from '@/lib/api/generated/models';
 
 const createQueryClient = () =>
   new QueryClient({
@@ -76,6 +76,27 @@ const INITIAL_CLIENTS: ClientResponse[] = [
   },
 ];
 
+const MOCK_ORGANIZATION: Organization = {
+  id: 'org_abc123',
+  type: 'pantry',
+  name: 'Gary Food Pantry Network',
+  subdomain: 'gary-pantry',
+  email: 'contact@garypantry.org',
+  website: 'https://garypantry.org',
+  phone: '219-555-0199',
+  image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?w=150',
+  address: '401 Broadway',
+  city: 'Gary',
+  state: 'IN',
+  country: 'United States',
+  zip: '46402',
+  lat: 41.5934,
+  lng: -87.3464,
+  maxReferrals: 5,
+  createdAt: '2026-01-01T00:00:00.000Z',
+  updatedAt: '2026-01-01T00:00:00.000Z',
+};
+
 let mockClients: ClientResponse[] = [...INITIAL_CLIENTS];
 
 const meta: Meta<typeof ClientsPageClient> = {
@@ -122,6 +143,10 @@ const meta: Meta<typeof ClientsPageClient> = {
             },
             { status: 200 },
           );
+        }),
+
+        http.get('/api/users/me/org', () => {
+          return HttpResponse.json({ ...MOCK_ORGANIZATION }, { status: 200 });
         }),
 
         http.put('*/clients/:id', async ({ params, request }) => {

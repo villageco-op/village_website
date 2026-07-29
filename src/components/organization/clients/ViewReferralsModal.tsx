@@ -17,19 +17,19 @@ import type { ClientResponse } from '@/lib/api/generated/models';
 
 interface ViewReferralsModalProps {
   client: ClientResponse;
+  maxReferrals: number;
   onClose: () => void;
 }
-
-const MAX_REFERRALS_ALLOTTED = 4;
 
 /**
  * Modal for viewing a clients referrals.
  * @param props - Component props
  * @param props.client - The client being deactivated
+ * @param props.maxReferrals - The max referrals per client
  * @param props.onClose - When the close button is clicked
  * @returns A dialog component
  */
-export function ViewReferralsModal({ client, onClose }: ViewReferralsModalProps) {
+export function ViewReferralsModal({ client, maxReferrals, onClose }: ViewReferralsModalProps) {
   const {
     data: response,
     isLoading,
@@ -40,8 +40,6 @@ export function ViewReferralsModal({ client, onClose }: ViewReferralsModalProps)
   const referrals = response?.status === 200 ? response.data?.data || [] : [];
   const totalReferrals =
     response?.status === 200 ? (response.data?.meta?.total ?? referrals.length) : referrals.length;
-
-  const activeCount = Math.min(totalReferrals, MAX_REFERRALS_ALLOTTED);
 
   return (
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
@@ -60,30 +58,17 @@ export function ViewReferralsModal({ client, onClose }: ViewReferralsModalProps)
           {/* Status Tracker Banner */}
           <div className="flex items-center justify-between rounded-lg border border-forest/10 bg-forest/[0.02] p-3.5">
             <div>
-              <p className="text-xs text-ink-3">Active Referrals Claimed</p>
+              <p className="text-xs text-ink-3">Referrals Used</p>
               <p className="text-lg font-bold text-ink">
-                {activeCount} of {MAX_REFERRALS_ALLOTTED}
+                {totalReferrals} of {maxReferrals}
               </p>
-            </div>
-            <div className="flex gap-1">
-              {[1, 2, 3, 4].map((step) => {
-                const isActive = step <= activeCount;
-                return (
-                  <span
-                    key={step}
-                    className={`h-2.5 w-6 rounded-full transition-colors ${
-                      isActive ? 'bg-forest' : 'bg-slate-200'
-                    }`}
-                  />
-                );
-              })}
             </div>
           </div>
 
           {/* Referred Profiles Section */}
           <div className="space-y-2.5">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-2">
-              Referred Profiles
+              Referred Clients
             </p>
 
             {isLoading ? (
@@ -110,7 +95,7 @@ export function ViewReferralsModal({ client, onClose }: ViewReferralsModalProps)
                         <span className="text-xs font-semibold text-ink">
                           {referredClient.name}
                         </span>
-                        <span className="text-[10px] text-ink-3">{referredClient.email}</span>
+                        <span className="text-xs text-ink-3">{referredClient.email}</span>
                       </div>
                     </div>
                   </div>

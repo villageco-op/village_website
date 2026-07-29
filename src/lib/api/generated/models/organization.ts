@@ -42,6 +42,12 @@ export interface Organization {
    * @nullable
    */
   lng: number | null;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   * @nullable
+   */
+  maxReferrals: number | null;
   /** @nullable */
   createdAt: string | null;
   /** @nullable */

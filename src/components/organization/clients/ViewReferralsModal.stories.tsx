@@ -61,6 +61,7 @@ const meta: Meta<typeof ViewReferralsModal> = {
   tags: ['autodocs'],
   args: {
     client: mockClient,
+    maxReferrals: 4,
     onClose: fn(),
   },
   decorators: [

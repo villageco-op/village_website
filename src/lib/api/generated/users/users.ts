@@ -29,6 +29,7 @@ import type {
   FcmStatusResponse,
   GetFcmStatusParams,
   GetSellerReviewsParams,
+  Organization,
   PaginatedReviewsResponse,
   PublicUserProfile,
   RegisterFcmTokenPayload,
@@ -348,6 +349,125 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getDeleteAccountMutationOptions(options), queryClient);
     }
     /**
+ * Fetch the organization of the currently authenticated user.
+ */
+export type getCurrentUserOrganizationResponse200 = {
+  data: Organization
+  status: 200
+}
+
+export type getCurrentUserOrganizationResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type getCurrentUserOrganizationResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type getCurrentUserOrganizationResponseSuccess = (getCurrentUserOrganizationResponse200) & {
+  headers: Headers;
+};
+export type getCurrentUserOrganizationResponseError = (getCurrentUserOrganizationResponse401 | getCurrentUserOrganizationResponse404) & {
+  headers: Headers;
+};
+
+export type getCurrentUserOrganizationResponse = (getCurrentUserOrganizationResponseSuccess | getCurrentUserOrganizationResponseError)
+
+export const getGetCurrentUserOrganizationUrl = () => {
+
+
+  
+
+  return `/api/users/me/org`
+}
+
+export const getCurrentUserOrganization = async ( options?: RequestInit): Promise<getCurrentUserOrganizationResponse> => {
+  
+  return apiClient<getCurrentUserOrganizationResponse>(getGetCurrentUserOrganizationUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetCurrentUserOrganizationQueryKey = () => {
+    return [
+    `/api/users/me/org`
+    ] as const;
+    }
+
+    
+export const getGetCurrentUserOrganizationQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError = ErrorResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCurrentUserOrganizationQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUserOrganization>>> = ({ signal }) => getCurrentUserOrganization({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCurrentUserOrganizationQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentUserOrganization>>>
+export type GetCurrentUserOrganizationQueryError = ErrorResponse
+
+
+export function useGetCurrentUserOrganization<TData = Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError = ErrorResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurrentUserOrganization>>,
+          TError,
+          Awaited<ReturnType<typeof getCurrentUserOrganization>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentUserOrganization<TData = Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError = ErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurrentUserOrganization>>,
+          TError,
+          Awaited<ReturnType<typeof getCurrentUserOrganization>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentUserOrganization<TData = Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError = ErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetCurrentUserOrganization<TData = Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError = ErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCurrentUserOrganizationQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
  * Store the user's Firebase Cloud Messaging token for push notifications.
  */
 export type registerFcmTokenResponse200 = {

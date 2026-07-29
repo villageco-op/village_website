@@ -36,4 +36,9 @@ export interface UpdateOrganizationPayload {
   website?: string;
   phone?: string;
   image?: string;
+  /**
+   * Maximum number of client referrals.
+   * @exclusiveMinimum 0
+   */
+  maxReferrals?: number;
 }
