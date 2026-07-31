@@ -29,7 +29,7 @@ export function SubscriptionSummaryCard({ subscription }: SubscriptionSummaryCar
   );
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-6">
         <h2 className="mb-4 font-heading text-[0.95rem] font-bold text-ink border-b border-border/50 pb-3">
           Subscription Summary
@@ -46,7 +46,7 @@ export function SubscriptionSummaryCard({ subscription }: SubscriptionSummaryCar
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="flex items-start gap-3 rounded-lg border border-border/50 bg-slate-50/50 p-4">
+          <div className="flex items-start gap-3 rounded-lg border border-border/50 p-4">
             <Package className="mt-0.5 h-5 w-5 text-ink-3" />
             <div>
               <p className="text-xs text-ink-3">Current Amount</p>
@@ -55,7 +55,7 @@ export function SubscriptionSummaryCard({ subscription }: SubscriptionSummaryCar
             </div>
           </div>
 
-          <div className="flex items-start gap-3 rounded-lg border border-border/50 bg-slate-50/50 p-4">
+          <div className="flex items-start gap-3 rounded-lg border border-border/50 p-4">
             <RefreshCw className="mt-0.5 h-5 w-5 text-ink-3" />
             <div>
               <p className="text-xs text-ink-3">Fulfillment Type</p>

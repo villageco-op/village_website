@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { useRegisterFcmToken } from '@/lib/api/generated/users/users';
 import { useUnregisterFcmToken } from '@/lib/api/generated/users/users';
 import { useGetFcmStatus } from '@/lib/api/generated/users/users';
@@ -68,26 +69,28 @@ export function NotificationControls() {
   };
 
   return (
-    <div className="bg-white p-5 rounded-lg border border-border/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div className="flex gap-4 items-center">
-        <div className="w-12 h-12 bg-sun-light text-sun rounded-full flex items-center justify-center shrink-0">
-          <Bell className="w-6 h-6" />
+    <Card>
+      <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex gap-4 items-center">
+          <div className="w-12 h-12 bg-sun-light text-sun rounded-full flex items-center justify-center shrink-0">
+            <Bell className="w-6 h-6" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-deep-forest text-lg">Push Notifications</h3>
+            <p className="text-sm text-ink-3">
+              Get real-time alerts about important activity on your account.
+            </p>
+          </div>
         </div>
-        <div>
-          <h3 className="font-semibold text-deep-forest text-lg">Push Notifications</h3>
-          <p className="text-sm text-ink-3">
-            Get real-time alerts about important activity on your account.
-          </p>
-        </div>
-      </div>
-      <Button
-        variant={isNotificationsEnabled ? 'destructive' : 'outline'}
-        onClick={() => void handleToggleNotifications()}
-        className="w-full sm:w-auto"
-        disabled={isLoading || registerToken.isPending || unregisterToken.isPending}
-      >
-        {isLoading ? 'Checking...' : isNotificationsEnabled ? 'Disable' : 'Enable'}
-      </Button>
-    </div>
+        <Button
+          variant={isNotificationsEnabled ? 'destructive' : 'outline'}
+          onClick={() => void handleToggleNotifications()}
+          className="w-full sm:w-auto"
+          disabled={isLoading || registerToken.isPending || unregisterToken.isPending}
+        >
+          {isLoading ? 'Checking...' : isNotificationsEnabled ? 'Disable' : 'Enable'}
+        </Button>
+      </CardContent>
+    </Card>
   );
 }

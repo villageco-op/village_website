@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { InlineErrorState } from '@/components/ui/state-displays';
+import { EmptyState, InlineErrorState } from '@/components/ui/state-displays';
 import {
   ProduceType,
   type SourceMapAnalyticsResponse,
@@ -55,11 +55,9 @@ export function AnalyticsSidebar({
 }: AnalyticsSidebarProps) {
   return (
     <div className="absolute top-4 left-4 right-4 z-10 flex max-h-[45vh] flex-col md:bottom-4 md:right-auto md:max-h-none md:w-90 pointer-events-none">
-      <Card className="pointer-events-auto flex h-auto max-h-full flex-col overflow-hidden rounded-2xl border-forest-dark/10 bg-white/95 shadow-2xl backdrop-blur-md">
+      <Card className="pointer-events-auto flex h-auto max-h-full flex-col overflow-hidden">
         <CardHeader className="shrink-0 pb-4">
-          <CardTitle className="font-heading text-xl text-deep-forest">
-            Supply Chain Impact
-          </CardTitle>
+          <CardTitle>Supply Chain Impact</CardTitle>
           <p className="font-sans text-xs text-ink-3">Visualize the flow and volume of your food</p>
         </CardHeader>
 
@@ -67,16 +65,14 @@ export function AnalyticsSidebar({
           {/* Interactive Filtering */}
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
-              <label className="text-[0.65rem] font-bold uppercase tracking-wider text-ink-3">
-                Filter by Produce
-              </label>
+              <label>Filter by Produce</label>
               <Select
                 value={produceType || 'ALL'}
                 onValueChange={(val) =>
                   setProduceType(val === 'ALL' ? undefined : (val as ProduceType))
                 }
               >
-                <SelectTrigger className="h-9 bg-white text-sm">
+                <SelectTrigger>
                   <SelectValue placeholder="All Produce" />
                 </SelectTrigger>
                 <SelectContent>
@@ -91,14 +87,9 @@ export function AnalyticsSidebar({
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="produceType"
-                className="text-[0.65rem] font-bold uppercase tracking-wider text-ink-3"
-              >
-                Filter by Season
-              </label>
+              <label htmlFor="produceType">Filter by Season</label>
               <Select value={season} onValueChange={setSeason}>
-                <SelectTrigger id="produceType" className="h-9 bg-white text-sm">
+                <SelectTrigger id="produceType">
                   <SelectValue placeholder="All Seasons" />
                 </SelectTrigger>
                 <SelectContent>
@@ -170,9 +161,7 @@ export function AnalyticsSidebar({
                     ))}
                   </div>
                 ) : (
-                  <div className="text-sm text-ink-3">
-                    No produce breakdown available for these filters.
-                  </div>
+                  <EmptyState title="No produce breakdown available for these filters." />
                 )}
               </div>
             </>

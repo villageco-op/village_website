@@ -211,11 +211,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
       <div className="max-w-3xl mx-auto">
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <Button
-              variant="ghost"
-              className="mb-2 -ml-3 text-ink-3 hover:text-ink hover:bg-slate-200/50"
-              onClick={() => router.back()}
-            >
+            <Button variant="ghost" className="mb-2 -ml-3 text-ink-3" onClick={() => router.back()}>
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Listings
             </Button>

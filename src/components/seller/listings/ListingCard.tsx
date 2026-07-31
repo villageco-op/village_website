@@ -48,7 +48,7 @@ export function ListingCard({ produce }: ListingCardProps) {
   const thumbnail = (produce.images as string[])[0];
 
   return (
-    <Card className="mb-5 flex flex-col justify-between rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card className="mb-5 flex flex-col justify-between">
       <CardContent className="flex flex-col p-6">
         <div className="mb-4 flex items-start gap-4">
           {/* Icon/Image Section */}
@@ -160,10 +160,10 @@ export function ListingCard({ produce }: ListingCardProps) {
 
         {/* Actions - Pushed to the bottom */}
         <div className="mt-auto flex gap-2 pt-2">
-          <Button variant="outline-forest" size="sm" className="px-4 text-xs font-semibold">
+          <Button variant="outline-forest" size="sm">
             <Link href={`/seller/listings/${produce.id}/edit`}>Edit</Link>
           </Button>
-          <Button variant="forest" size="sm" className="px-4 text-xs font-semibold">
+          <Button variant="forest" size="sm">
             <Link href={`/seller/listings/${produce.id}/orders`}>View orders</Link>
           </Button>
         </div>

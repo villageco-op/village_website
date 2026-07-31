@@ -1,6 +1,7 @@
 'use client';
 
 import { UserPlus } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -10,6 +11,7 @@ import { MembersTable } from './MembersTable';
 import { OrgMembersSkeleton } from './OrgMembersClientSkeleton';
 
 import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/ui/page-header';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { useAuth } from '@/hooks/useAuth';
 import { usePagination } from '@/hooks/usePagination';
@@ -129,16 +131,15 @@ export default function OrgMembersClient() {
   return (
     <div className="flex w-full flex-col gap-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="font-heading text-2xl font-bold text-ink">Organization Members</h1>
-          <p className="text-sm text-ink-3">Invite, manage, and assign roles to members.</p>
-        </div>
-        <Button
-          onClick={() => toast.info('Invitation step coming soon.')}
-          className="bg-forest text-white gap-2"
-        >
-          <UserPlus className="h-4 w-4" />
-          <span>Invite New Member</span>
+        <PageHeader
+          title="Organization Members"
+          subtitle="Invite, manage, and assign roles to members."
+        />
+        <Button asChild variant="forest">
+          <Link href="/org/new-client" className="gap-2">
+            <UserPlus className="h-4 w-4" />
+            <span>Invite New Member</span>
+          </Link>
         </Button>
       </div>
 

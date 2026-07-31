@@ -64,7 +64,7 @@ export default function OrgHelpClient() {
           </p>
         </div>
 
-        <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden">
+        <Card>
           {isSuccess ? (
             <CardContent className="flex flex-col items-center justify-center p-16 text-center">
               <div className="w-16 h-16 bg-lime/20 rounded-full flex items-center justify-center mb-6">
@@ -78,8 +78,7 @@ export default function OrgHelpClient() {
                 account: <span className="font-semibold text-deep-forest">{resolvedEmail}</span>.
               </p>
               <Button
-                variant="outline"
-                className="border-lime/50 text-deep-forest hover:bg-lime/10"
+                variant="lime"
                 onClick={() => {
                   setMessage('');
                   setIsSuccess(false);
@@ -90,11 +89,9 @@ export default function OrgHelpClient() {
             </CardContent>
           ) : (
             <>
-              <CardHeader className="bg-off-white border-b border-lime/20 pb-6">
-                <CardTitle className="font-heading text-xl text-deep-forest">
-                  How can we support your organization?
-                </CardTitle>
-                <CardDescription className="text-forest-dark/70 text-sm mt-1">
+              <CardHeader>
+                <CardTitle>How can we support your organization?</CardTitle>
+                <CardDescription className="mt-1">
                   We generally follow up within one business day.
                 </CardDescription>
               </CardHeader>
@@ -102,9 +99,7 @@ export default function OrgHelpClient() {
               <CardContent className="pt-6">
                 <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
                   <div className="space-y-2">
-                    <Label htmlFor="message" className="text-sm font-semibold text-deep-forest">
-                      Message *
-                    </Label>
+                    <Label htmlFor="message">Message *</Label>
                     <Textarea
                       id="message"
                       name="message"
@@ -120,8 +115,8 @@ export default function OrgHelpClient() {
                   <div className="pt-4 border-t border-lime/20">
                     <Button
                       type="submit"
+                      variant="lime"
                       disabled={submitContactFormMutation.isPending || !message.trim()}
-                      className="w-full sm:w-auto bg-lime text-forest-dark hover:bg-lime-light font-bold h-12 px-8 text-base transition-all duration-300 hover:-translate-y-0.5"
                     >
                       {submitContactFormMutation.isPending ? (
                         <>

@@ -85,16 +85,14 @@ export default function BuyerActivityDashboard({
   if (!orders.length && !subscriptions.length) return null;
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-off-white shadow-sm overflow-hidden">
-      <CardHeader className="bg-white border-b border-border/50 p-5">
-        <CardTitle className="font-heading text-lg font-bold text-deep-forest">
-          Your Activity
-        </CardTitle>
+    <Card>
+      <CardHeader>
+        <CardTitle>Your Activity</CardTitle>
       </CardHeader>
 
       <CardContent className="p-0">
         {(activeOrders.length > 0 || activeSubs.length > 0) && (
-          <div className="p-5 border-b border-border/50 bg-white">
+          <div className="p-5 border-b border-border/50">
             <h4 className="text-xs font-bold text-ink-3 uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <AlertCircle className="w-3.5 h-3.5 text-lime-600" /> Current & Pending
             </h4>
@@ -102,7 +100,7 @@ export default function BuyerActivityDashboard({
               {activeOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between p-3 rounded-lg border border-border bg-slate-50"
+                  className="flex items-center justify-between p-3 rounded-lg border border-border"
                 >
                   <div className="flex items-center gap-3">
                     <Package className="w-4 h-4 text-ink-3" />
@@ -118,7 +116,6 @@ export default function BuyerActivityDashboard({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-forest-dark h-8 text-xs font-semibold"
                     onClick={() => router.push(`/orders/${order.id}`)}
                   >
                     View
@@ -129,7 +126,7 @@ export default function BuyerActivityDashboard({
               {activeSubs.map((sub: any) => (
                 <div
                   key={sub.id}
-                  className="flex items-center justify-between p-3 rounded-lg border border-lime-600/20 bg-lime-50/50"
+                  className="flex items-center justify-between p-3 rounded-lg border border-lime-600/20"
                 >
                   <div className="flex items-center gap-3">
                     <RefreshCw className="w-4 h-4 text-lime-700" />
@@ -146,7 +143,6 @@ export default function BuyerActivityDashboard({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-lime-800 h-8 text-xs font-semibold hover:bg-lime-600/10"
                     onClick={() => router.push(`/subscriptions/${sub.id}`)}
                   >
                     Manage
@@ -158,7 +154,7 @@ export default function BuyerActivityDashboard({
         )}
 
         {hasHistory && (
-          <div className="p-5 bg-slate-50">
+          <div className="p-5">
             <h4 className="text-xs font-bold text-ink-3 uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5" /> Purchase History
             </h4>

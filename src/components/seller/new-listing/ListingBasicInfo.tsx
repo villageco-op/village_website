@@ -24,27 +24,26 @@ export function ListingBasicInfo({ data, updateData }: StepComponentProps) {
   const MAX_DESCRIPTION_LENGTH = 500;
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white">
+    <Card>
       <CardHeader>
-        <CardTitle className="font-heading text-lg text-deep-forest">Basic Information</CardTitle>
+        <CardTitle>Basic Information</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="title" className="text-ink-2 font-semibold">
-            Title <span className="text-red-500">*</span>
+          <Label htmlFor="title">
+            Title <span className="text-required">*</span>
           </Label>
           <Input
             id="title"
             required
             placeholder="e.g. Organic Heirloom Tomatoes"
-            className="bg-white border-lime/50 focus-visible:ring-click-green"
             value={data.title}
             onChange={(e) => updateData({ title: e.target.value })}
           />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <Label htmlFor="description" className="text-ink-2 font-semibold">
+            <Label htmlFor="description">
               Description <span className="text-xs font-normal text-ink-3">(Optional)</span>
             </Label>
             <span
@@ -56,7 +55,6 @@ export function ListingBasicInfo({ data, updateData }: StepComponentProps) {
           <Textarea
             id="description"
             placeholder="Tell buyers about your growing practices, flavor profile, or suggested uses..."
-            className="bg-white border-lime/50 focus-visible:ring-click-green resize-none"
             rows={4}
             value={data.description}
             maxLength={MAX_DESCRIPTION_LENGTH}
@@ -68,16 +66,14 @@ export function ListingBasicInfo({ data, updateData }: StepComponentProps) {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="produceType" className="text-ink-2 font-semibold">
-            Produce Type
-          </Label>
+          <Label htmlFor="produceType">Produce Type</Label>
           <Select
             value={data.produceType || 'ALL'}
             onValueChange={(val) =>
               updateData({ produceType: val === 'ALL' ? undefined : (val as ProduceType) })
             }
           >
-            <SelectTrigger id="produceType" className="h-9 bg-white text-sm">
+            <SelectTrigger id="produceType">
               <SelectValue placeholder="All Produce" />
             </SelectTrigger>
             <SelectContent>

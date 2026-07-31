@@ -10,6 +10,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { InlineErrorState } from '@/components/ui/state-displays';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetGrowersForMap } from '@/lib/api/generated/growers/growers';
 import type { MapGrower } from '@/lib/api/generated/models';
@@ -78,7 +79,7 @@ export function SupplyMapCard({
   };
 
   return (
-    <Card className="mb-5 flex flex-col rounded-xl border border-forest-dark/10 p-6 shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card className="mb-5 flex flex-col p-6">
       <div className="mb-5">
         <h2 className="font-heading text-[0.95rem] font-bold text-ink">Your Supply Map</h2>
         <p className="mt-0.5 font-sans text-[0.78rem] text-ink-3">
@@ -90,7 +91,7 @@ export function SupplyMapCard({
       {/* Map Container */}
       <div className="relative flex h-48 w-full items-center justify-center overflow-hidden rounded-[10px] bg-linear-to-br from-[#e8f0e0] to-[#d4e6c8]">
         {isError ? (
-          <div className="text-sm font-bold text-destructive">Failed to load map data</div>
+          <InlineErrorState title="Failed to load map data" />
         ) : (
           <Map
             initialViewState={{

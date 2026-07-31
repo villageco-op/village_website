@@ -17,14 +17,11 @@ interface OrderActionCardProps {
  */
 export default function OrderActionCard({ onOrder }: OrderActionCardProps) {
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-sm">
+    <Card>
       <CardContent className="p-6">
         <h3 className="font-heading text-lg font-bold text-deep-forest mb-4">Ready to purchase?</h3>
         <div className="space-y-3">
-          <Button
-            className="w-full bg-lime text-forest-dark hover:bg-lime/80 font-bold"
-            onClick={() => onOrder()}
-          >
+          <Button variant="lime" className="w-full" onClick={() => onOrder()}>
             <ShoppingCart className="w-4 h-4 mr-2" />
             Order Now
           </Button>

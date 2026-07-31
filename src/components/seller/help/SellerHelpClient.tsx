@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2, Send, CheckCircle, Sprout } from 'lucide-react';
+import { Loader2, Send, Sprout } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -64,12 +64,9 @@ export default function SellerHelpClient() {
           </p>
         </div>
 
-        <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden">
+        <Card>
           {isSuccess ? (
             <CardContent className="flex flex-col items-center justify-center p-16 text-center">
-              <div className="w-16 h-16 bg-lime/20 rounded-full flex items-center justify-center mb-6">
-                <CheckCircle className="w-8 h-8 text-lime" />
-              </div>
               <h2 className="font-heading text-2xl font-bold text-deep-forest mb-2">
                 Message Sent!
               </h2>
@@ -78,8 +75,7 @@ export default function SellerHelpClient() {
                 <span className="font-semibold text-deep-forest">{resolvedEmail}</span>.
               </p>
               <Button
-                variant="outline"
-                className="border-lime/50 text-deep-forest hover:bg-lime/10"
+                variant="lime"
                 onClick={() => {
                   setMessage('');
                   setIsSuccess(false);
@@ -90,11 +86,9 @@ export default function SellerHelpClient() {
             </CardContent>
           ) : (
             <>
-              <CardHeader className="bg-off-white border-b border-lime/20 pb-6">
-                <CardTitle className="font-heading text-xl text-deep-forest">
-                  How can we help?
-                </CardTitle>
-                <CardDescription className="text-forest-dark/70 text-sm mt-1">
+              <CardHeader>
+                <CardTitle>How can we help?</CardTitle>
+                <CardDescription>
                   We&apos;ll reply to the email associated with your account.
                 </CardDescription>
               </CardHeader>
@@ -102,9 +96,7 @@ export default function SellerHelpClient() {
               <CardContent className="pt-6">
                 <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
                   <div className="space-y-2">
-                    <Label htmlFor="message" className="text-sm font-semibold text-deep-forest">
-                      Message *
-                    </Label>
+                    <Label htmlFor="message">Message *</Label>
                     <Textarea
                       id="message"
                       name="message"
@@ -113,15 +105,15 @@ export default function SellerHelpClient() {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Describe what you need help with..."
-                      className="flex w-full rounded-md border border-forest-dark/20 bg-transparent px-3 py-3 text-sm transition-colors placeholder:text-forest-dark/40 focus:outline-none focus:ring-2 focus:ring-lime focus:border-transparent disabled:opacity-50 resize-y"
                     />
                   </div>
 
                   <div className="pt-4 border-t border-lime/20">
                     <Button
                       type="submit"
+                      variant="lime"
                       disabled={submitContactFormMutation.isPending || !message.trim()}
-                      className="w-full sm:w-auto bg-lime text-forest-dark hover:bg-lime-light font-bold h-12 px-8 text-base transition-all duration-300 hover:-translate-y-0.5"
+                      className="w-full sm:w-auto"
                     >
                       {submitContactFormMutation.isPending ? (
                         <>

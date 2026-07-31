@@ -174,17 +174,12 @@ export default function AddNewListingClient() {
             <Button
               type="button"
               variant="outline"
-              className="text-ink-2 bg-white"
               onClick={() => router.back()}
               disabled={isSubmitting || isUploading}
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={isSubmitting || isUploading}
-              className="bg-lime text-forest-dark hover:bg-lime-light font-bold min-w-35"
-            >
+            <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-35">
               {isSubmitting ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               ) : (

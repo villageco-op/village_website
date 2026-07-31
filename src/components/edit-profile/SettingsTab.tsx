@@ -8,6 +8,7 @@ import { DeleteAccountDialog } from './DeleteAccountDialog';
 import { NotificationControls } from './NotificationControls';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { useDeleteAccount } from '@/lib/api/generated/users/users';
 
 interface SettingsTabProps {
@@ -42,31 +43,35 @@ export default function SettingsTab({ onLogout }: SettingsTabProps) {
       <NotificationControls />
 
       {/* Account Management */}
-      <div className="bg-white p-5 rounded-lg border border-border/40 space-y-6">
-        <div>
-          <h3 className="font-semibold text-deep-forest text-lg">Account Management</h3>
-          <p className="text-sm text-ink-3 mb-4">Manage your current session and account status.</p>
-          <Button variant="secondary" onClick={onLogout} className="w-full sm:w-auto text-ink-2">
-            <LogOut className="w-4 h-4 mr-2" /> Log out
-          </Button>
-        </div>
+      <Card>
+        <CardContent className="space-y-6">
+          <div>
+            <h3 className="font-semibold text-deep-forest text-lg">Account Management</h3>
+            <p className="text-sm text-ink-3 mb-4">
+              Manage your current session and account status.
+            </p>
+            <Button variant="secondary" onClick={onLogout} className="w-full sm:w-auto">
+              <LogOut className="w-4 h-4 mr-2" /> Log out
+            </Button>
+          </div>
 
-        <hr className="border-t border-border/20" />
+          <hr className="border-t border-border/20" />
 
-        <div>
-          <h3 className="font-semibold text-red-600 text-lg">Danger Zone</h3>
-          <p className="text-sm text-ink-3 mb-4">
-            Permanently delete your account and all associated data. This action cannot be undone.
-          </p>
-          <Button
-            variant="destructive"
-            onClick={() => setIsDeleteDialogOpen(true)}
-            className="w-full sm:w-auto"
-          >
-            <Trash2 className="w-4 h-4 mr-2" /> Delete Account
-          </Button>
-        </div>
-      </div>
+          <div>
+            <h3 className="font-semibold text-red-600 text-lg">Danger Zone</h3>
+            <p className="text-sm text-ink-3 mb-4">
+              Permanently delete your account and all associated data. This action cannot be undone.
+            </p>
+            <Button
+              variant="destructive"
+              onClick={() => setIsDeleteDialogOpen(true)}
+              className="w-full sm:w-auto"
+            >
+              <Trash2 className="w-4 h-4 mr-2" /> Delete Account
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       <DeleteAccountDialog
         isOpen={isDeleteDialogOpen}

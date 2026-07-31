@@ -30,7 +30,7 @@ export function UpcomingOrdersCard({ orders }: UpcomingOrdersCardProps) {
   const router = useRouter();
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-0 sm:p-6">
         <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between px-6 pt-6 sm:px-0 sm:pt-0 gap-3">
           <div>
@@ -53,22 +53,12 @@ export function UpcomingOrdersCard({ orders }: UpcomingOrdersCardProps) {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-border/50 bg-slate-50/50 hover:bg-slate-50/50">
-                  <TableHead className="font-heading text-[0.66rem] font-bold tracking-[0.08em] uppercase text-ink-3 pl-4 sm:pl-2">
-                    Grower
-                  </TableHead>
-                  <TableHead className="font-heading text-[0.66rem] font-bold tracking-[0.08em] uppercase text-ink-3">
-                    Order ID
-                  </TableHead>
-                  <TableHead className="font-heading text-[0.66rem] font-bold tracking-[0.08em] uppercase text-ink-3">
-                    Total
-                  </TableHead>
-                  <TableHead className="font-heading text-[0.66rem] font-bold tracking-[0.08em] uppercase text-ink-3">
-                    Delivery
-                  </TableHead>
-                  <TableHead className="font-heading text-[0.66rem] font-bold tracking-[0.08em] uppercase text-ink-3 pr-4 sm:pr-2 text-right">
-                    Status
-                  </TableHead>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead>Grower</TableHead>
+                  <TableHead>Order ID</TableHead>
+                  <TableHead>Total</TableHead>
+                  <TableHead>Delivery</TableHead>
+                  <TableHead className="text-right">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -77,7 +67,7 @@ export function UpcomingOrdersCard({ orders }: UpcomingOrdersCardProps) {
                     <TableRow
                       key={order.id}
                       onClick={() => router.push(`/orders/${order.id}`)}
-                      className="cursor-pointer border-border/50 transition-colors hover:bg-slate-50/80"
+                      className="cursor-pointer transition-colors hover:bg-slate-50/80"
                     >
                       <OrderIdentityCell
                         id={order.sellerId}

@@ -81,14 +81,14 @@ export function SubdomainInput({
 
   return (
     <div className="space-y-1.5">
-      <Label htmlFor="subdomain" className="text-ink-2 font-semibold text-sm">
-        Custom Subdomain {required && <span className="text-red-500">*</span>}
+      <Label htmlFor="subdomain">
+        Custom Subdomain {required && <span className="text-required">*</span>}
       </Label>
       <div className="flex rounded-md shadow-sm">
         <Input
           id="subdomain"
           placeholder="gary-pantry"
-          className="bg-white border-lime/50 focus-visible:ring-click-green rounded-r-none h-9 text-right font-mono text-sm"
+          className="rounded-r-none h-9 text-right font-mono text-sm"
           value={value}
           onChange={handleSubdomainChange}
           required={required}

@@ -54,7 +54,7 @@ export function BuyerOrderForm({
 
   if (isLoading) {
     return (
-      <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden">
+      <Card>
         <div className="flex justify-center p-12">
           <Loader2 className="w-8 h-8 animate-spin text-lime" />
         </div>
@@ -116,16 +116,14 @@ export function BuyerOrderForm({
   };
 
   return (
-    <Card className="z-50 rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden relative max-w-[calc(100vw-2rem)] mx-auto w-full sm:max-w-md">
-      <CardHeader className="bg-off-white border-b border-lime/20 pb-4 pr-12">
-        <CardTitle className="font-heading text-xl text-deep-forest">
-          Order {produce.title}
-        </CardTitle>
+    <Card className="z-50 overflow-hidden relative max-w-[calc(100vw-2rem)] mx-auto w-full sm:max-w-md">
+      <CardHeader className="pb-4 pr-12">
+        <CardTitle>Order {produce.title}</CardTitle>
         {onClose && (
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-2 top-2 text-forest-dark/50 hover:text-forest-dark"
+            className="absolute right-2 top-2"
             onClick={onClose}
             type="button"
           >
@@ -187,8 +185,9 @@ export function BuyerOrderForm({
         <CardFooter className="pb-6">
           <Button
             type="submit"
+            variant="lime"
             disabled={addToCartMutation.isPending || isOutOfStock || hasError}
-            className="w-full bg-lime text-forest-dark hover:bg-lime-light font-bold h-12 text-lg transition-colors"
+            className="w-full"
           >
             {addToCartMutation.isPending ? (
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />

@@ -49,7 +49,7 @@ export function BuyerDashboardStats({
   return (
     <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {/* Produce On Order */}
-      <Card className="border-l-4 border-l-lime border-y-forest-dark/10 border-r-forest-dark/10 shadow-[0_2px_12px_rgba(42,75,40,0.05)] rounded-xl py-5 px-5">
+      <Card className="border-l-4 border-l-lime border-y-forest-dark/10 border-r-forest-dark/10 py-5 px-5">
         <CardContent className="p-0">
           <div className="mb-0.75 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             {onOrderThisWeekLbs} lbs
@@ -68,7 +68,7 @@ export function BuyerDashboardStats({
       </Card>
 
       {/* Spend Stat */}
-      <Card className="border-l-4 border-l-sun border-y-forest-dark/10 border-r-forest-dark/10 shadow-[0_2px_12px_rgba(42,75,40,0.05)] rounded-xl py-5 px-5">
+      <Card className="border-l-4 border-l-sun border-y-forest-dark/10 border-r-forest-dark/10 py-5 px-5">
         <CardContent className="p-0">
           <div className="mb-0.75 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             $
@@ -85,7 +85,7 @@ export function BuyerDashboardStats({
       </Card>
 
       {/* Active Subscriptions Stat */}
-      <Card className="border-l-4 border-l-deep-forest border-y-forest-dark/10 border-r-forest-dark/10 shadow-[0_2px_12px_rgba(42,75,40,0.05)] rounded-xl py-5 px-5">
+      <Card className="border-l-4 border-l-deep-forest border-y-forest-dark/10 border-r-forest-dark/10 py-5 px-5">
         <CardContent className="p-0">
           <div className="mb-0.75 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             {activeSubscriptions.length}
@@ -98,7 +98,7 @@ export function BuyerDashboardStats({
       </Card>
 
       {/* Local Growers Stat */}
-      <Card className="border-l-4 border-l-clay border-y-forest-dark/10 border-r-forest-dark/10 shadow-[0_2px_12px_rgba(42,75,40,0.05)] rounded-xl py-5 px-5">
+      <Card className="border-l-4 border-l-clay border-y-forest-dark/10 border-r-forest-dark/10 py-5 px-5">
         <CardContent className="p-0">
           <div className="mb-0.75 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             {localGrowersSupplying}

@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import OrgTab from '../organization/settings/OrgTab';
 import { Button } from '../ui/button';
+import { PageHeader } from '../ui/page-header';
 import { NotFoundState } from '../ui/state-displays';
 
 import { EditProfileSkeleton } from './EditProfileSkeleton';
@@ -49,7 +50,7 @@ export default function EditProfilePage() {
   return (
     <div className="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 bg-off-white">
       <div className="max-w-2xl w-full">
-        <h1 className="font-heading text-3xl font-bold text-deep-forest mb-6">Edit Profile</h1>
+        <PageHeader title="Edit Profile" />
 
         {/* Tabs Switcher */}
         <div className="flex space-x-6 border-b border-border/20 mb-8">

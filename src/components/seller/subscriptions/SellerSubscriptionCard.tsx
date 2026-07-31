@@ -48,7 +48,7 @@ export function SellerSubscriptionCard({
   };
 
   return (
-    <Card className="group flex h-full flex-col rounded-xl border border-forest-dark/10 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <Card className="group flex h-full flex-col">
       <CardContent className="flex h-full flex-col p-6">
         {/* Header: Avatar, Product, Buyer & Status */}
         <div className="mb-4 flex items-start justify-between gap-3">
@@ -74,7 +74,7 @@ export function SellerSubscriptionCard({
                 <div className="flex items-start opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                   <Button
                     onClick={() => onFilterProduct?.(productId)}
-                    className="cursor-pointer text-ink-3 hover:text-forest hidden md:inline-flex"
+                    className="hidden md:inline-flex"
                     size="xs"
                     variant="ghost"
                     title="Filter by Product"
@@ -91,7 +91,7 @@ export function SellerSubscriptionCard({
                 <div className="flex items-start opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                   <Button
                     onClick={() => onFilterBuyer?.(buyerId)}
-                    className="cursor-pointer text-ink-3 hover:text-forest hidden md:inline-flex"
+                    className="hidden md:inline-flex"
                     variant="ghost"
                     size="xs"
                     title="Filter by Buyer"
@@ -123,12 +123,7 @@ export function SellerSubscriptionCard({
 
         {/* Actions */}
         <div className="mt-auto flex pt-2">
-          <Button
-            variant="outline-forest"
-            size="sm"
-            asChild
-            className="w-full text-xs font-semibold"
-          >
+          <Button variant="outline-forest" size="sm" asChild className="w-full">
             <Link href={`/seller/subscriptions/${subscription.id}`}>Manage Subscription</Link>
           </Button>
         </div>

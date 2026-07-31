@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 
 import { GrowerCard } from './GrowerCard';
-import { GrowersHeader } from './GrowersHeader';
 import { GrowersSkeleton } from './GrowersSkeleton';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import {
   Select,
@@ -71,7 +71,10 @@ export default function BuyerGrowersClient() {
 
   return (
     <div className="flex w-full flex-col p-8 pt-6">
-      <GrowersHeader activeCount={activeCount} cityText={cityText} />
+      <PageHeader
+        title={`My Growers`}
+        subtitle={`${activeCount} active relationship${activeCount !== 1 ? 's' : ''} · ${cityText}`}
+      />
 
       {/* Filters Section */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -79,10 +82,10 @@ export default function BuyerGrowersClient() {
           placeholder="Search by produce or grower name..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className="max-w-xs bg-white"
+          className="max-w-xs"
         />
         <Select value={distanceFilter} onValueChange={(val) => setDistanceFilter(val)}>
-          <SelectTrigger className="w-full sm:w-48 bg-white">
+          <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="Filter by distance" />
           </SelectTrigger>
           <SelectContent>

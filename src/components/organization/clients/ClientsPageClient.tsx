@@ -8,6 +8,7 @@ import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { EditClientModal } from './EditClientModal';
 import { ViewReferralsModal } from './ViewReferralsModal';
 
+import { PageHeader } from '@/components/ui/page-header';
 import { usePagination } from '@/hooks/usePagination';
 import {
   useGetClients,
@@ -100,10 +101,7 @@ export default function ClientsPageClient() {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="font-heading text-2xl font-bold text-ink">Clients</h1>
-        <p className="text-sm text-ink-3">View, edit & delete clients and view referrals.</p>
-      </div>
+      <PageHeader title="Clients" subtitle="View, edit & delete clients and view referrals." />
 
       <ClientsTable
         clients={clients || []}

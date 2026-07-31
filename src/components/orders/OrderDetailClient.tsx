@@ -101,11 +101,7 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
         {/* Header */}
         <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <Button
-              variant="ghost"
-              className="-ml-3 mb-2 text-ink-3 hover:bg-slate-200/50 hover:text-ink"
-              onClick={() => router.back()}
-            >
+            <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
             </Button>
@@ -122,27 +118,17 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
           {/* Action Buttons (Only visible if the order is active/pending) */}
           {isPending && (
             <div className="flex gap-3">
-              <Button
-                variant="outline"
-                className="bg-white border-destructive/30 text-destructive hover:bg-destructive/5 hover:text-destructive"
-                onClick={() => setIsCancelOpen(true)}
-              >
+              <Button variant="destructive" onClick={() => setIsCancelOpen(true)}>
                 Cancel Order
               </Button>
-              <Button
-                className="bg-lime text-forest-dark hover:bg-lime/80 font-semibold"
-                onClick={() => setIsRescheduleOpen(true)}
-              >
+              <Button variant="lime" onClick={() => setIsRescheduleOpen(true)}>
                 Reschedule
               </Button>
             </div>
           )}
 
           {isReorderable && (
-            <Button
-              className="bg-lime text-forest-dark hover:bg-lime/80 font-semibold"
-              onClick={() => setIsReorderOpen(true)}
-            >
+            <Button variant="lime" onClick={() => setIsReorderOpen(true)}>
               <RotateCcw className="mr-2 h-4 w-4" />
               Order Again
             </Button>

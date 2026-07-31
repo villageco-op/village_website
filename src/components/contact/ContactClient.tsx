@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2, Send, CheckCircle } from 'lucide-react';
+import { Loader2, Send } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -78,12 +78,9 @@ export default function ContactClient() {
           </p>
         </div>
 
-        <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden">
+        <Card>
           {isSuccess ? (
             <CardContent className="flex flex-col items-center justify-center p-16 text-center">
-              <div className="w-16 h-16 bg-lime/20 rounded-full flex items-center justify-center mb-6">
-                <CheckCircle className="w-8 h-8 text-lime" />
-              </div>
               <h2 className="font-heading text-2xl font-bold text-deep-forest mb-2">
                 Message Sent!
               </h2>
@@ -92,8 +89,7 @@ export default function ContactClient() {
                 <span className="font-semibold text-deep-forest">{formData.email}</span>.
               </p>
               <Button
-                variant="outline"
-                className="border-lime/50 text-deep-forest hover:bg-lime/10"
+                variant="lime"
                 onClick={() => {
                   setFormData({ ...formData, message: '' });
                   setIsSuccess(false);
@@ -104,13 +100,9 @@ export default function ContactClient() {
             </CardContent>
           ) : (
             <>
-              <CardHeader className="bg-off-white border-b border-lime/20 pb-6">
-                <CardTitle className="font-heading text-xl text-deep-forest">
-                  Contact Form
-                </CardTitle>
-                <CardDescription className="text-forest-dark/70 text-sm mt-1">
-                  Fields marked with an asterisk (*) are required.
-                </CardDescription>
+              <CardHeader>
+                <CardTitle>Contact Form</CardTitle>
+                <CardDescription>Fields marked with an asterisk (*) are required.</CardDescription>
               </CardHeader>
 
               <CardContent className="pt-6">
@@ -118,9 +110,7 @@ export default function ContactClient() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     {/* Name Field */}
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-sm font-semibold text-deep-forest">
-                        Full Name *
-                      </Label>
+                      <Label htmlFor="name">Full Name *</Label>
                       <Input
                         id="name"
                         name="name"
@@ -129,15 +119,13 @@ export default function ContactClient() {
                         value={resolvedName}
                         onChange={handleChange}
                         placeholder="Jane Doe"
-                        className="flex h-12 w-full rounded-md border border-forest-dark/20 bg-transparent px-3 py-2 text-sm transition-colors placeholder:text-forest-dark/40 focus:outline-none focus:ring-2 focus:ring-lime focus:border-transparent disabled:opacity-50"
+                        className="flex h-12 w-full"
                       />
                     </div>
 
                     {/* Email Field */}
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm font-semibold text-deep-forest">
-                        Email Address *
-                      </Label>
+                      <Label htmlFor="email">Email Address *</Label>
                       <Input
                         id="email"
                         name="email"
@@ -146,17 +134,14 @@ export default function ContactClient() {
                         value={resolvedEmail}
                         onChange={handleChange}
                         placeholder="jane@example.com"
-                        className="flex h-12 w-full rounded-md border border-forest-dark/20 bg-transparent px-3 py-2 text-sm transition-colors placeholder:text-forest-dark/40 focus:outline-none focus:ring-2 focus:ring-lime focus:border-transparent disabled:opacity-50"
+                        className="flex h-12 w-full"
                       />
                     </div>
                   </div>
 
                   {/* Company Field (Optional) */}
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="organization"
-                      className="text-sm font-semibold text-deep-forest"
-                    >
+                    <Label htmlFor="organization">
                       Organization{' '}
                       <span className="text-forest-dark/50 font-normal">(Optional)</span>
                     </Label>
@@ -167,15 +152,13 @@ export default function ContactClient() {
                       value={resolvedCompany}
                       onChange={handleChange}
                       placeholder="Your organization name"
-                      className="flex h-12 w-full rounded-md border border-forest-dark/20 bg-transparent px-3 py-2 text-sm transition-colors placeholder:text-forest-dark/40 focus:outline-none focus:ring-2 focus:ring-lime focus:border-transparent disabled:opacity-50"
+                      className="flex h-12 w-full"
                     />
                   </div>
 
                   {/* Message Field */}
                   <div className="space-y-2">
-                    <Label htmlFor="message" className="text-sm font-semibold text-deep-forest">
-                      Message *
-                    </Label>
+                    <Label htmlFor="message">Message *</Label>
                     <Textarea
                       id="message"
                       name="message"
@@ -184,7 +167,7 @@ export default function ContactClient() {
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="How can we help you?"
-                      className="flex w-full rounded-md border border-forest-dark/20 bg-transparent px-3 py-3 text-sm transition-colors placeholder:text-forest-dark/40 focus:outline-none focus:ring-2 focus:ring-lime focus:border-transparent disabled:opacity-50 resize-y"
+                      className="flex w-full"
                     />
                   </div>
 
@@ -192,8 +175,9 @@ export default function ContactClient() {
                   <div className="pt-4 border-t border-lime/20">
                     <Button
                       type="submit"
+                      variant="lime"
                       disabled={submitContactFormMutation.isPending}
-                      className="w-full sm:w-auto bg-lime text-forest-dark hover:bg-lime-light font-bold h-12 px-8 text-base transition-all duration-300 hover:-translate-y-0.5"
+                      className="w-full sm:w-auto"
                     >
                       {submitContactFormMutation.isPending ? (
                         <>

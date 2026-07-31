@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { EarningsHeader } from './EarningsHeader';
 import { EarningsSkeleton } from './EarningsSkeleton';
 import { EarningsStatRow } from './EarningsStatRow';
 import { MonthlyGoalCard } from './MonthlyGoalCard';
 import { PayoutHistoryCard } from './PayoutHistoryCard';
 
+import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
@@ -18,6 +18,7 @@ import {
   useGetSellerPayouts,
 } from '@/lib/api/generated/sellers/sellers';
 import { handleDownloadSellerPayoutsCSV } from '@/lib/csv-utils';
+import { formatAppDate } from '@/lib/date-utils';
 
 /**
  * The client component for the seller earnings page.
@@ -102,10 +103,14 @@ export default function SellerEarningsClient() {
   const earningsData = earningsRes.data;
   const payoutsData = payoutsRes?.data?.data || [];
   const meta = payoutsRes.data?.meta;
+  const monthYear = formatAppDate(new Date(), 'longMonthYear');
 
   return (
     <div className="flex w-full flex-col">
-      <EarningsHeader />
+      <PageHeader
+        title="Earnings"
+        subtitle={`${monthYear} · All earnings from Village produce sales`}
+      />
 
       <EarningsStatRow data={earningsData} />
 

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import router from 'next/router';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import type { SellerMapGroup } from '@/lib/api/generated/models';
 
 interface SellerProduceSidebarProps {
@@ -30,8 +31,8 @@ export function SellerProduceSidebar({
   onGrowerClick,
 }: SellerProduceSidebarProps) {
   return (
-    <div className="absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl border-l border-forest-dark/10 z-40 flex flex-col animate-in slide-in-from-right-8 duration-300">
-      <div className="flex items-center justify-between border-b border-border/50 p-4 bg-slate-50/80 backdrop-blur-sm">
+    <div className="absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-off-white shadow-2xl border-l border-forest-dark/10 z-40 flex flex-col animate-in slide-in-from-right-8 duration-300">
+      <div className="flex items-center justify-between border-b border-border/50 p-4">
         <Button
           size="sm"
           variant="link"
@@ -42,67 +43,64 @@ export function SellerProduceSidebar({
           <span className="truncate max-w-45 text-left">{group.name}</span>
           <span className="ml-1 text-sm">↗</span>
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="h-8 w-8 rounded-full text-ink-3 hover:text-ink-1 hover:bg-slate-200/50"
-        >
+        <Button variant="ghost" size="icon" onClick={onClose}>
           <X className="h-4 w-4" />
         </Button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white/50">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-off-white/50">
         {group.produce.length === 0 ? (
           <div className="text-sm text-ink-4 italic text-center py-8">
             No active listings available.
           </div>
         ) : (
           group.produce.map((item) => (
-            <div
+            <Card
               key={String(item.id)}
-              className="cursor-pointer flex flex-col gap-3 p-3 border border-border/60 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow"
+              className="cursor-pointer"
               onClick={() => void router.push(`/produce/${item.id}`)}
             >
-              <div className="flex gap-3 items-center">
-                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-forest-dark/10 bg-slate-50">
-                  {item.thumbnail ? (
-                    <Image
-                      src={String(item.thumbnail)}
-                      alt={item.name}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-[10px] text-slate-400 font-medium">
-                      No Img
+              <CardContent className="flex flex-col gap-3 p-3">
+                <div className="flex gap-3 items-center">
+                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-forest-dark/10 bg-slate-50">
+                    {item.thumbnail ? (
+                      <Image
+                        src={String(item.thumbnail)}
+                        alt={item.name}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-[10px] text-slate-400 font-medium">
+                        No Img
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-ink-1 truncate text-sm" title={item.name}>
+                      {item.name}
                     </div>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-ink-1 truncate text-sm" title={item.name}>
-                    {item.name}
-                  </div>
-                  <div className="text-xs text-ink-3 mt-0.5 flex flex-col gap-0.5">
-                    <span className="font-medium text-deep-forest">
-                      ${(Number(item.price) * 16).toFixed(2)}/lb
-                    </span>
-                    <span>{(Number(item.availableInventory) / 16).toFixed(1)} lbs available</span>
+                    <div className="text-xs text-ink-3 mt-0.5 flex flex-col gap-0.5">
+                      <span className="font-medium text-deep-forest">
+                        ${(Number(item.price) * 16).toFixed(2)}/lb
+                      </span>
+                      <span>{(Number(item.availableInventory) / 16).toFixed(1)} lbs available</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <Button
-                variant="lime"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onOrderItem(String(item.id));
-                }}
-                className="w-full font-semibold"
-              >
-                + Order
-              </Button>
-            </div>
+                <Button
+                  variant="lime"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOrderItem(String(item.id));
+                  }}
+                  className="w-full font-semibold"
+                >
+                  + Order
+                </Button>
+              </CardContent>
+            </Card>
           ))
         )}
       </div>

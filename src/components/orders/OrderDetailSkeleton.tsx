@@ -27,7 +27,7 @@ export function OrderDetailSkeleton() {
         {/* Main Info */}
         <div className="flex flex-col gap-6 md:col-span-2">
           {/* Summary Card */}
-          <Card className="rounded-xl border-border bg-white shadow-sm">
+          <Card>
             <CardContent className="p-6">
               <div className="mb-6 flex justify-between">
                 <Skeleton className="h-6 w-40" />
@@ -45,7 +45,7 @@ export function OrderDetailSkeleton() {
           </Card>
 
           {/* Items Table Card */}
-          <Card className="rounded-xl border-border bg-white shadow-sm">
+          <Card>
             <CardContent className="p-6">
               <Skeleton className="mb-6 h-6 w-32" />
               <div className="space-y-4">
@@ -67,7 +67,7 @@ export function OrderDetailSkeleton() {
             </CardContent>
           </Card>
           {/* Location Map Skeleton */}
-          <Card className="rounded-xl border-border bg-white shadow-sm">
+          <Card>
             <CardContent className="p-6">
               <Skeleton className="mb-4 h-6 w-32" />
               <Skeleton className="mb-4 h-52 w-full rounded-[10px]" /> {/* Map Block */}
@@ -86,7 +86,7 @@ export function OrderDetailSkeleton() {
         <div className="flex flex-col gap-6">
           {/* User Cards Skeletons */}
           {[1, 2].map((i) => (
-            <Card key={i} className="rounded-xl border-border bg-white shadow-sm">
+            <Card key={i}>
               <CardContent className="p-6">
                 <Skeleton className="mb-6 h-6 w-32" />
                 <div className="space-y-5">
