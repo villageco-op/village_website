@@ -59,7 +59,7 @@ export function InvoiceHistoryCard({
   const router = useRouter();
 
   return (
-    <Card className="rounded-xl border border-[rgba(42,75,40,0.08)] bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-6">
         <div className="mb-5 flex items-center justify-between">
           <div>
@@ -89,7 +89,7 @@ export function InvoiceHistoryCard({
             value={statusFilter}
             onValueChange={(val) => setStatusFilter(val as OrderStatus | 'all')}
           >
-            <SelectTrigger className="w-full sm:w-48 bg-white">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>
@@ -100,7 +100,7 @@ export function InvoiceHistoryCard({
           </Select>
 
           <Select value={timeframeFilter} onValueChange={(val) => setTimeframeFilter(val)}>
-            <SelectTrigger className="w-full sm:w-48 bg-white">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Filter by timeframe" />
             </SelectTrigger>
             <SelectContent>

@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { EmptyState } from '@/components/ui/state-displays';
 import {
   Table,
   TableBody,
@@ -51,7 +52,7 @@ export function PayoutHistoryCard({
   setTimeframeFilter,
 }: PayoutHistoryCardProps) {
   return (
-    <Card className="rounded-xl border border-[rgba(42,75,40,0.08)] bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-6">
         <div className="mb-5 flex items-center justify-between">
           <div>
@@ -79,7 +80,7 @@ export function PayoutHistoryCard({
         {/* Filters Section */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
           <Select value={timeframeFilter} onValueChange={(val) => setTimeframeFilter(val)}>
-            <SelectTrigger className="w-full sm:w-48 bg-white">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Filter by timeframe" />
             </SelectTrigger>
             <SelectContent>
@@ -102,28 +103,16 @@ export function PayoutHistoryCard({
         </div>
 
         {payouts.length === 0 ? (
-          <div className="py-8 text-center font-sans text-sm text-ink-3">
-            No payout history found.
-          </div>
+          <EmptyState title="No payout history found." />
         ) : (
           <Table className="w-full">
             <TableHeader>
-              <TableRow className="border-[rgba(42,75,40,0.08)]">
-                <TableHead className="font-heading text-[0.66rem] font-bold uppercase tracking-[0.08em] text-ink-3">
-                  Date
-                </TableHead>
-                <TableHead className="font-heading text-[0.66rem] font-bold uppercase tracking-[0.08em] text-ink-3">
-                  Crop
-                </TableHead>
-                <TableHead className="font-heading text-[0.66rem] font-bold uppercase tracking-[0.08em] text-ink-3">
-                  Qty Sold
-                </TableHead>
-                <TableHead className="font-heading text-[0.66rem] font-bold uppercase tracking-[0.08em] text-ink-3">
-                  Buyer
-                </TableHead>
-                <TableHead className="font-heading text-[0.66rem] font-bold uppercase tracking-[0.08em] text-ink-3">
-                  Amount
-                </TableHead>
+              <TableRow className="hover:bg-transparent">
+                <TableHead>Date</TableHead>
+                <TableHead>Crop</TableHead>
+                <TableHead>Qty Sold</TableHead>
+                <TableHead>Buyer</TableHead>
+                <TableHead>Amount</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -131,20 +120,12 @@ export function PayoutHistoryCard({
                 const dateStr = formatAppDate(payout.date, 'short');
 
                 return (
-                  <TableRow key={i} className="border-[rgba(42,75,40,0.05)] hover:bg-off-white">
-                    <TableCell className="py-3.5 font-sans text-[0.82rem] text-ink-2">
-                      {dateStr}
-                    </TableCell>
-                    <TableCell className="py-3.5 font-heading font-bold text-ink">
-                      {payout.productName}
-                    </TableCell>
-                    <TableCell className="py-3.5 font-sans text-[0.82rem] text-ink-2">
-                      {payout.quantityLbs} lbs
-                    </TableCell>
-                    <TableCell className="py-3.5 font-sans text-[0.82rem] text-ink-2">
-                      {payout.buyerName}
-                    </TableCell>
-                    <TableCell className="py-3.5 font-heading font-bold text-click-green">
+                  <TableRow key={i}>
+                    <TableCell>{dateStr}</TableCell>
+                    <TableCell>{payout.productName}</TableCell>
+                    <TableCell>{payout.quantityLbs} lbs</TableCell>
+                    <TableCell>{payout.buyerName}</TableCell>
+                    <TableCell className="font-heading font-bold text-click-green">
                       +${payout.amountDollars.toFixed(2)}
                     </TableCell>
                   </TableRow>

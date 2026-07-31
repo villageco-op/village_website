@@ -110,11 +110,7 @@ export default function SellerSubscriptionDetailClient({
         {/* Header */}
         <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <Button
-              variant="ghost"
-              className="-ml-3 mb-2 text-ink-3 hover:bg-slate-200/50 hover:text-ink"
-              onClick={() => router.back()}
-            >
+            <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
             </Button>
@@ -140,8 +136,7 @@ export default function SellerSubscriptionDetailClient({
           {!isCanceled && (
             <div className="flex flex-wrap gap-3">
               <Button
-                variant="outline"
-                className="bg-white border-destructive/30 text-destructive hover:bg-destructive/5 hover:text-destructive"
+                variant="destructive"
                 onClick={() => openStatusDialog('canceled')}
                 disabled={updateMutation.isPending}
               >
@@ -162,7 +157,6 @@ export default function SellerSubscriptionDetailClient({
               ) : (
                 <Button
                   variant="outline"
-                  className="bg-white text-ink-3 hover:bg-slate-50 hover:text-ink"
                   onClick={() => openStatusDialog('paused')}
                   disabled={updateMutation.isPending}
                 >

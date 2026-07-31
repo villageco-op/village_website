@@ -51,7 +51,7 @@ export function DeleteOrganizationDialog({
               setConfirmText('');
               onClose();
             }}
-            className="text-ink-3 hover:text-ink-2"
+            className="cursor-pointer text-ink-3 hover:text-ink-2"
             disabled={isPending}
           >
             <X className="w-5 h-5" />

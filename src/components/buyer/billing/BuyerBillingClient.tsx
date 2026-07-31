@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
-import { BillingHeader } from './BillingHeader';
 import { BillingStatsCard } from './BillingStatsCard';
 import { InvoiceHistoryCard } from './InvoiceHistoryCard';
 
+import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PageErrorState } from '@/components/ui/state-displays';
@@ -14,6 +14,7 @@ import { useGetBuyerBillingSummary } from '@/lib/api/generated/buyers/buyers';
 import type { GetOrdersParams, OrderStatus } from '@/lib/api/generated/models';
 import { getOrders, useGetOrders } from '@/lib/api/generated/orders/orders';
 import { handleDownloadBuyerInvoicesCSV } from '@/lib/csv-utils';
+import { formatAppDate } from '@/lib/date-utils';
 
 /**
  * The client component for the buyer billing & order history page.
@@ -107,10 +108,14 @@ export default function BuyerBillingClient() {
   const summaryData = summaryRes.data;
   const ordersData = ordersRes.data?.data || [];
   const meta = ordersRes.data?.meta;
+  const currentMonthYear = formatAppDate(new Date(), 'longMonthYear');
 
   return (
     <div className="flex w-full flex-col">
-      <BillingHeader />
+      <PageHeader
+        title={`Billing Summary`}
+        subtitle={`${currentMonthYear} · Transparent pricing · No hidden fees`}
+      />
       <BillingStatsCard data={summaryData} />
 
       <div className="mt-8 flex flex-col">

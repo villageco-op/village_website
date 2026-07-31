@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRef } from 'react';
 import { toast } from 'sonner';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 import { cn } from '@/lib/utils';
@@ -71,9 +72,9 @@ export function ListingImageUpload({
   };
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white">
+    <Card>
       <CardHeader>
-        <CardTitle className="font-heading text-lg text-deep-forest">Product Images</CardTitle>
+        <CardTitle>Product Images</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -89,13 +90,14 @@ export function ListingImageUpload({
                 fill
                 className="object-cover"
               />
-              <button
+              <Button
                 type="button"
+                variant="destructive"
                 onClick={() => onRemoveImage(index)}
-                className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-full shadow-sm text-red-600 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
+                className="absolute top-2 right-2"
               >
                 <Trash2 className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           ))}
 

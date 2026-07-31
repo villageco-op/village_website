@@ -53,8 +53,11 @@
   --color-destructive: #c0392b;
   --color-destructive-foreground: var(--color-off-white);
 
+  --color-required: var(--color-red-500);
+
   --color-border: var(--color-lime);
-  --color-input: var(--color-cream-dark);
+  --color-input: var(--color-off-white);
+  --color-input-border: var(--color-lime/50);
   --color-ring: var(--color-click-green);
 
   --radius: var(--radius-brand);

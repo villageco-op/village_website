@@ -1,10 +1,10 @@
 'use client';
 
 import { OrderHistoryCard } from './OrderHistoryCard';
-import { OrdersHeader } from './OrdersHeader';
 import { OrdersSkeleton } from './OrdersSkeleton';
 import { PendingOrdersCard } from './PendingOrdersCard';
 
+import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
@@ -70,7 +70,10 @@ export default function SellerOrdersClient() {
 
   return (
     <div className="flex w-full flex-col">
-      <OrdersHeader pendingCount={pendingTotal} />
+      <PageHeader
+        title="Orders"
+        subtitle={`${pendingTotal} pending · All time orders from buyers on Village`}
+      />
 
       <PendingOrdersCard orders={pendingOrders} pendingCount={pendingTotal} />
       <PaginationControls meta={pendingMeta} onPageChange={pendingSetPage} className="mt-2 mb-10" />

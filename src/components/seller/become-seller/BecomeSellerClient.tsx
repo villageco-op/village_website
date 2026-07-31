@@ -101,10 +101,7 @@ export default function BecomeSellerClient() {
                 Create an account or log in to set up your farm profile and connect your bank
                 account.
               </p>
-              <Button
-                asChild
-                className="bg-lime text-forest-dark hover:bg-lime-light font-bold h-12 px-8 text-base transition-all duration-300 hover:-translate-y-0.5"
-              >
+              <Button asChild variant="lime">
                 <Link href="/login?returnTo=/onboarding?upgrade=seller">
                   Log in / Sign up to Start <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
@@ -138,10 +135,7 @@ export default function BecomeSellerClient() {
                   </span>
                 </li>
               </ul>
-              <Button
-                asChild
-                className="w-full bg-lime text-forest-dark hover:bg-lime-light font-bold h-12 text-base transition-all duration-300 hover:-translate-y-0.5"
-              >
+              <Button asChild variant="lime" className="w-full">
                 <Link href="/onboarding?upgrade=seller">
                   Complete Seller Onboarding <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
@@ -149,9 +143,6 @@ export default function BecomeSellerClient() {
             </div>
           ) : (
             <>
-              <div className="w-16 h-16 bg-lime/20 rounded-full flex items-center justify-center mx-auto mb-4 text-lime">
-                <CheckCircle2 className="w-8 h-8" />
-              </div>
               <h2 className="font-heading text-2xl font-bold text-deep-forest mb-3">
                 You&apos;re already a seller!
               </h2>
@@ -159,10 +150,7 @@ export default function BecomeSellerClient() {
                 Your farm profile is active and ready to go. Head over to your dashboard to manage
                 your listings and orders.
               </p>
-              <Button
-                asChild
-                className="bg-click-green text-white hover:bg-forest-mid font-bold h-12 px-8 text-base"
-              >
+              <Button asChild variant="forest">
                 <Link href="/producer">
                   Go to Dashboard <LayoutDashboard className="w-5 h-5 ml-2" />
                 </Link>

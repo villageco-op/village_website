@@ -126,7 +126,7 @@ export const Paginated: Story = {
     await expect(canvas.queryByText(/Premium Produce 13/i)).not.toBeInTheDocument();
 
     // Navigate to Page 2
-    const nextButton = await canvas.findByRole('button', { name: /next|2/i });
+    const nextButton = await canvas.findByRole('button', { name: /next/i });
     await userEvent.click(nextButton);
 
     // Verify Page 2 content

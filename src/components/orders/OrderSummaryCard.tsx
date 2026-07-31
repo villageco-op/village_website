@@ -19,7 +19,7 @@ interface OrderSummaryCardProps {
  */
 export function OrderSummaryCard({ order }: OrderSummaryCardProps) {
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-6">
         <div className="mb-5 flex items-center justify-between border-b border-border/50 pb-5">
           <h2 className="font-heading text-lg font-bold text-ink">Order Summary</h2>

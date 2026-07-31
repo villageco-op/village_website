@@ -17,7 +17,7 @@ export default function OrderConfirmationClient() {
 
   return (
     <div className="container-custom max-w-2xl mx-auto">
-      <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden">
+      <Card>
         <CardContent className="flex flex-col items-center justify-center p-12 sm:p-16 text-center">
           {/* Success Icon */}
           <div className="w-20 h-20 bg-lime/20 rounded-full flex items-center justify-center mb-6 animate-in zoom-in duration-500">

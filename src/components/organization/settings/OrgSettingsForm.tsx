@@ -10,6 +10,7 @@ import { AvatarPicker } from '@/components/edit-profile/AvatarPicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SecondaryHeader } from '@/components/ui/secondary-header';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import { OrgType, type Organization, type User } from '@/lib/api/generated/models';
 import {
@@ -157,10 +158,10 @@ export default function OrgSettingsForm({
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      <div>
-        <h2 className="font-heading text-xl font-bold text-deep-forest">Organization Details</h2>
-        <p className="text-sm text-ink-3 mt-1">Manage visual identity, address, and subdomain.</p>
-      </div>
+      <SecondaryHeader
+        title="Organization Details"
+        subtitle="Manage visual identity, address, and subdomain."
+      />
 
       <form onSubmit={(e) => void handleUpdateOrganization(e)} className="space-y-5">
         <AvatarPicker
@@ -177,14 +178,13 @@ export default function OrgSettingsForm({
         {/* Organization Form Controls */}
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="orgName" className="text-ink-2 font-semibold text-sm">
-              Organization Name <span className="text-red-500">*</span>
+            <Label htmlFor="orgName">
+              Organization Name <span className="text-required">*</span>
             </Label>
             <Input
               id="orgName"
               key={name}
               placeholder="Enter your organizations name"
-              className="bg-white border-lime/50 focus-visible:ring-click-green h-9"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -203,27 +203,21 @@ export default function OrgSettingsForm({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-ink-2 font-semibold text-sm">
-                Contact Email
-              </Label>
+              <Label htmlFor="email">Contact Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="contact@garypantry.org"
-                className="bg-white border-lime/50 focus-visible:ring-click-green h-9"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="website" className="text-ink-2 font-semibold text-sm">
-                Website
-              </Label>
+              <Label htmlFor="website">Website</Label>
               <Input
                 id="website"
                 placeholder="https://garypantry.org"
-                className="bg-white border-lime/50 focus-visible:ring-click-green h-9"
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
               />
@@ -232,9 +226,7 @@ export default function OrgSettingsForm({
 
           {isPantry && (
             <div className="space-y-1.5">
-              <Label htmlFor="maxReferrals" className="text-ink-2 font-semibold text-sm">
-                Client Referral Limit
-              </Label>
+              <Label htmlFor="maxReferrals">Client Referral Limit</Label>
               <p className="text-xs text-ink-3 mt-1 mb-4">
                 The number of referrals a single client is allowed to make.
               </p>
@@ -243,7 +235,7 @@ export default function OrgSettingsForm({
                 type="number"
                 min={0}
                 placeholder="e.g. 4"
-                className="bg-white border-lime/50 focus-visible:ring-click-green h-9 max-w-40"
+                className="max-w-40"
                 value={maxReferrals}
                 onChange={(e) => setMaxReferrals(e.target.value)}
               />
@@ -268,22 +260,18 @@ export default function OrgSettingsForm({
         </div>
       </form>
 
+      <hr className="border-t border-border/20" />
+
       {/* Danger Zone */}
-      <div className="pt-8 border-t border-red-200 mt-8">
-        <div className="bg-red-50/50 border border-red-100 rounded-lg p-5">
-          <h3 className="text-red-800 font-heading text-lg font-bold">Danger Zone</h3>
-          <p className="text-xs text-red-700/80 mt-1 mb-4">
-            Deleting this organization is permanent. All settings, inventories, lists, and connected
-            data will be removed. This cannot be undone.
-          </p>
-          <Button
-            type="button"
-            onClick={() => setShowDeleteModal(true)}
-            className="bg-red-600 hover:bg-red-700 text-white font-bold"
-          >
-            <Trash2 className="w-4 h-4 mr-2" /> Delete Organization
-          </Button>
-        </div>
+      <div className="pt-8 mt-8">
+        <h3 className="font-semibold text-red-600 text-lg">Danger Zone</h3>
+        <p className="text-sm text-ink-3 mb-4">
+          Deleting this organization is permanent. All settings, inventories, lists, and connected
+          data will be removed. This cannot be undone.
+        </p>
+        <Button type="button" variant="destructive" onClick={() => setShowDeleteModal(true)}>
+          <Trash2 className="w-4 h-4 mr-2" /> Delete Organization
+        </Button>
       </div>
 
       <DeleteOrganizationDialog

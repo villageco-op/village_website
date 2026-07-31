@@ -40,7 +40,7 @@ export function EarningsStatRow({ data }: EarningsStatRowProps) {
   return (
     <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {/* Earned this month */}
-      <Card className="rounded-xl border border-[rgba(42,75,40,0.08)] border-l-[3px] border-l-lime bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+      <Card className="border-l-[3px] border-l-lime">
         <CardContent className="p-5">
           <div className="mb-1 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             ${earnedThisMonth.toFixed(2)}
@@ -55,7 +55,7 @@ export function EarningsStatRow({ data }: EarningsStatRowProps) {
       </Card>
 
       {/* Remaining to goal */}
-      <Card className="rounded-xl border border-[rgba(42,75,40,0.08)] border-l-[3px] border-l-sun bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+      <Card className="border-l-[3px] border-l-sun">
         <CardContent className="p-5">
           <div className="mb-1 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             ${Math.max(remainingToGoal, 0).toFixed(2)}
@@ -68,7 +68,7 @@ export function EarningsStatRow({ data }: EarningsStatRowProps) {
       </Card>
 
       {/* Total earned YTD */}
-      <Card className="rounded-xl border border-[rgba(42,75,40,0.08)] border-l-[3px] border-l-forest-dark bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+      <Card className="border-l-[3px] border-l-forest-dark">
         <CardContent className="p-5">
           <div className="mb-1 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             ${totalEarnedYTD.toFixed(2)}
@@ -81,7 +81,7 @@ export function EarningsStatRow({ data }: EarningsStatRowProps) {
       </Card>
 
       {/* Avg per lb sold */}
-      <Card className="rounded-xl border border-[rgba(42,75,40,0.08)] border-l-[3px] border-l-clay bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+      <Card className="border-l-[3px] border-l-clay">
         <CardContent className="p-5">
           <div className="mb-1 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             ${avgPerLbSold.toFixed(2)}

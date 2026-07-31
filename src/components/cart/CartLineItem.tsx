@@ -182,7 +182,6 @@ export function CartLineItem({
                 onUpdate(item.reservationId, { isSubscription: !!checked })
               }
               disabled={isUpdating}
-              className="border-cream-dark data-[state=checked]:bg-lime data-[state=checked]:text-white"
             />
             <Label
               htmlFor={`sub-${item.reservationId}`}

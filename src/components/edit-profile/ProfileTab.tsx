@@ -9,9 +9,11 @@ import { AddressFormFields, type AddressValue } from './AddressFormFields';
 import { AvatarPicker } from './AvatarPicker';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SecondaryHeader } from '@/components/ui/secondary-header';
 import { Textarea } from '@/components/ui/textarea';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import type { User } from '@/lib/api/generated/models/user';
@@ -147,7 +149,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
       {/* Basic Info Section */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="font-heading text-xl font-bold text-deep-forest">Basic Information</h2>
+          <SecondaryHeader title="Basic Information" />
           {isSeller && (
             <Button variant="outline" size="sm" asChild className="hidden sm:flex">
               <Link href={`/public-profile/${user.id}`}>
@@ -171,9 +173,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-ink-2 font-semibold">
-              Real Name
-            </Label>
+            <Label htmlFor="name">Real Name</Label>
             <Input
               id="name"
               placeholder="e.g. Jane Doe"
@@ -196,9 +196,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="about" className="text-ink-2 font-semibold">
-                  About You
-                </Label>
+                <Label htmlFor="about">About You</Label>
                 <Textarea
                   id="about"
                   placeholder="Tell your community what you grow and why you love it..."
@@ -209,9 +207,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="specialties" className="text-ink-2 font-semibold">
-                  Specialties (comma separated)
-                </Label>
+                <Label htmlFor="specialties">Specialties (comma separated)</Label>
                 <Input
                   id="specialties"
                   placeholder="e.g. Heirloom Tomatoes, Honey, Sourdough"
@@ -221,9 +217,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="goal" className="text-ink-2 font-semibold">
-                  Weekly Goal ($)
-                </Label>
+                <Label htmlFor="goal">Weekly Goal ($)</Label>
                 <Input
                   id="goal"
                   type="number"
@@ -233,35 +227,36 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
                 />
               </div>
 
-              <div className="bg-white p-4 rounded-lg border border-lime/30 space-y-4">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="delivery"
-                    checked={willDeliver}
-                    onCheckedChange={(checked) => setWillDeliver(checked as boolean)}
-                    className="data-[state=checked]:bg-click-green data-[state=checked]:border-click-green"
-                  />
-                  <Label htmlFor="delivery" className="text-ink-2 font-semibold cursor-pointer">
-                    I am willing to deliver orders myself
-                  </Label>
-                </div>
-
-                {willDeliver && (
-                  <div className="pl-6 animate-in fade-in slide-in-from-top-2">
-                    <Label htmlFor="range" className="text-xs text-ink-3 uppercase tracking-wide">
-                      Delivery Range (Miles)
-                    </Label>
-                    <Input
-                      id="range"
-                      type="number"
-                      placeholder="e.g. 15"
-                      className="mt-1 max-w-30"
-                      value={deliveryRangeMiles}
-                      onChange={(e) => setDeliveryRangeMiles(e.target.value || '')}
+              <Card>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="delivery"
+                      checked={willDeliver}
+                      onCheckedChange={(checked) => setWillDeliver(checked as boolean)}
                     />
+                    <Label htmlFor="delivery" className="cursor-pointer">
+                      I am willing to deliver orders myself
+                    </Label>
                   </div>
-                )}
-              </div>
+
+                  {willDeliver && (
+                    <div className="pl-6 animate-in fade-in slide-in-from-top-2">
+                      <Label htmlFor="range" className="text-xs text-ink-3 uppercase tracking-wide">
+                        Delivery Range (Miles)
+                      </Label>
+                      <Input
+                        id="range"
+                        type="number"
+                        placeholder="e.g. 15"
+                        className="mt-1 max-w-30"
+                        value={deliveryRangeMiles}
+                        onChange={(e) => setDeliveryRangeMiles(e.target.value || '')}
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           </div>
         </>
@@ -270,8 +265,9 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
       <div className="flex pt-4">
         <Button
           type="submit"
+          variant="lime"
           disabled={isSaving}
-          className="w-full sm:w-auto bg-lime text-forest-dark hover:bg-lime-light font-bold ml-auto"
+          className="w-full sm:w-auto ml-auto"
         >
           {isSaving ? (
             <>

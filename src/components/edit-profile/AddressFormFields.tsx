@@ -52,13 +52,12 @@ export function AddressFormFields({ value, onChange, required = false }: Address
     <div className="space-y-4">
       {/* Street Address */}
       <div className="space-y-1.5">
-        <Label htmlFor="address" className="text-ink-2 font-semibold text-sm">
-          Street Address {required && <span className="text-red-500">*</span>}
+        <Label htmlFor="address">
+          Street Address {required && <span className="text-required">*</span>}
         </Label>
         <Input
           id="address"
           placeholder="e.g. 101 Civic Center Plaza"
-          className="bg-white border-lime/50 focus-visible:ring-click-green h-9"
           value={value.address}
           onChange={(e) => updateField('address', e.target.value)}
           required={required}
@@ -68,13 +67,10 @@ export function AddressFormFields({ value, onChange, required = false }: Address
       {/* City / State / Zip Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="space-y-1.5">
-          <Label htmlFor="city" className="text-ink-2 font-semibold text-sm">
-            City {required && <span className="text-red-500">*</span>}
-          </Label>
+          <Label htmlFor="city">City {required && <span className="text-required">*</span>}</Label>
           <Input
             id="city"
             placeholder="e.g. Gary"
-            className="bg-white border-lime/50 focus-visible:ring-click-green h-9"
             value={value.city}
             onChange={(e) => updateField('city', e.target.value)}
             required={required}
@@ -84,18 +80,15 @@ export function AddressFormFields({ value, onChange, required = false }: Address
         <div className="grid grid-cols-2 gap-2">
           {/* State Select Dropdown */}
           <div className="space-y-1.5">
-            <Label htmlFor="state" className="text-ink-2 font-semibold text-sm">
-              State {required && <span className="text-red-500">*</span>}
+            <Label htmlFor="state">
+              State {required && <span className="text-required">*</span>}
             </Label>
             <Select
               value={value.state}
               onValueChange={(val) => updateField('state', val)}
               required={required}
             >
-              <SelectTrigger
-                id="state"
-                className="bg-white border-lime/50 focus-visible:ring-click-green h-9"
-              >
+              <SelectTrigger id="state">
                 <SelectValue placeholder="State" />
               </SelectTrigger>
               <SelectContent>
@@ -110,8 +103,8 @@ export function AddressFormFields({ value, onChange, required = false }: Address
 
           {/* Zip Code Input */}
           <div className="space-y-1.5">
-            <Label htmlFor="zip" className="text-ink-2 font-semibold text-sm">
-              ZIP Code {required && <span className="text-red-500">*</span>}
+            <Label htmlFor="zip">
+              ZIP Code {required && <span className="text-required">*</span>}
             </Label>
             <Input
               id="zip"
@@ -119,7 +112,6 @@ export function AddressFormFields({ value, onChange, required = false }: Address
               inputMode="numeric"
               maxLength={5}
               pattern="[0-9]*"
-              className="bg-white border-lime/50 focus-visible:ring-click-green h-9"
               value={value.zip}
               onChange={handleZipChange}
               required={required}

@@ -101,7 +101,6 @@ export default function SellerListingsTab({ sellerId, onOrderItem }: SellerListi
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-3" />
           <Input
             placeholder="Search listings..."
-            className="pl-9 bg-white h-9 w-full"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
@@ -115,7 +114,7 @@ export default function SellerListingsTab({ sellerId, onOrderItem }: SellerListi
               setPage(1);
             }}
           >
-            <SelectTrigger className="w-full bg-white h-9">
+            <SelectTrigger>
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -131,10 +130,7 @@ export default function SellerListingsTab({ sellerId, onOrderItem }: SellerListi
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {listings.length > 0 ? (
           listings.map((item) => (
-            <Card
-              key={String(item.id)}
-              className="overflow-hidden rounded-2xl border-1.5 border-cream-dark bg-white transition-all"
-            >
+            <Card key={String(item.id)}>
               <div className="relative flex h-25 items-center justify-center bg-linear-to-br from-lime-pale to-[#eafaea] text-click-green overflow-hidden">
                 {item.thumbnail ? (
                   <Image
@@ -187,12 +183,7 @@ export default function SellerListingsTab({ sellerId, onOrderItem }: SellerListi
                     <Button variant="lime" className="flex-1" onClick={() => onOrderItem(item.id)}>
                       + Order
                     </Button>
-                    <Button
-                      variant="outline-forest"
-                      size="sm"
-                      asChild
-                      className="flex-1 text-xs font-semibold"
-                    >
+                    <Button variant="outline-forest" size="sm" asChild className="flex-1">
                       <Link href={`/produce/${item.id}`}>View Details</Link>
                     </Button>
                   </div>

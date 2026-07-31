@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { InlineErrorState } from '@/components/ui/state-displays';
+import { EmptyState, InlineErrorState } from '@/components/ui/state-displays';
 import type { SellerReviewItem } from '@/lib/api/generated/models';
 import { useGetSellerReviews } from '@/lib/api/generated/users/users';
 import { formatAppDate } from '@/lib/date-utils';
@@ -42,20 +42,13 @@ export default function ProduceReviews({
   const reviews = reviewsRes?.data?.reviews || [];
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-sm">
-      <CardHeader className="p-6 border-b border-border/50">
-        <CardTitle className="font-heading text-xl font-bold text-deep-forest">
-          Product Reviews
-        </CardTitle>
+    <Card>
+      <CardHeader>
+        <CardTitle>Product Reviews</CardTitle>
       </CardHeader>
       <CardContent className="p-6">
         {reviews.length === 0 ? (
-          <div className="text-center py-8">
-            <Star className="w-8 h-8 text-slate-200 mx-auto mb-3" />
-            <p className="text-ink-3 text-sm">
-              No reviews yet for this product. Be the first to order and review!
-            </p>
-          </div>
+          <EmptyState title="No reviews yet for this product. Be the first to order and review!" />
         ) : (
           <div className="space-y-6">
             {reviews.map((review: SellerReviewItem) => (

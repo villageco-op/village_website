@@ -29,7 +29,7 @@ export function SubscriptionLocationCard({ subscription }: SubscriptionLocationC
   const headerIcon = isDelivery ? <Truck /> : <Store />;
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-6">
         <div className="mb-4 flex items-center gap-2 border-b border-border/50 pb-3">
           <span className="leading-none h-5 w-5 text-deep-forest">{headerIcon}</span>

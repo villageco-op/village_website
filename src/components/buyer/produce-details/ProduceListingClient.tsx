@@ -54,11 +54,7 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
     <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Navigation & Header */}
-        <Button
-          variant="ghost"
-          className="mb-6 -ml-3 text-ink-3 hover:text-ink hover:bg-slate-200/50"
-          onClick={() => router.back()}
-        >
+        <Button variant="ghost" className="mb-6 -ml-3 text-ink-3" onClick={() => router.back()}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Browse
         </Button>

@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
@@ -138,122 +139,113 @@ export default function LoginClient() {
       </Link>
 
       {/* Login Card */}
-      <div className="max-w-md w-full bg-card border border-border/20 shadow-sm rounded-xl p-8">
-        {isEmailSent ? (
-          <div className="flex flex-col items-center text-center py-4 animate-in fade-in zoom-in-95 duration-300">
-            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-lime/20 text-forest-dark">
-              <Mail className="h-8 w-8" />
-            </div>
-
-            <h2 className="font-heading text-2xl font-bold text-deep-forest mb-3">
-              Check your email
-            </h2>
-
-            <p className="font-sans text-sm text-ink-3 mb-8">
-              We sent a secure login link to <br />
-              <span className="font-semibold text-ink">{email}</span>. <br />
-              Please check your inbox to continue.
-            </p>
-
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsEmailSent(false)}
-              className="w-full bg-white border-border/50 text-ink hover:bg-cream/50 h-11 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to login
-            </Button>
-          </div>
-        ) : (
-          <>
-            <div className="text-center mb-8">
-              <h2 className="font-heading text-3xl font-bold text-deep-forest">
-                Welcome to the Village
-              </h2>
-              <p className="font-sans text-sm text-ink-3 mt-2">
-                Sign in or create an account to get involved.
-              </p>
-            </div>
-            <div className="space-y-6">
-              {/* Google OAuth Form */}
-              <form action="/api/auth/signin/google" method="POST">
-                <input type="hidden" name="csrfToken" value={csrfToken} />
-                <input type="hidden" name="callbackUrl" value={callbackUrl} />
-                <Button
-                  type="submit"
-                  variant="outline"
-                  className="w-full bg-white border-lime/50 text-ink hover:bg-cream/50 h-11 transition-colors"
-                >
-                  <Icons.google className="w-5 h-5 mr-2" />
-                  Continue with Google
-                </Button>
-              </form>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <Separator className="w-full bg-border/40" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-[#f2efe6] px-2 text-ink-3 font-semibold tracking-wider rounded-sm">
-                    Or magic link
-                  </span>
-                </div>
+      <Card className="max-w-md w-full p-8">
+        <CardContent>
+          {isEmailSent ? (
+            <div className="flex flex-col items-center text-center py-4 animate-in fade-in zoom-in-95 duration-300">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-lime/20 text-forest-dark">
+                <Mail className="h-8 w-8" />
               </div>
 
-              {/* Magic Link (Nodemailer) Form */}
-              <form
-                onSubmit={(e) => {
-                  void handleMagicLinkSignIn(e);
-                }}
-                method="POST"
-                className="space-y-4"
-              >
-                <input type="hidden" name="csrfToken" value={csrfToken} />
-                <input type="hidden" name="callbackUrl" value={callbackUrl} />
-                <input type="hidden" name="redirect" value="false" />
+              <h2 className="font-heading text-2xl font-bold text-deep-forest mb-3">
+                Check your email
+              </h2>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-ink-2 font-semibold">
-                    Email Address
-                  </Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="farmer@valley.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="bg-white border-lime/50 h-11 focus-visible:ring-click-green placeholder:text-ink-3/40"
-                  />
+              <p className="font-sans text-sm text-ink-3 mb-8">
+                We sent a secure login link to <br />
+                <span className="font-semibold text-ink">{email}</span>. <br />
+                Please check your inbox to continue.
+              </p>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsEmailSent(false)}
+                className="w-full h-11"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to login
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div className="text-center mb-8">
+                <h2 className="font-heading text-3xl font-bold text-deep-forest">
+                  Welcome to the Village
+                </h2>
+                <p className="font-sans text-sm text-ink-3 mt-2">
+                  Sign in or create an account to get involved.
+                </p>
+              </div>
+              <div className="space-y-6">
+                {/* Google OAuth Form */}
+                <form action="/api/auth/signin/google" method="POST">
+                  <input type="hidden" name="csrfToken" value={csrfToken} />
+                  <input type="hidden" name="callbackUrl" value={callbackUrl} />
+                  <Button type="submit" variant="outline" className="w-full h-11">
+                    <Icons.google className="w-5 h-5 mr-2" />
+                    Continue with Google
+                  </Button>
+                </form>
+
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <Separator className="w-full bg-border/40" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-[#f2efe6] px-2 text-ink-3 font-semibold tracking-wider rounded-sm">
+                      Or magic link
+                    </span>
+                  </div>
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full h-11 bg-lime text-forest-dark font-heading text-sm font-bold tracking-wide transition-transform hover:bg-lime-light hover:-translate-y-px disabled:opacity-50"
+                {/* Magic Link (Nodemailer) Form */}
+                <form
+                  onSubmit={(e) => {
+                    void handleMagicLinkSignIn(e);
+                  }}
+                  method="POST"
+                  className="space-y-4"
                 >
-                  {isLoading ? 'Sending...' : 'Email me a login link'}
-                  {!isLoading && <ArrowRight className="w-4 h-4 ml-2" />}
-                </Button>
-              </form>
-            </div>
-          </>
-        )}
+                  <input type="hidden" name="csrfToken" value={csrfToken} />
+                  <input type="hidden" name="callbackUrl" value={callbackUrl} />
+                  <input type="hidden" name="redirect" value="false" />
 
-        <p className="mt-8 text-center text-xs text-ink-3/70">
-          By getting involved, you agree to our{' '}
-          <Link href="/terms" className="underline hover:text-ink-2">
-            Terms of Service
-          </Link>{' '}
-          and{' '}
-          <Link href="/privacy" className="underline hover:text-ink-2">
-            Privacy Policy
-          </Link>
-          .
-        </p>
-      </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="farmer@valley.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+
+                  <Button type="submit" variant="lime" disabled={isLoading} className="w-full h-11">
+                    {isLoading ? 'Sending...' : 'Email me a login link'}
+                    {!isLoading && <ArrowRight className="w-4 h-4 ml-2" />}
+                  </Button>
+                </form>
+              </div>
+            </>
+          )}
+
+          <p className="mt-8 text-center text-xs text-ink-3/70">
+            By getting involved, you agree to our{' '}
+            <Link href="/terms" className="underline hover:text-ink-2">
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link href="/privacy" className="underline hover:text-ink-2">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

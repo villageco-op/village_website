@@ -26,7 +26,7 @@ interface OrderItemsCardProps {
  */
 export function OrderItemsCard({ items }: OrderItemsCardProps) {
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-0 sm:p-6">
         <div className="flex items-center gap-2 px-6 pt-6 sm:px-0 sm:pt-0 mb-4 border-b border-border/50 pb-4">
           <Package className="h-5 w-5 text-ink-3" />
@@ -39,19 +39,11 @@ export function OrderItemsCard({ items }: OrderItemsCardProps) {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-border/50 hover:bg-transparent">
-                  <TableHead className="font-heading text-xs font-bold text-ink-3">
-                    Product
-                  </TableHead>
-                  <TableHead className="font-heading text-xs font-bold text-ink-3 text-right">
-                    Quantity
-                  </TableHead>
-                  <TableHead className="font-heading text-xs font-bold text-ink-3 text-right">
-                    Price/lb
-                  </TableHead>
-                  <TableHead className="font-heading text-xs font-bold text-ink-3 text-right">
-                    Subtotal
-                  </TableHead>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead>Product</TableHead>
+                  <TableHead className="text-right">Quantity</TableHead>
+                  <TableHead className="text-right">Price/lb</TableHead>
+                  <TableHead className="text-right">Subtotal</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -63,18 +55,16 @@ export function OrderItemsCard({ items }: OrderItemsCardProps) {
                   return (
                     <TableRow
                       key={item.id}
-                      className="cursor-pointer border-border/50 hover:bg-off-white"
+                      className="cursor-pointer hover:bg-off-white"
                       onClick={() => void router.push(`/produce/${item.id}`)}
                     >
                       <TableCell className="font-medium text-ink">
                         {item.productName || 'Unknown Product'}
                       </TableCell>
-                      <TableCell className="text-right text-ink-3">
+                      <TableCell className="text-right">
                         {quantityLbs.toFixed(1).replace(/\.0$/, '')} lbs
                       </TableCell>
-                      <TableCell className="text-right text-ink-3">
-                        ${pricePerLb.toFixed(2)}
-                      </TableCell>
+                      <TableCell className="text-right">${pricePerLb.toFixed(2)}</TableCell>
                       <TableCell className="text-right font-bold text-ink">
                         ${subtotal.toFixed(2)}
                       </TableCell>

@@ -29,9 +29,7 @@ export function OrderQuantityInput({ quantityLbs, onChange, maxLbs }: OrderQuant
 
   return (
     <div className="space-y-3">
-      <Label htmlFor="quantity" className="text-ink-2 font-semibold">
-        Quantity (lbs)
-      </Label>
+      <Label htmlFor="quantity">Quantity (lbs)</Label>
       <div className="flex items-center space-x-3">
         <Input
           id="quantity"
@@ -41,7 +39,7 @@ export function OrderQuantityInput({ quantityLbs, onChange, maxLbs }: OrderQuant
           max={maxLbs}
           value={quantityLbs}
           onChange={handleChange}
-          className="h-10 w-24 text-center text-lg font-medium bg-white border-lime/50 focus-visible:ring-click-green"
+          className="max-w-24"
         />
       </div>
       <p className="text-xs text-ink-3">

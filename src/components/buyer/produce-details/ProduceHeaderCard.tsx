@@ -18,17 +18,14 @@ export default function ProduceHeaderCard({ produce }: { produce: ProduceDetail 
   const images = (produce.images as string[]) || [];
 
   return (
-    <Card className="overflow-hidden rounded-xl border border-forest-dark/10 bg-white shadow-sm">
+    <Card>
       <ImageGallery images={images} title={produce.title} />
 
       <CardContent className="p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Badge
-                variant="outline"
-                className="text-forest-dark border-forest-dark/30 capitalize"
-              >
+              <Badge variant="outline" className="capitalize">
                 {produce.produceType?.replace('_', ' ')}
               </Badge>
               {produce.isSubscribable && (

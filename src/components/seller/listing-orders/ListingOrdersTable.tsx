@@ -35,7 +35,7 @@ export function ListingOrdersTable({ orders, totalOrders }: ListingOrdersTablePr
   const router = useRouter();
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-0 sm:p-6">
         <div className="mb-5 hidden items-center justify-between px-6 pt-6 sm:flex sm:px-0 sm:pt-0">
           <div>
@@ -56,24 +56,14 @@ export function ListingOrdersTable({ orders, totalOrders }: ListingOrdersTablePr
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-border/50 bg-slate-50/50 hover:bg-slate-50/50">
-                  <TableHead className="font-heading text-xs font-bold text-ink-3 pl-4 sm:pl-2">
-                    Buyer
-                  </TableHead>
-                  <TableHead className="font-heading text-xs font-bold text-ink-3">
-                    Order ID
-                  </TableHead>
-                  <TableHead className="font-heading text-xs font-bold text-ink-3">
-                    Quantity
-                  </TableHead>
-                  <TableHead className="font-heading text-xs font-bold text-ink-3">Total</TableHead>
-                  <TableHead className="font-heading text-xs font-bold text-ink-3">
-                    Fulfillment
-                  </TableHead>
-                  <TableHead className="font-heading text-xs font-bold text-ink-3">Date</TableHead>
-                  <TableHead className="font-heading text-xs font-bold text-ink-3 pr-4 sm:pr-2 text-right">
-                    Status
-                  </TableHead>
+                <TableRow>
+                  <TableHead>Buyer</TableHead>
+                  <TableHead>Order ID</TableHead>
+                  <TableHead>Quantity</TableHead>
+                  <TableHead>Total</TableHead>
+                  <TableHead>Fulfillment</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="pr-4 sm:pr-2 text-right">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
