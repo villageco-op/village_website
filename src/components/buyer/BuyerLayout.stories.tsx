@@ -5,7 +5,6 @@ import React from 'react';
 import { BuyerSidebar } from '@/components/buyer/BuyerSidebar';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { CartFab } from '@/components/cart/CartFab';
-import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { Toaster } from '@/components/ui/sonner';
 import { CartProvider } from '@/hooks/useCartUI';
@@ -68,8 +67,7 @@ function MockFullDashboardLayout({ children }: { children?: React.ReactNode }) {
               </div>
               <div className="py-120" />
               <p className="text-muted-foreground max-w-md mx-auto text-sm">
-                This is the bottom of the dashboard component. The footer should now scroll into
-                view.
+                This is the bottom of the dashboard component.
               </p>
             </div>
           )}
@@ -80,9 +78,6 @@ function MockFullDashboardLayout({ children }: { children?: React.ReactNode }) {
       <CartFab />
       <CartDrawer />
       <Toaster />
-
-      {/* 4. Global Footer */}
-      <Footer />
     </div>
   );
 }

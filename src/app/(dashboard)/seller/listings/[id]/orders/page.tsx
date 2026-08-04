@@ -1,0 +1,15 @@
+import ListingOrdersClient from '../../../../../../components/seller/listing-orders/ListingOrdersClient';
+
+/**
+ * The view listing orders page for sellers.
+ * Displays all orders associated with a specific produce listing.
+ *
+ * @param props - The URL parameters containing the listing ID
+ * @param props.params - The parameters from the URL
+ * @param props.params.id - The listing ID
+ * @returns The listing orders client component
+ */
+export default async function ListingOrdersPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <ListingOrdersClient id={id} />;
+}

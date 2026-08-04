@@ -4,7 +4,6 @@ import { Bricolage_Grotesque, Sora, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { CartFab } from '@/components/cart/CartFab';
-import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import Providers from '@/components/providers';
 import { TutorialOverlay } from '@/components/tutorial/TutorialOverlay';
@@ -65,7 +64,6 @@ export default function RootLayout({
           </CartProvider>
         </Providers>
         <Toaster />
-        <Footer />
       </body>
     </html>
   );

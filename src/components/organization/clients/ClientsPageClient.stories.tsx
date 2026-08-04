@@ -25,8 +25,8 @@ const createQueryClient = () =>
 const INITIAL_CLIENTS: ClientResponse[] = [
   {
     id: 'cli_1',
-    name: 'Acme Corp',
-    email: 'contact@acme.com',
+    name: 'Jane Doe',
+    email: 'jane.doe@example.com',
     phone: '0001231234',
     address: '123 Forest Ave',
     city: 'Madison',
@@ -42,8 +42,8 @@ const INITIAL_CLIENTS: ClientResponse[] = [
   },
   {
     id: 'cli_2',
-    name: 'Stark Industries',
-    email: 'info@stark.com',
+    name: 'John Smith',
+    email: 'john.smith@example.com',
     phone: '0001231234',
     address: '200 Park Ave',
     city: 'New York',
@@ -59,8 +59,8 @@ const INITIAL_CLIENTS: ClientResponse[] = [
   },
   {
     id: 'cli_3',
-    name: 'Wayne Enterprises',
-    email: 'bruce@wayne.com',
+    name: 'Alice Johnson',
+    email: 'alice.johnson@example.com',
     phone: '0001231234',
     address: null,
     city: null,
@@ -73,6 +73,19 @@ const INITIAL_CLIENTS: ClientResponse[] = [
     active: false,
     createdAt: '2024-03-10T00:00:00Z',
     updatedAt: '2024-03-10T00:00:00Z',
+  },
+];
+
+const mockReferralsList = [
+  {
+    id: 'ref_1',
+    name: 'John Smith',
+    email: 'john.smith@example.com',
+  },
+  {
+    id: 'ref_2',
+    name: 'Alice Johnson',
+    email: 'alice.johnson@example.com',
   },
 ];
 
@@ -92,7 +105,7 @@ const MOCK_ORGANIZATION: Organization = {
   zip: '46402',
   lat: 41.5934,
   lng: -87.3464,
-  maxReferrals: 5,
+  maxReferrals: 4,
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
 };
@@ -181,6 +194,13 @@ const meta: Meta<typeof ClientsPageClient> = {
 
           return HttpResponse.json({ success: true }, { status: 200 });
         }),
+
+        http.get('/api/clients/*/referrals', () => {
+          return HttpResponse.json({
+            data: mockReferralsList,
+            meta: { total: 2 },
+          });
+        }),
       ],
     },
   },
@@ -244,10 +264,10 @@ export const DeleteClientFlow: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await expect(await canvas.findByText('Acme Corp')).toBeInTheDocument();
+    await expect(await canvas.findByText('Jane Doe')).toBeInTheDocument();
 
     await step('Select client row to enable actions', async () => {
-      const clientRow = await canvas.findByText('Acme Corp');
+      const clientRow = await canvas.findByText('Jane Doe');
       await userEvent.click(clientRow);
     });
 
