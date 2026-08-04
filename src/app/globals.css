@@ -57,7 +57,7 @@
 
   --color-border: var(--color-lime);
   --color-input: var(--color-off-white);
-  --color-input-border: var(--color-lime/50);
+  --color-input-border: calc(var(--color-lime) / 50);
   --color-ring: var(--color-click-green);
 
   --radius: var(--radius-brand);

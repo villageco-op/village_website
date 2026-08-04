@@ -1,17 +1,11 @@
 'use client';
 
-import { Loader2, Send } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Textarea } from '../ui/textarea';
+import { ContactFormFields } from './ContactFormFields';
+import { ContactSuccess } from './ContactSuccess';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/hooks/useAuth';
-import { useSubmitContactForm } from '@/lib/api/generated/contact/contact';
 
 /**
  * The Contact Page.
@@ -19,51 +13,7 @@ import { useSubmitContactForm } from '@/lib/api/generated/contact/contact';
  * @returns The contact form page component
  */
 export default function ContactClient() {
-  const { user } = useAuth();
-  const submitContactFormMutation = useSubmitContactForm();
-
   const [isSuccess, setIsSuccess] = useState(false);
-
-  const [formData, setFormData] = useState<{
-    name: string | null;
-    email: string | null;
-    company: string | null;
-    message: string;
-  }>({
-    name: null,
-    email: null,
-    company: null,
-    message: '',
-  });
-
-  const resolvedName = formData.name ?? user?.name ?? '';
-  const resolvedEmail = formData.email ?? user?.email ?? '';
-  const resolvedCompany = formData.company ?? '';
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.SubmitEvent) => {
-    e.preventDefault();
-
-    try {
-      await submitContactFormMutation.mutateAsync({
-        data: {
-          name: resolvedName,
-          email: resolvedEmail,
-          company: resolvedCompany,
-          message: formData.message,
-        },
-      });
-      toast.success('Message sent successfully!');
-      setIsSuccess(true);
-    } catch (err) {
-      console.error('Failed to submit contact form:', err);
-      toast.error('Failed to send message. Please try again later.');
-    }
-  };
 
   return (
     <div className="min-h-screen bg-off-white py-20 px-4">
@@ -80,24 +30,12 @@ export default function ContactClient() {
 
         <Card>
           {isSuccess ? (
-            <CardContent className="flex flex-col items-center justify-center p-16 text-center">
-              <h2 className="font-heading text-2xl font-bold text-deep-forest mb-2">
-                Message Sent!
-              </h2>
-              <p className="text-forest-dark/70 mb-8">
-                Thank you for reaching out. A member of our team will get back to you at{' '}
-                <span className="font-semibold text-deep-forest">{formData.email}</span>.
-              </p>
-              <Button
-                variant="lime"
-                onClick={() => {
-                  setFormData({ ...formData, message: '' });
-                  setIsSuccess(false);
-                }}
-              >
-                Send another message
-              </Button>
-            </CardContent>
+            <ContactSuccess
+              title="Message Sent!"
+              description="Thank you for reaching out. A member of our team will get back to you shortly."
+              buttonText="Send another message"
+              onReset={() => setIsSuccess(false)}
+            />
           ) : (
             <>
               <CardHeader>
@@ -106,92 +44,24 @@ export default function ContactClient() {
               </CardHeader>
 
               <CardContent className="pt-6">
-                <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {/* Name Field */}
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name *</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        type="text"
-                        required
-                        value={resolvedName}
-                        onChange={handleChange}
-                        placeholder="Jane Doe"
-                        className="flex h-12 w-full"
-                      />
-                    </div>
-
-                    {/* Email Field */}
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email Address *</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                        value={resolvedEmail}
-                        onChange={handleChange}
-                        placeholder="jane@example.com"
-                        className="flex h-12 w-full"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Company Field (Optional) */}
-                  <div className="space-y-2">
-                    <Label htmlFor="organization">
-                      Organization{' '}
-                      <span className="text-forest-dark/50 font-normal">(Optional)</span>
-                    </Label>
-                    <Input
-                      id="organization"
-                      name="organization"
-                      type="text"
-                      value={resolvedCompany}
-                      onChange={handleChange}
-                      placeholder="Your organization name"
-                      className="flex h-12 w-full"
-                    />
-                  </div>
-
-                  {/* Message Field */}
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message *</Label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={5}
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder="How can we help you?"
-                      className="flex w-full"
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <div className="pt-4 border-t border-lime/20">
-                    <Button
-                      type="submit"
-                      variant="lime"
-                      disabled={submitContactFormMutation.isPending}
-                      className="w-full sm:w-auto"
-                    >
-                      {submitContactFormMutation.isPending ? (
-                        <>
-                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          Send Message <Send className="w-4 h-4 ml-2" />
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </form>
+                <ContactFormFields
+                  subjectPrefix="[GENERAL INQUIRY]"
+                  buttonText="Send Message"
+                  buttonVariant="forest"
+                  labels={{
+                    name: 'Full Name',
+                    email: 'Email Address',
+                    company: 'Organization (Optional)',
+                    message: 'Message',
+                  }}
+                  placeholders={{
+                    name: 'Jane Doe',
+                    email: 'jane@example.com',
+                    company: 'e.g. City Food Bank / Neighborhood Grocer',
+                    message: 'How can we help you?',
+                  }}
+                  onSuccess={() => setIsSuccess(true)}
+                />
               </CardContent>
             </>
           )}

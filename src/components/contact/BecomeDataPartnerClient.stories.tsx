@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse } from 'msw';
 
-import ContactClient from './ContactClient';
+import BecomeDataPartnerClient from './BecomeDataPartnerClient';
 
 import { Toaster } from '@/components/ui/sonner';
 
@@ -14,9 +14,9 @@ const mockedQueryClient = new QueryClient({
   },
 });
 
-const meta: Meta<typeof ContactClient> = {
-  title: 'Contact/ContactPage',
-  component: ContactClient,
+const meta: Meta<typeof BecomeDataPartnerClient> = {
+  title: 'Contact/BecomeDataPartnerContactPage',
+  component: BecomeDataPartnerClient,
   parameters: {
     layout: 'fullscreen',
     nextjs: {
@@ -42,7 +42,7 @@ const meta: Meta<typeof ContactClient> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ContactClient>;
+type Story = StoryObj<typeof BecomeDataPartnerClient>;
 
 /**
  * Standard view of the contact page.

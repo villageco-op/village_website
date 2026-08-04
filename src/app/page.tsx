@@ -1,11 +1,10 @@
+import { AnnouncementBanner } from '@/components/home/extra/AnnouncementBanner';
 import CtaSection from '@/components/home/sections/CtaSection';
+import { CustomFeaturesSection } from '@/components/home/sections/CustomFeaturesSection';
 import HeroSection from '@/components/home/sections/HeroSection';
-import HowItWorksSection from '@/components/home/sections/HowItWorksSection';
-import ImageCarouselSection from '@/components/home/sections/ImageCarouselSection';
-import ImpactSection from '@/components/home/sections/ImpactSection';
-import PlatformDiagramSection from '@/components/home/sections/PlatformDiagramSection';
-import WhatIsSection from '@/components/home/sections/WhatIsSection';
-import WhyItMattersSection from '@/components/home/sections/WhyItMattersSection';
+import { PredictionThesisSection } from '@/components/home/sections/PredictionThesisSection';
+import { ReferralFeatureSection } from '@/components/home/sections/ReferralFeatureSection';
+import { Footer } from '@/components/layout/Footer';
 
 /**
  * Home page at the root of the app.
@@ -14,14 +13,13 @@ import WhyItMattersSection from '@/components/home/sections/WhyItMattersSection'
 export default function Home() {
   return (
     <main className="flex flex-col w-full min-h-screen relative">
+      <AnnouncementBanner />
       <HeroSection />
-      <WhatIsSection />
-      <HowItWorksSection />
-      <WhyItMattersSection />
-      <PlatformDiagramSection />
-      <ImpactSection />
-      <ImageCarouselSection />
+      <ReferralFeatureSection />
+      <CustomFeaturesSection />
+      <PredictionThesisSection />
       <CtaSection />
+      <Footer />
     </main>
   );
 }

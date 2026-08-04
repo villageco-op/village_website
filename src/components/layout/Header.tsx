@@ -35,10 +35,8 @@ const getSecondaryNavItems = (path: string) => {
   }
   if (path === '/') {
     return [
-      { name: 'What it is', href: '#what-it-is', protected: false },
-      { name: 'How it works', href: '#how-it-works', protected: false },
-      { name: 'Why it matters', href: '#why-it-matters', protected: false },
-      { name: 'Community', href: '#community', protected: false },
+      { name: 'Food Pantries', href: '#referral-management', protected: false },
+      { name: 'Resturants & Markets', href: '#demand-prediction-research', protected: false },
     ];
   }
   if (path.startsWith('/org')) {

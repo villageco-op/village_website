@@ -3,7 +3,7 @@ import { userEvent, within, expect, waitFor } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
-import AcceptInviteClient from '@/app/verify-invite/page';
+import AcceptInviteClient from '@/app/(login)/verify-invite/page';
 import { Toaster } from '@/components/ui/sonner';
 
 const mockedQueryClient = new QueryClient({
