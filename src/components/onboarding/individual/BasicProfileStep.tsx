@@ -8,20 +8,7 @@ import { AvatarPicker } from '@/components/edit-profile/AvatarPicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-
-/**
- * Data structure for the basic profile information step.
- */
-export interface BasicInfoData {
-  name: string;
-  organization: string | null;
-  imageFile: File | null;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  zip: string;
-}
+import type { BasicInfoData } from '@/hooks/useOnboardingActions';
 
 /**
  * Props for the BasicProfileStep component.

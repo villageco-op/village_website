@@ -30,7 +30,12 @@ export default function OnboardingFlow() {
   }
 
   if (flowType === 'organization') {
-    return <OrganizationOnboardingFlow isUpgradingToOrg onBack={() => setFlowType(null)} />;
+    return (
+      <OrganizationOnboardingFlow
+        isUpgradingToOrg={isUpgradingToOrg}
+        onBack={() => setFlowType(null)}
+      />
+    );
   }
 
   return (

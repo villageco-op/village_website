@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn, userEvent, within, expect, waitFor } from '@storybook/test';
+import { fn, userEvent, within, expect, waitFor, screen } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -44,6 +44,11 @@ const meta: Meta<typeof OrganizationOnboardingFlow> = {
         http.post('*/api/upload', async () => {
           await delay(200);
           return HttpResponse.json({ url: 'https://example.com/logo.jpg' });
+        }),
+
+        http.put('*/api/users/me', async () => {
+          await delay(500);
+          return HttpResponse.json({ success: true });
         }),
 
         http.post('*/api/location/geocode', async () => {
@@ -141,15 +146,33 @@ export const CompleteOnboardingJourney: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
 
-    // --- STEP 1: Select Organization Type ---
+    // Basic Info
+    await userEvent.type(await canvas.findByLabelText(/Real Name/i), 'Jane Doe');
+    await userEvent.type(canvas.getByLabelText(/Street Address/i), '123 Farm Lane');
+
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Austin');
+
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+    const txOption = await screen.findByRole('option', { name: 'Texas' });
+    await userEvent.click(txOption);
+
+    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '78701');
+
+    await userEvent.click(canvas.getByRole('button', { name: /Continue/i }));
+
+    // Select Organization Type
     const pantryBtn = await canvas.findByRole('button', { name: /Food Pantry/i });
     await userEvent.click(pantryBtn);
 
-    // --- STEP 2: Fill Organization Details ---
+    // Fill Organization Details
     const orgNameInput = await canvas.findByLabelText(/Organization Name/i);
     await userEvent.type(orgNameInput, 'Gary Food Network');
 
     const subdomainInput = canvas.getByLabelText(/Custom Subdomain/i);
+    await userEvent.clear(subdomainInput);
     await userEvent.type(subdomainInput, 'gary-network');
 
     const addressInput = canvas.getByLabelText(/Street Address/i);
@@ -167,7 +190,7 @@ export const CompleteOnboardingJourney: Story = {
     const step2SubmitBtn = canvas.getByRole('button', { name: /Create Organization/i });
     await userEvent.click(step2SubmitBtn);
 
-    // --- STEP 3: Team Invitations Panel ---
+    // Team Invitations Panel
     const inviteEmailInput = await canvas.findByLabelText(/Member Email Address/i);
     await userEvent.type(inviteEmailInput, 'partner@garyfood.org');
 
@@ -211,22 +234,27 @@ export const ServerErrorJourney: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // Transition straight into Details form configuration
-    await userEvent.click(await canvas.findByRole('button', { name: /Food Pantry/i }));
+    // Basic Info
+    await userEvent.type(await canvas.findByLabelText(/Real Name/i), 'Jane Doe');
+    await userEvent.type(canvas.getByLabelText(/Street Address/i), '123 Farm Lane');
 
-    await userEvent.type(await canvas.findByLabelText(/Organization Name/i), 'Fail Hub');
-    await userEvent.type(canvas.getByLabelText(/Custom Subdomain/i), 'fail-hub');
-    await userEvent.type(canvas.getByLabelText(/Street Address/i), '999 Broken Way');
-    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '46404');
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Austin');
 
-    await expect(await canvas.findByText(/Subdomain is available!/i)).toBeInTheDocument();
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+    const txOption = await screen.findByRole('option', { name: 'Texas' });
+    await userEvent.click(txOption);
 
-    await userEvent.click(canvas.getByRole('button', { name: /Create Organization/i }));
+    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '78701');
 
-    // Confirm wizard layout flow state doesn't transition into step 3 (invite screen)
+    await userEvent.click(canvas.getByRole('button', { name: /Continue/i }));
+
+    // Confirm wizard layout flow state doesn't transition into step 3
     await waitFor(async () => {
-      const formHeading = canvas.getByRole('heading', { name: /Organization Profile/i });
-      await expect(formHeading).toBeInTheDocument();
+      const nameInput = await canvas.findByLabelText(/Real Name/i);
+      await expect(nameInput).toBeInTheDocument();
     });
   },
 };

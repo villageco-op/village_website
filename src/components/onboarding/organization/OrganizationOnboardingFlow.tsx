@@ -4,11 +4,14 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import BasicProfileStep from '../individual/BasicProfileStep';
+
 import OrgDetailsStep, { type OrgDetailsData } from './OrgDetailsStep';
 import OrgInviteStep from './OrgInviteStep';
 import OrgTypeStep from './OrgTypeStep';
 
 import { useTutorial } from '@/components/providers/TutorialProvider';
+import { type BasicInfoData, useSubmitBasicProfile } from '@/hooks/useOnboardingActions';
 import { useInviteToOrg } from '@/lib/api/generated/invites/invites';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import type { OrgRole } from '@/lib/api/generated/models/orgRole';
@@ -16,7 +19,7 @@ import type { OrgType } from '@/lib/api/generated/models/orgType';
 import { useCreateOrganization } from '@/lib/api/generated/organizations/organizations';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 
-type OrgStep = 'org-type' | 'org-details' | 'org-invite';
+type OrgStep = 'basic-info' | 'org-type' | 'org-details' | 'org-invite';
 
 interface OrganizationOnboardingFlowProps {
   isUpgradingToOrg: boolean;
@@ -37,7 +40,7 @@ export default function OrganizationOnboardingFlow({
   const router = useRouter();
   const { completeOnboarding } = useTutorial();
 
-  const [step, setStep] = useState<OrgStep>('org-type');
+  const [step, setStep] = useState<OrgStep>(isUpgradingToOrg ? 'org-type' : 'basic-info');
   const [isUploading, setIsUploading] = useState(false);
   const [orgType, setOrgType] = useState<OrgType>('pantry');
 
@@ -45,6 +48,7 @@ export default function OrganizationOnboardingFlow({
   const geocodeAddressMutation = useGeocodeAddress();
   const createOrgMutation = useCreateOrganization();
   const inviteToOrgMutation = useInviteToOrg();
+  const { submitBasicProfile, isPending: isBasicInfoPending } = useSubmitBasicProfile();
 
   const handleOrgDetailsSubmit = async (data: OrgDetailsData) => {
     const toastId = toast.loading('Uploading organization logo...');
@@ -136,12 +140,21 @@ export default function OrganizationOnboardingFlow({
     }
   };
 
+  const handleBasicInfoSubmit = async (data: BasicInfoData) => {
+    const success = await submitBasicProfile(data);
+    if (success) {
+      setStep('org-type');
+    }
+  };
+
   const handleFinishOrgOnboarding = () => {
     completeOnboarding();
     router.push('/org/clients');
   };
 
-  const ORG_STEPS_ORDER: OrgStep[] = ['org-type', 'org-details', 'org-invite'];
+  const ORG_STEPS_ORDER: OrgStep[] = isUpgradingToOrg
+    ? ['org-type', 'org-details', 'org-invite']
+    : ['basic-info', 'org-type', 'org-details', 'org-invite'];
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-off-white py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -165,6 +178,14 @@ export default function OrganizationOnboardingFlow({
 
         {/* Form Node Card */}
         <div className="bg-cream/30 border border-border/20 shadow-sm rounded-xl p-8 min-h-100 flex flex-col justify-center relative">
+          {step === 'basic-info' && (
+            <BasicProfileStep
+              onSubmit={handleBasicInfoSubmit}
+              isPending={isBasicInfoPending}
+              onBack={onBack}
+            />
+          )}
+
           {step === 'org-type' && (
             <OrgTypeStep
               onSelectType={(type) => {
