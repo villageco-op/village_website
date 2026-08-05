@@ -72,7 +72,7 @@ export default function AcceptInviteClient() {
 
       if (response.status === 200) {
         toast.success('Invitation accepted successfully.');
-        router.push('/dashboard');
+        router.push('/org/clients');
       } else {
         toast.error('Failed to accept the invitation. Please verify the code.');
       }

@@ -138,7 +138,7 @@ export default function OrganizationOnboardingFlow({
 
   const handleFinishOrgOnboarding = () => {
     completeOnboarding();
-    router.push('/org-dashboard');
+    router.push('/org/clients');
   };
 
   const ORG_STEPS_ORDER: OrgStep[] = ['org-type', 'org-details', 'org-invite'];

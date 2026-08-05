@@ -107,14 +107,14 @@ export function InviteMembersForm({
         <div className="flex flex-col sm:flex-row gap-3 items-end">
           {/* Email Input */}
           <div className="w-full sm:flex-3 flex flex-col gap-1.5">
-            <Label htmlFor="inviteEmail" className="text-xs font-semibold text-ink-3">
+            <Label htmlFor="inviteEmail">
               Member Email Address
             </Label>
             <Input
               id="inviteEmail"
               type="email"
               placeholder="colleague@example.com"
-              className="bg-white border-lime/50 focus-visible:ring-click-green h-9 text-sm w-full"
+              className="h-9 w-full"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isInviting}
@@ -123,7 +123,7 @@ export function InviteMembersForm({
 
           {/* Role Select */}
           <div className="w-full sm:w-48 flex flex-col gap-1.5">
-            <Label htmlFor="inviteRole" className="text-xs font-semibold text-ink-3">
+            <Label htmlFor="inviteRole">
               Permission Role
             </Label>
             <Select
@@ -133,7 +133,7 @@ export function InviteMembersForm({
             >
               <SelectTrigger
                 id="inviteRole"
-                className="bg-white border-lime/50 focus-visible:ring-click-green h-9 text-sm w-full"
+                className="h-9 w-full"
               >
                 <SelectValue placeholder="Role" />
               </SelectTrigger>

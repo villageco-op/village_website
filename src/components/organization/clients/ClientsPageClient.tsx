@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -8,6 +9,7 @@ import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { EditClientModal } from './EditClientModal';
 import { ViewReferralsModal } from './ViewReferralsModal';
 
+import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/ui/page-header';
 import { usePagination } from '@/hooks/usePagination';
 import {
@@ -101,7 +103,17 @@ export default function ClientsPageClient() {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <PageHeader title="Clients" subtitle="View, edit & delete clients and view referrals." />
+      <PageHeader 
+      title="Clients" 
+      subtitle="View, edit & delete clients and view referrals."
+      actions={
+          <Button asChild variant="lime" size="sm" className="text-xs font-semibold">
+            <Link href="/org/new-client">
+            + New Client
+            </Link>
+          </Button>
+        }
+      />
 
       <ClientsTable
         clients={clients || []}
