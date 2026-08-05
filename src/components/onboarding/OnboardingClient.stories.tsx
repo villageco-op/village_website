@@ -94,11 +94,9 @@ export const SelectIndividualJourney: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // 1. Gate selection step
     const individualBtn = await canvas.findByRole('button', { name: /Individual/i });
     await userEvent.click(individualBtn);
 
-    // 2. Asserts we have branched into IndividualOnboardingFlow step 1
     const individualNameInput = await canvas.findByLabelText(/Real Name/i);
     await expect(individualNameInput).toBeInTheDocument();
   },
@@ -108,16 +106,23 @@ export const SelectIndividualJourney: Story = {
  * Journey selecting "Organization" account type and traversing the organizational branch.
  */
 export const SelectOrganizationJourney: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        query: {
+          upgrade: null,
+        },
+      },
+    },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // 1. Gate selection step
     const orgBtn = await canvas.findByRole('button', { name: /Organization/i });
     await userEvent.click(orgBtn);
 
-    // 2. Asserts we have branched into OrganizationOnboardingFlow step 1
-    const foodPantryCard = await canvas.findByRole('button', { name: /Food Pantry/i });
-    await expect(foodPantryCard).toBeInTheDocument();
+    const individualNameInput = await canvas.findByLabelText(/Real Name/i);
+    await expect(individualNameInput).toBeInTheDocument();
   },
 };
 

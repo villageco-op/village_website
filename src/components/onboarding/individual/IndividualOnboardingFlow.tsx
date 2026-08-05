@@ -4,15 +4,14 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import BasicProfileStep, { type BasicInfoData } from './BasicProfileStep';
+import BasicProfileStep from './BasicProfileStep';
 import NotificationsStep from './NotificationStep';
 import RoleStep from './RoleStep';
 import SellerInfoStep from './SellerInfoStep';
 import SellerSuccessStep from './SellerSuccessStep';
 
-import { useGeocodeAddress } from '@/lib/api/generated/location/location';
+import { type BasicInfoData, useSubmitBasicProfile } from '@/hooks/useOnboardingActions';
 import { useGenerateStripeOnboardingLink } from '@/lib/api/generated/stripe/stripe';
-import { useUploadImage } from '@/lib/api/generated/upload/upload';
 import { useUpdateCurrentUser, useRegisterFcmToken } from '@/lib/api/generated/users/users';
 import { initFcmListener } from '@/lib/firebase';
 
@@ -56,70 +55,16 @@ export default function IndividualOnboardingFlow({
 
   const [step, setStep] = useState<Step>(isUpgradingToSeller ? 'seller-info' : 'basic-info');
   const [selectedRole, setSelectedRole] = useState<Role>(isUpgradingToSeller ? 'seller' : null);
-  const [isUploading, setIsUploading] = useState(false);
 
   const updateProfile = useUpdateCurrentUser();
   const registerToken = useRegisterFcmToken();
   const generateStripe = useGenerateStripeOnboardingLink();
-  const uploadImageMutation = useUploadImage();
-  const geocodeAddressMutation = useGeocodeAddress();
+  const { submitBasicProfile, isPending } = useSubmitBasicProfile();
 
   const handleBasicInfoSubmit = async (data: BasicInfoData) => {
-    const toastId = toast.loading('Uploading your profile picture...');
-
-    try {
-      setIsUploading(true);
-      let imageUrl: string | undefined = undefined;
-
-      if (data.imageFile) {
-        const uploadRes = await uploadImageMutation.mutateAsync({
-          data: { file: data.imageFile },
-        });
-
-        if (uploadRes.status === 200) {
-          imageUrl = uploadRes.data.url;
-          toast.loading('Saving your profile details...', { id: toastId });
-        } else {
-          throw new Error(uploadRes.data.error || 'Failed to upload image');
-        }
-      }
-
-      const geocodeRes = await geocodeAddressMutation.mutateAsync({
-        data: {
-          address: data.address,
-          city: data.city,
-          state: data.state,
-          zip: data.zip,
-        },
-      });
-
-      if (geocodeRes.status !== 200) {
-        throw new Error(geocodeRes.data.error || 'Failed to geocode address');
-      }
-
-      const { lat, lng } = geocodeRes.data;
-
-      await updateProfile.mutateAsync({
-        data: {
-          name: data.name,
-          image: imageUrl,
-          address: data.address,
-          city: data.city,
-          state: data.state,
-          zip: data.zip,
-          country: data.country,
-          lat,
-          lng,
-        },
-      });
-
-      toast.success('Profile updated!', { id: toastId });
+    const success = await submitBasicProfile(data);
+    if (success) {
       setStep('role');
-    } catch (error) {
-      console.error('OnboardingFlow: Failed to update basic profile', error);
-      toast.error('Could not save profile. Please check your connection.', { id: toastId });
-    } finally {
-      setIsUploading(false);
     }
   };
 
@@ -237,7 +182,7 @@ export default function IndividualOnboardingFlow({
           {step === 'basic-info' && (
             <BasicProfileStep
               onSubmit={handleBasicInfoSubmit}
-              isPending={isUploading || updateProfile.isPending}
+              isPending={isPending}
               onBack={onBack}
             />
           )}

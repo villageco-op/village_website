@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { Loader2, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -12,7 +13,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PageHeader } from '@/components/ui/page-header';
-import { useCreateClient } from '@/lib/api/generated/clients/clients';
+import { getGetClientsQueryKey, useCreateClient } from '@/lib/api/generated/clients/clients';
 import type { Referrer } from '@/lib/api/generated/models';
 
 /**
@@ -21,6 +22,7 @@ import type { Referrer } from '@/lib/api/generated/models';
  */
 export default function NewClientPageClient() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -34,7 +36,13 @@ export default function NewClientPageClient() {
 
   const [selectedReferrer, setSelectedReferrer] = useState<Referrer | null>(null);
 
-  const { mutateAsync: createClient, isPending: isSubmitting } = useCreateClient();
+  const { mutateAsync: createClient, isPending: isSubmitting } = useCreateClient({
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: getGetClientsQueryKey() });
+      },
+    },
+  });
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
