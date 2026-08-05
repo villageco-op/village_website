@@ -107,9 +107,7 @@ export function InviteMembersForm({
         <div className="flex flex-col sm:flex-row gap-3 items-end">
           {/* Email Input */}
           <div className="w-full sm:flex-3 flex flex-col gap-1.5">
-            <Label htmlFor="inviteEmail">
-              Member Email Address
-            </Label>
+            <Label htmlFor="inviteEmail">Member Email Address</Label>
             <Input
               id="inviteEmail"
               type="email"
@@ -123,18 +121,13 @@ export function InviteMembersForm({
 
           {/* Role Select */}
           <div className="w-full sm:w-48 flex flex-col gap-1.5">
-            <Label htmlFor="inviteRole">
-              Permission Role
-            </Label>
+            <Label htmlFor="inviteRole">Permission Role</Label>
             <Select
               value={role}
               onValueChange={(val) => setRole(val as OrgRole)}
               disabled={isInviting}
             >
-              <SelectTrigger
-                id="inviteRole"
-                className="h-9 w-full"
-              >
+              <SelectTrigger id="inviteRole" className="h-9 w-full">
                 <SelectValue placeholder="Role" />
               </SelectTrigger>
               <SelectContent>

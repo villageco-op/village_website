@@ -45,9 +45,7 @@ export default function SellerListingsClient() {
         subtitle={`${activeCount} active · Visible to buyers on the Village marketplace`}
         actions={
           <Button variant="lime" size="sm" className="text-xs font-semibold">
-            <Link href="/seller/new-listing">
-            + New listing
-            </Link>
+            <Link href="/seller/new-listing">+ New listing</Link>
           </Button>
         }
       />

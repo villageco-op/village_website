@@ -103,14 +103,12 @@ export default function ClientsPageClient() {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <PageHeader 
-      title="Clients" 
-      subtitle="View, edit & delete clients and view referrals."
-      actions={
+      <PageHeader
+        title="Clients"
+        subtitle="View, edit & delete clients and view referrals."
+        actions={
           <Button asChild variant="lime" size="sm" className="text-xs font-semibold">
-            <Link href="/org/new-client">
-            + New Client
-            </Link>
+            <Link href="/org/new-client">+ New Client</Link>
           </Button>
         }
       />
