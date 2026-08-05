@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import { AddNewListingCard } from './AddNewListingCard';
 import { ListingCard } from './ListingCard';
 import { ListingsSkeleton } from './ListingsSkeleton';
@@ -43,7 +45,7 @@ export default function SellerListingsClient() {
         subtitle={`${activeCount} active · Visible to buyers on the Village marketplace`}
         actions={
           <Button variant="lime" size="sm" className="text-xs font-semibold">
-            + New listing
+            <Link href="/seller/new-listing">+ New listing</Link>
           </Button>
         }
       />
