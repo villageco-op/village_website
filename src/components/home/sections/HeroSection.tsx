@@ -37,7 +37,7 @@ export default function HeroSection() {
         <div className="flex flex-wrap items-center gap-3 mt-8 lg:mt-10">
           <Button variant="lime" asChild className="px-6 h-14 font-sans text-base font-semibold">
             <Link href="/login">
-              Create Your Free Account <ArrowRight className="ml-2 h-4 w-4" />
+              Join Your Village <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button

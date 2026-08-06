@@ -134,6 +134,6 @@ export const AuthenticatedWithOrg: Story = {
 
     // Verify dashboard link
     const dashboardButton = await canvas.findByRole('link', { name: /Go to Org Dashboard/i });
-    await expect(dashboardButton).toHaveAttribute('href', '/org-dashboard');
+    await expect(dashboardButton).toHaveAttribute('href', '/org/clients');
   },
 };

@@ -18,12 +18,12 @@ describe('checkStandardAuth', () => {
   });
 
   it('redirects unauthenticated users on protected buyer routes', async () => {
-    const redirect = await checkStandardAuth('/buyer/dashboard', false, null);
+    const redirect = await checkStandardAuth('/buyer', false, null);
     expect(redirect).toBe('/buyer/browse');
   });
 
   it('allows access to protected buyer routes if authenticated', async () => {
-    const redirect = await checkStandardAuth('/buyer/dashboard', true, null);
+    const redirect = await checkStandardAuth('/buyer', true, null);
     expect(redirect).toBeNull();
   });
 
@@ -40,6 +40,11 @@ describe('checkStandardAuth', () => {
   it('redirects unauthenticated users on general protected routes like /orders', async () => {
     const redirect = await checkStandardAuth('/orders', false, null);
     expect(redirect).toBe('/');
+  });
+
+  it('redirects /org route to /org/clients', async () => {
+    const redirect = await checkStandardAuth('/org', false, null);
+    expect(redirect).toBe('/org/clients');
   });
 
   describe('/login', () => {
@@ -78,6 +83,28 @@ describe('checkStandardAuth', () => {
       expect(redirect).toBe('/onboarding');
     });
 
+    it('redirects to onboarding with org_invited query param if user has organizationId but onboarding is incomplete', async () => {
+      vi.spyOn(userApi, 'fetchCurrentUser').mockResolvedValue({
+        name: 'Jane Doe',
+        isOnboardingComplete: false,
+        organizationId: 'org_123',
+      } as any);
+
+      const redirect = await checkStandardAuth('/login/success', true, null);
+      expect(redirect).toBe('/onboarding?upgrade=org_invited');
+    });
+
+    it('redirects to /org/clients if onboarding is complete and user has an organizationId', async () => {
+      vi.spyOn(userApi, 'fetchCurrentUser').mockResolvedValue({
+        name: 'Jane Doe',
+        isOnboardingComplete: true,
+        organizationId: 'org_123',
+      } as any);
+
+      const redirect = await checkStandardAuth('/login/success', true, null);
+      expect(redirect).toBe('/org/clients');
+    });
+
     it('redirects to seller dashboard if onboarding is complete and stripe onboarding is complete', async () => {
       vi.spyOn(userApi, 'fetchCurrentUser').mockResolvedValue({
         name: 'Jane Doe',
@@ -86,7 +113,7 @@ describe('checkStandardAuth', () => {
       } as any);
 
       const redirect = await checkStandardAuth('/login/success', true, null);
-      expect(redirect).toBe('/seller/dashboard');
+      expect(redirect).toBe('/seller');
     });
 
     it('redirects to buyer dashboard if onboarding is complete but stripe onboarding is incomplete', async () => {
@@ -97,7 +124,7 @@ describe('checkStandardAuth', () => {
       } as any);
 
       const redirect = await checkStandardAuth('/login/success', true, null);
-      expect(redirect).toBe('/buyer/dashboard');
+      expect(redirect).toBe('/buyer');
     });
   });
 });

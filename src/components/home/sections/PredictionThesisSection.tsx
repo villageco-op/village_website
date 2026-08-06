@@ -35,13 +35,6 @@ export function PredictionThesisSection({
             By analyzing city-wide grocery purchasing data alongside menu sales, our upcoming
             machine learning platform maps local demand correlations to stop waste at the source.
           </p>
-
-          <p className="text-sm text-cream/70 leading-relaxed">
-            Instead of reactive discounting when produce is already turning, the system predicts
-            excess inventory cycles in advance; allowing businesses to dynamically adjust pricing,
-            fine-tune purchasing, or safely donate surplus produce to local pantries before it
-            spoils.
-          </p>
         </div>
 
         {/* Right Column: Call to Action / Data Partner Recruitment Card */}
@@ -57,33 +50,10 @@ export function PredictionThesisSection({
               historical purchasing and waste data leading up to August 2027.
             </p>
 
-            <div className="space-y-3 mb-8">
-              <div className="flex items-start gap-2.5 text-xs text-deep-forest/90">
-                <span className="flex size-5 rounded-full bg-lime text-black font-bold items-center justify-center shrink-0 text-[10px]">
-                  1
-                </span>
-                <span>Share historical & current purchasing/waste logs for model training.</span>
-              </div>
-              <div className="flex items-start gap-2.5 text-xs text-deep-forest/90">
-                <span className="flex size-5 rounded-full bg-lime text-black font-bold items-center justify-center shrink-0 text-[10px]">
-                  2
-                </span>
-                <span>Help test real-world predictive accuracy in a local ecosystem.</span>
-              </div>
-              <div className="flex items-start gap-2.5 text-xs text-deep-forest/90">
-                <span className="flex size-5 rounded-full bg-lime text-black font-bold items-center justify-center shrink-0 text-[10px]">
-                  3
-                </span>
-                <span>
-                  Receive complimentary early access to the paid subscription platform in 2027.
-                </span>
-              </div>
-            </div>
-
             {/* Partner Contact Action */}
             <div className="flex flex-wrap items-center gap-4 pt-2 border-t border-deep-forest/10">
               <Button variant="forest" size="lg" className="w-full sm:w-auto font-bold" asChild>
-                <Link href="/become-data-partner">Become a Data Partner</Link>
+                <Link href="/become-data-partner">Learn More</Link>
               </Button>
               <span className="text-xs text-deep-forest/60">
                 No commitment required. Early trial is free for participating businesses.

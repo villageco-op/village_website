@@ -12,13 +12,28 @@ import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/hooks/useAuth';
 import { cn, getAssetPath } from '@/lib/utils';
 
-const navItems = [
+interface NavItem {
+  name: string;
+  href: string;
+  unAuthOnly?: boolean;
+  orgOnly?: boolean;
+}
+
+const navItems: NavItem[] = [
   { name: 'Home', href: '/', unAuthOnly: true },
-  { name: 'Sell', href: '/seller', unAuthOnly: false },
-  { name: 'Shop', href: '/buyer', unAuthOnly: false },
+  { name: 'Sell', href: '/seller' },
+  { name: 'Shop', href: '/buyer' },
+  { name: 'Org', href: '/org/clients', orgOnly: true },
 ];
 
-const getSecondaryNavItems = (path: string) => {
+interface SecondaryNavItem {
+  name: string;
+  href: string;
+  protected: boolean;
+  adminOnly?: boolean;
+}
+
+const getSecondaryNavItems = (path: string): SecondaryNavItem[] => {
   if (path.startsWith('/buyer')) {
     return [
       { name: 'Dashboard', href: '/buyer', protected: true },
@@ -41,8 +56,9 @@ const getSecondaryNavItems = (path: string) => {
   }
   if (path.startsWith('/org')) {
     return [
-      { name: 'Dashboard', href: '/org', protected: true },
-      { name: 'Members', href: '/org/members', protected: true },
+      { name: 'Clients', href: '/org/clients', protected: true, adminOnly: false },
+      { name: 'Members', href: '/org/members', protected: true, adminOnly: true },
+      { name: 'Learn', href: '/org/tutorials', protected: true, adminOnly: false },
     ];
   }
   return [];
@@ -55,11 +71,15 @@ const getSecondaryNavItems = (path: string) => {
 export function Header() {
   const pathname = usePathname();
   const { user, status } = useAuth();
+
+  const orgUser = !!user?.organizationId;
+  const adminUser = user?.orgRole === 'admin';
+
   const secondaryNavItems = getSecondaryNavItems(pathname).filter(
-    (item) => !item.protected || status == 'authenticated',
+    (item) => (!item.protected || status == 'authenticated') && (!item.adminOnly || adminUser),
   );
   const filteredNavItems = navItems.filter(
-    (item) => !item.unAuthOnly || status == 'unauthenticated',
+    (item) => (!item.unAuthOnly || status == 'unauthenticated') && (!item.orgOnly || orgUser),
   );
 
   const isLoading = status === 'loading';

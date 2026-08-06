@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -50,13 +51,17 @@ export default function EditProfilePage() {
   return (
     <div className="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 bg-off-white">
       <div className="max-w-2xl w-full">
+        <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back
+        </Button>
         <PageHeader title="Edit Profile" />
 
         {/* Tabs Switcher */}
         <div className="flex space-x-6 border-b border-border/20 mb-8">
           <button
             onClick={() => setActiveTab('profile')}
-            className={`pb-3 font-semibold text-sm transition-colors relative ${
+            className={`cursor-pointer pb-3 font-semibold text-sm transition-colors relative ${
               activeTab === 'profile' ? 'text-deep-forest' : 'text-ink-3 hover:text-ink-2'
             }`}
           >
@@ -68,7 +73,7 @@ export default function EditProfilePage() {
           {hasOrg && (
             <button
               onClick={() => setActiveTab('org')}
-              className={`pb-3 font-semibold text-sm transition-colors relative ${
+              className={`cursor-pointer pb-3 font-semibold text-sm transition-colors relative ${
                 activeTab === 'org' ? 'text-deep-forest' : 'text-ink-3 hover:text-ink-2'
               }`}
             >
@@ -80,7 +85,7 @@ export default function EditProfilePage() {
           )}
           <button
             onClick={() => setActiveTab('settings')}
-            className={`pb-3 font-semibold text-sm transition-colors relative ${
+            className={`cursor-pointer pb-3 font-semibold text-sm transition-colors relative ${
               activeTab === 'settings' ? 'text-deep-forest' : 'text-ink-3 hover:text-ink-2'
             }`}
           >

@@ -86,7 +86,7 @@ export default function AddOrganizationClient() {
                 Head over to your organization workspace to manage settings and members.
               </p>
               <Button asChild variant="lime" className="h-11 px-6">
-                <Link href="/org-dashboard">Go to Org Dashboard</Link>
+                <Link href="/org/clients">Go to Org Dashboard</Link>
               </Button>
             </CardContent>
           )}

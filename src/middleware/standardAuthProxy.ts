@@ -44,17 +44,25 @@ export async function checkStandardAuth(
 
     if (user) {
       if (!user.isOnboardingComplete) {
+        if (user.organizationId) return '/onboarding?upgrade=org_invited';
         return '/onboarding';
       }
 
-      if (user.stripeOnboardingComplete) {
-        return '/seller/dashboard';
+      if (!!user.organizationId) {
+        return '/org/clients';
+      } else if (user.stripeOnboardingComplete) {
+        return '/seller';
       } else {
-        return '/buyer/dashboard';
+        return '/buyer';
       }
     }
 
     return '/onboarding';
+  }
+
+  // Temporary base org redirect
+  if (pathname === '/org') {
+    return '/org/clients';
   }
 
   return null;

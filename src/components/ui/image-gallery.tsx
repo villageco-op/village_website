@@ -39,7 +39,7 @@ export function ImageGallery({ images, title, className, imageClassName, width, 
 
   if (images.length === 0) {
     return (
-      <div className={cn("aspect-video flex items-center justify-center bg-slate-100 text-slate-400", className)}>
+      <div className={cn("flex items-center justify-center bg-slate-100 text-slate-400", className)}>
         No Image Available
       </div>
     );
@@ -48,7 +48,7 @@ export function ImageGallery({ images, title, className, imageClassName, width, 
   return (
     <div className={cn("group relative w-full overflow-hidden bg-slate-100", className)}>
       <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
-        <CarouselContent className="ml-0">
+        <CarouselContent className="ml-0 items-start">
           {images.map((src, index) => (
             <CarouselItem key={index} className="relative basis-full pl-0 min-w-0">
               <Image

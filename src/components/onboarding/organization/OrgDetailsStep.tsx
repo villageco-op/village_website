@@ -110,13 +110,13 @@ export default function OrgDetailsStep({ type, onSubmit, onBack, isPending }: Or
         {/* Form Fields */}
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="orgName" className="text-ink-2 font-semibold text-sm">
-              Organization Name <span className="text-red-500">*</span>
+            <Label htmlFor="orgName">
+              Organization Name <span className="text-required">*</span>
             </Label>
             <Input
               id="orgName"
               placeholder="e.g. Gary Food Pantry Network"
-              className="bg-white border-lime/50 focus-visible:ring-click-green h-9"
+              className="h-9"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -134,27 +134,21 @@ export default function OrgDetailsStep({ type, onSubmit, onBack, isPending }: Or
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-ink-2 font-semibold text-sm">
-                Contact Email
-              </Label>
+              <Label htmlFor="email">Contact Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="contact@garypantry.org"
-                className="bg-white border-lime/50 focus-visible:ring-click-green h-9"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="website" className="text-ink-2 font-semibold text-sm">
-                Website
-              </Label>
+              <Label htmlFor="website">Website</Label>
               <Input
                 id="website"
                 placeholder="https://garypantry.org"
-                className="bg-white border-lime/50 focus-visible:ring-click-green h-9"
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
               />
@@ -163,9 +157,7 @@ export default function OrgDetailsStep({ type, onSubmit, onBack, isPending }: Or
 
           {isPantry && (
             <div className="space-y-1.5">
-              <Label htmlFor="maxReferrals" className="text-ink-2 font-semibold text-sm">
-                Client Referral Limit
-              </Label>
+              <Label htmlFor="maxReferrals">Client Referral Limit</Label>
               <p className="text-xs text-ink-3 mt-1 mb-4">
                 The number of referrals a single client is allowed to make.
               </p>
@@ -174,7 +166,7 @@ export default function OrgDetailsStep({ type, onSubmit, onBack, isPending }: Or
                 type="number"
                 min={0}
                 placeholder="e.g. 4"
-                className="bg-white border-lime/50 focus-visible:ring-click-green h-9 max-w-40"
+                className="max-w-40"
                 value={maxReferrals}
                 onChange={(e) => setMaxReferrals(e.target.value)}
               />

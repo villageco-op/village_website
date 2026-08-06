@@ -26,6 +26,7 @@ export interface NavItem {
   badge?: number | string;
   badgeVariant?: 'default' | 'sun';
   protected?: boolean;
+  adminOnly?: boolean;
 }
 
 /**
@@ -103,7 +104,11 @@ export function Sidebar({
   const visibleNavGroups = navGroups
     .map((group) => ({
       ...group,
-      items: group.items.filter((item) => !item.protected || (user !== null && user !== undefined)),
+      items: group.items.filter(
+        (item) =>
+          (!item.protected || (user !== null && user !== undefined)) &&
+          (!item.adminOnly || user?.orgRole === 'admin'),
+      ),
     }))
     .filter((group) => group.items.length > 0);
 

@@ -184,7 +184,6 @@ export default function ClientsExportClient() {
         @media print {
           @page {
             size: landscape;
-            /* Setting margin to 0 suppresses default browser header (title) and footer (URL) */
             margin: 0;
           }
 
@@ -192,7 +191,6 @@ export default function ClientsExportClient() {
             background-color: white !important;
             color: black !important;
             font-size: 9pt !important;
-            /* Add margin/padding to body so content doesn't print against the paper edge */
             padding: 12mm !important;
             width: 100% !important;
           }

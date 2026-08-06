@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { userEvent, within } from '@storybook/test';
 import { http, HttpResponse } from 'msw';
 
+import { OrgSidebar } from '../OrgSidebar';
+
 import ClientsExportClient from './ClientsExportClient';
 
 import type { ClientResponse } from '@/lib/api/generated/models';
@@ -257,4 +259,42 @@ export const MultiPagePagination: Story = {
     const actionButton = canvas.getByRole('button', { name: /print/i });
     await userEvent.click(actionButton);
   },
+};
+
+/**
+ * Layout integration view demonstrating the component rendered alongside the OrgSidebar.
+ */
+export const WithOrgSidebar: Story = {
+  ...IdleInitialState,
+  decorators: [
+    (Story) => (
+      <div className="flex min-h-[calc(100vh-64px)] w-full bg-off-white">
+        <aside className="print:hidden">
+          <OrgSidebar
+            user={
+              {
+                id: 'user-1',
+                email: 'user@example.com',
+                organizationId: 'org-1',
+                role: 'ADMIN',
+              } as any
+            }
+            status="authenticated"
+            org={
+              {
+                id: 'org-1',
+                name: 'Acme Corp',
+              } as any
+            }
+            isLoading={false}
+            isError={false}
+            onRefetch={() => {}}
+          />
+        </aside>
+        <main className="flex-1 px-9 py-8">
+          <Story />
+        </main>
+      </div>
+    ),
+  ],
 };
