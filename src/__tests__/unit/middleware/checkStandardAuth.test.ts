@@ -39,7 +39,7 @@ describe('checkStandardAuth', () => {
 
   it('redirects unauthenticated users on general protected routes like /orders', async () => {
     const redirect = await checkStandardAuth('/orders', false, null);
-    expect(redirect).toBe('/');
+    expect(redirect).toBe('/unauthorized');
   });
 
   it('redirects /org route to /org/clients', async () => {
@@ -53,9 +53,9 @@ describe('checkStandardAuth', () => {
       expect(redirect).toBeNull();
     });
 
-    it('redirects to home if already authenticated', async () => {
+    it('redirects to already-logged-in if already authenticated', async () => {
       const redirect = await checkStandardAuth('/login', true, null);
-      expect(redirect).toBe('/');
+      expect(redirect).toBe('/already-logged-in');
     });
   });
 

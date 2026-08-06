@@ -28,11 +28,11 @@ export async function checkStandardAuth(
   }
 
   if (isGeneralProtectedRoute && !isAuthenticated) {
-    return '/';
+    return '/unauthorized';
   }
 
   if (pathname === '/login' && isAuthenticated) {
-    return '/';
+    return '/already-logged-in';
   }
 
   if (pathname === '/login/success') {
