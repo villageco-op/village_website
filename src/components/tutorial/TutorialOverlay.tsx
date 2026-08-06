@@ -29,7 +29,7 @@ export function TutorialOverlay() {
     nextStep,
     prevStep,
     endTutorial,
-    allowedRoutes,
+    disallowedRoutes,
   } = useTutorial();
   const pathname = usePathname();
   const router = useRouter();
@@ -37,9 +37,9 @@ export function TutorialOverlay() {
 
   if (!activeTutorial || !currentStep) return null;
 
-  const isAllowedPage = allowedRoutes.some((route) => pathname.startsWith(route));
+  const isDisallowedPage = disallowedRoutes.some((route) => pathname.startsWith(route));
 
-  if (!isAllowedPage) return null;
+  if (isDisallowedPage) return null;
 
   const totalSteps = activeTutorial.steps.length;
   const isCorrectPage = pathname === currentStep.targetRoute;

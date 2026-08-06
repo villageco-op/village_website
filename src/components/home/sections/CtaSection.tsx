@@ -18,12 +18,11 @@ export default function CtaSection() {
             align="center"
             hasAfterLine
             eyebrow="Join your village"
-            title={
-              <h2 className="font-heading text-[clamp(2.4rem,4.2vw,3.6rem)] font-extrabold text-cream tracking-[-0.035em] leading-[1.1] mb-10 max-w-170 mx-auto">
-                Your neighborhood is ready. <span className="text-lime">Are you?</span>
-              </h2>
-            }
+            title=""
           />
+          <h1 className="font-heading text-[clamp(2.4rem,4.2vw,3.6rem)] font-extrabold text-cream tracking-[-0.035em] leading-[1.1] mb-10 max-w-170 mx-auto">
+            Your neighborhood is ready. <span className="text-lime">Are you?</span>
+          </h1>
         </div>
 
         {/* Buttons */}

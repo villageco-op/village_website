@@ -67,40 +67,32 @@ export default function SellerInfoStep({
 
       <form onSubmit={handleSubmit} className="space-y-5 noValidate">
         <div className="space-y-2">
-          <Label htmlFor="about" className="text-ink-2 font-semibold">
-            About You
-          </Label>
+          <Label htmlFor="about">About You</Label>
           <Textarea
             id="about"
             placeholder="Tell your community what you grow and why you love it..."
-            className="bg-white border-lime/50 focus-visible:ring-click-green resize-none h-24"
+            className="resize-none h-24"
             value={aboutMe}
             onChange={(e) => setAboutMe(e.target.value)}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="specialties" className="text-ink-2 font-semibold">
-            Specialties (comma separated)
-          </Label>
+          <Label htmlFor="specialties">Specialties (comma separated)</Label>
           <Input
             id="specialties"
             placeholder="e.g. Heirloom Tomatoes, Honey, Sourdough"
-            className="bg-white border-lime/50 focus-visible:ring-click-green"
             value={specialties}
             onChange={(e) => setSpecialties(e.target.value)}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="goal" className="text-ink-2 font-semibold">
-            Weekly Goal ($)
-          </Label>
+          <Label htmlFor="goal">Weekly Goal ($)</Label>
           <Input
             id="goal"
             type="number"
             placeholder="How much would you like to make each week?"
-            className="bg-white border-lime/50 focus-visible:ring-click-green"
             value={goal}
             onChange={(e) => setGoal(e.target.value === '' ? '' : Number(e.target.value))}
           />
@@ -112,23 +104,22 @@ export default function SellerInfoStep({
               id="delivery"
               checked={willDeliver}
               onCheckedChange={(checked) => setWillDeliver(checked as boolean)}
-              className="data-[state=checked]:bg-click-green data-[state=checked]:border-click-green"
             />
-            <Label htmlFor="delivery" className="text-ink-2 font-semibold cursor-pointer">
+            <Label htmlFor="delivery" className="cursor-pointer">
               I am willing to deliver orders myself
             </Label>
           </div>
 
           {willDeliver && (
             <div className="pl-6 animate-in fade-in slide-in-from-top-2">
-              <Label htmlFor="range" className="text-xs text-ink-3 uppercase tracking-wide">
+              <Label htmlFor="range" className="text-xs uppercase tracking-wide">
                 Delivery Range (Miles)
               </Label>
               <Input
                 id="range"
                 type="number"
                 placeholder="e.g. 15"
-                className="bg-white border-lime/50 focus-visible:ring-click-green mt-1 max-w-30"
+                className="mt-1 max-w-30"
                 value={deliveryRangeMiles}
                 onChange={(e) => setDeliveryRangeMiles(Number(e.target.value) || '')}
               />

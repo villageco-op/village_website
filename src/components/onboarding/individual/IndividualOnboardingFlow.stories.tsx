@@ -197,7 +197,7 @@ export const ProfileUpdateError: Story = {
     // Verify that we do NOT progress to the role selection step
     // (the button should revert to normal or stay on the basic info form)
     await delay(600); // Wait for mock network failure
-    const roleHeading = canvas.queryByText(/Welcome to the Village/i);
+    const roleHeading = canvas.queryByText(/Welcome to Your Village/i);
     await expect(roleHeading).toBeInTheDocument(); // We should still be on step 1
   },
 };

@@ -61,7 +61,9 @@ export default function BasicProfileStep({ onSubmit, isPending, onBack }: BasicP
   return (
     <div className="animate-in fade-in slide-in-from-right-8 duration-500">
       <div className="mb-8 text-center">
-        <h2 className="font-heading text-2xl font-bold text-deep-forest">Welcome to the Village</h2>
+        <h2 className="font-heading text-2xl font-bold text-deep-forest">
+          Welcome to Your Village
+        </h2>
         <p className="font-sans text-sm text-ink-3 mt-2">
           Let&apos;s start with the basics to set up your profile.
         </p>
@@ -85,13 +87,12 @@ export default function BasicProfileStep({ onSubmit, isPending, onBack }: BasicP
         {/* Form Fields */}
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-ink-2 font-semibold">
-              Real Name <span className="text-red-500">*</span>
+            <Label htmlFor="name">
+              Real Name <span className="text-required">*</span>
             </Label>
             <Input
               id="name"
               placeholder="e.g. Jane Doe"
-              className="bg-white border-lime/50 focus-visible:ring-click-green"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required

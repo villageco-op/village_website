@@ -45,7 +45,7 @@ const meta: Meta<typeof TutorialOverlay> = {
     (Story) => (
       <TutorialProvider
         tutorials={mockTutorials}
-        allowedRoutes={['/dashboard', '/clients']}
+        disallowedRoutes={['/onboarding/step-1']}
         defaultTutorialId="mock_tutorial"
       >
         <div className="min-h-100 w-full bg-slate-50 relative p-8">

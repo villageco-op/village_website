@@ -9,7 +9,7 @@ interface ReferralFeatureSectionProps {
   images?: string[];
 }
 
-const DEFAULT_IMAGES = [
+const DEFAULT_IMAGES: string[] = [
   getAssetPath('/images/clients-table.png'),
   getAssetPath('/images/client-referrals.png'),
   getAssetPath('/images/clients-export.png'),
@@ -26,6 +26,8 @@ export function ReferralFeatureSection({
   id = 'referral-management',
   images = DEFAULT_IMAGES,
 }: ReferralFeatureSectionProps) {
+  const width = 1200;
+  const height = 750;
   return (
     <section
       id={id}
@@ -49,14 +51,14 @@ export function ReferralFeatureSection({
         </div>
 
         {/* Right Column: Image Gallery */}
-        <div className="lg:col-span-7">
-          <div className="rounded-2xl overflow-hidden border border-deep-forest/10 shadow-2xl">
+        <div className="shrink-0 lg:col-span-7 aspect-21/9">
+          <div className="shrink-0 rounded-2xl overflow-hidden border border-deep-forest/10 shadow-2xl aspect-21/9">
             <ImageGallery
-              imageClassName="object-contain"
+              imageClassName="shrink-0 object-contain aspect-21/9"
               images={images}
               title="Food Pantry Client Referral Management Preview"
-              width={1200}
-              height={750}
+              width={width}
+              height={height}
             />
           </div>
         </div>

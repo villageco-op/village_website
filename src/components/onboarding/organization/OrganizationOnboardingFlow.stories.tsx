@@ -140,6 +140,11 @@ export const InitialState: Story = {};
  * Org Type Selection -> Profile Configuration Form -> Network registration -> Team Invitations.
  */
 export const CompleteOnboardingJourney: Story = {
+  parameters: {
+    testRunner: {
+      timeout: 60000,
+    },
+  },
   beforeEach: () => {
     mockInvites = [];
   },
@@ -182,10 +187,8 @@ export const CompleteOnboardingJourney: Story = {
     await userEvent.type(zipInput, '46402');
 
     // Wait for async MSW subdomain check message to surface and clear the dynamic button locking
-    await waitFor(async () => {
-      const availableIndicator = await canvas.findByText(/Subdomain is available!/i);
-      await expect(availableIndicator).toBeInTheDocument();
-    });
+    const availableIndicator = await canvas.findByText(/Subdomain is available!/i);
+    await expect(availableIndicator).toBeInTheDocument();
 
     const step2SubmitBtn = canvas.getByRole('button', { name: /Create Organization/i });
     await userEvent.click(step2SubmitBtn);

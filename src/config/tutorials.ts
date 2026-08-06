@@ -29,7 +29,7 @@ export enum TutorialCategory {
 /**
  * Routes where the tutorial overlay will show.
  */
-export const ALLOWED_TUTORIAL_ROUTES = ['/dashboard', '/settings', '/projects'];
+export const DISALLOWED_TUTORIAL_ROUTES = ['/onboarding', '/login', '/verify-invite'];
 
 /**
  * Tutorial config object. Contains the full list of tutorials.

@@ -15,9 +15,16 @@ export default function OnboardingFlow() {
   const searchParams = useSearchParams();
   const isUpgradingToSeller = searchParams?.get('upgrade') === 'seller';
   const isUpgradingToOrg = searchParams?.get('upgrade') === 'org';
+  const isInvitedOrgMember = searchParams?.get('upgrade') === 'org_invited';
 
   const [flowType, setFlowType] = useState<'individual' | 'organization' | null>(
-    isUpgradingToSeller ? 'individual' : isUpgradingToOrg ? 'organization' : null,
+    isUpgradingToSeller
+      ? 'individual'
+      : isUpgradingToOrg
+        ? 'organization'
+        : isInvitedOrgMember
+          ? 'individual'
+          : null,
   );
 
   if (flowType === 'individual') {

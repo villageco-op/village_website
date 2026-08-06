@@ -8,7 +8,7 @@ import {
   type Tutorial,
   type TutorialStep,
   TUTORIALS as DEFAULT_TUTORIALS,
-  ALLOWED_TUTORIAL_ROUTES as DEFAULT_ALLOWED_ROUTES,
+  DISALLOWED_TUTORIAL_ROUTES as DEFAULT_DISALLOWED_ROUTES,
 } from '@/config/tutorials';
 
 interface TutorialContextType {
@@ -21,7 +21,7 @@ interface TutorialContextType {
   endTutorial: () => void;
   isOnboardingCompleted: boolean;
   completeOnboarding: () => void;
-  allowedRoutes: string[];
+  disallowedRoutes: string[];
   tutorials: Record<string, Tutorial>;
 }
 
@@ -29,8 +29,8 @@ interface TutorialProviderProps {
   children: React.ReactNode;
   /** Optional custom tutorials map (defaults to config/tutorials) */
   tutorials?: Record<string, Tutorial>;
-  /** Optional allowed routes array (defaults to config/tutorials) */
-  allowedRoutes?: string[];
+  /** Optional disallowed routes array (defaults to config/tutorials) */
+  disallowedRoutes?: string[];
   /** Optional default tutorial key to auto-start for onboarding */
   defaultTutorialId?: string;
 }
@@ -42,14 +42,14 @@ const TutorialContext = createContext<TutorialContextType | undefined>(undefined
  * @param props - Component props
  * @param props.children - Children components
  * @param props.tutorials - Optional tutorial override
- * @param props.allowedRoutes - Optional allowed routes override
+ * @param props.disallowedRoutes - Optional disallowed routes override
  * @param props.defaultTutorialId - Optional defualt tutorial step override
  * @returns The provider wrapping the children
  */
 export function TutorialProvider({
   children,
   tutorials = DEFAULT_TUTORIALS,
-  allowedRoutes = DEFAULT_ALLOWED_ROUTES,
+  disallowedRoutes = DEFAULT_DISALLOWED_ROUTES,
   defaultTutorialId = 'overview',
 }: TutorialProviderProps) {
   const [activeTutorial, setActiveTutorial] = useState<Tutorial | null>(() => {
@@ -167,7 +167,7 @@ export function TutorialProvider({
         endTutorial,
         isOnboardingCompleted,
         completeOnboarding,
-        allowedRoutes,
+        disallowedRoutes,
         tutorials,
       }}
     >

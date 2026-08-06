@@ -36,14 +36,16 @@ export default function OrgLayout({
   return (
     <AuthGuard user={user} status={status} requireOrganization>
       <div className="flex min-h-[calc(100vh-64px)] w-full bg-off-white">
-        <OrgSidebar
-          user={user}
-          status={status}
-          org={org}
-          isLoading={isLoading}
-          isError={orgError}
-          onRefetch={() => void refetch()}
-        />
+        <aside className="print:hidden">
+          <OrgSidebar
+            user={user}
+            status={status}
+            org={org}
+            isLoading={isLoading}
+            isError={orgError}
+            onRefetch={() => void refetch()}
+          />
+        </aside>
         <main className="flex-1 px-9 py-8">{children}</main>
       </div>
     </AuthGuard>
