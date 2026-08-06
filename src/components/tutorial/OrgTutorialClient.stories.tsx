@@ -44,11 +44,7 @@ const meta: Meta<typeof OrgTutorialClient> = {
   },
   decorators: [
     (Story) => (
-      <TutorialProvider
-        tutorials={mockTutorials}
-        allowedRoutes={['/dashboard', '/clients', '/tutorials']}
-        defaultTutorialId="mock_tutorial"
-      >
+      <TutorialProvider tutorials={mockTutorials} defaultTutorialId="mock_tutorial">
         <div className="min-h-125 w-full bg-background relative p-4">
           <Story />
           <TutorialOverlay />
@@ -96,7 +92,7 @@ export const StartSelectedTutorialFlow: Story = {
 export const DefaultTutorials: Story = {
   decorators: [
     (Story) => (
-      <TutorialProvider allowedRoutes={['/dashboard', '/clients', '/tutorials']}>
+      <TutorialProvider>
         <div className="min-h-125 w-full bg-background relative p-4">
           <Story />
           <TutorialOverlay />
