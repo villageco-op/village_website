@@ -30,9 +30,8 @@ const DEFUALT_NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: 'Settings & Support',
+    label: 'Support',
     items: [
-      { name: 'Settings', sub: '', icon: Settings, href: '/settings', protected: true },
       { name: 'Get Help', sub: '', icon: MessageCircle, href: '/org/help', protected: true },
       {
         name: 'Tutorials',
