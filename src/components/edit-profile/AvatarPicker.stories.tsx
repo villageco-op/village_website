@@ -51,7 +51,7 @@ export const WithValue: Story = {
 
     await expect(canvas.getByText('Change Avatar')).toBeInTheDocument();
 
-    const img = canvas.getByAltText('Profile avatar preview');
+    const img = canvas.getByAltText('Profile Image');
     await expect(img).toBeInTheDocument();
   },
 };
