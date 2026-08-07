@@ -37,6 +37,7 @@ interface SellerInfoData {
 
 interface IndividualOnboardingFlowProps {
   isUpgradingToSeller: boolean;
+  isInvitedOrgMember: boolean;
   onBack: () => void;
 }
 
@@ -44,11 +45,14 @@ interface IndividualOnboardingFlowProps {
  * The client component for the onboarding page. Walks through the steps and submits the data.
  * @param props - Component props
  * @param props.isUpgradingToSeller - Indicates this is an buyer returning to become a seller
+ * @param props.isInvitedOrgMember - Indicates this is an org member that is returning to
+ * complete individual onboarding
  * @param props.onBack - When the back button is pressed
  * @returns The component for the full on boarding flow
  */
 export default function IndividualOnboardingFlow({
   isUpgradingToSeller,
+  isInvitedOrgMember,
   onBack,
 }: IndividualOnboardingFlowProps) {
   const router = useRouter();
@@ -154,7 +158,9 @@ export default function IndividualOnboardingFlow({
 
   const STEPS_ORDER: Step[] = isUpgradingToSeller
     ? ['seller-info', 'notifications', 'seller-success']
-    : ['basic-info', 'role', 'seller-info', 'notifications', 'seller-success'];
+    : isInvitedOrgMember
+      ? ['basic-info', 'notifications']
+      : ['basic-info', 'role', 'seller-info', 'notifications', 'seller-success'];
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-off-white py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">

@@ -45,7 +45,7 @@ describe('proxy main function', () => {
 
       await proxy(req);
 
-      expect(checkStandardAuth).toHaveBeenCalledWith('/buyer/browse', true, null);
+      expect(checkStandardAuth).toHaveBeenCalledWith('/buyer/browse', '', true, null);
       expect(NextResponse.next).toHaveBeenCalled();
     });
 
@@ -59,7 +59,7 @@ describe('proxy main function', () => {
 
       const res = await proxy(req);
 
-      expect(checkStandardAuth).toHaveBeenCalledWith('/buyer/dashboard', false, 'session=123');
+      expect(checkStandardAuth).toHaveBeenCalledWith('/buyer/dashboard', '', false, 'session=123');
       expect(NextResponse.redirect).toHaveBeenCalled();
       expect(res.status).toBe(307);
       expect(res.headers.get('location')).toBe('http://localhost:3000/buyer/browse');

@@ -13,62 +13,62 @@ describe('checkStandardAuth', () => {
   });
 
   it('allows access to unprotected buyer routes without auth', async () => {
-    const redirect = await checkStandardAuth('/buyer/browse', false, null);
+    const redirect = await checkStandardAuth('/buyer/browse', '', false, null);
     expect(redirect).toBeNull();
   });
 
   it('redirects unauthenticated users on protected buyer routes', async () => {
-    const redirect = await checkStandardAuth('/buyer', false, null);
+    const redirect = await checkStandardAuth('/buyer', '', false, null);
     expect(redirect).toBe('/buyer/browse');
   });
 
   it('allows access to protected buyer routes if authenticated', async () => {
-    const redirect = await checkStandardAuth('/buyer', true, null);
+    const redirect = await checkStandardAuth('/buyer', '', true, null);
     expect(redirect).toBeNull();
   });
 
   it('redirects unauthenticated users on seller routes', async () => {
-    const redirect = await checkStandardAuth('/seller/inventory', false, null);
+    const redirect = await checkStandardAuth('/seller/inventory', '', false, null);
     expect(redirect).toBe('/become-seller');
   });
 
   it('allows access to seller routes if authenticated', async () => {
-    const redirect = await checkStandardAuth('/seller/inventory', true, null);
+    const redirect = await checkStandardAuth('/seller/inventory', '', true, null);
     expect(redirect).toBeNull();
   });
 
   it('redirects unauthenticated users on general protected routes like /orders', async () => {
-    const redirect = await checkStandardAuth('/orders', false, null);
-    expect(redirect).toBe('/unauthorized');
+    const redirect = await checkStandardAuth('/orders', '', false, null);
+    expect(redirect).toBe('/login?callbackUrl=%2Forders');
   });
 
   it('redirects /org route to /org/clients', async () => {
-    const redirect = await checkStandardAuth('/org', false, null);
+    const redirect = await checkStandardAuth('/org', '', false, null);
     expect(redirect).toBe('/org/clients');
   });
 
   describe('/login', () => {
     it('allows access to login page if unauthenticated', async () => {
-      const redirect = await checkStandardAuth('/login', false, null);
+      const redirect = await checkStandardAuth('/login', '', false, null);
       expect(redirect).toBeNull();
     });
 
     it('redirects to already-logged-in if already authenticated', async () => {
-      const redirect = await checkStandardAuth('/login', true, null);
+      const redirect = await checkStandardAuth('/login', '', true, null);
       expect(redirect).toBe('/already-logged-in');
     });
   });
 
   describe('/login/success', () => {
     it('redirects to home if unauthenticated', async () => {
-      const redirect = await checkStandardAuth('/login/success', false, null);
+      const redirect = await checkStandardAuth('/login/success', '', false, null);
       expect(redirect).toBe('/');
     });
 
     it('redirects to onboarding if user profile fetch fails (returns null)', async () => {
       vi.spyOn(userApi, 'fetchCurrentUser').mockResolvedValue(null as any);
 
-      const redirect = await checkStandardAuth('/login/success', true, 'mock-cookie');
+      const redirect = await checkStandardAuth('/login/success', '', true, 'mock-cookie');
       expect(userApi.fetchCurrentUser).toHaveBeenCalledWith('mock-cookie');
       expect(redirect).toBe('/onboarding');
     });
@@ -79,7 +79,7 @@ describe('checkStandardAuth', () => {
         isOnboardingComplete: false,
       } as any);
 
-      const redirect = await checkStandardAuth('/login/success', true, null);
+      const redirect = await checkStandardAuth('/login/success', '', true, null);
       expect(redirect).toBe('/onboarding');
     });
 
@@ -90,7 +90,7 @@ describe('checkStandardAuth', () => {
         organizationId: 'org_123',
       } as any);
 
-      const redirect = await checkStandardAuth('/login/success', true, null);
+      const redirect = await checkStandardAuth('/login/success', '', true, null);
       expect(redirect).toBe('/onboarding?upgrade=org_invited');
     });
 
@@ -101,7 +101,7 @@ describe('checkStandardAuth', () => {
         organizationId: 'org_123',
       } as any);
 
-      const redirect = await checkStandardAuth('/login/success', true, null);
+      const redirect = await checkStandardAuth('/login/success', '', true, null);
       expect(redirect).toBe('/org/clients');
     });
 
@@ -112,7 +112,7 @@ describe('checkStandardAuth', () => {
         isOnboardingComplete: true,
       } as any);
 
-      const redirect = await checkStandardAuth('/login/success', true, null);
+      const redirect = await checkStandardAuth('/login/success', '', true, null);
       expect(redirect).toBe('/seller');
     });
 
@@ -123,7 +123,7 @@ describe('checkStandardAuth', () => {
         isOnboardingComplete: true,
       } as any);
 
-      const redirect = await checkStandardAuth('/login/success', true, null);
+      const redirect = await checkStandardAuth('/login/success', '', true, null);
       expect(redirect).toBe('/buyer');
     });
   });
