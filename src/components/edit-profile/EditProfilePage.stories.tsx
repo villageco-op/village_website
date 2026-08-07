@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect, userEvent } from '@storybook/test';
+import { expect, userEvent, within } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { http, HttpResponse, delay } from 'msw';
+import { HttpResponse, delay, http } from 'msw';
 
 import EditProfilePage from './EditProfilePage';
+
+import { OrgType } from '@/lib/api/generated/models';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -37,6 +39,39 @@ const MOCK_USER_DATA = {
   updatedAt: null,
 };
 
+const MOCK_ORG_ADMIN_USER = {
+  ...MOCK_USER_DATA,
+  organizationId: 'org_123',
+  orgRole: 'admin',
+};
+
+const MOCK_ORG_MEMBER_USER = {
+  ...MOCK_USER_DATA,
+  organizationId: 'org_123',
+  orgRole: 'member',
+};
+
+const MOCK_ORGANIZATION = {
+  id: 'org_123',
+  type: OrgType.pantry,
+  name: 'Community Food Bank',
+  subdomain: 'community-food-bank',
+  email: 'contact@communityfoodbank.org',
+  website: 'https://communityfoodbank.org',
+  phone: '555-0199',
+  image: null,
+  address: '100 Main St',
+  city: 'Springfield',
+  state: 'IL',
+  country: 'United States',
+  zip: '62701',
+  lat: 39.7817,
+  lng: -89.6501,
+  maxReferrals: 4,
+  createdAt: '2026-01-01T00:00:00.000Z',
+  updatedAt: '2026-01-01T00:00:00.000Z',
+};
+
 // Standard CRUD handlers used across the rendering subcomponents
 const childComponentHandlers = [
   http.post('*/api/upload/image', () => {
@@ -57,6 +92,19 @@ const childComponentHandlers = [
   }),
   http.delete('*/api/users/account', () => {
     return HttpResponse.json({ success: true }, { status: 200 });
+  }),
+  // Organization endpoints
+  http.get('*/api/organizations/org_123', () => {
+    return HttpResponse.json(MOCK_ORGANIZATION, { status: 200 });
+  }),
+  http.put('*/api/organizations/org_123', () => {
+    return HttpResponse.json({ ...MOCK_ORGANIZATION }, { status: 200 });
+  }),
+  http.delete('*/api/organizations/org_123', () => {
+    return HttpResponse.json({ success: true }, { status: 200 });
+  }),
+  http.post('*/api/users/me/org/leave', () => {
+    return HttpResponse.json({ data: { success: true }, status: 200 });
   }),
 ];
 
@@ -172,6 +220,88 @@ export const AuthenticatedSeller: Story = {
     // Verify subform injection blocks are active
     await expect(await canvas.findByText('Seller Details')).toBeInTheDocument();
     await expect(canvas.getByLabelText(/Weekly Goal \(\$\)/i)).toHaveValue(250);
+  },
+};
+
+/**
+ * Authenticated User with Org Admin Role. Shows Organization tab with editing controls.
+ */
+export const AuthenticatedOrgAdmin: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        ...childComponentHandlers,
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_ORG_ADMIN_USER,
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await canvas.findByRole('heading', { name: 'Edit Profile', level: 1 });
+
+    // Organization tab should be visible
+    const orgTabButton = canvas.getByRole('button', { name: /^Organization$/i });
+    await expect(orgTabButton).toBeInTheDocument();
+    await userEvent.click(orgTabButton);
+
+    // Admin should see form inputs and edit capability
+    await expect(await canvas.findByLabelText(/Organization Name/i)).toHaveValue(
+      'Community Food Bank',
+    );
+    await expect(canvas.getByRole('button', { name: /Save Changes/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: /Leave Organization/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: /Delete Organization/i })).toBeInTheDocument();
+  },
+};
+
+/**
+ * Authenticated User with Org Member Role. Shows Organization tab in read-only mode.
+ */
+export const AuthenticatedOrgMember: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        ...childComponentHandlers,
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_ORG_MEMBER_USER,
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await canvas.findByRole('heading', { name: 'Edit Profile', level: 1 });
+
+    // Organization tab should be visible
+    const orgTabButton = canvas.getByRole('button', { name: /^Organization$/i });
+    await expect(orgTabButton).toBeInTheDocument();
+    await userEvent.click(orgTabButton);
+
+    // Member should see read-only banner and text displays
+    await expect(
+      await canvas.findByText('Only organization admins can edit organization settings.'),
+    ).toBeInTheDocument();
+    await expect(canvas.getByText('Community Food Bank')).toBeInTheDocument();
+
+    // Member should NOT see editable inputs or delete organization button
+    await expect(canvas.queryByLabelText(/Organization Name/i)).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('button', { name: /Save Changes/i })).not.toBeInTheDocument();
+    await expect(
+      canvas.queryByRole('button', { name: /Delete Organization/i }),
+    ).not.toBeInTheDocument();
+
+    // Member CAN see Leave Organization option
+    await expect(canvas.getByRole('button', { name: /Leave Organization/i })).toBeInTheDocument();
   },
 };
 

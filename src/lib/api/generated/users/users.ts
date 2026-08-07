@@ -468,6 +468,96 @@ export function useGetCurrentUserOrganization<TData = Awaited<ReturnType<typeof 
 
 
 /**
+ * Leave current organization by clearing organizationId and orgRole.
+ */
+export type leaveOrganizationResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type leaveOrganizationResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type leaveOrganizationResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type leaveOrganizationResponseSuccess = (leaveOrganizationResponse200) & {
+  headers: Headers;
+};
+export type leaveOrganizationResponseError = (leaveOrganizationResponse401 | leaveOrganizationResponse404) & {
+  headers: Headers;
+};
+
+export type leaveOrganizationResponse = (leaveOrganizationResponseSuccess | leaveOrganizationResponseError)
+
+export const getLeaveOrganizationUrl = () => {
+
+
+  
+
+  return `/api/users/me/org/leave`
+}
+
+export const leaveOrganization = async ( options?: RequestInit): Promise<leaveOrganizationResponse> => {
+  
+  return apiClient<leaveOrganizationResponse>(getLeaveOrganizationUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+);}
+  
+
+
+
+export const getLeaveOrganizationMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof leaveOrganization>>, TError,void, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof leaveOrganization>>, TError,void, TContext> => {
+
+const mutationKey = ['leaveOrganization'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof leaveOrganization>>, void> = () => {
+          
+
+          return  leaveOrganization(requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LeaveOrganizationMutationResult = NonNullable<Awaited<ReturnType<typeof leaveOrganization>>>
+    
+    export type LeaveOrganizationMutationError = ErrorResponse
+
+    export const useLeaveOrganization = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof leaveOrganization>>, TError,void, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof leaveOrganization>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getLeaveOrganizationMutationOptions(options), queryClient);
+    }
+    /**
  * Store the user's Firebase Cloud Messaging token for push notifications.
  */
 export type registerFcmTokenResponse200 = {

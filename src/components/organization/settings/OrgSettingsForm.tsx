@@ -1,13 +1,18 @@
-import { Loader2, Trash2 } from 'lucide-react';
+'use client';
+
+import { Loader2, LogOut, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { DeleteOrganizationDialog } from './DeleteConfirmationDialog';
+import { LeaveOrganizationDialog } from './LeaveOrganizationDialog';
 import { SubdomainInput } from './SubdomainInput';
 
 import { AddressFormFields } from '@/components/edit-profile/AddressFormFields';
 import { AvatarPicker } from '@/components/edit-profile/AvatarPicker';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SecondaryHeader } from '@/components/ui/secondary-header';
@@ -18,6 +23,7 @@ import {
   useDeleteOrganization,
 } from '@/lib/api/generated/organizations/organizations';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
+import { useLeaveOrganization } from '@/lib/api/generated/users/users';
 
 interface OrgSettingsFormProps {
   orgData: Organization | null;
@@ -25,6 +31,7 @@ interface OrgSettingsFormProps {
   user: User;
   refetchOrg: () => void;
   onDeleteOrganization: () => void;
+  onLeaveOrganization?: () => void;
 }
 
 /**
@@ -35,6 +42,7 @@ interface OrgSettingsFormProps {
  * @param props.user - The current user
  * @param props.refetchOrg - Refetch the organization data
  * @param props.onDeleteOrganization - When the delete org button is pressed
+ * @param props.onLeaveOrganization - When the leave org button is pressed
  * @returns A form with inputs and query management
  */
 export default function OrgSettingsForm({
@@ -43,7 +51,10 @@ export default function OrgSettingsForm({
   user,
   refetchOrg,
   onDeleteOrganization,
+  onLeaveOrganization,
 }: OrgSettingsFormProps) {
+  const isAdmin = user?.orgRole?.toLowerCase() === 'admin';
+
   const [name, setName] = useState(orgData?.name || '');
   const [subdomain, setSubdomain] = useState(orgData?.subdomain || '');
   const [isSubdomainValid, setIsSubdomainValid] = useState(true);
@@ -62,11 +73,14 @@ export default function OrgSettingsForm({
   );
   const [currentAvatar, setCurrentAvatar] = useState(orgData?.image || null);
   const [imageFile, setImageFile] = useState<File | null>(null);
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
 
   const updateOrgMutation = useUpdateOrganization();
   const deleteOrgMutation = useDeleteOrganization();
+  const leaveOrgMutation = useLeaveOrganization();
   const uploadImageMutation = useUploadImage();
   const geocodeAddressMutation = useGeocodeAddress();
 
@@ -74,7 +88,7 @@ export default function OrgSettingsForm({
 
   const handleUpdateOrganization = async (e: React.SubmitEvent) => {
     e.preventDefault();
-    if (!orgId) return;
+    if (!orgId || !isAdmin) return;
 
     const isValid =
       name.trim() !== '' &&
@@ -114,7 +128,6 @@ export default function OrgSettingsForm({
     }
 
     const { lat, lng } = geocodeRes.data;
-
     const parsedMaxReferrals = maxReferrals !== '' ? Number.parseInt(maxReferrals, 10) : undefined;
 
     try {
@@ -156,132 +169,241 @@ export default function OrgSettingsForm({
     }
   };
 
+  const handleLeaveOrganization = async () => {
+    try {
+      const res = await leaveOrgMutation.mutateAsync();
+      if (res.status === 200) {
+        toast.success('You have left the organization.');
+        setShowLeaveModal(false);
+        if (onLeaveOrganization) {
+          onLeaveOrganization();
+        } else {
+          onDeleteOrganization();
+        }
+      } else {
+        toast.error('Failed to leave organization.');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('An error occurred while leaving the organization.');
+    }
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <SecondaryHeader
         title="Organization Details"
-        subtitle="Manage visual identity, address, and subdomain."
+        subtitle={isAdmin ? 'Manage visual identity, address, and subdomain.' : ''}
       />
 
-      <form onSubmit={(e) => void handleUpdateOrganization(e)} className="space-y-5">
-        <AvatarPicker
-          label="Update Profile Photo"
-          value={currentAvatar}
-          onChange={(preview, file) => {
-            if (!file) return;
+      {!isAdmin && (
+        <div className="p-4 border border-amber-200 bg-amber-50 rounded-lg text-amber-800 text-sm">
+          Only organization admins can edit organization settings.
+        </div>
+      )}
 
-            setCurrentAvatar(preview);
-            setImageFile(file);
-          }}
-        />
-
-        {/* Organization Form Controls */}
-        <div className="space-y-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="orgName">
-              Organization Name <span className="text-required">*</span>
-            </Label>
-            <Input
-              id="orgName"
-              key={name}
-              placeholder="Enter your organizations name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-
-          <SubdomainInput
-            value={subdomain}
-            onChange={setSubdomain}
-            originalValue={orgData?.subdomain}
-            onValidityChange={setIsSubdomainValid}
-            required
+      {isAdmin ? (
+        <form onSubmit={(e) => void handleUpdateOrganization(e)} className="space-y-5">
+          <AvatarPicker
+            label="Update Profile Photo"
+            value={currentAvatar}
+            onChange={(preview, file) => {
+              if (!file) return;
+              setCurrentAvatar(preview);
+              setImageFile(file);
+            }}
           />
 
-          <AddressFormFields value={addressInfo} onChange={setAddressInfo} required />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="email">Contact Email</Label>
+              <Label htmlFor="orgName">
+                Organization Name <span className="text-required">*</span>
+              </Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="contact@garypantry.org"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="orgName"
+                key={name}
+                placeholder="Enter your organization's name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
               />
             </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="website">Website</Label>
-              <Input
-                id="website"
-                placeholder="https://garypantry.org"
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
-              />
+            <SubdomainInput
+              value={subdomain}
+              onChange={setSubdomain}
+              originalValue={orgData?.subdomain}
+              onValidityChange={setIsSubdomainValid}
+              required
+            />
+
+            <AddressFormFields value={addressInfo} onChange={setAddressInfo} required />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="email">Contact Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="contact@garypantry.org"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="website">Website</Label>
+                <Input
+                  id="website"
+                  placeholder="https://garypantry.org"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </div>
             </div>
+
+            {isPantry && (
+              <div className="space-y-1.5">
+                <Label htmlFor="maxReferrals">Client Referral Limit</Label>
+                <p className="text-xs text-ink-3 mt-1 mb-4">
+                  The number of referrals a single client is allowed to make.
+                </p>
+                <Input
+                  id="maxReferrals"
+                  type="number"
+                  min={0}
+                  placeholder="e.g. 4"
+                  className="max-w-40"
+                  value={maxReferrals}
+                  onChange={(e) => setMaxReferrals(e.target.value)}
+                />
+              </div>
+            )}
           </div>
 
-          {isPantry && (
-            <div className="space-y-1.5">
-              <Label htmlFor="maxReferrals">Client Referral Limit</Label>
-              <p className="text-xs text-ink-3 mt-1 mb-4">
-                The number of referrals a single client is allowed to make.
-              </p>
-              <Input
-                id="maxReferrals"
-                type="number"
-                min={0}
-                placeholder="e.g. 4"
-                className="max-w-40"
-                value={maxReferrals}
-                onChange={(e) => setMaxReferrals(e.target.value)}
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="pt-4 border-t border-border/10 flex justify-end">
-          <Button
-            type="submit"
-            disabled={updateOrgMutation.isPending || !isSubdomainValid}
-            variant="lime"
-          >
-            {updateOrgMutation.isPending ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving Changes...
-              </>
-            ) : (
-              'Save Changes'
+          <div className="pt-4 border-t border-border/10 flex justify-end">
+            <Button
+              type="submit"
+              disabled={updateOrgMutation.isPending || !isSubdomainValid}
+              variant="lime"
+            >
+              {updateOrgMutation.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving Changes...
+                </>
+              ) : (
+                'Save Changes'
+              )}
+            </Button>
+          </div>
+        </form>
+      ) : (
+        /* Non-Admin Read-Only View */
+        <Card>
+          <CardContent className="space-y-6">
+            {orgData?.image && (
+              <div className="w-16 h-16 flex items-center space-x-4">
+                <Image
+                  src={orgData.image}
+                  alt={orgData.name}
+                  className="w-16 h-16 rounded-full object-cover border"
+                  width="16"
+                  height="16"
+                  priority
+                />
+              </div>
             )}
-          </Button>
-        </div>
-      </form>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="text-xs text-ink-3 font-medium block">Name</span>
+                <p className="text-ink-1 font-medium">{orgData?.name || '—'}</p>
+              </div>
+
+              <div>
+                <span className="text-xs text-ink-3 font-medium block">Subdomain</span>
+                <p className="text-ink-1 font-medium">{orgData?.subdomain || '—'}</p>
+              </div>
+
+              <div className="sm:col-span-2">
+                <span className="text-xs text-ink-3 font-medium block">Address</span>
+                <p className="text-ink-1 font-medium">
+                  {[orgData?.address, orgData?.city, orgData?.state, orgData?.zip]
+                    .filter(Boolean)
+                    .join(', ') || '—'}
+                </p>
+              </div>
+
+              <div>
+                <span className="text-xs text-ink-3 font-medium block">Contact Email</span>
+                <p className="text-ink-1 font-medium">{orgData?.email || '—'}</p>
+              </div>
+
+              <div>
+                <span className="text-xs text-ink-3 font-medium block">Website</span>
+                <p className="text-ink-1 font-medium">{orgData?.website || '—'}</p>
+              </div>
+
+              {isPantry && (
+                <div>
+                  <span className="text-xs text-ink-3 font-medium block">
+                    Client Referral Limit
+                  </span>
+                  <p className="text-ink-1 font-medium">{orgData?.maxReferrals ?? '—'}</p>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <hr className="border-t border-border/20" />
+      <Card className="space-y-6">
+        <CardContent>
+          <div>
+            <h3 className="font-semibold text-ink-1 text-lg">Organization Management</h3>
+            <p className="text-sm text-ink-3 mb-4">
+              Revoke your access to this organization and its associated resources.
+            </p>
+            <Button type="button" variant="secondary" onClick={() => setShowLeaveModal(true)}>
+              <LogOut className="w-4 h-4 mr-2" /> Leave Organization
+            </Button>
+          </div>
 
-      {/* Danger Zone */}
-      <div className="pt-8 mt-8">
-        <h3 className="font-semibold text-red-600 text-lg">Danger Zone</h3>
-        <p className="text-sm text-ink-3 mb-4">
-          Deleting this organization is permanent. All settings, inventories, lists, and connected
-          data will be removed. This cannot be undone.
-        </p>
-        <Button type="button" variant="destructive" onClick={() => setShowDeleteModal(true)}>
-          <Trash2 className="w-4 h-4 mr-2" /> Delete Organization
-        </Button>
-      </div>
+          {/* Admin Danger Zone */}
+          {isAdmin && (
+            <div className="pt-4 border-t border-border/10">
+              <h3 className="font-semibold text-red-600 text-lg">Danger Zone</h3>
+              <p className="text-sm text-ink-3 mb-4">
+                Deleting this organization is permanent. All settings, inventories, lists, and
+                connected data will be removed. This cannot be undone.
+              </p>
+              <Button type="button" variant="destructive" onClick={() => setShowDeleteModal(true)}>
+                <Trash2 className="w-4 h-4 mr-2" /> Delete Organization
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
-      <DeleteOrganizationDialog
-        isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
-        onConfirm={handleDeleteOrganization}
-        onConfirmTextChanged={setDeleteConfirmText}
-        isPending={deleteOrgMutation.isPending}
-        organizationName={orgData?.name || ''}
+      <LeaveOrganizationDialog
+        isOpen={showLeaveModal}
+        onClose={() => setShowLeaveModal(false)}
+        onConfirm={handleLeaveOrganization}
+        isPending={leaveOrgMutation.isPending}
+        organizationName={orgData?.name}
       />
+
+      {isAdmin && (
+        <DeleteOrganizationDialog
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={handleDeleteOrganization}
+          onConfirmTextChanged={setDeleteConfirmText}
+          isPending={deleteOrgMutation.isPending}
+          organizationName={orgData?.name || ''}
+        />
+      )}
     </div>
   );
 }

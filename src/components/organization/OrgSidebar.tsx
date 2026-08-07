@@ -5,7 +5,6 @@ import {
   Printer,
   IdCardLanyard,
   MessageCircle,
-  Settings,
   UserPlus,
   Users,
 } from 'lucide-react';

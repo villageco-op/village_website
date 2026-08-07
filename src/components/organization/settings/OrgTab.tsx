@@ -10,6 +10,7 @@ import { useGetOrganization } from '@/lib/api/generated/organizations/organizati
 interface OrgTabProps {
   user: User;
   onDeleteOrganization: () => void;
+  onLeaveOrganization: () => void;
 }
 
 /**
@@ -18,9 +19,10 @@ interface OrgTabProps {
  * @param props - Component props
  * @param props.user - The current user
  * @param props.onDeleteOrganization - When delete org is pressed
+ * @param props.onLeaveOrganization - When leave org is pressed
  * @returns A form component
  */
-export default function OrgTab({ user, onDeleteOrganization }: OrgTabProps) {
+export default function OrgTab({ user, onDeleteOrganization, onLeaveOrganization }: OrgTabProps) {
   const orgId = user?.organizationId;
 
   const {
@@ -49,6 +51,7 @@ export default function OrgTab({ user, onDeleteOrganization }: OrgTabProps) {
       user={user}
       refetchOrg={() => void refetchOrg()}
       onDeleteOrganization={onDeleteOrganization}
+      onLeaveOrganization={onLeaveOrganization}
     />
   );
 }
