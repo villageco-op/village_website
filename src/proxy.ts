@@ -11,7 +11,7 @@ import { checkStandardAuth } from './middleware/standardAuthProxy';
  */
 export async function proxy(request: NextRequest) {
   const url = request.nextUrl;
-  const { pathname } = url;
+  const { pathname, search } = url;
   const hostname = request.headers.get('host') || '';
   const isAuthenticated = hasSessionToken(request);
   const cookieHeader = request.headers.get('cookie');
@@ -38,7 +38,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const standardRedirect = await checkStandardAuth(pathname, isAuthenticated, cookieHeader);
+  const standardRedirect = await checkStandardAuth(pathname, search, isAuthenticated, cookieHeader);
   if (standardRedirect) {
     return NextResponse.redirect(new URL(standardRedirect, request.url));
   }

@@ -31,6 +31,7 @@ export default function OnboardingFlow() {
     return (
       <IndividualOnboardingFlow
         isUpgradingToSeller={isUpgradingToSeller}
+        isInvitedOrgMember={isInvitedOrgMember}
         onBack={() => setFlowType(null)}
       />
     );

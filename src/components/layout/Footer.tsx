@@ -17,7 +17,7 @@ const FOOTER_LINKS = [
       { label: 'Food pantries', href: '/#referral-management' },
       { label: 'Restaurants & markets', href: '/#demand-prediction-research' },
       { label: 'Join an organization', href: '/join-org' },
-      { label: 'Register your organization', href: '/login' },
+      { label: 'Register your organization', href: '/onboarding?upgrade=org' },
     ],
   },
   {

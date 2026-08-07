@@ -43,7 +43,11 @@ export function AuthGuard({
 
     if (user && pathname !== '/onboarding') {
       if (!user.isOnboardingComplete) {
-        router.replace('/onboarding');
+        if (user.organizationId) {
+          router.replace('/onboarding?upgrade=org_invited');
+        } else {
+          router.replace('/onboarding');
+        }
       }
     }
 

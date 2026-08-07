@@ -54,7 +54,7 @@ export function AvatarPicker({ label, value, onChange }: AvatarPickerProps) {
         {value ? (
           <Image
             src={value}
-            alt="Profile avatar preview"
+            alt="Profile Image"
             fill
             className="object-cover"
             sizes="80px"

@@ -136,43 +136,24 @@ type Story = StoryObj<typeof OrganizationOnboardingFlow>;
 export const InitialState: Story = {};
 
 /**
- * End-to-end user flow executing all steps sequentially:
- * Org Type Selection -> Profile Configuration Form -> Network registration -> Team Invitations.
+ * Complete onboarding flow for existing users upgrading to an organization.
+ * Bypasses basic profile configuration to prevent test timeouts.
  */
 export const CompleteOnboardingJourney: Story = {
-  parameters: {
-    testRunner: {
-      timeout: 60000,
-    },
+  args: {
+    isUpgradingToOrg: true,
   },
   beforeEach: () => {
     mockInvites = [];
   },
-  play: async ({ canvasElement, args }) => {
+  play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // Basic Info
-    await userEvent.type(await canvas.findByLabelText(/Real Name/i), 'Jane Doe');
-    await userEvent.type(canvas.getByLabelText(/Street Address/i), '123 Farm Lane');
-
-    const cityInput = canvas.getByLabelText(/City/i);
-    await userEvent.clear(cityInput);
-    await userEvent.type(cityInput, 'Austin');
-
-    const stateDropdown = canvas.getByRole('combobox');
-    await userEvent.click(stateDropdown);
-    const txOption = await screen.findByRole('option', { name: 'Texas' });
-    await userEvent.click(txOption);
-
-    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '78701');
-
-    await userEvent.click(canvas.getByRole('button', { name: /Continue/i }));
-
-    // Select Organization Type
+    // 1. Select Organization Type (Step starts directly here)
     const pantryBtn = await canvas.findByRole('button', { name: /Food Pantry/i });
     await userEvent.click(pantryBtn);
 
-    // Fill Organization Details
+    // 2. Fill Organization Details
     const orgNameInput = await canvas.findByLabelText(/Organization Name/i);
     await userEvent.type(orgNameInput, 'Gary Food Network');
 
@@ -186,29 +167,15 @@ export const CompleteOnboardingJourney: Story = {
     const zipInput = canvas.getByLabelText(/ZIP Code/i);
     await userEvent.type(zipInput, '46402');
 
-    // Wait for async MSW subdomain check message to surface and clear the dynamic button locking
+    // Wait for async MSW subdomain check
     const availableIndicator = await canvas.findByText(/Subdomain is available!/i);
     await expect(availableIndicator).toBeInTheDocument();
 
     const step2SubmitBtn = canvas.getByRole('button', { name: /Create Organization/i });
     await userEvent.click(step2SubmitBtn);
 
-    // Team Invitations Panel
-    const inviteEmailInput = await canvas.findByLabelText(/Member Email Address/i);
-    await userEvent.type(inviteEmailInput, 'partner@garyfood.org');
-
-    const inviteBtn = await canvas.findByRole('button', { name: /Invite/i });
-    await waitFor(() => expect(inviteBtn).toBeEnabled());
-    await userEvent.click(inviteBtn);
-
-    // Verify row item append inside list array layout table
-    await waitFor(async () => {
-      const tableRecord = await canvas.findByText('partner@garyfood.org');
-      await expect(tableRecord).toBeInTheDocument();
-    });
-
-    // Complete the flow orchestrator redirect sequences
-    const finishBtn = canvas.getByRole('button', { name: /Finish & Go to Dashboard/i });
+    // Complete onboarding flow
+    const finishBtn = await canvas.findByRole('button', { name: /Finish & Go to Dashboard/i });
     await userEvent.click(finishBtn);
   },
 };

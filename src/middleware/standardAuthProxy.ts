@@ -3,17 +3,22 @@ import { fetchCurrentUser } from '@/lib/api/user';
 /**
  * Proxy for handling redirecting for protected pages.
  * @param pathname - The url pathname
+ * @param search - The url search params
  * @param isAuthenticated - Is the user authenticated
  * @param cookieHeader - The cookie header
  * @returns The redirect url
  */
 export async function checkStandardAuth(
   pathname: string,
+  search: string,
   isAuthenticated: boolean,
   cookieHeader: string | null,
 ) {
+  const fullPathWithParams = `${pathname}${search}`;
+  const encodedCallback = encodeURIComponent(fullPathWithParams);
+
   const unprotectedRoutes = ['/buyer/browse', '/buyer/help'];
-  const otherProtectedRoutes = ['/orders'];
+  const otherProtectedRoutes = ['/orders', '/onboarding'];
   const isProtectedBuyerRoute =
     pathname.startsWith('/buyer') && !unprotectedRoutes.includes(pathname);
   const isSellerRoute = pathname.startsWith('/seller');
@@ -28,7 +33,7 @@ export async function checkStandardAuth(
   }
 
   if (isGeneralProtectedRoute && !isAuthenticated) {
-    return '/unauthorized';
+    return `/login?callbackUrl=${encodedCallback}`;
   }
 
   if (pathname === '/login' && isAuthenticated) {
