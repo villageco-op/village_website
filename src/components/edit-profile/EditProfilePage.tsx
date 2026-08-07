@@ -43,7 +43,7 @@ export default function EditProfilePage() {
   const isSeller = user.stripeOnboardingComplete === true;
   const hasOrg = !!user.organizationId;
 
-  const handleDeleteOrganization = () => {
+  const handleLeaveOrDeleteOrganization = () => {
     refetch();
     setActiveTab('profile');
   };
@@ -101,7 +101,11 @@ export default function EditProfilePage() {
           {activeTab === 'profile' && <ProfileTab user={user} isSeller={isSeller} />}
 
           {activeTab === 'org' && hasOrg && (
-            <OrgTab user={user} onDeleteOrganization={handleDeleteOrganization} />
+            <OrgTab
+              user={user}
+              onDeleteOrganization={handleLeaveOrDeleteOrganization}
+              onLeaveOrganization={handleLeaveOrDeleteOrganization}
+            />
           )}
 
           {activeTab === 'settings' && <SettingsTab onLogout={() => void logout()} />}

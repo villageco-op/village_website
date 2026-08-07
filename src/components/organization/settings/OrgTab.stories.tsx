@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect, userEvent } from '@storybook/test';
+import { expect, userEvent, within } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { http, HttpResponse } from 'msw';
+import { HttpResponse, http } from 'msw';
 
 import OrgTab from './OrgTab';
 
-import type { User, Organization } from '@/lib/api/generated/models';
+import { OrgType, type Organization, type User } from '@/lib/api/generated/models';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +39,12 @@ const MOCK_USER_WITH_ORG: User = {
   updatedAt: null,
 };
 
+const MOCK_MEMBER_USER: User = {
+  ...MOCK_USER_WITH_ORG,
+  id: 'user_456',
+  orgRole: 'member',
+};
+
 const MOCK_USER_WITHOUT_ORG: User = {
   ...MOCK_USER_WITH_ORG,
   organizationId: null,
@@ -47,7 +53,7 @@ const MOCK_USER_WITHOUT_ORG: User = {
 
 const MOCK_ORGANIZATION: Organization = {
   id: 'org_abc123',
-  type: 'pantry',
+  type: OrgType.pantry,
   name: 'Gary Food Pantry Network',
   subdomain: 'gary-pantry',
   email: 'contact@garypantry.org',
@@ -79,6 +85,10 @@ const handlers = [
   // Mock Delete Organization endpoint
   http.delete('*/api/organizations/org_abc123', () => {
     return HttpResponse.json({ success: true });
+  }),
+  // Mock Leave Organization endpoint
+  http.post('*/api/users/me/org/leave', () => {
+    return HttpResponse.json({ data: { success: true }, status: 200 });
   }),
   // Mock Upload Image endpoint
   http.post('*/api/upload', () => {
@@ -118,7 +128,7 @@ export default meta;
 type Story = StoryObj<typeof OrgTab>;
 
 /**
- * Default view demonstrating a fully populated, successfully loaded organization record.
+ * Default view demonstrating a fully populated, successfully loaded organization record for an admin.
  */
 export const DefaultConfigured: Story = {
   args: {
@@ -127,7 +137,6 @@ export const DefaultConfigured: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // Verify loading transitions cleanly and matches mock records
     await expect(await canvas.findByLabelText(/Organization Name/i)).toHaveValue(
       'Gary Food Pantry Network',
     );
@@ -135,6 +144,41 @@ export const DefaultConfigured: Story = {
     await expect(canvas.getByLabelText(/Website/i)).toHaveValue('https://garypantry.org');
     await expect(canvas.getByLabelText(/Client Referral Limit/i)).toHaveValue(5);
     await expect(canvas.getByRole('button', { name: /Save Changes/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: /Leave Organization/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: /Delete Organization/i })).toBeInTheDocument();
+  },
+};
+
+/**
+ * Non-admin (member) view displaying read-only text, notice banner, and leave organization option without edit forms or delete options.
+ */
+export const NonAdminMemberView: Story = {
+  args: {
+    user: MOCK_MEMBER_USER,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Verify non-admin warning banner is present
+    await expect(
+      await canvas.findByText('Only organization admins can edit organization settings.'),
+    ).toBeInTheDocument();
+
+    // Verify read-only displays are rendered instead of form inputs
+    await expect(canvas.getByText('Gary Food Pantry Network')).toBeInTheDocument();
+    await expect(canvas.getByText('gary-pantry')).toBeInTheDocument();
+    await expect(canvas.getByText('contact@garypantry.org')).toBeInTheDocument();
+    await expect(canvas.getByText('https://garypantry.org')).toBeInTheDocument();
+
+    // Verify admin inputs and delete option are omitted
+    await expect(canvas.queryByLabelText(/Organization Name/i)).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('button', { name: /Save Changes/i })).not.toBeInTheDocument();
+    await expect(
+      canvas.queryByRole('button', { name: /Delete Organization/i }),
+    ).not.toBeInTheDocument();
+
+    // Verify Leave Organization is still accessible
+    await expect(canvas.getByRole('button', { name: /Leave Organization/i })).toBeInTheDocument();
   },
 };
 
@@ -155,7 +199,7 @@ export const NoOrganizationAssociated: Story = {
 };
 
 /**
- * Evaluates updating maxReferrals alongside standard fields during form submission.
+ * Evaluates updating maxReferrals alongside standard fields during form submission for an admin.
  */
 export const FormSubmissionSuccess: Story = {
   args: {
@@ -171,8 +215,26 @@ export const FormSubmissionSuccess: Story = {
     const saveButton = canvas.getByRole('button', { name: /Save Changes/i });
     await userEvent.click(saveButton);
 
-    // Instant switch to pending asynchronous operation state
     await expect(await canvas.findByText(/Saving Changes.../i)).toBeInTheDocument();
+  },
+};
+
+/**
+ * Simulates triggering the leave organization confirmation modal.
+ */
+export const LeaveOrganizationFlow: Story = {
+  args: {
+    user: MOCK_MEMBER_USER,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const leaveButton = await canvas.findByRole('button', { name: /Leave Organization/i });
+    await userEvent.click(leaveButton);
+
+    const body = within(canvasElement.ownerDocument.body);
+    await expect(body.getByRole('heading', { name: 'Leave Organization' })).toBeInTheDocument();
+    await expect(body.getByRole('button', { name: 'Leave Organization' })).toBeInTheDocument();
   },
 };
 
@@ -186,7 +248,6 @@ export const DangerZoneDeletionFlow: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // Await core component initialization
     await canvas.findByLabelText(/Organization Name/i);
 
     const deleteButton = canvas.getByRole('button', { name: /Delete Organization/i });

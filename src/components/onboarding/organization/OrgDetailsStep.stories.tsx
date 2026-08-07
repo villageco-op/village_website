@@ -110,10 +110,8 @@ export const ValidFlow: Story = {
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '46402');
 
     // Wait for MSW response to resolve and update local hook states
-    await waitFor(async () => {
-      const successText = await canvas.findByText(/Subdomain is available!/i);
-      await expect(successText).toBeInTheDocument();
-    });
+    const successText = await canvas.findByText(/Subdomain is available!/i);
+    await expect(successText).toBeInTheDocument();
 
     const submitBtn = canvas.getByRole('button', { name: /Create Organization/i });
     await expect(submitBtn).toBeEnabled();
