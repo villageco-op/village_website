@@ -14,20 +14,25 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/compone
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { EmptyState, PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
-import type { GetProduceListParams } from '@/lib/api/generated/models';
+import type { GetProduceListParams, User } from '@/lib/api/generated/models';
 import { useGetProduceList } from '@/lib/api/generated/produce/produce';
 
 interface BrowseProduceListClientProps {
   onViewChange: (view: 'list' | 'map') => void;
+  user?: User;
 }
 
 /**
  * The buyer browse produce page with search and filter controls.
  * @param props - Browse produce list props
  * @param props.onViewChange - When the view toggle is clicked
+ * @param props.user - The user object
  * @returns The client for the browse produce page
  */
-export default function BrowseProduceListClient({ onViewChange }: BrowseProduceListClientProps) {
+export default function BrowseProduceListClient({
+  onViewChange,
+  user,
+}: BrowseProduceListClientProps) {
   const router = useRouter();
   const { page, limit, setPage, resetPage } = usePagination(20);
 
@@ -38,6 +43,8 @@ export default function BrowseProduceListClient({ onViewChange }: BrowseProduceL
   const [filters, setFilters] = useState<
     Omit<GetProduceListParams, 'page' | 'limit' | 'search' | 'lat' | 'lng'>
   >({});
+
+  const [customCoords, setCustomCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -50,14 +57,37 @@ export default function BrowseProduceListClient({ onViewChange }: BrowseProduceL
     resetPage();
   }, [debouncedSearch, filters, resetPage]);
 
+  const currentLat = user?.lat ?? customCoords?.lat ?? 41.602;
+  const currentLng = user?.lng ?? customCoords?.lng ?? -87.3371;
+
   const queryParams: GetProduceListParams = {
     page,
     limit,
+    lat: currentLat,
+    lng: currentLng,
     ...(debouncedSearch && { search: debouncedSearch }),
     ...filters,
   };
 
   const { data: response, isLoading, isError, refetch } = useGetProduceList(queryParams);
+
+  useEffect(() => {
+    if (!user && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log('Location retrieved from browser: ' + JSON.stringify(position));
+          setCustomCoords({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.log('Location access denied or unavailable, using fallback coordinates.', error);
+        },
+        { enableHighAccuracy: false, timeout: 30000 },
+      );
+    }
+  }, [user]);
 
   if (isError || (response && response.status !== 200)) {
     return (
@@ -77,6 +107,8 @@ export default function BrowseProduceListClient({ onViewChange }: BrowseProduceL
         setFilters={setFilters}
         currentView="list"
         onViewChange={onViewChange}
+        onLocationChange={(lat, lng) => setCustomCoords({ lat, lng })}
+        currentLocationName={user ? 'Profile Location' : undefined}
       />
 
       {isLoading ? (
@@ -86,7 +118,7 @@ export default function BrowseProduceListClient({ onViewChange }: BrowseProduceL
           <BrowseProduceTable
             produce={produceList}
             onOrderItem={(id: string) => void setSelectedProduceId(id)}
-            onGrowerClick={(id: string) => void router.push(`/seller/${id}`)}
+            onGrowerClick={(id: string) => void router.push(`/public-profile/${id}`)}
           />
           <PaginationControls meta={meta} onPageChange={setPage} />
         </div>

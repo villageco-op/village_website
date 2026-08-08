@@ -1,10 +1,13 @@
 'use client';
 
+import Link from 'next/link';
+
 import { AddNewListingCard } from './AddNewListingCard';
 import { ListingCard } from './ListingCard';
-import { ListingsHeader } from './ListingsHeader';
 import { ListingsSkeleton } from './ListingsSkeleton';
 
+import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
@@ -37,7 +40,15 @@ export default function SellerListingsClient() {
 
   return (
     <div className="flex w-full flex-col">
-      <ListingsHeader activeCount={activeCount} />
+      <PageHeader
+        title="My Listings"
+        subtitle={`${activeCount} active · Visible to buyers on the Village marketplace`}
+        actions={
+          <Button variant="lime" size="sm" className="text-xs font-semibold">
+            <Link href="/seller/new-listing">+ New listing</Link>
+          </Button>
+        }
+      />
 
       {/* 3-Column Grid */}
       <div className="mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">

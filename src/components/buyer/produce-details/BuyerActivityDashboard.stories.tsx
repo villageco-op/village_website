@@ -84,10 +84,10 @@ export const FullActivity: Story = {
     msw: {
       handlers: [
         http.get('*/api/orders', () => {
-          return HttpResponse.json({ data: { data: MOCK_ORDERS }, status: 200 });
+          return HttpResponse.json({ data: MOCK_ORDERS });
         }),
         http.get('*/api/subscriptions', () => {
-          return HttpResponse.json({ data: { data: MOCK_SUBS }, status: 200 });
+          return HttpResponse.json({ data: MOCK_SUBS });
         }),
       ],
     },
@@ -109,10 +109,10 @@ export const ActiveSubscriptionOnly: Story = {
     msw: {
       handlers: [
         http.get('*/api/orders', () => {
-          return HttpResponse.json({ data: { data: [] }, status: 200 });
+          return HttpResponse.json({ data: [] });
         }),
         http.get('*/api/subscriptions', () => {
-          return HttpResponse.json({ data: { data: [MOCK_SUBS[0]] }, status: 200 });
+          return HttpResponse.json({ data: [MOCK_SUBS[0]] });
         }),
       ],
     },
@@ -128,10 +128,10 @@ export const HistoryOnly: Story = {
     msw: {
       handlers: [
         http.get('*/api/orders', () => {
-          return HttpResponse.json({ data: { data: [MOCK_ORDERS[1]] }, status: 200 });
+          return HttpResponse.json({ data: [MOCK_ORDERS[1]] });
         }),
         http.get('*/api/subscriptions', () => {
-          return HttpResponse.json({ data: { data: [] }, status: 200 });
+          return HttpResponse.json({ data: [] });
         }),
       ],
     },
@@ -147,10 +147,10 @@ export const EmptyState: Story = {
     msw: {
       handlers: [
         http.get('*/api/orders', () => {
-          return HttpResponse.json({ data: { data: [] }, status: 200 });
+          return HttpResponse.json({ data: [] });
         }),
         http.get('*/api/subscriptions', () => {
-          return HttpResponse.json({ data: { data: [] }, status: 200 });
+          return HttpResponse.json({ data: [] });
         }),
       ],
     },

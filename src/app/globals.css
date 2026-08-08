@@ -8,6 +8,7 @@
   --color-deep-forest: #2a4b28;
   --color-forest-dark: #1e3820;
   --color-forest-mid: #3a6435;
+  --color-forest-muted: #2a4b280d;
   --color-click-green: #4a7729;
   --color-lime: #a4c739;
   --color-lime-light: #c8dc7a;
@@ -52,8 +53,11 @@
   --color-destructive: #c0392b;
   --color-destructive-foreground: var(--color-off-white);
 
+  --color-required: var(--color-red-500);
+
   --color-border: var(--color-lime);
-  --color-input: var(--color-cream-dark);
+  --color-input: var(--color-off-white);
+  --color-input-border: calc(var(--color-lime) / 50);
   --color-ring: var(--color-click-green);
 
   --radius: var(--radius-brand);
@@ -64,6 +68,12 @@
 
   --color-muted: oklch(0.97 0.001 106.424);
   --color-muted-foreground: oklch(0.553 0.013 58.071);
+
+  --color-table-border: var(--color-forest-muted);
+  --color-table-row-hover: var(--color-cream);
+  --color-table-header-foreground: var(--color-ink-3);
+  --color-table-body-foreground: var(--color-ink-2);
+  --color-table-body-foreground-highlighted: var(--color-ink);
 }
 
 @layer base {

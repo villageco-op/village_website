@@ -105,21 +105,14 @@ export const Default: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/dashboard', () =>
-          HttpResponse.json({ status: 200, data: MOCK_DASHBOARD_STATS }),
-        ),
+        http.get('*/api/buyer/dashboard', () => HttpResponse.json(MOCK_DASHBOARD_STATS)),
         http.get('*/api/orders*', () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: PAGINATED_ORDERS_DATA.slice(0, 2),
-              meta: { total: 2, page: 1, limit: PAGE_LIMIT, totalPages: 1 },
-            },
+            data: PAGINATED_ORDERS_DATA.slice(0, 2),
+            meta: { total: 2, page: 1, limit: PAGE_LIMIT, totalPages: 1 },
           });
         }),
-        http.get('*/api/growers/growers-map*', () =>
-          HttpResponse.json({ data: MOCK_GROWERS_LIST, status: 200 }),
-        ),
+        http.get('*/api/growers/growers-map*', () => HttpResponse.json(MOCK_GROWERS_LIST)),
       ],
     },
   },
@@ -132,12 +125,8 @@ export const OrdersPaginated: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/dashboard', () =>
-          HttpResponse.json({ status: 200, data: MOCK_DASHBOARD_STATS }),
-        ),
-        http.get('*/api/growers/growers-map*', () =>
-          HttpResponse.json({ data: MOCK_GROWERS_LIST, status: 200 }),
-        ),
+        http.get('*/api/buyer/dashboard', () => HttpResponse.json(MOCK_DASHBOARD_STATS)),
+        http.get('*/api/growers/growers-map*', () => HttpResponse.json(MOCK_GROWERS_LIST)),
         http.get('*/api/orders*', ({ request }) => {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
@@ -147,15 +136,12 @@ export const OrdersPaginated: Story = {
           const items = PAGINATED_ORDERS_DATA.slice(start, end);
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: items,
-              meta: {
-                total: PAGINATED_ORDERS_DATA.length,
-                page,
-                limit: PAGE_LIMIT,
-                totalPages: Math.ceil(PAGINATED_ORDERS_DATA.length / PAGE_LIMIT),
-              },
+            data: items,
+            meta: {
+              total: PAGINATED_ORDERS_DATA.length,
+              page,
+              limit: PAGE_LIMIT,
+              totalPages: Math.ceil(PAGINATED_ORDERS_DATA.length / PAGE_LIMIT),
             },
           });
         }),
@@ -206,24 +192,21 @@ export const EmptyState: Story = {
       handlers: [
         http.get('*/api/buyer/dashboard', () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              ...MOCK_DASHBOARD_STATS,
-              onOrderThisWeekLbs: 0,
-              percentChangeFromLastWeek: 0,
-              totalSpendThisMonth: '0',
-              activeSubscriptions: [],
-              localGrowersSupplying: 0,
-            },
+            ...MOCK_DASHBOARD_STATS,
+            onOrderThisWeekLbs: 0,
+            percentChangeFromLastWeek: 0,
+            totalSpendThisMonth: '0',
+            activeSubscriptions: [],
+            localGrowersSupplying: 0,
           });
         }),
         http.get('*/api/orders*', () =>
           HttpResponse.json({
-            status: 200,
-            data: { data: [], meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 } },
+            data: [],
+            meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 },
           }),
         ),
-        http.get('*/api/growers/growers-map*', () => HttpResponse.json({ data: [], status: 200 })),
+        http.get('*/api/growers/growers-map*', () => HttpResponse.json([])),
       ],
     },
   },

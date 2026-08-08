@@ -105,10 +105,10 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get('*/api/seller/earnings', () => {
-          return HttpResponse.json({ data: MOCK_EARNINGS, status: 200 });
+          return HttpResponse.json(MOCK_EARNINGS);
         }),
         http.get('*/api/seller/payouts', () => {
-          return HttpResponse.json({ data: MOCK_PAYOUTS, status: 200 });
+          return HttpResponse.json(MOCK_PAYOUTS);
         }),
       ],
     },
@@ -135,7 +135,7 @@ export const Paginated: Story = {
     msw: {
       handlers: [
         http.get('*/api/seller/earnings', () => {
-          return HttpResponse.json({ data: MOCK_EARNINGS, status: 200 });
+          return HttpResponse.json(MOCK_EARNINGS);
         }),
         http.get('*/api/seller/payouts', ({ request }) => {
           const url = new URL(request.url);
@@ -146,15 +146,12 @@ export const Paginated: Story = {
           const items = PAGINATED_DATA.slice(start, end);
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: items,
-              meta: {
-                total: PAGINATED_DATA.length,
-                page,
-                limit: PAGE_LIMIT,
-                totalPages: Math.ceil(PAGINATED_DATA.length / PAGE_LIMIT),
-              },
+            data: items,
+            meta: {
+              total: PAGINATED_DATA.length,
+              page,
+              limit: PAGE_LIMIT,
+              totalPages: Math.ceil(PAGINATED_DATA.length / PAGE_LIMIT),
             },
           });
         }),
@@ -184,12 +181,9 @@ export const GoalExceeded: Story = {
       handlers: [
         http.get('*/api/seller/earnings', () => {
           return HttpResponse.json({
-            data: {
-              ...MOCK_EARNINGS,
-              earnedThisMonth: 1200,
-              remainingToGoal: 0,
-            },
-            status: 200,
+            ...MOCK_EARNINGS,
+            earnedThisMonth: 1200,
+            remainingToGoal: 0,
           });
         }),
         http.get('*/api/seller/payouts', () => {
@@ -229,22 +223,18 @@ export const NewSeller: Story = {
       handlers: [
         http.get('*/api/seller/earnings', () => {
           return HttpResponse.json({
-            data: {
-              earnedThisMonth: 0,
-              earnedLastMonth: 0,
-              remainingToGoal: 500,
-              monthlyGoal: 500,
-              totalEarnedYTD: 0,
-              ytdStartDate: new Date().toISOString(),
-              avgPerLbSold: 0,
-              amountSoldDollarsPerProduceThisMonth: [],
-            },
-            status: 200,
+            earnedThisMonth: 0,
+            earnedLastMonth: 0,
+            remainingToGoal: 500,
+            monthlyGoal: 500,
+            totalEarnedYTD: 0,
+            ytdStartDate: new Date().toISOString(),
+            avgPerLbSold: 0,
+            amountSoldDollarsPerProduceThisMonth: [],
           });
         }),
         http.get('*/api/seller/payouts', () => {
           return HttpResponse.json({
-            status: 200,
             data: [],
             meta: { total: 0, page: 1, limit: 50, totalPages: 0 },
           });

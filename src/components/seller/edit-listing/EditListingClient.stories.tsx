@@ -54,19 +54,16 @@ export const Default: Story = {
       handlers: [
         http.get(`*/api/produce/${MOCK_ID}`, () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              title: 'Organic Strawberries',
-              description: 'Freshly picked sun-ripened strawberries from our north field.',
-              produceType: 'berries',
-              pricePerOz: 0.5, // $8.00/lb
-              totalOzInventory: 160, // 10 lbs
-              availableBy: '2026-06-01T12:00:00Z',
-              seasonStart: '2026-05-01',
-              seasonEnd: '2026-08-01',
-              status: 'active',
-              images: [],
-            },
+            title: 'Organic Strawberries',
+            description: 'Freshly picked sun-ripened strawberries from our north field.',
+            produceType: 'berries',
+            pricePerOz: 0.5, // $8.00/lb
+            totalOzInventory: 160, // 10 lbs
+            availableBy: '2026-06-01T12:00:00Z',
+            seasonStart: '2026-05-01',
+            seasonEnd: '2026-08-01',
+            status: 'active',
+            images: [],
           });
         }),
       ],
@@ -132,7 +129,7 @@ export const ToggleStatus: Story = {
       handlers: [
         ...Default.parameters!.msw.handlers,
         http.put(`*/api/produce/${MOCK_ID}`, () => {
-          return HttpResponse.json({ status: 200 });
+          return HttpResponse.json(null, { status: 200 });
         }),
       ],
     },

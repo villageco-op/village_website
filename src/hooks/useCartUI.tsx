@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
+import { useAuth } from './useAuth';
+
 import { useGetCart } from '@/lib/api/generated/cart/cart';
 
 interface CartContextValue {
@@ -57,14 +59,21 @@ export function useCartUI() {
  * @returns The result of the useGetCart query.
  */
 export function useCartData() {
-  const query = useGetCart();
+  const { status, user } = useAuth();
   const { showErrorToast } = useCartUI();
+  const enabled = status === 'authenticated' && user?.isOnboardingComplete;
+
+  const query = useGetCart({
+    query: {
+      enabled: !!enabled,
+    },
+  });
 
   useEffect(() => {
-    if (query.isError || (query.data && query.data.status !== 200)) {
+    if (enabled && (query.isError || (query.data && query.data.status !== 200))) {
       showErrorToast();
     }
-  }, [query.isError, query.data, query.data?.status, showErrorToast]);
+  }, [query.isError, query.data, query.data?.status, showErrorToast, enabled]);
 
   return query;
 }

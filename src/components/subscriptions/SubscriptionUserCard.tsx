@@ -26,7 +26,7 @@ export function SubscriptionUserCard({ title, user, role }: SubscriptionUserCard
   if (!user) return null;
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-6">
         <h2 className="mb-4 font-heading text-[0.95rem] font-bold text-ink border-b border-border/50 pb-3">
           {title}

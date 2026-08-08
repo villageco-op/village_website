@@ -1,4 +1,4 @@
-import { AlertTriangle, Pause, Play, Trash2 } from 'lucide-react';
+import { Pause, Play, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,25 +28,16 @@ export function ListingStatusActions({
   const isPaused = status === 'paused';
 
   return (
-    <Card className="rounded-xl border border-red-200 shadow-sm bg-red-50/30">
+    <Card>
       <CardHeader>
-        <CardTitle className="font-heading text-lg text-red-900 flex items-center">
-          <AlertTriangle className="w-5 h-5 mr-2 text-red-600" />
-          Danger Zone & Status
-        </CardTitle>
+        <CardTitle>Danger Zone</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-sm text-ink-3">
           Manage the visibility of this listing or permanently remove it from your marketplace.
         </p>
         <div className="flex flex-wrap gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            className="bg-white text-ink-2 hover:bg-slate-50 border-gray-300"
-            onClick={onToggleStatus}
-            disabled={isPending}
-          >
+          <Button type="button" variant="outline" onClick={onToggleStatus} disabled={isPending}>
             {isPaused ? (
               <>
                 <Play className="w-4 h-4 mr-2" />
@@ -59,13 +50,7 @@ export function ListingStatusActions({
               </>
             )}
           </Button>
-          <Button
-            type="button"
-            variant="destructive"
-            className="bg-red-600 hover:bg-red-700 text-white"
-            onClick={onDelete}
-            disabled={isPending}
-          >
+          <Button type="button" variant="destructive" onClick={onDelete} disabled={isPending}>
             <Trash2 className="w-4 h-4 mr-2" />
             Delete Listing
           </Button>

@@ -88,10 +88,7 @@ export const Active: Story = {
     msw: {
       handlers: [
         http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, () => {
-          return HttpResponse.json({
-            status: 200,
-            data: MOCK_BASE_SUBSCRIPTION,
-          });
+          return HttpResponse.json(MOCK_BASE_SUBSCRIPTION);
         }),
       ],
     },
@@ -120,11 +117,8 @@ export const Paused: Story = {
       handlers: [
         http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              ...MOCK_BASE_SUBSCRIPTION,
-              status: SubscriptionStatus.paused,
-            },
+            ...MOCK_BASE_SUBSCRIPTION,
+            status: SubscriptionStatus.paused,
           });
         }),
       ],
@@ -145,12 +139,9 @@ export const Canceled: Story = {
       handlers: [
         http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              ...MOCK_BASE_SUBSCRIPTION,
-              status: SubscriptionStatus.canceled,
-              cancelReason: 'Slow harvests, can no longer meet demand.',
-            },
+            ...MOCK_BASE_SUBSCRIPTION,
+            status: SubscriptionStatus.canceled,
+            cancelReason: 'Slow harvests, can no longer meet demand.',
           });
         }),
       ],

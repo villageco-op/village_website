@@ -1,0 +1,48 @@
+name: Trigger Smoke Test on Vercel Deployment
+
+on:
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+  check-vercel-and-trigger:
+    name: Check Vercel Status
+    if: |
+      github.event.issue.pull_request &&
+      (github.event.comment.user.login == 'vercel[bot]' || contains(github.event.comment.body, 'Vercel for GitHub'))
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verify Deployment is Ready
+        id: check_status
+        run: |
+          COMMENT_BODY="${{ github.event.comment.body }}"
+          
+          if echo "$COMMENT_BODY" | grep -q "Ready"; then
+            echo "✅ Vercel deployment is ready!"
+            
+            PREVIEW_URL=$(echo "$COMMENT_BODY" | grep -oE 'https://[a-zA-Z0-9_-]+\.vercel\.app' | head -n 1)
+            
+            echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+            echo "IS_READY=true" >> $GITHUB_ENV
+          else
+            echo "⏳ Vercel deployment is still building or failed. Skipping smoke test."
+            echo "IS_READY=false" >> $GITHUB_ENV
+          fi
+
+      - name: Generate GitHub App Token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.E2E_APP_ID }}
+          private-key: ${{ secrets.E2E_APP_PRIVATE_KEY }}
+          owner: villageco-op
+          repositories: e2e-tests
+
+      - name: Trigger E2E Smoke Tests
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          repository: villageco-op/e2e-tests
+          event-type: frontend-pr-smoke
+          client-payload: '{"repo": "${{ github.repository }}", "pr_num": "${{ github.event.pull_request.number }}", "target_url": "${{ steps.check_status.outputs.preview_url }}"}'

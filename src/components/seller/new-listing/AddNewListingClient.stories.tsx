@@ -52,7 +52,7 @@ export const FullFormSubmission: Story = {
       handlers: [
         http.post('*/api/produce', async () => {
           await delay(100);
-          return HttpResponse.json({ status: 201 });
+          return HttpResponse.json(null, { status: 201 });
         }),
       ],
     },

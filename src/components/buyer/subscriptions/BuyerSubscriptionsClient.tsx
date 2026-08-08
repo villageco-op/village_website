@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 
 import { SubscriptionCard } from './SubscriptionCard';
-import { SubscriptionsHeader } from './SubscriptionsHeader';
 import { SubscriptionsSkeleton } from './SubscriptionsSkeleton';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import {
   Select,
@@ -69,7 +69,10 @@ export default function BuyerSubscriptionsClient() {
 
   return (
     <div className="flex w-full flex-col p-8 pt-6">
-      <SubscriptionsHeader activeCount={activeCount} />
+      <PageHeader
+        title="My Subscriptions"
+        subtitle={`${activeCount} active subscription${activeCount !== 1 ? 's' : ''}`}
+      />
 
       {/* Filters Section */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -77,13 +80,13 @@ export default function BuyerSubscriptionsClient() {
           placeholder="Filter by Seller ID..."
           value={sellerInput}
           onChange={(e) => setSellerInput(e.target.value)}
-          className="max-w-xs bg-white"
+          className="max-w-xs"
         />
         <Select
           value={statusFilter}
           onValueChange={(val) => setStatusFilter(val as SubscriptionStatus | 'all')}
         >
-          <SelectTrigger className="w-full sm:w-48 bg-white">
+          <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
@@ -96,12 +99,11 @@ export default function BuyerSubscriptionsClient() {
 
         {(statusFilter !== 'all' || sellerInput) && (
           <Button
+            variant="ghost"
             onClick={() => {
               setStatusFilter('all');
               setSellerInput('');
             }}
-            className="text-sm font-semibold text-forest hover:underline"
-            variant="ghost"
           >
             Clear filters
           </Button>

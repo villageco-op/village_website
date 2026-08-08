@@ -5,6 +5,7 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
+import type { UserOrgRole } from './userOrgRole';
 import type { UserSpecialties } from './userSpecialties';
 
 export interface User {
@@ -17,6 +18,10 @@ export interface User {
   emailVerified: string | null;
   /** @nullable */
   image: string | null;
+  /** @nullable */
+  organizationId: string | null;
+  /** @nullable */
+  orgRole: UserOrgRole;
   /** @nullable */
   aboutMe: string | null;
   specialties: UserSpecialties;
@@ -47,11 +52,10 @@ export interface User {
   /** @nullable */
   deliveryRangeMiles: string | null;
   /** @nullable */
-  stripeAccountId: string | null;
-  /** @nullable */
   stripeOnboardingComplete: boolean | null;
   /** @nullable */
   createdAt: string | null;
   /** @nullable */
   updatedAt: string | null;
+  isOnboardingComplete: boolean;
 }

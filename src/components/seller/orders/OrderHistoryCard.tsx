@@ -35,7 +35,7 @@ export function OrderHistoryCard({ orders, completedCount }: OrderHistoryCardPro
   const router = useRouter();
 
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-6">
         <div className="mb-5 flex items-center justify-between">
           <div>
@@ -51,33 +51,25 @@ export function OrderHistoryCard({ orders, completedCount }: OrderHistoryCardPro
         ) : (
           <Table>
             <TableHeader>
-              <TableRow className="border-border/50">
-                <TableHead className="font-heading text-xs font-bold text-ink-3">
-                  Order ID
-                </TableHead>
-                <TableHead className="font-heading text-xs font-bold text-ink-3">Amount</TableHead>
-                <TableHead className="font-heading text-xs font-bold text-ink-3">Type</TableHead>
-                <TableHead className="font-heading text-xs font-bold text-ink-3">Date</TableHead>
-                <TableHead className="font-heading text-xs font-bold text-ink-3">Status</TableHead>
+              <TableRow className="hover:bg-transparent">
+                <TableHead>Order ID</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {orders.map((order) => (
                 <TableRow
                   key={order.id}
-                  className="cursor-pointer border-border/50 transition-colors hover:bg-slate-50/80"
+                  className="cursor-pointer transition-colors hover:bg-slate-50/80"
                   onClick={() => router.push(`/orders/${order.id}`)}
                 >
-                  <TableCell className="font-medium text-ink">
-                    #{order.id.slice(0, 8).toUpperCase()}
-                  </TableCell>
-                  <TableCell className="font-bold text-ink">
-                    ${Number(order.totalAmount || 0).toFixed(2)}
-                  </TableCell>
-                  <TableCell className="capitalize text-ink-3">{order.fulfillmentType}</TableCell>
-                  <TableCell className="text-ink-3">
-                    {formatAppDate(order.scheduledTime, 'dayMonth')}
-                  </TableCell>
+                  <TableCell>#{order.id.slice(0, 8).toUpperCase()}</TableCell>
+                  <TableCell>${Number(order.totalAmount || 0).toFixed(2)}</TableCell>
+                  <TableCell className="capitalize">{order.fulfillmentType}</TableCell>
+                  <TableCell>{formatAppDate(order.scheduledTime, 'dayMonth')}</TableCell>
                   <TableCell>
                     <StatusPill status={order.status} />
                   </TableCell>

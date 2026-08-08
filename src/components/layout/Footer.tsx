@@ -5,30 +5,26 @@ import { getAssetPath } from '@/lib/utils';
 
 const FOOTER_LINKS = [
   {
-    title: 'Platform',
+    title: 'Individuals',
     links: [
-      { label: 'Browse produce', href: '#' },
-      { label: 'Become a producer', href: '#' },
-      { label: 'List your land', href: '#' },
-      { label: 'Restaurant buyers', href: '#' },
+      { label: 'Browse produce', href: '/buyer/browse' },
+      { label: 'Sell locally', href: '/become-seller' },
     ],
   },
   {
-    title: 'Community',
+    title: 'Organizations',
     links: [
-      { label: 'How it works', href: '#' },
-      { label: 'The value loop', href: '#' },
-      { label: 'Our mission', href: '#' },
-      { label: 'Partner with us', href: '#' },
+      { label: 'Food pantries', href: '/#referral-management' },
+      { label: 'Restaurants & markets', href: '/#demand-prediction-research' },
+      { label: 'Join an organization', href: '/join-org' },
+      { label: 'Register your organization', href: '/onboarding?upgrade=org' },
     ],
   },
   {
     title: 'Contact',
     links: [
-      { label: 'Talk to our team', href: '#' },
+      { label: 'Talk to our team', href: '/contact' },
       { label: 'Get involved', href: '/login' },
-      { label: 'Press & media', href: '#' },
-      { label: 'Privacy policy', href: '#' },
     ],
   },
 ];
@@ -53,8 +49,7 @@ export function Footer() {
               className="h-8.5 w-auto mb-3.5"
             />
             <p className="font-sans text-[0.82rem] text-cream/40 leading-[1.7] max-w-57.5">
-              Fresh food and real economic opportunity for neighborhoods in Gary, Indiana and
-              beyond.
+              Fresh food, real economic opportunity, community growth and connection.
             </p>
           </div>
 
@@ -81,9 +76,6 @@ export function Footer() {
         <div className="border-t border-cream/5 pt-6 flex justify-between items-center flex-wrap gap-3">
           <div className="font-sans text-[0.75rem] text-cream/25">
             &copy; {currentYear} Village. All rights reserved.
-          </div>
-          <div className="font-heading text-[0.75rem] text-cream/25 flex items-center gap-1.25">
-            <span>📍</span> Gary, Indiana
           </div>
         </div>
       </div>

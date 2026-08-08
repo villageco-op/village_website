@@ -18,9 +18,12 @@ interface ImageGalleryProps {
   images: string[];
   title: string;
   className?: string;
+  imageClassName?: string;
+  width?: number;
+  height?: number;
 }
 
-export function ImageGallery({ images, title, className }: ImageGalleryProps) {
+export function ImageGallery({ images, title, className, imageClassName, width, height }: ImageGalleryProps) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
 
@@ -36,23 +39,24 @@ export function ImageGallery({ images, title, className }: ImageGalleryProps) {
 
   if (images.length === 0) {
     return (
-      <div className={cn("aspect-video flex items-center justify-center bg-slate-100 text-slate-400", className)}>
+      <div className={cn("flex items-center justify-center bg-slate-100 text-slate-400", className)}>
         No Image Available
       </div>
     );
   }
 
   return (
-    <div className={cn("group relative aspect-video w-full overflow-hidden bg-slate-100", className)}>
-      <Carousel setApi={setApi} opts={{ loop: true }} className="h-full w-full">
-        <CarouselContent className="h-full ml-0">
+    <div className={cn("group relative w-full overflow-hidden bg-slate-100", className)}>
+      <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
+        <CarouselContent className="ml-0 items-start">
           {images.map((src, index) => (
-            <CarouselItem key={index} className="relative aspect-video basis-full pl-0 min-w-0">
+            <CarouselItem key={index} className="relative basis-full pl-0 min-w-0">
               <Image
                 src={src}
                 alt={`${title} - image ${index + 1}`}
-                fill
-                className="object-cover transition-transform duration-500 ease-in-out"
+                width={width || 1200}
+                height={height || 750}
+                className={cn("object-contain w-full h-auto transition-transform duration-500 ease-in-out", imageClassName)}
                 priority={index === 0}
               />
             </CarouselItem>

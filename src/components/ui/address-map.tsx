@@ -88,7 +88,7 @@ export function AddressMap({
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 bg-white text-ink-3 hover:text-ink text-xs font-semibold"
+            className="flex-1"
             onClick={handleCopy}
           >
             {copied ? (
@@ -96,12 +96,13 @@ export function AddressMap({
             ) : (
               <Copy className="mr-1.5 h-3.5 w-3.5" />
             )}
-            {copied ? 'Copied!' : 'Copy Address'}
+            <span className="hidden min-[360px]:inline">{copied ? 'Copied!' : 'Copy Address'}</span>
+            <span className="inline min-[360px]:hidden">{copied ? 'Copied!' : 'Copy'}</span>
           </Button>
           <Button
             variant="forest"
             size="sm"
-            className="flex-1 text-xs font-semibold"
+            className="flex-1"
             onClick={handleOpenMap}
           >
             <ExternalLink className="mr-1.5 h-3.5 w-3.5" />

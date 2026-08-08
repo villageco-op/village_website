@@ -82,7 +82,7 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get('*/api/growers/growers-map*', () => {
-          return HttpResponse.json({ data: MOCK_GROWERS, status: 200 });
+          return HttpResponse.json(MOCK_GROWERS);
         }),
       ],
     },
@@ -102,7 +102,7 @@ export const Loading: Story = {
       handlers: [
         http.get('*/api/growers/growers-map*', async () => {
           await delay('infinite');
-          return HttpResponse.json({ data: [] });
+          return HttpResponse.json([]);
         }),
       ],
     },
@@ -155,7 +155,7 @@ export const LargeNetwork: Story = {
             distanceMiles: parseFloat((Math.random() * 10 + 1).toFixed(1)),
             specialties: specialtyPool.sort(() => 0.5 - Math.random()).slice(0, 2),
           }));
-          return HttpResponse.json({ data: denseGrowers, status: 200 });
+          return HttpResponse.json(denseGrowers);
         }),
       ],
     },

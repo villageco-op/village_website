@@ -12,25 +12,23 @@ const mockedQueryClient = new QueryClient({
 });
 
 const MOCK_DASHBOARD_DATA = {
-  data: {
-    sellerLocation: {
-      lat: 0.0,
-      lng: 34.0,
-      address: 'Austin, TX',
-    },
-    earnedThisMonth: 1250.5,
-    earnedLastMonth: 980.0,
-    soldThisWeekLbs: 45.2,
-    onTrackWithGoal: true,
-    activeListingsCount: 12,
-    activeListingsNames: ['Organic Strawberries', 'Heirloom Tomatoes', 'Wild Honey'],
-    monthlyGoal: 2000.0,
-    earningsByProduceThisMonth: [
-      { produceName: 'Strawberries', earned: 450 },
-      { produceName: 'Tomatoes', earned: 300 },
-      { produceName: 'Honey', earned: 500.5 },
-    ],
+  sellerLocation: {
+    lat: 0.0,
+    lng: 34.0,
+    address: 'Austin, TX',
   },
+  earnedThisMonth: 1250.5,
+  earnedLastMonth: 980.0,
+  soldThisWeekLbs: 45.2,
+  onTrackWithGoal: true,
+  activeListingsCount: 12,
+  activeListingsNames: ['Organic Strawberries', 'Heirloom Tomatoes', 'Wild Honey'],
+  monthlyGoal: 2000.0,
+  earningsByProduceThisMonth: [
+    { produceName: 'Strawberries', earned: 450 },
+    { produceName: 'Tomatoes', earned: 300 },
+    { produceName: 'Honey', earned: 500.5 },
+  ],
 };
 
 const meta: Meta<typeof SellerDashboardClient> = {
@@ -132,17 +130,15 @@ export const EmptyState: Story = {
       handlers: [
         http.get('*/api/seller/dashboard', () => {
           return HttpResponse.json({
-            data: {
-              sellerLocation: 'New York, NY',
-              earnedThisMonth: 0,
-              earnedLastMonth: 0,
-              soldThisWeekLbs: 0,
-              onTrackWithGoal: false,
-              activeListingsCount: 0,
-              activeListingsNames: [],
-              monthlyGoal: 1000,
-              earningsByProduceThisMonth: [],
-            },
+            sellerLocation: 'New York, NY',
+            earnedThisMonth: 0,
+            earnedLastMonth: 0,
+            soldThisWeekLbs: 0,
+            onTrackWithGoal: false,
+            activeListingsCount: 0,
+            activeListingsNames: [],
+            monthlyGoal: 1000,
+            earningsByProduceThisMonth: [],
           });
         }),
       ],

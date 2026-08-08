@@ -116,11 +116,7 @@ export default function SubscriptionDetailClient({ id }: SubscriptionDetailClien
         {/* Header */}
         <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <Button
-              variant="ghost"
-              className="-ml-3 mb-2 text-ink-3 hover:bg-slate-200/50 hover:text-ink"
-              onClick={() => router.back()}
-            >
+            <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
             </Button>
@@ -138,26 +134,18 @@ export default function SubscriptionDetailClient({ id }: SubscriptionDetailClien
           {/* Action Buttons */}
           {!isCanceled && (
             <div className="flex flex-wrap gap-3">
-              <Button
-                variant="outline"
-                className="bg-white border-destructive/30 text-destructive hover:bg-destructive/5 hover:text-destructive"
-                onClick={() => setIsCancelOpen(true)}
-              >
+              <Button variant="destructive" onClick={() => setIsCancelOpen(true)}>
                 Cancel
               </Button>
               <Button
                 variant="outline"
-                className="bg-white text-ink-3 hover:bg-slate-50 hover:text-ink"
                 onClick={() => void handleTogglePause(subscription.status)}
                 disabled={updateMutation.isPending}
               >
                 {isPaused ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
                 {isPaused ? 'Resume' : 'Pause'}
               </Button>
-              <Button
-                className="bg-lime text-forest-dark hover:bg-lime/80 font-semibold"
-                onClick={() => setIsEditOpen(true)}
-              >
+              <Button variant="lime" onClick={() => setIsEditOpen(true)}>
                 Edit Subscription
               </Button>
             </div>

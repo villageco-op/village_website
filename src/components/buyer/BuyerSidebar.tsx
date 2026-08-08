@@ -1,17 +1,6 @@
 'use client';
 
-import {
-  Package,
-  Store,
-  ClipboardList,
-  Sprout,
-  MapPin,
-  CreditCard,
-  LineChart,
-  MessageCircle,
-  Settings,
-  Repeat,
-} from 'lucide-react';
+import { Package, Store, CreditCard, MessageCircle, Repeat } from 'lucide-react';
 
 import { Sidebar, type NavGroup } from '../layout/Sidebar';
 
@@ -21,63 +10,68 @@ const BUYER_NAV_GROUPS: NavGroup[] = [
   {
     label: 'Ordering',
     items: [
-      { name: 'Order Dashboard', sub: 'Weekly summary', icon: Package, href: '/buyer' },
-      { name: 'Browse Produce', sub: 'Available this week', icon: Store, href: '/buyer/browse' },
+      {
+        name: 'Order Dashboard',
+        sub: 'Weekly summary',
+        icon: Package,
+        href: '/buyer',
+        protected: true,
+      },
+      {
+        name: 'Browse Produce',
+        sub: 'Available this week',
+        icon: Store,
+        href: '/buyer/browse',
+        protected: false,
+      },
       {
         name: 'Subscriptions',
         sub: 'Recurring orders',
         icon: Repeat,
         href: '/buyer/subscriptions',
+        protected: true,
       },
-      { name: 'Order History', sub: 'Past deliveries', icon: ClipboardList, href: '/buyer/orders' },
-    ],
-  },
-  {
-    label: 'Sourcing',
-    items: [
-      {
-        name: 'Grower Profiles',
-        sub: 'Your trusted farmers',
-        icon: Sprout,
-        href: '/buyer/growers',
-      },
-      { name: 'Source Map', sub: 'Where food comes from', icon: MapPin, href: '/buyer/map' },
     ],
   },
   {
     label: 'Business',
     items: [
-      { name: 'Billing', sub: 'Invoices & payments', icon: CreditCard, href: '/buyer/billing' },
-      { name: 'Impact Report', sub: 'Local food metrics', icon: LineChart, href: '/buyer/impact' },
+      {
+        name: 'Billing',
+        sub: 'Invoices & payments',
+        icon: CreditCard,
+        href: '/buyer/billing',
+        protected: true,
+      },
     ],
   },
   {
     label: 'Support',
-    items: [
-      { name: 'Get Help', icon: MessageCircle, href: '/buyer/help' },
-      { name: 'Settings', icon: Settings, href: '/buyer/settings' },
-    ],
+    items: [{ name: 'Get Help', icon: MessageCircle, href: '/buyer/help', protected: false }],
   },
 ];
 
 interface BuyerSidebarProps {
   user?: User;
+  status: 'loading' | 'authenticated' | 'unauthenticated';
 }
 
 /**
  * The left aligned sidebar for navigating the buyer pages.
  * @param props - Props for the buyer user object
  * @param props.user - The user object for the buyer
+ * @param props.status - The users authentication status
  * @returns A sidebar component with navigation links
  */
-export function BuyerSidebar({ user }: BuyerSidebarProps) {
+export function BuyerSidebar({ user, status }: BuyerSidebarProps) {
   return (
     <Sidebar
       user={user}
+      status={status}
       roleLabel="Buyer"
-      fallbackName="County Fresh Mkt"
-      settingsHref="/buyer/settings"
-      publicProfileBaseUrl="/buyer"
+      fallbackName="New Neighbor"
+      settingsHref="/settings"
+      publicProfileBaseUrl={undefined}
       navGroups={BUYER_NAV_GROUPS}
     />
   );

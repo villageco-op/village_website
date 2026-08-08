@@ -51,7 +51,7 @@ export function SubscriptionCard({ subscription, index, onFilterSeller }: Subscr
   };
 
   return (
-    <Card className="group flex h-full flex-col rounded-xl border-none bg-white shadow-md transition-shadow hover:shadow-lg">
+    <Card className="group flex h-full flex-col">
       <CardContent className="flex h-full flex-col p-6">
         {/* Header */}
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -67,12 +67,13 @@ export function SubscriptionCard({ subscription, index, onFilterSeller }: Subscr
               </AvatarFallback>
             </Avatar>
             <div>
-              <div
-                className="cursor-pointer line-clamp-1 font-heading text-[0.92rem] font-bold text-ink hover:underline"
+              <Button
+                variant="link"
+                className="line-clamp-1"
                 onClick={() => void router.push(`/produce/${subscription.productId}`)}
               >
                 {productTitle} ↗
-              </div>
+              </Button>
               <div className="flex items-center gap-2 font-sans text-[0.74rem] text-ink-3">
                 <span className="truncate max-w-80">from {sellerName}</span>
                 {/* ID Actions */}

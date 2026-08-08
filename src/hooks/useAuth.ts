@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import type { User } from '@/lib/api/generated/models/user';
 
@@ -19,6 +19,12 @@ export interface Session {
 export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
   const [status, setStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
+  const [trigger, setTrigger] = useState(0);
+
+  const refetch = useCallback(() => {
+    setStatus('loading');
+    setTrigger((prev) => prev + 1);
+  }, []);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -33,7 +39,7 @@ export function useAuth() {
         const data = await res.json();
 
         // Auth.js returns an empty object {} if no session exists
-        if (Object.keys(data).length > 0) {
+        if (data && Object.keys(data).length > 0) {
           setSession(data);
           setStatus('authenticated');
         } else {
@@ -46,7 +52,30 @@ export function useAuth() {
     };
 
     void fetchSession();
-  }, []);
+  }, [trigger]);
 
-  return { session, user: session?.user, status };
+  const logout = async () => {
+    try {
+      const csrfRes = await fetch('/api/auth/csrf');
+      if (!csrfRes.ok) throw new Error('Failed to fetch CSRF token');
+
+      const { csrfToken } = await csrfRes.json();
+
+      await fetch('/api/auth/signout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          csrfToken: csrfToken,
+        }),
+      });
+
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Failed to logout', error);
+    }
+  };
+
+  return { session, user: session?.user, status, logout, refetch };
 }

@@ -41,7 +41,7 @@ export function DashboardStats({
   return (
     <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
       {/* Earned Stat */}
-      <Card className="border-l-4 border-l-lime border-y-forest-dark/10 border-r-forest-dark/10 shadow-[0_2px_12px_rgba(42,75,40,0.05)] rounded-xl py-5 px-5">
+      <Card className="border-l-4 border-l-lime border-y-forest-dark/10 border-r-forest-dark/10 py-5 px-5">
         <CardContent className="p-0">
           <div className="mb-0.75 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             ${earnedThisMonth.toLocaleString()}
@@ -59,7 +59,7 @@ export function DashboardStats({
       </Card>
 
       {/* Harvested/Sold Stat */}
-      <Card className="border-l-4 border-l-sun border-y-forest-dark/10 border-r-forest-dark/10 shadow-[0_2px_12px_rgba(42,75,40,0.05)] rounded-xl py-5 px-5">
+      <Card className="border-l-4 border-l-sun border-y-forest-dark/10 border-r-forest-dark/10 py-5 px-5">
         <CardContent className="p-0">
           <div className="mb-0.75 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             {soldThisWeekLbs} lbs
@@ -77,7 +77,7 @@ export function DashboardStats({
       </Card>
 
       {/* Active Listings Stat */}
-      <Card className="border-l-4 border-l-deep-forest border-y-forest-dark/10 border-r-forest-dark/10 shadow-[0_2px_12px_rgba(42,75,40,0.05)] rounded-xl py-5 px-5">
+      <Card className="border-l-4 border-l-deep-forest border-y-forest-dark/10 border-r-forest-dark/10 py-5 px-5">
         <CardContent className="p-0">
           <div className="mb-0.75 font-heading text-[1.8rem] font-extrabold tracking-[-0.025em] text-ink">
             {activeListingsCount}

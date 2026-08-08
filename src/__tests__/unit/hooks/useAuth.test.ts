@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import { useAuth } from '../../../hooks/useAuth';
 
@@ -84,6 +84,105 @@ describe('useAuth', () => {
 
     await waitFor(() => {
       expect(result.current.status).toBe('unauthenticated');
+    });
+  });
+
+  describe('logout', () => {
+    const originalLocation = window.location;
+
+    beforeEach(() => {
+      // @ts-expect-error - overriding window.location for testing purposes
+      delete window.location;
+      window.location = { ...originalLocation, href: '' } as Location & string;
+    });
+
+    afterEach(() => {
+      window.location = originalLocation as Location & string;
+    });
+
+    it('should successfully logout and redirect to the home page', async () => {
+      const mockCsrfToken = 'mock-csrf-token-123';
+
+      vi.mocked(fetch)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve({}),
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve({ csrfToken: mockCsrfToken }),
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+        } as Response);
+
+      const { result } = renderHook(() => useAuth());
+
+      await waitFor(() => {
+        expect(result.current.status).toBe('unauthenticated');
+      });
+
+      await result.current.logout();
+
+      expect(fetch).toHaveBeenCalledWith('/api/auth/csrf');
+
+      expect(fetch).toHaveBeenCalledWith('/api/auth/signout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: expect.any(URLSearchParams),
+      });
+
+      const lastFetchCallArgs = vi.mocked(fetch).mock.calls[2][1];
+      const sentParams = lastFetchCallArgs?.body as URLSearchParams;
+      expect(sentParams.get('csrfToken')).toBe(mockCsrfToken);
+
+      expect(window.location.href).toBe('/');
+    });
+
+    it('should catch errors and log them if fetching CSRF fails', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      // 1st fetch: useAuth init, 2nd fetch: CSRF failure
+      vi.mocked(fetch)
+        .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({}) } as Response)
+        .mockResolvedValueOnce({ ok: false } as Response);
+
+      const { result } = renderHook(() => useAuth());
+      await waitFor(() => expect(result.current.status).toBe('unauthenticated'));
+
+      await result.current.logout();
+
+      expect(consoleSpy).toHaveBeenCalledWith('Failed to logout', expect.any(Error));
+      // Ensure it aborted before reaching the signout call or shifting location
+      expect(fetch).not.toHaveBeenCalledWith('/api/auth/signout', expect.any(Object));
+      expect(window.location.href).not.toBe('/');
+
+      consoleSpy.mockRestore();
+    });
+
+    it('should catch errors and log them if the signout call fails', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      // 1st fetch: init, 2nd fetch: CSRF success, 3rd fetch: Signout network failure
+      vi.mocked(fetch)
+        .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({}) } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve({ csrfToken: 'token' }),
+        } as Response)
+        .mockRejectedValueOnce(new Error('Network error on signout'));
+
+      const { result } = renderHook(() => useAuth());
+      await waitFor(() => expect(result.current.status).toBe('unauthenticated'));
+
+      await result.current.logout();
+
+      expect(consoleSpy).toHaveBeenCalledWith('Failed to logout', expect.any(Error));
+      expect(window.location.href).not.toBe('/');
+
+      consoleSpy.mockRestore();
     });
   });
 });

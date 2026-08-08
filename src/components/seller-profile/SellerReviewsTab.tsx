@@ -4,11 +4,12 @@ import { Star } from 'lucide-react';
 import { useState } from 'react';
 
 import { Eyebrow } from '../ui/eyebrow';
+import { EmptyState, PageErrorState } from '../ui/state-displays';
 
 import { SellerReviewCardSkeleton } from './SellerProfileSkeletons';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { Progress } from '@/components/ui/progress';
 import {
@@ -58,12 +59,21 @@ export default function SellerReviewsTab({ sellerId, profile }: SellerReviewsTab
     sortOrder = 'asc';
   }
 
-  const { data: response, isLoading } = useGetSellerReviews(sellerId, {
+  const {
+    data: response,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetSellerReviews(sellerId, {
     page,
     limit,
     sortBy,
     sortOrder,
   });
+
+  if (!isLoading && (response?.status !== 200 || isError)) {
+    return <PageErrorState title="Failed to load reviews." onRetry={() => void refetch()} />;
+  }
 
   const reviews = response?.data?.reviews || [];
   const meta = response?.data?.pagination || { total: 0, page: 1, limit: 10, totalPages: 1 };
@@ -137,7 +147,7 @@ export default function SellerReviewsTab({ sellerId, profile }: SellerReviewsTab
             setPage(1);
           }}
         >
-          <SelectTrigger className="w-45 bg-white h-9">
+          <SelectTrigger>
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
@@ -158,37 +168,34 @@ export default function SellerReviewsTab({ sellerId, profile }: SellerReviewsTab
           </>
         ) : reviews.length > 0 ? (
           reviews.map((review) => (
-            <Card
-              key={String(review.id)}
-              className="rounded-2xl border-1.5 border-cream-dark p-6 shadow-sm"
-            >
-              <div className="mb-3 flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-9 w-9 bg-lime-pale">
-                    <AvatarFallback className="bg-transparent font-heading text-xs font-extrabold text-click-green">
-                      {review.buyer?.name ? review.buyer.name.substring(0, 2).toUpperCase() : 'B'}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="font-heading text-[0.86rem] font-bold text-ink">
-                      {review.buyer?.name || 'Anonymous Buyer'}
-                    </div>
-                    <div className="mt-0.5 font-sans text-[0.7rem] text-ink-3">
-                      {formatAppDate(review.createdAt, 'full')}
+            <Card key={String(review.id)}>
+              <CardContent>
+                <div className="mb-3 flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-9 w-9 bg-lime-pale">
+                      <AvatarFallback className="bg-transparent font-heading text-xs font-extrabold text-click-green">
+                        {review.buyer?.name ? review.buyer.name.substring(0, 2).toUpperCase() : 'B'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="font-heading text-[0.86rem] font-bold text-ink">
+                        {review.buyer?.name || 'Anonymous Buyer'}
+                      </div>
+                      <div className="mt-0.5 font-sans text-[0.7rem] text-ink-3">
+                        {formatAppDate(review.createdAt, 'full')}
+                      </div>
                     </div>
                   </div>
+                  <div className="flex gap-0.5">{renderStars(review.rating, 'h-3.5 w-3.5')}</div>
                 </div>
-                <div className="flex gap-0.5">{renderStars(review.rating, 'h-3.5 w-3.5')}</div>
-              </div>
-              <p className="font-sans text-[0.84rem] leading-[1.7] text-ink-2">
-                {review.comment || 'No comment left for this review.'}
-              </p>
+                <p className="font-sans text-[0.84rem] leading-[1.7] text-ink-2">
+                  {review.comment || 'No comment left for this review.'}
+                </p>
+              </CardContent>
             </Card>
           ))
         ) : (
-          <div className="flex h-32 items-center justify-center rounded-2xl border border-dashed border-cream-dark bg-white text-ink-3">
-            No reviews match the selected filters.
-          </div>
+          <EmptyState title="No reviews match the selected filters." />
         )}
       </div>
 

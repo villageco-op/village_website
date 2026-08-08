@@ -5,12 +5,14 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
+import type { EntityId } from './entityId';
 import type { Location } from './location';
 
 export interface UserBasicInfo {
   id: string;
   /** @nullable */
   name?: string | null;
+  organizationId?: EntityId & (unknown | null);
   /** @nullable */
   email?: string | null;
   location?: Location & (unknown | null);

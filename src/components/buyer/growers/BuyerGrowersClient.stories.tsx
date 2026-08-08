@@ -5,7 +5,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import BuyerGrowersClient from './BuyerGrowersClient';
 
-import type { GrowersResponse, ProduceType } from '@/lib/api/generated/models';
+import type { ProduceType } from '@/lib/api/generated/models';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -19,6 +19,7 @@ const generateMockGrowers = (count: number) => {
   return Array.from({ length: count }, (_, i) => ({
     sellerId: `grower-${i + 1}`,
     name: `Grower ${i + 1}`,
+    organization: null,
     city: 'Austin',
     location: {
       lat: 30.2672,
@@ -38,13 +39,10 @@ const generateMockGrowers = (count: number) => {
 
 const PAGINATED_GROWERS_DATA = generateMockGrowers(25);
 
-const MOCK_GROWERS: { data: GrowersResponse; status: number } = {
-  status: 200,
-  data: {
-    data: PAGINATED_GROWERS_DATA.slice(0, 2),
-    meta: { total: 2, page: 1, limit: 10, totalPages: 1 },
-    cities: ['Austin'],
-  },
+const MOCK_GROWERS = {
+  data: PAGINATED_GROWERS_DATA.slice(0, 2),
+  meta: { total: 2, page: 1, limit: 10, totalPages: 1 },
+  cities: ['Austin'],
 };
 
 const meta: Meta<typeof BuyerGrowersClient> = {
@@ -108,15 +106,12 @@ export const Paginated: Story = {
           const items = PAGINATED_GROWERS_DATA.slice(start, end);
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: items,
-              meta: {
-                total: PAGINATED_GROWERS_DATA.length,
-                page,
-                limit: PAGE_LIMIT,
-                totalPages: Math.ceil(PAGINATED_GROWERS_DATA.length / PAGE_LIMIT),
-              },
+            data: items,
+            meta: {
+              total: PAGINATED_GROWERS_DATA.length,
+              page,
+              limit: PAGE_LIMIT,
+              totalPages: Math.ceil(PAGINATED_GROWERS_DATA.length / PAGE_LIMIT),
             },
           });
         }),
@@ -143,8 +138,8 @@ export const MixedLocations: Story = {
       handlers: [
         http.get('*/api/buyer/growers', () => {
           const mixedData = JSON.parse(JSON.stringify(MOCK_GROWERS));
-          mixedData.data.data[1].city = 'San Antonio';
-          mixedData.data.cities = ['Austin', 'San Antonio'];
+          mixedData.data[1].city = 'San Antonio';
+          mixedData.cities = ['Austin', 'San Antonio'];
           return HttpResponse.json(mixedData);
         }),
       ],
@@ -175,8 +170,8 @@ export const EmptyState: Story = {
       handlers: [
         http.get('*/api/buyer/growers', () => {
           return HttpResponse.json({
-            data: { data: [], meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 } },
-            status: 200,
+            data: [],
+            meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 },
           });
         }),
       ],

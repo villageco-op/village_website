@@ -1,3 +1,4 @@
+import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 
@@ -21,22 +22,23 @@ export function OrderSubscriptionToggle({
   frequencyDays,
 }: OrderSubscriptionToggleProps) {
   return (
-    <div className="flex items-start space-x-3 p-4 rounded-lg border border-lime/30 bg-lime-pale/30">
-      <Checkbox
-        id="subscription"
-        checked={isSubscription}
-        onCheckedChange={(checked) => onChange(checked === true)}
-        className="mt-1 border-click-green data-[state=checked]:bg-click-green data-[state=checked]:text-white"
-      />
-      <div className="space-y-1 leading-none">
-        <Label htmlFor="subscription" className="font-semibold text-deep-forest cursor-pointer">
-          Subscribe to this item
-        </Label>
-        <p className="text-sm text-ink-3">
-          Automatically receive this order every {frequencyDays || 7} days during the harvest
-          season.
-        </p>
-      </div>
-    </div>
+    <Card>
+      <CardContent className="flex items-start space-x-3 p-4">
+        <Checkbox
+          id="subscription"
+          checked={isSubscription}
+          onCheckedChange={(checked) => onChange(checked === true)}
+        />
+        <div className="space-y-1 leading-none">
+          <Label htmlFor="subscription" className="cursor-pointer">
+            Subscribe to this item
+          </Label>
+          <p className="text-sm text-ink-3">
+            Automatically receive this order every {frequencyDays || 7} days during the harvest
+            season.
+          </p>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

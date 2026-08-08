@@ -26,11 +26,15 @@ import type {
 
 import type {
   ErrorResponse,
+  FcmStatusResponse,
+  GetFcmStatusParams,
   GetSellerReviewsParams,
+  Organization,
   PaginatedReviewsResponse,
   PublicUserProfile,
   RegisterFcmTokenPayload,
   SuccessResponse,
+  UnregisterFcmTokenPayload,
   UpdateScheduleRulesPayload,
   UpdateUserPayload,
   User,
@@ -255,6 +259,305 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getUpdateCurrentUserMutationOptions(options), queryClient);
     }
     /**
+ * Delete user account, anonymizing personal data to preserve historical orders.
+ */
+export type deleteAccountResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type deleteAccountResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type deleteAccountResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type deleteAccountResponseSuccess = (deleteAccountResponse200) & {
+  headers: Headers;
+};
+export type deleteAccountResponseError = (deleteAccountResponse401 | deleteAccountResponse404) & {
+  headers: Headers;
+};
+
+export type deleteAccountResponse = (deleteAccountResponseSuccess | deleteAccountResponseError)
+
+export const getDeleteAccountUrl = () => {
+
+
+  
+
+  return `/api/users/me`
+}
+
+export const deleteAccount = async ( options?: RequestInit): Promise<deleteAccountResponse> => {
+  
+  return apiClient<deleteAccountResponse>(getDeleteAccountUrl(),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+  
+
+
+
+export const getDeleteAccountMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAccount>>, TError,void, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAccount>>, TError,void, TContext> => {
+
+const mutationKey = ['deleteAccount'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAccount>>, void> = () => {
+          
+
+          return  deleteAccount(requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAccountMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAccount>>>
+    
+    export type DeleteAccountMutationError = ErrorResponse
+
+    export const useDeleteAccount = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAccount>>, TError,void, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAccount>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getDeleteAccountMutationOptions(options), queryClient);
+    }
+    /**
+ * Fetch the organization of the currently authenticated user.
+ */
+export type getCurrentUserOrganizationResponse200 = {
+  data: Organization
+  status: 200
+}
+
+export type getCurrentUserOrganizationResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type getCurrentUserOrganizationResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type getCurrentUserOrganizationResponseSuccess = (getCurrentUserOrganizationResponse200) & {
+  headers: Headers;
+};
+export type getCurrentUserOrganizationResponseError = (getCurrentUserOrganizationResponse401 | getCurrentUserOrganizationResponse404) & {
+  headers: Headers;
+};
+
+export type getCurrentUserOrganizationResponse = (getCurrentUserOrganizationResponseSuccess | getCurrentUserOrganizationResponseError)
+
+export const getGetCurrentUserOrganizationUrl = () => {
+
+
+  
+
+  return `/api/users/me/org`
+}
+
+export const getCurrentUserOrganization = async ( options?: RequestInit): Promise<getCurrentUserOrganizationResponse> => {
+  
+  return apiClient<getCurrentUserOrganizationResponse>(getGetCurrentUserOrganizationUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetCurrentUserOrganizationQueryKey = () => {
+    return [
+    `/api/users/me/org`
+    ] as const;
+    }
+
+    
+export const getGetCurrentUserOrganizationQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError = ErrorResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCurrentUserOrganizationQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUserOrganization>>> = ({ signal }) => getCurrentUserOrganization({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCurrentUserOrganizationQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentUserOrganization>>>
+export type GetCurrentUserOrganizationQueryError = ErrorResponse
+
+
+export function useGetCurrentUserOrganization<TData = Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError = ErrorResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurrentUserOrganization>>,
+          TError,
+          Awaited<ReturnType<typeof getCurrentUserOrganization>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentUserOrganization<TData = Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError = ErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurrentUserOrganization>>,
+          TError,
+          Awaited<ReturnType<typeof getCurrentUserOrganization>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentUserOrganization<TData = Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError = ErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetCurrentUserOrganization<TData = Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError = ErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUserOrganization>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCurrentUserOrganizationQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Leave current organization by clearing organizationId and orgRole.
+ */
+export type leaveOrganizationResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type leaveOrganizationResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type leaveOrganizationResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type leaveOrganizationResponseSuccess = (leaveOrganizationResponse200) & {
+  headers: Headers;
+};
+export type leaveOrganizationResponseError = (leaveOrganizationResponse401 | leaveOrganizationResponse404) & {
+  headers: Headers;
+};
+
+export type leaveOrganizationResponse = (leaveOrganizationResponseSuccess | leaveOrganizationResponseError)
+
+export const getLeaveOrganizationUrl = () => {
+
+
+  
+
+  return `/api/users/me/org/leave`
+}
+
+export const leaveOrganization = async ( options?: RequestInit): Promise<leaveOrganizationResponse> => {
+  
+  return apiClient<leaveOrganizationResponse>(getLeaveOrganizationUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+);}
+  
+
+
+
+export const getLeaveOrganizationMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof leaveOrganization>>, TError,void, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof leaveOrganization>>, TError,void, TContext> => {
+
+const mutationKey = ['leaveOrganization'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof leaveOrganization>>, void> = () => {
+          
+
+          return  leaveOrganization(requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LeaveOrganizationMutationResult = NonNullable<Awaited<ReturnType<typeof leaveOrganization>>>
+    
+    export type LeaveOrganizationMutationError = ErrorResponse
+
+    export const useLeaveOrganization = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof leaveOrganization>>, TError,void, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof leaveOrganization>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getLeaveOrganizationMutationOptions(options), queryClient);
+    }
+    /**
  * Store the user's Firebase Cloud Messaging token for push notifications.
  */
 export type registerFcmTokenResponse200 = {
@@ -267,15 +570,10 @@ export type registerFcmTokenResponse401 = {
   status: 401
 }
 
-export type registerFcmTokenResponse404 = {
-  data: ErrorResponse
-  status: 404
-}
-
 export type registerFcmTokenResponseSuccess = (registerFcmTokenResponse200) & {
   headers: Headers;
 };
-export type registerFcmTokenResponseError = (registerFcmTokenResponse401 | registerFcmTokenResponse404) & {
+export type registerFcmTokenResponseError = (registerFcmTokenResponse401) & {
   headers: Headers;
 };
 
@@ -346,6 +644,213 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getRegisterFcmTokenMutationOptions(options), queryClient);
     }
     /**
+ * Remove the user's Firebase Cloud Messaging token for the given platform.
+ */
+export type unregisterFcmTokenResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type unregisterFcmTokenResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type unregisterFcmTokenResponseSuccess = (unregisterFcmTokenResponse200) & {
+  headers: Headers;
+};
+export type unregisterFcmTokenResponseError = (unregisterFcmTokenResponse401) & {
+  headers: Headers;
+};
+
+export type unregisterFcmTokenResponse = (unregisterFcmTokenResponseSuccess | unregisterFcmTokenResponseError)
+
+export const getUnregisterFcmTokenUrl = () => {
+
+
+  
+
+  return `/api/users/fcm-token`
+}
+
+export const unregisterFcmToken = async (unregisterFcmTokenPayload: UnregisterFcmTokenPayload, options?: RequestInit): Promise<unregisterFcmTokenResponse> => {
+  
+  return apiClient<unregisterFcmTokenResponse>(getUnregisterFcmTokenUrl(),
+  {      
+    ...options,
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      unregisterFcmTokenPayload,)
+  }
+);}
+  
+
+
+
+export const getUnregisterFcmTokenMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unregisterFcmToken>>, TError,{data: UnregisterFcmTokenPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof unregisterFcmToken>>, TError,{data: UnregisterFcmTokenPayload}, TContext> => {
+
+const mutationKey = ['unregisterFcmToken'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof unregisterFcmToken>>, {data: UnregisterFcmTokenPayload}> = (props) => {
+          const {data} = props ?? {};
+
+          return  unregisterFcmToken(data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UnregisterFcmTokenMutationResult = NonNullable<Awaited<ReturnType<typeof unregisterFcmToken>>>
+    export type UnregisterFcmTokenMutationBody = UnregisterFcmTokenPayload
+    export type UnregisterFcmTokenMutationError = ErrorResponse
+
+    export const useUnregisterFcmToken = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unregisterFcmToken>>, TError,{data: UnregisterFcmTokenPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof unregisterFcmToken>>,
+        TError,
+        {data: UnregisterFcmTokenPayload},
+        TContext
+      > => {
+      return useMutation(getUnregisterFcmTokenMutationOptions(options), queryClient);
+    }
+    /**
+ * Checks if a token exists for the current user and a given platform.
+ */
+export type getFcmStatusResponse200 = {
+  data: FcmStatusResponse
+  status: 200
+}
+
+export type getFcmStatusResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type getFcmStatusResponseSuccess = (getFcmStatusResponse200) & {
+  headers: Headers;
+};
+export type getFcmStatusResponseError = (getFcmStatusResponse401) & {
+  headers: Headers;
+};
+
+export type getFcmStatusResponse = (getFcmStatusResponseSuccess | getFcmStatusResponseError)
+
+export const getGetFcmStatusUrl = (params: GetFcmStatusParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/users/fcm-status?${stringifiedParams}` : `/api/users/fcm-status`
+}
+
+export const getFcmStatus = async (params: GetFcmStatusParams, options?: RequestInit): Promise<getFcmStatusResponse> => {
+  
+  return apiClient<getFcmStatusResponse>(getGetFcmStatusUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetFcmStatusQueryKey = (params?: GetFcmStatusParams,) => {
+    return [
+    `/api/users/fcm-status`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+    
+export const getGetFcmStatusQueryOptions = <TData = Awaited<ReturnType<typeof getFcmStatus>>, TError = ErrorResponse>(params: GetFcmStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFcmStatusQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFcmStatus>>> = ({ signal }) => getFcmStatus(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFcmStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getFcmStatus>>>
+export type GetFcmStatusQueryError = ErrorResponse
+
+
+export function useGetFcmStatus<TData = Awaited<ReturnType<typeof getFcmStatus>>, TError = ErrorResponse>(
+ params: GetFcmStatusParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFcmStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getFcmStatus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFcmStatus<TData = Awaited<ReturnType<typeof getFcmStatus>>, TError = ErrorResponse>(
+ params: GetFcmStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFcmStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getFcmStatus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFcmStatus<TData = Awaited<ReturnType<typeof getFcmStatus>>, TError = ErrorResponse>(
+ params: GetFcmStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetFcmStatus<TData = Awaited<ReturnType<typeof getFcmStatus>>, TError = ErrorResponse>(
+ params: GetFcmStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFcmStatus>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFcmStatusQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
  * Seller defines their base availability.
  */
 export type updateScheduleRulesResponse200 = {

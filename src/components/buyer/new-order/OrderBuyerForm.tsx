@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { Loader2, ShoppingCart, CalendarDays, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
@@ -10,7 +11,7 @@ import { OrderSubscriptionToggle } from './OrderSubscriptionToggle';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormErrorState } from '@/components/ui/state-displays';
-import { useAddToCart } from '@/lib/api/generated/cart/cart';
+import { getGetCartQueryKey, useAddToCart } from '@/lib/api/generated/cart/cart';
 import type { ProduceDetail } from '@/lib/api/generated/models';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
 
@@ -38,6 +39,7 @@ export function BuyerOrderForm({
 }: BuyerOrderFormProps) {
   const { data: produceQuery, isLoading, error, refetch } = useGetProduce(produceId);
   const addToCartMutation = useAddToCart();
+  const queryClient = useQueryClient();
 
   const [quantityLbs, setQuantityLbs] = useState<number>(initialQuantityLbs || 1);
   const [isSubscription, setIsSubscription] = useState<boolean>(initialIsSubscription || false);
@@ -52,7 +54,7 @@ export function BuyerOrderForm({
 
   if (isLoading) {
     return (
-      <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden">
+      <Card>
         <div className="flex justify-center p-12">
           <Loader2 className="w-8 h-8 animate-spin text-lime" />
         </div>
@@ -106,23 +108,22 @@ export function BuyerOrderForm({
         },
       });
       toast.success('Added to cart!');
+      void queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
+      if (onClose) onClose();
     } catch (err) {
-      console.error('Failed to add to cart:', err);
       toast.error('Failed to add item to cart.');
     }
   };
 
   return (
-    <Card className="z-50 rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden relative max-w-[calc(100vw-2rem)] mx-auto w-full sm:max-w-md">
-      <CardHeader className="bg-off-white border-b border-lime/20 pb-4 pr-12">
-        <CardTitle className="font-heading text-xl text-deep-forest">
-          Order {produce.title}
-        </CardTitle>
+    <Card className="z-50 overflow-hidden relative max-w-[calc(100vw-2rem)] mx-auto w-full sm:max-w-md">
+      <CardHeader className="pb-4 pr-12">
+        <CardTitle>Order {produce.title}</CardTitle>
         {onClose && (
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-2 top-2 text-forest-dark/50 hover:text-forest-dark"
+            className="absolute right-2 top-2"
             onClick={onClose}
             type="button"
           >
@@ -184,8 +185,9 @@ export function BuyerOrderForm({
         <CardFooter className="pb-6">
           <Button
             type="submit"
+            variant="lime"
             disabled={addToCartMutation.isPending || isOutOfStock || hasError}
-            className="w-full bg-lime text-forest-dark hover:bg-lime-light font-bold h-12 text-lg transition-colors"
+            className="w-full"
           >
             {addToCartMutation.isPending ? (
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />

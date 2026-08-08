@@ -26,6 +26,8 @@ export const Default: Story = {
     profile: {
       id: 'user-1',
       name: 'Sarah Greenfield',
+      organization: null,
+      organizationId: '',
       starRating: 4.8,
       joinedAt: '2022-06-10T00:00:00Z',
       activeBuyerCount: 24,

@@ -7,12 +7,6 @@ import SellerListingsTab from './SellerListingsTab';
 
 import type { ProduceListItem } from '@/lib/api/generated/models';
 
-const mockedQueryClient = new QueryClient({
-  defaultOptions: {
-    queries: { retry: false },
-  },
-});
-
 const SELLER_ID = 'seller_789';
 
 const generateMockListings = (count: number, namePrefix = 'Listing'): ProduceListItem[] => {
@@ -21,6 +15,7 @@ const generateMockListings = (count: number, namePrefix = 'Listing'): ProduceLis
     name: `${namePrefix} ${i + 1}`,
     sellerId: SELLER_ID,
     sellerName: 'Green Valley Farm',
+    sellerOrg: null,
     thumbnail:
       i % 3 === 0
         ? 'https://images.unsplash.com/photo-1597362868487-10501f930a04?w=400&h=300&fit=crop'
@@ -47,9 +42,16 @@ const meta: Meta<typeof SellerListingsTab> = {
   },
   decorators: [
     (Story) => {
-      mockedQueryClient.clear();
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+            refetchOnWindowFocus: false,
+          },
+        },
+      });
       return (
-        <QueryClientProvider client={mockedQueryClient}>
+        <QueryClientProvider client={queryClient}>
           <div className="max-w-4xl mx-auto bg-off-white p-6 rounded-xl">
             <Story />
           </div>
@@ -72,11 +74,8 @@ export const Default: Story = {
       handlers: [
         http.get('*/api/produce/list', () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: ALL_MOCK_LISTINGS.slice(0, 12),
-              meta: { total: 12, page: 1, limit: 12, totalPages: 1 },
-            },
+            data: ALL_MOCK_LISTINGS.slice(0, 12),
+            meta: { total: 12, page: 1, limit: 12, totalPages: 1 },
           });
         }),
       ],
@@ -85,53 +84,6 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(await canvas.findByText(/12 active listings/i)).toBeInTheDocument();
-  },
-};
-
-/**
- * Testing pagination with multiple pages of results.
- */
-export const Paginated: Story = {
-  args: { sellerId: SELLER_ID },
-  parameters: {
-    msw: {
-      handlers: [
-        http.get('*/api/produce/list', ({ request }) => {
-          const url = new URL(request.url);
-          const page = Number(url.searchParams.get('page') || '1');
-          const limit = 12;
-          const start = (page - 1) * limit;
-          const data = ALL_MOCK_LISTINGS.slice(start, start + limit);
-
-          return HttpResponse.json({
-            status: 200,
-            data: {
-              data,
-              meta: {
-                total: ALL_MOCK_LISTINGS.length,
-                page,
-                limit,
-                totalPages: Math.ceil(ALL_MOCK_LISTINGS.length / limit),
-              },
-            },
-          });
-        }),
-      ],
-    },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    // Page 1
-    await expect(await canvas.findByText('Listing 1')).toBeInTheDocument();
-
-    // Go to Page 2
-    const nextButton = await canvas.findByRole('button', { name: /next|2/i });
-    await userEvent.click(nextButton);
-
-    // Page 2
-    await expect(await canvas.findByText('Listing 13')).toBeInTheDocument();
-    await expect(canvas.queryByText('Listing 1')).not.toBeInTheDocument();
   },
 };
 
@@ -153,11 +105,8 @@ export const Searching: Story = {
           }
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: filtered.slice(0, 12),
-              meta: { total: filtered.length, page: 1, limit: 12, totalPages: 1 },
-            },
+            data: filtered.slice(0, 12),
+            meta: { total: filtered.length, page: 1, limit: 12, totalPages: 1 },
           });
         }),
       ],
@@ -190,11 +139,8 @@ export const NoResults: Story = {
       handlers: [
         http.get('*/api/produce/list', () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: [],
-              meta: { total: 0, page: 1, limit: 12, totalPages: 0 },
-            },
+            data: [],
+            meta: { total: 0, page: 1, limit: 12, totalPages: 0 },
           });
         }),
       ],

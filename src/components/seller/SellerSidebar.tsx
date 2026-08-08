@@ -1,51 +1,29 @@
 'use client';
 
-import {
-  LayoutDashboard,
-  Sprout,
-  CircleDollarSign,
-  Package,
-  HeartHandshake,
-  MessageCircle,
-  Settings,
-} from 'lucide-react';
-import type { ComponentType } from 'react';
+import { LayoutDashboard, Sprout, CircleDollarSign, Package, MessageCircle } from 'lucide-react';
 
-import { Sidebar } from '../layout/Sidebar';
+import { type NavGroup, Sidebar } from '../layout/Sidebar';
 
 import type { User } from '@/lib/api/generated/models/user';
-
-/**
- * A navigation item in the side bar.
- */
-export interface NavItem {
-  name: string;
-  sub: string;
-  icon: ComponentType<{ className?: string; strokeWidth?: number }>;
-  href: string;
-  badge?: number | string;
-  badgeVariant?: 'default' | 'sun';
-}
-
-/**
- * A group of navigation items with a label.
- */
-export interface NavGroup {
-  label: string;
-  items: NavItem[];
-}
 
 const SELLER_NAV_GROUPS: NavGroup[] = [
   {
     label: 'Overview',
     items: [
-      { name: 'Dashboard', sub: 'This week at a glance', icon: LayoutDashboard, href: '/seller' },
+      {
+        name: 'Dashboard',
+        sub: 'This week at a glance',
+        icon: LayoutDashboard,
+        href: '/seller',
+        protected: true,
+      },
       {
         name: 'My Listings',
         sub: 'Active produce for sale',
         icon: Sprout,
         href: '/seller/listings',
         badge: 3,
+        protected: true,
       },
     ],
   },
@@ -57,6 +35,7 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
         sub: 'Revenue & payouts',
         icon: CircleDollarSign,
         href: '/seller/earnings',
+        protected: true,
       },
       {
         name: 'Orders',
@@ -65,25 +44,14 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
         href: '/seller/orders',
         badge: 2,
         badgeVariant: 'sun',
-      },
-    ],
-  },
-  {
-    label: 'Resources',
-    items: [
-      {
-        name: 'Community Fund',
-        sub: 'Grants & support',
-        icon: HeartHandshake,
-        href: '/seller/fund',
+        protected: true,
       },
     ],
   },
   {
     label: 'Support',
     items: [
-      { name: 'Get Help', sub: '', icon: MessageCircle, href: '/seller/help' },
-      { name: 'Settings', sub: '', icon: Settings, href: '/seller/settings' },
+      { name: 'Get Help', sub: '', icon: MessageCircle, href: '/seller/help', protected: true },
     ],
   },
 ];
@@ -93,22 +61,30 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
  */
 interface SellerSidebarProps {
   user?: User;
+  status: 'loading' | 'authenticated' | 'unauthenticated';
 }
 
 /**
  * The left aligned sidebar for navigating the seller pages.
  * @param props - Props for the seller user object
  * @param props.user - The user object for the seller
+ * @param props.status - The user authentication status
  * @returns A sidebar component with navigation links
  */
-export function SellerSidebar({ user }: SellerSidebarProps) {
+export function SellerSidebar({ user, status }: SellerSidebarProps) {
+  if (user && !user.stripeOnboardingComplete) {
+    // AuthGaurd will redirect so hide nav items
+    status = 'loading';
+  }
+
   return (
     <Sidebar
       user={user}
+      status={status}
       roleLabel="Producer"
-      fallbackName="Producer"
-      settingsHref="/seller/settings"
-      publicProfileBaseUrl="/producer"
+      fallbackName="New Neighbor"
+      settingsHref="/settings"
+      publicProfileBaseUrl="/public-profile"
       navGroups={SELLER_NAV_GROUPS}
     />
   );

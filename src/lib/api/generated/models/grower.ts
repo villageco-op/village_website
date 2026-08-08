@@ -13,7 +13,7 @@ import type { UserId } from './userId';
 export interface Grower {
   sellerId: UserId;
   /**
-   * The display name of the grower
+   * The name of the grower
    * @nullable
    */
   name: string | null;

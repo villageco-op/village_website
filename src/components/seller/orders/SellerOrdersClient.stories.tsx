@@ -5,75 +5,67 @@ import { http, HttpResponse, delay } from 'msw';
 
 import SellerOrdersClient from './SellerOrdersClient';
 
-import type { getOrdersResponse200 } from '@/lib/api/generated/orders/orders';
-
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
   },
 });
 
-const MOCK_PENDING_ORDERS: getOrdersResponse200 = {
-  status: 200,
-  data: {
-    data: [
-      {
-        id: 'ord_pending_1',
-        totalAmount: '24.99',
-        fulfillmentType: 'pickup',
-        scheduledTime: new Date().toISOString(),
-        status: 'pending',
-        sellerId: 'seller-1',
-        buyerId: 'buyer-2',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        paymentMethod: 'card',
-        cancelReason: null,
-        stripeReceiptUrl: 'https://stripe.com/receipt',
-        stripeInvoiceId: 'invoice_id',
-      },
-      {
-        id: 'ord_pending_2',
-        totalAmount: '15.00',
-        fulfillmentType: 'delivery',
-        scheduledTime: new Date().toISOString(),
-        status: 'pending',
-        sellerId: 'seller-1',
-        buyerId: 'buyer-2',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        paymentMethod: 'card',
-        cancelReason: null,
-        stripeReceiptUrl: 'https://stripe.com/receipt',
-        stripeInvoiceId: 'invoice_id',
-      },
-    ],
-    meta: { total: 2, page: 1, limit: 2, totalPages: 1 },
-  },
+const MOCK_PENDING_ORDERS = {
+  data: [
+    {
+      id: 'ord_pending_1',
+      totalAmount: '24.99',
+      fulfillmentType: 'pickup',
+      scheduledTime: new Date().toISOString(),
+      status: 'pending',
+      sellerId: 'seller-1',
+      buyerId: 'buyer-2',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      paymentMethod: 'card',
+      cancelReason: null,
+      stripeReceiptUrl: 'https://stripe.com/receipt',
+      stripeInvoiceId: 'invoice_id',
+    },
+    {
+      id: 'ord_pending_2',
+      totalAmount: '15.00',
+      fulfillmentType: 'delivery',
+      scheduledTime: new Date().toISOString(),
+      status: 'pending',
+      sellerId: 'seller-1',
+      buyerId: 'buyer-2',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      paymentMethod: 'card',
+      cancelReason: null,
+      stripeReceiptUrl: 'https://stripe.com/receipt',
+      stripeInvoiceId: 'invoice_id',
+    },
+  ],
+  meta: { total: 2, page: 1, limit: 2, totalPages: 1 },
 };
 
-const MOCK_HISTORY_ORDERS: getOrdersResponse200 = {
-  status: 200,
-  data: {
-    data: [
-      {
-        id: 'ord_hist_1',
-        totalAmount: '45.00',
-        fulfillmentType: 'pickup',
-        scheduledTime: new Date(Date.now() - 86400000).toISOString(),
-        status: 'completed',
-        sellerId: 'seller-1',
-        buyerId: 'buyer-2',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        paymentMethod: 'card',
-        cancelReason: null,
-        stripeReceiptUrl: 'https://stripe.com/receipt',
-        stripeInvoiceId: 'invoice_id',
-      },
-    ],
-    meta: { total: 1, page: 1, limit: 1, totalPages: 1 },
-  },
+const MOCK_HISTORY_ORDERS = {
+  data: [
+    {
+      id: 'ord_hist_1',
+      totalAmount: '45.00',
+      fulfillmentType: 'pickup',
+      scheduledTime: new Date(Date.now() - 86400000).toISOString(),
+      status: 'completed',
+      sellerId: 'seller-1',
+      buyerId: 'buyer-2',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      paymentMethod: 'card',
+      cancelReason: null,
+      stripeReceiptUrl: 'https://stripe.com/receipt',
+      stripeInvoiceId: 'invoice_id',
+    },
+  ],
+  meta: { total: 1, page: 1, limit: 1, totalPages: 1 },
 };
 
 const generateMockOrders = (count: number, prefix: string, status: string) => {
@@ -200,10 +192,7 @@ export const EmptyState: Story = {
     msw: {
       handlers: [
         http.get('*/api/orders', () => {
-          return HttpResponse.json({
-            status: 200,
-            data: { data: [], meta: { total: 0 } },
-          });
+          return HttpResponse.json({ data: [], meta: { total: 0 } });
         }),
       ],
     },
@@ -236,15 +225,12 @@ export const Paginated: Story = {
           const items = allItems.slice(start, end);
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: items,
-              meta: {
-                total: allItems.length,
-                page,
-                limit,
-                totalPages: Math.ceil(allItems.length / limit),
-              },
+            data: items,
+            meta: {
+              total: allItems.length,
+              page,
+              limit,
+              totalPages: Math.ceil(allItems.length / limit),
             },
           });
         }),

@@ -35,6 +35,8 @@ type Story = StoryObj<typeof SellerSidebar>;
 const mockUser: User = {
   id: 'user_123',
   name: 'Alex Gardener',
+  organizationId: null,
+  orgRole: null,
   email: 'alex@village.com',
   emailVerified: '2024-01-01T00:00:00Z',
   image:
@@ -50,8 +52,8 @@ const mockUser: User = {
   country: 'United States',
   zip: '45678',
   deliveryRangeMiles: '15',
-  stripeAccountId: 'acct_123',
   stripeOnboardingComplete: true,
+  isOnboardingComplete: true,
   createdAt: '2024-01-01T00:00:00Z',
   updatedAt: '2024-01-01T00:00:00Z',
 };
@@ -62,6 +64,7 @@ const mockUser: User = {
 export const DashboardActive: Story = {
   args: {
     user: mockUser,
+    status: 'authenticated',
   },
   parameters: {
     nextjs: {
@@ -82,6 +85,7 @@ export const InitialsFallback: Story = {
       name: 'Sarah Smith',
       image: null,
     },
+    status: 'authenticated',
   },
   parameters: {
     nextjs: {
@@ -98,6 +102,7 @@ export const InitialsFallback: Story = {
 export const ListingsActive: Story = {
   args: {
     user: mockUser,
+    status: 'authenticated',
   },
   parameters: {
     nextjs: {
@@ -114,6 +119,7 @@ export const ListingsActive: Story = {
 export const OrdersActive: Story = {
   args: {
     user: mockUser,
+    status: 'authenticated',
   },
   parameters: {
     nextjs: {
@@ -130,6 +136,7 @@ export const OrdersActive: Story = {
 export const SettingsActive: Story = {
   args: {
     user: mockUser,
+    status: 'authenticated',
   },
   parameters: {
     nextjs: {
@@ -146,6 +153,24 @@ export const SettingsActive: Story = {
 export const Anonymous: Story = {
   args: {
     user: undefined,
+    status: 'unauthenticated',
+  },
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: '/seller',
+      },
+    },
+  },
+};
+
+/**
+ * Sidebar state when user status is loading.
+ */
+export const Loading: Story = {
+  args: {
+    user: undefined,
+    status: 'loading',
   },
   parameters: {
     nextjs: {

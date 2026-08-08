@@ -17,7 +17,6 @@ import SellerInfoMapCard from './SellerInfoMapCard';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { NotFoundState } from '@/components/ui/state-displays';
-import type { ProduceDetail } from '@/lib/api/generated/models';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
 
 interface ProduceListingClientProps {
@@ -34,14 +33,13 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
   const router = useRouter();
   const [showOrderForm, setShowOrderForm] = useState(false);
 
-  const produceQuery = useGetProduce(id, { query: { enabled: !!id } });
-  const produce = produceQuery.data?.data as ProduceDetail | undefined;
+  const { isError, isLoading, data } = useGetProduce(id, { query: { enabled: !!id } });
 
-  if (produceQuery.isLoading) {
+  if (isLoading) {
     return <ProduceListingSkeleton />;
   }
 
-  if (produceQuery.isError || !produce) {
+  if (isError || data?.status !== 200 || !data.data) {
     return (
       <NotFoundState
         title="Listing not found"
@@ -50,15 +48,13 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
     );
   }
 
+  const produce = data.data;
+
   return (
     <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Navigation & Header */}
-        <Button
-          variant="ghost"
-          className="mb-6 -ml-3 text-ink-3 hover:text-ink hover:bg-slate-200/50"
-          onClick={() => router.back()}
-        >
+        <Button variant="ghost" className="mb-6 -ml-3 text-ink-3" onClick={() => router.back()}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Browse
         </Button>
@@ -72,7 +68,7 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
 
           {/* Right Column: Order Actions, Seller Map, & Buyer Activity */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6 items-start">
-            <div className="md:col-start-2 md:row-start-2">
+            <div className="md:col-start-2 md:row-start-2 lg:col-start-1 lg:row-start-1">
               <OrderActionCard onOrder={() => setShowOrderForm(true)} />
             </div>
 

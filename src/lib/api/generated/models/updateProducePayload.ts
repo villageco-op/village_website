@@ -29,11 +29,8 @@ export interface UpdateProducePayload {
    * @nullable
    */
   maxOrderQuantityOz?: number | null;
-  /**
-   * The date and time when the produce will be ready for pickup or delivery
-   * @nullable
-   */
-  availableBy?: string | null;
+  /** The date and time when the produce will be ready for pickup or delivery */
+  availableBy?: string;
   /**
    * How often this item is typically harvested, in days
    * @minimum 0

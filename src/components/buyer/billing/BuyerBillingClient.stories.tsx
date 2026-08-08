@@ -71,16 +71,11 @@ export const Default: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/billing-summary', () =>
-          HttpResponse.json({ status: 200, data: MOCK_BILLING_SUMMARY }),
-        ),
+        http.get('*/api/buyer/billing-summary', () => HttpResponse.json(MOCK_BILLING_SUMMARY)),
         http.get('*/api/orders', () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: PAGINATED_INVOICES_DATA.slice(0, 2),
-              meta: { total: 2, page: 1, limit: PAGE_LIMIT, totalPages: 1 },
-            },
+            data: PAGINATED_INVOICES_DATA.slice(0, 2),
+            meta: { total: 2, page: 1, limit: PAGE_LIMIT, totalPages: 1 },
           });
         }),
       ],
@@ -95,9 +90,7 @@ export const PaginatedHistory: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('*/api/buyer/billing-summary', () =>
-          HttpResponse.json({ status: 200, data: MOCK_BILLING_SUMMARY }),
-        ),
+        http.get('*/api/buyer/billing-summary', () => HttpResponse.json(MOCK_BILLING_SUMMARY)),
         http.get('*/api/orders', ({ request }) => {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
@@ -107,15 +100,12 @@ export const PaginatedHistory: Story = {
           const items = PAGINATED_INVOICES_DATA.slice(start, end);
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: items,
-              meta: {
-                total: PAGINATED_INVOICES_DATA.length,
-                page,
-                limit: PAGE_LIMIT,
-                totalPages: Math.ceil(PAGINATED_INVOICES_DATA.length / PAGE_LIMIT),
-              },
+            data: items,
+            meta: {
+              total: PAGINATED_INVOICES_DATA.length,
+              page,
+              limit: PAGE_LIMIT,
+              totalPages: Math.ceil(PAGINATED_INVOICES_DATA.length / PAGE_LIMIT),
             },
           });
         }),
@@ -159,19 +149,16 @@ export const EmptyState: Story = {
       handlers: [
         http.get('*/api/buyer/billing-summary', () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              totalSpent: 0,
-              totalProduceLbs: 0,
-              avgCostPerLb: 0,
-              localSourcingPercentage: 0,
-            },
+            totalSpent: 0,
+            totalProduceLbs: 0,
+            avgCostPerLb: 0,
+            localSourcingPercentage: 0,
           });
         }),
         http.get('*/api/orders', () => {
           return HttpResponse.json({
-            status: 200,
-            data: { data: [], meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 } },
+            data: [],
+            meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 },
           });
         }),
       ],

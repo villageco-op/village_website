@@ -8,6 +8,7 @@ import { CartDrawer } from './CartDrawer';
 
 import { Toaster } from '@/components/ui/sonner';
 import { CartProvider, useCartUI } from '@/hooks/useCartUI';
+import type { User } from '@/lib/api/generated/models';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -16,108 +17,136 @@ const mockedQueryClient = new QueryClient({
 });
 
 const MOCK_FULL_CART = {
-  status: 200,
-  data: {
-    data: [
-      {
-        groupId: 'group_1',
-        isSubscription: false,
-        frequencyDays: 0,
-        fulfillmentType: 'pickup',
-        availableBy: new Date().toISOString(),
-        deliveryFee: '0.00',
-        seller: { id: 'seller_1', name: 'Green Valley Farms' },
-        items: [
-          {
-            reservationId: 'res_101',
-            productId: 'prod_1',
-            title: 'Organic Honeycrisp Apples',
-            pricePerOz: '0.25', // $4.00 / lb
-            quantityOz: '32', // 2 lbs
-            maxOrderQuantityOz: '160',
-            isSubscribable: true,
-            isSubscription: false,
-            subscriptionFrequencyDays: null,
-            subscriptionCostReductionPercent: null,
-            expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
-            images: ['https://placehold.co/100x100/4CAF50/FFF?text=Apples'],
-          },
-          {
-            reservationId: 'res_103',
-            productId: 'prod_3',
-            title: 'Heirloom Carrots',
-            pricePerOz: '0.15', // $2.40 / lb
-            quantityOz: '16', // 1 lb
-            maxOrderQuantityOz: '80',
-            isSubscribable: true,
-            isSubscription: false,
-            subscriptionFrequencyDays: null,
-            subscriptionCostReductionPercent: null,
-            expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
-            images: [],
-          },
-        ],
-      },
-      {
-        groupId: 'group_2',
-        isSubscription: true,
-        frequencyDays: 8,
-        fulfillmentType: 'delivery',
-        availableBy: new Date().toISOString(),
-        deliveryFee: '5.00',
-        seller: { id: 'seller_1', name: 'Green Valley Farms' },
-        items: [
-          {
-            reservationId: 'res_102',
-            productId: 'prod_2',
-            title: 'Weekly Fresh Strawberries',
-            pricePerOz: '0.50', // $8.00 / lb
-            quantityOz: '16', // 1 lb
-            maxOrderQuantityOz: '80',
-            isSubscribable: true,
-            isSubscription: true,
-            subscriptionFrequencyDays: 7,
-            subscriptionCostReductionPercent: 10,
-            expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
-            images: [],
-          },
-        ],
-      },
-      {
-        groupId: 'group_3',
-        isSubscription: false,
-        frequencyDays: 0,
-        fulfillmentType: 'pickup',
-        availableBy: new Date().toISOString(),
-        deliveryFee: '4.50',
-        seller: { id: 'seller_2', name: 'Sunny Side Dairy' },
-        items: [
-          {
-            reservationId: 'res_201',
-            productId: 'prod_4',
-            title: 'Raw Whole Milk (Half Gallon)',
-            pricePerOz: '0.12',
-            quantityOz: '64',
-            maxOrderQuantityOz: '128',
-            isSubscribable: false,
-            isSubscription: false,
-            subscriptionFrequencyDays: null,
-            subscriptionCostReductionPercent: null,
-            expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
-            images: [],
-          },
-        ],
-      },
-    ],
-  },
+  data: [
+    {
+      groupId: 'group_1',
+      isSubscription: false,
+      frequencyDays: 0,
+      fulfillmentType: 'pickup',
+      availableBy: new Date().toISOString(),
+      deliveryFee: '0.00',
+      seller: { id: 'seller_1', name: 'Green Valley Farms' },
+      items: [
+        {
+          reservationId: 'res_101',
+          productId: 'prod_1',
+          title: 'Organic Honeycrisp Apples',
+          pricePerOz: '0.25', // $4.00 / lb
+          quantityOz: '32', // 2 lbs
+          maxOrderQuantityOz: '160',
+          isSubscribable: true,
+          isSubscription: false,
+          subscriptionFrequencyDays: null,
+          subscriptionCostReductionPercent: null,
+          expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
+          images: ['https://placehold.co/100x100/4CAF50/FFF?text=Apples'],
+        },
+        {
+          reservationId: 'res_103',
+          productId: 'prod_3',
+          title: 'Heirloom Carrots',
+          pricePerOz: '0.15', // $2.40 / lb
+          quantityOz: '16', // 1 lb
+          maxOrderQuantityOz: '80',
+          isSubscribable: true,
+          isSubscription: false,
+          subscriptionFrequencyDays: null,
+          subscriptionCostReductionPercent: null,
+          expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
+          images: [],
+        },
+      ],
+    },
+    {
+      groupId: 'group_2',
+      isSubscription: true,
+      frequencyDays: 8,
+      fulfillmentType: 'delivery',
+      availableBy: new Date().toISOString(),
+      deliveryFee: '5.00',
+      seller: { id: 'seller_1', name: 'Green Valley Farms' },
+      items: [
+        {
+          reservationId: 'res_102',
+          productId: 'prod_2',
+          title: 'Weekly Fresh Strawberries',
+          pricePerOz: '0.50', // $8.00 / lb
+          quantityOz: '16', // 1 lb
+          maxOrderQuantityOz: '80',
+          isSubscribable: true,
+          isSubscription: true,
+          subscriptionFrequencyDays: 7,
+          subscriptionCostReductionPercent: 10,
+          expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
+          images: [],
+        },
+      ],
+    },
+    {
+      groupId: 'group_3',
+      isSubscription: false,
+      frequencyDays: 0,
+      fulfillmentType: 'pickup',
+      availableBy: new Date().toISOString(),
+      deliveryFee: '4.50',
+      seller: { id: 'seller_2', name: 'Sunny Side Dairy' },
+      items: [
+        {
+          reservationId: 'res_201',
+          productId: 'prod_4',
+          title: 'Raw Whole Milk (Half Gallon)',
+          pricePerOz: '0.12',
+          quantityOz: '64',
+          maxOrderQuantityOz: '128',
+          isSubscribable: false,
+          isSubscription: false,
+          subscriptionFrequencyDays: null,
+          subscriptionCostReductionPercent: null,
+          expiresAt: new Date(Date.now() + 15 * 60000).toISOString(),
+          images: [],
+        },
+      ],
+    },
+  ],
 };
 
 const MOCK_EMPTY_CART = {
-  status: 200,
-  data: { data: [] },
+  data: [],
 };
 
-// Helper component to auto-open the cart drawer on mount for viewing in Storybook
+const mockUser: User = {
+  id: 'buyer_123',
+  name: 'County Fresh Mkt',
+  organizationId: null,
+  orgRole: null,
+  email: 'purchasing@countyfresh.com',
+  emailVerified: '2024-01-01T00:00:00Z',
+  image:
+    'https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=150&h=150&auto=format&fit=crop',
+  aboutMe: 'A local market bringing fresh valley produce to Gary, IN.',
+  deliveryRangeMiles: '0',
+  specialties: [],
+  goal: '90',
+  stripeOnboardingComplete: false,
+  isOnboardingComplete: true,
+  address: '456 Market Ave',
+  city: 'Gary',
+  lat: 41.59,
+  lng: -87.34,
+  state: 'IN',
+  country: 'United States',
+  zip: '92921',
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
+};
+
+const mockAuthSession = http.get('*/api/auth/session', () =>
+  HttpResponse.json({
+    user: mockUser,
+    expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+  }),
+);
+
 const AutoOpenCartWrapper = ({ children }: { children: React.ReactNode }) => {
   const { openCart } = useCartUI();
   useEffect(() => {
@@ -158,7 +187,7 @@ type Story = StoryObj<typeof CartDrawer>;
 export const Populated: Story = {
   parameters: {
     msw: {
-      handlers: [http.get('*/api/cart*', () => HttpResponse.json(MOCK_FULL_CART))],
+      handlers: [http.get('*/api/cart*', () => HttpResponse.json(MOCK_FULL_CART)), mockAuthSession],
     },
   },
 };
@@ -169,7 +198,10 @@ export const Populated: Story = {
 export const Empty: Story = {
   parameters: {
     msw: {
-      handlers: [http.get('*/api/cart*', () => HttpResponse.json(MOCK_EMPTY_CART))],
+      handlers: [
+        http.get('*/api/cart*', () => HttpResponse.json(MOCK_EMPTY_CART)),
+        mockAuthSession,
+      ],
     },
   },
 };
@@ -180,7 +212,10 @@ export const Empty: Story = {
 export const ErrorState: Story = {
   parameters: {
     msw: {
-      handlers: [http.get('*/api/cart*', () => new HttpResponse(null, { status: 500 }))],
+      handlers: [
+        http.get('*/api/cart*', () => new HttpResponse(null, { status: 500 })),
+        mockAuthSession,
+      ],
     },
   },
 };
@@ -197,6 +232,7 @@ export const RemoveItemSuccess: Story = {
           await delay(400);
           return HttpResponse.json({ success: true }, { status: 200 });
         }),
+        mockAuthSession,
       ],
     },
   },
@@ -227,6 +263,7 @@ export const UpdateQuantitySuccess: Story = {
           await delay(400); // Simulate network delay
           return HttpResponse.json({ success: true }, { status: 200 });
         }),
+        mockAuthSession,
       ],
     },
   },
@@ -259,6 +296,7 @@ export const ToggleSubscriptionSuccess: Story = {
           await delay(400);
           return HttpResponse.json({ success: true }, { status: 200 });
         }),
+        mockAuthSession,
       ],
     },
   },
@@ -293,6 +331,7 @@ export const UpdateGroupFulfillmentSuccess: Story = {
           await delay(400);
           return HttpResponse.json({ success: true }, { status: 200 });
         }),
+        mockAuthSession,
       ],
     },
   },

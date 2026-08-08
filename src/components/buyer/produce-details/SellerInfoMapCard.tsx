@@ -15,7 +15,7 @@ import type { ProduceDetail } from '@/lib/api/generated/models';
  */
 export default function SellerInfoMapCard({ seller }: { seller: ProduceDetail['seller'] }) {
   return (
-    <Card className="rounded-xl border border-forest-dark/10 bg-white shadow-sm">
+    <Card>
       <CardContent className="p-6 pt-0 space-y-6">
         {/* Seller Basic Info */}
         <div className="flex items-center gap-3">

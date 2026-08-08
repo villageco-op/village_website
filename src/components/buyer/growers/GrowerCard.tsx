@@ -25,6 +25,7 @@ interface GrowerCardProps {
  */
 export function GrowerCard({ grower, index }: GrowerCardProps) {
   const startDate = formatAppDate(grower.firstOrderDate, 'monthYear');
+  const name = grower.name;
 
   const getPillColor = (index: number) => {
     const styles = [
@@ -41,7 +42,7 @@ export function GrowerCard({ grower, index }: GrowerCardProps) {
   };
 
   return (
-    <Card className="flex h-full flex-col rounded-xl bg-white shadow-md border-none">
+    <Card className="flex h-full flex-col">
       <CardContent className="flex h-full flex-col p-6">
         {/* Header: Avatar, Name, Address */}
         <div className="mb-3 flex items-center gap-3">
@@ -52,12 +53,12 @@ export function GrowerCard({ grower, index }: GrowerCardProps) {
                 getAvatarFallbackColor(index),
               )}
             >
-              {getInitials(grower.name)}
+              {getInitials(name)}
             </AvatarFallback>
           </Avatar>
           <div>
             <div className="font-heading text-[0.92rem] font-bold text-ink">
-              {grower.name || 'Unknown Grower'}
+              {name || 'Unknown Grower'}
             </div>
             <div className="font-sans text-[0.74rem] text-ink-3">
               {grower.location?.address || 'No address provided'}
@@ -90,12 +91,7 @@ export function GrowerCard({ grower, index }: GrowerCardProps) {
 
         {/* Actions */}
         <div className="mt-auto flex gap-2 pt-1">
-          <Button
-            variant="outline-forest"
-            size="sm"
-            asChild
-            className="h-8 px-4 text-xs font-semibold"
-          >
+          <Button variant="outline-forest" size="sm" asChild>
             <Link href={`/seller/${grower.sellerId}`}>View Profile</Link>
           </Button>
         </div>

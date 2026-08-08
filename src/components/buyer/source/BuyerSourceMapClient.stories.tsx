@@ -97,10 +97,10 @@ export const Default: Story = {
           return HttpResponse.json(MOCK_SESSION);
         }),
         http.get('*/api/source-map/nodes', () => {
-          return HttpResponse.json({ status: 200, data: MOCK_NODES });
+          return HttpResponse.json(MOCK_NODES);
         }),
         http.get('*/api/source-map/analytics', () => {
-          return HttpResponse.json({ status: 200, data: MOCK_ANALYTICS });
+          return HttpResponse.json(MOCK_ANALYTICS);
         }),
       ],
     },
@@ -143,12 +143,14 @@ export const Empty: Story = {
       handlers: [
         http.get('/api/auth/session', () => HttpResponse.json(MOCK_SESSION)),
         http.get('*/api/source-map/nodes', () => {
-          return HttpResponse.json({ status: 200, data: [] });
+          return HttpResponse.json([], { status: 200 });
         }),
         http.get('*/api/source-map/analytics', () => {
           return HttpResponse.json({
-            status: 200,
-            data: { ...MOCK_ANALYTICS, totalSpend: 0, uniqueGrowers: 0, produceBreakdown: [] },
+            ...MOCK_ANALYTICS,
+            totalSpend: 0,
+            uniqueGrowers: 0,
+            produceBreakdown: [],
           });
         }),
       ],
@@ -178,10 +180,8 @@ export const Unauthenticated: Story = {
     msw: {
       handlers: [
         http.get('/api/auth/session', () => HttpResponse.json({})),
-        http.get('*/api/source-map/nodes', () => HttpResponse.json({ status: 200, data: [] })),
-        http.get('*/api/source-map/analytics', () =>
-          HttpResponse.json({ status: 200, data: null }),
-        ),
+        http.get('*/api/source-map/nodes', () => HttpResponse.json(null, { status: 200 })),
+        http.get('*/api/source-map/analytics', () => HttpResponse.json(null, { status: 200 })),
       ],
     },
   },

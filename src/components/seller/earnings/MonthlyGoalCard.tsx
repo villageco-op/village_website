@@ -45,7 +45,7 @@ export function MonthlyGoalCard({
   const progressPercent = Math.min((earnedThisMonth / monthlyGoal) * 100, 100);
 
   return (
-    <Card className="rounded-xl border border-[rgba(42,75,40,0.08)] bg-white shadow-[0_2px_12px_rgba(42,75,40,0.05)]">
+    <Card>
       <CardContent className="p-6">
         <div className="mb-5 flex items-center justify-between">
           <div>

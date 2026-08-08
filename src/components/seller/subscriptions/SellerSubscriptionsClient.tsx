@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 
 import { SellerSubscriptionCard } from './SellerSubscriptionCard';
-import { SellerSubscriptionsHeader } from './SellerSubscriptionsHeader';
 import { SellerSubscriptionsSkeleton } from './SellerSubscriptionsSkeleton';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import {
   Select,
@@ -80,7 +80,10 @@ export default function SellerSubscriptionsClient() {
 
   return (
     <div className="flex w-full flex-col p-8 pt-6">
-      <SellerSubscriptionsHeader activeCount={activeCount} />
+      <PageHeader
+        title="Customer Subscriptions"
+        subtitle={`You are fulfilling ${activeCount} active subscription${activeCount !== 1 ? 's' : ''}`}
+      />
 
       {/* Filters */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -88,19 +91,19 @@ export default function SellerSubscriptionsClient() {
           placeholder="Filter by Buyer ID..."
           value={buyerInput}
           onChange={(e) => setBuyerInput(e.target.value)}
-          className="max-w-xs bg-white"
+          className="max-w-xs"
         />
         <Input
           placeholder="Filter by Product ID..."
           value={productInput}
           onChange={(e) => setProductInput(e.target.value)}
-          className="max-w-xs bg-white"
+          className="max-w-xs"
         />
         <Select
           value={statusFilter}
           onValueChange={(val) => setStatusFilter(val as SubscriptionStatus | 'all')}
         >
-          <SelectTrigger className="w-full sm:w-45 bg-white">
+          <SelectTrigger className="w-full sm:w-45">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
@@ -118,8 +121,7 @@ export default function SellerSubscriptionsClient() {
               setProductInput('');
               setStatusFilter('all');
             }}
-            className="text-sm font-semibold text-forest hover:underline"
-            variant="ghost"
+            variant="link"
           >
             Clear filters
           </Button>

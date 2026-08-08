@@ -66,37 +66,31 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get(`*/api/produce/${MOCK_ID}`, () => {
-          return HttpResponse.json({
-            status: 200,
-            data: { title: 'Heirloom Tomatoes' },
-          });
+          return HttpResponse.json({ title: 'Heirloom Tomatoes' });
         }),
         http.get(`*/api/produce/${MOCK_ID}/orders`, () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: [
-                {
-                  id: 'ord_1',
-                  buyer: { name: 'Alex River', image: '' },
-                  quantityOz: 32,
-                  totalAmount: '12.00',
-                  fulfillmentType: 'pickup',
-                  scheduledTime: new Date().toISOString(),
-                  status: 'completed',
-                },
-                {
-                  id: 'ord_2',
-                  buyer: { name: 'Sam Smith', image: '' },
-                  quantityOz: 16,
-                  totalAmount: '6.50',
-                  fulfillmentType: 'delivery',
-                  scheduledTime: new Date().toISOString(),
-                  status: 'pending',
-                },
-              ],
-              meta: { total: 2, totalPages: 1 },
-            },
+            data: [
+              {
+                id: 'ord_1',
+                buyer: { name: 'Alex River', image: '' },
+                quantityOz: 32,
+                totalAmount: '12.00',
+                fulfillmentType: 'pickup',
+                scheduledTime: new Date().toISOString(),
+                status: 'completed',
+              },
+              {
+                id: 'ord_2',
+                buyer: { name: 'Sam Smith', image: '' },
+                quantityOz: 16,
+                totalAmount: '6.50',
+                fulfillmentType: 'delivery',
+                scheduledTime: new Date().toISOString(),
+                status: 'pending',
+              },
+            ],
+            meta: { total: 2, totalPages: 1 },
           });
         }),
       ],
@@ -112,10 +106,7 @@ export const Paginated: Story = {
     msw: {
       handlers: [
         http.get(`*/api/produce/${MOCK_ID}`, () => {
-          return HttpResponse.json({
-            status: 200,
-            data: { title: 'Paginated Heirloom Tomatoes' },
-          });
+          return HttpResponse.json({ title: 'Paginated Heirloom Tomatoes' });
         }),
         http.get(`*/api/produce/${MOCK_ID}/orders`, ({ request }) => {
           const url = new URL(request.url);
@@ -126,15 +117,12 @@ export const Paginated: Story = {
           const items = PAGINATED_ORDERS.slice(start, end);
 
           return HttpResponse.json({
-            status: 200,
-            data: {
-              data: items,
-              meta: {
-                total: PAGINATED_ORDERS.length,
-                page,
-                limit: PAGE_LIMIT,
-                totalPages: Math.ceil(PAGINATED_ORDERS.length / PAGE_LIMIT),
-              },
+            data: items,
+            meta: {
+              total: PAGINATED_ORDERS.length,
+              page,
+              limit: PAGE_LIMIT,
+              totalPages: Math.ceil(PAGINATED_ORDERS.length / PAGE_LIMIT),
             },
           });
         }),
@@ -179,16 +167,10 @@ export const EmptyOrders: Story = {
     msw: {
       handlers: [
         http.get(`*/api/produce/${MOCK_ID}`, () => {
-          return HttpResponse.json({
-            status: 200,
-            data: { title: 'Honeycrisp Apples' },
-          });
+          return HttpResponse.json({ title: 'Honeycrisp Apples' });
         }),
         http.get(`*/api/produce/${MOCK_ID}/orders`, () => {
-          return HttpResponse.json({
-            status: 200,
-            data: { data: [], meta: { total: 0, totalPages: 0 } },
-          });
+          return HttpResponse.json({ data: [], meta: { total: 0, totalPages: 0 } });
         }),
       ],
     },

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ListingOrdersSkeleton } from '@/components/seller/listing-orders/ListingOrdersSkeleton';
 import { ListingOrdersTable } from '@/components/seller/listing-orders/ListingOrdersTable';
 import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
@@ -68,20 +69,18 @@ export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
         {/* Header Section */}
         <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <Button
-              variant="ghost"
-              className="-ml-3 mb-2 text-ink-3 hover:bg-slate-200/50 hover:text-ink"
-              onClick={() => router.back()}
-            >
+            <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Listing
             </Button>
-            <div className="flex items-center gap-3">
-              <h1 className="font-heading text-3xl font-bold text-deep-forest">Orders</h1>
-            </div>
-            <p className="mt-1 font-sans text-sm text-ink-3">
-              Viewing all orders for <strong className="text-ink">{produceTitle}</strong>
-            </p>
+            <PageHeader
+              title="Orders"
+              subtitle={
+                <>
+                  Viewing all orders for <strong className="text-ink">{produceTitle}</strong>
+                </>
+              }
+            />
           </div>
         </div>
 

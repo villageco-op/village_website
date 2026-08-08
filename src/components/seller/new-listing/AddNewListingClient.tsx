@@ -1,3 +1,5 @@
+'use client';
+
 import { ArrowLeft, Loader2, ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -12,6 +14,7 @@ import { ListingPricingInventory } from './ListingPricingInventory';
 
 import type { CreateProducePayload, ProduceType } from '@/lib/api/generated/models';
 import { useCreateProduce } from '@/lib/api/generated/produce/produce';
+import { formatLocalDate } from '@/lib/date-utils';
 
 /**
  * Interface for the new listing form.
@@ -107,9 +110,11 @@ export default function AddNewListingClient() {
         totalOzInventory,
         maxOrderQuantityOz,
         harvestFrequencyDays: Number(formData.harvestFrequencyDays),
-        availableBy: formData.availableBy ? new Date(formData.availableBy).toISOString() : null,
-        seasonStart: new Date(formData.seasonStart).toISOString(),
-        seasonEnd: new Date(formData.seasonEnd).toISOString(),
+        availableBy: formData.availableBy
+          ? new Date(formData.availableBy).toISOString()
+          : undefined,
+        seasonStart: formatLocalDate(formData.seasonStart),
+        seasonEnd: formatLocalDate(formData.seasonEnd),
         isSubscribable: formData.isSubscribable,
         images: formData.images.length > 0 ? formData.images : undefined,
       };
@@ -169,17 +174,12 @@ export default function AddNewListingClient() {
             <Button
               type="button"
               variant="outline"
-              className="text-ink-2 bg-white"
               onClick={() => router.back()}
               disabled={isSubmitting || isUploading}
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={isSubmitting || isUploading}
-              className="bg-lime text-forest-dark hover:bg-lime-light font-bold min-w-35"
-            >
+            <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-35">
               {isSubmitting ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               ) : (

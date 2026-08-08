@@ -72,11 +72,8 @@ export const Default: Story = {
       handlers: [
         http.get(`*/api/users/${MOCK_SELLER_ID}/reviews`, () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              reviews: generateMockReviews(3),
-              pagination: { total: 3, page: 1, limit: 5, totalPages: 1 },
-            },
+            reviews: generateMockReviews(3),
+            meta: { total: 3, page: 1, limit: 5, totalPages: 1 },
           });
         }),
       ],
@@ -100,11 +97,8 @@ export const NoReviews: Story = {
       handlers: [
         http.get(`*/api/users/${MOCK_SELLER_ID}/reviews`, () => {
           return HttpResponse.json({
-            status: 200,
-            data: {
-              reviews: [],
-              pagination: { total: 0, page: 1, limit: 5, totalPages: 0 },
-            },
+            reviews: [],
+            meta: { total: 0, page: 1, limit: 5, totalPages: 0 },
           });
         }),
       ],

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { Home, Package, Settings, Truck } from 'lucide-react';
+import { expect, within } from '@storybook/test';
+import { Home, Lock, Shield, Truck } from 'lucide-react';
 
 import { Sidebar, type NavGroup } from './Sidebar';
 
@@ -33,6 +34,8 @@ type Story = StoryObj<typeof Sidebar>;
 const mockUser: User = {
   id: 'user_generic_1',
   name: 'Sam Logistics',
+  organizationId: 'org_123',
+  orgRole: 'member',
   email: 'sam@transport.com',
   emailVerified: '2024-01-01T00:00:00Z',
   image:
@@ -43,8 +46,8 @@ const mockUser: User = {
   deliveryRangeMiles: '0',
   specialties: [],
   goal: '90',
-  stripeAccountId: 'id',
   stripeOnboardingComplete: false,
+  isOnboardingComplete: true,
   address: '456 Market Ave',
   city: 'Gary',
   lat: 41.59,
@@ -54,41 +57,125 @@ const mockUser: User = {
   zip: '45678',
 };
 
-const mockNavGroups: NavGroup[] = [
+const mockNavGroupsWithPermissions: NavGroup[] = [
   {
     label: 'Main',
     items: [
-      { name: 'Dashboard', icon: Home, href: '/dashboard' },
-      { name: 'Deliveries', sub: 'Active routes', icon: Truck, href: '/deliveries', badge: 5 },
+      { name: 'Public Overview', icon: Home, href: '/overview', protected: false },
+      {
+        name: 'Protected Deliveries',
+        sub: 'Active routes',
+        icon: Truck,
+        href: '/deliveries',
+        protected: true,
+      },
     ],
   },
   {
-    label: 'System',
+    label: 'Administration',
     items: [
-      { name: 'Inventory', icon: Package, href: '/inventory', badge: 'New', badgeVariant: 'sun' },
-      { name: 'Settings', icon: Settings, href: '/settings' },
+      {
+        name: 'User Management',
+        icon: Shield,
+        href: '/admin/users',
+        protected: true,
+        adminOnly: true,
+      },
+      { name: 'System Logs', icon: Lock, href: '/admin/logs', protected: true, adminOnly: true },
     ],
   },
 ];
 
 /**
- * A completely custom instance of the AppSidebar, acting as a generic logistics navigation.
+ * What the generic sidebar looks like when the user is logged out (undefined user).
+ * Asserts that protected and admin-only items are filtered out.
  */
-export const CustomLogisticsView: Story = {
+export const Anonymous: Story = {
   args: {
-    user: mockUser,
-    roleLabel: 'Driver',
-    fallbackName: 'Driver',
-    navGroups: mockNavGroups,
-    settingsHref: '/settings',
-    publicProfileBaseUrl: '/driver',
+    user: undefined,
+    status: 'unauthenticated',
+    roleLabel: 'Guest',
+    fallbackName: 'Guest User',
+    navGroups: mockNavGroupsWithPermissions,
+    settingsHref: '/login',
   },
   parameters: {
     nextjs: {
-      navigation: {
-        pathname: '/deliveries',
-      },
+      navigation: { pathname: '/overview' },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Unprotected items should be visible
+    await expect(canvas.getByRole('link', { name: /Public Overview/i })).toBeInTheDocument();
+
+    // Protected and admin items must be filtered out
+    await expect(
+      canvas.queryByRole('link', { name: /Protected Deliveries/i }),
+    ).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('link', { name: /User Management/i })).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('link', { name: /System Logs/i })).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Authenticated non-admin member.
+ * Asserts protected items are visible, but adminOnly items are hidden.
+ */
+export const AuthenticatedMember: Story = {
+  args: {
+    user: { ...mockUser, orgRole: 'member' },
+    status: 'authenticated',
+    roleLabel: 'Member',
+    fallbackName: 'Member',
+    navGroups: mockNavGroupsWithPermissions,
+    settingsHref: '/settings',
+  },
+  parameters: {
+    nextjs: {
+      navigation: { pathname: '/deliveries' },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Public and protected items should be visible
+    await expect(canvas.getByRole('link', { name: /Public Overview/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('link', { name: /Protected Deliveries/i })).toBeInTheDocument();
+
+    // Admin-only items must be filtered out for non-admin users
+    await expect(canvas.queryByRole('link', { name: /User Management/i })).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('link', { name: /System Logs/i })).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Authenticated admin user.
+ * Asserts that all items (public, protected, and adminOnly) are visible.
+ */
+export const AuthenticatedAdmin: Story = {
+  args: {
+    user: { ...mockUser, orgRole: 'admin' },
+    status: 'authenticated',
+    roleLabel: 'Admin',
+    fallbackName: 'Admin',
+    navGroups: mockNavGroupsWithPermissions,
+    settingsHref: '/settings',
+  },
+  parameters: {
+    nextjs: {
+      navigation: { pathname: '/admin/users' },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // All links (public, protected, and admin-only) should be rendered
+    await expect(canvas.getByRole('link', { name: /Public Overview/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('link', { name: /Protected Deliveries/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('link', { name: /User Management/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('link', { name: /System Logs/i })).toBeInTheDocument();
   },
 };
 
@@ -97,37 +184,68 @@ export const CustomLogisticsView: Story = {
  */
 export const InitialsFallback: Story = {
   args: {
-    user: { ...mockUser, image: null, name: 'Warehouse Admin' },
+    user: { ...mockUser, image: null, name: 'Warehouse Admin', orgRole: 'admin' },
+    status: 'authenticated',
     roleLabel: 'Admin',
     fallbackName: 'Admin',
-    navGroups: mockNavGroups,
+    navGroups: mockNavGroupsWithPermissions,
     settingsHref: '/settings',
   },
   parameters: {
     nextjs: {
-      navigation: {
-        pathname: '/dashboard',
-      },
+      navigation: { pathname: '/overview' },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Asserts fallback avatar renders initials
+    await expect(canvas.getByText('WA')).toBeInTheDocument();
+  },
+};
+
+/**
+ * Sidebar in loading state displaying skeleton loader.
+ */
+export const Loading: Story = {
+  args: {
+    user: undefined,
+    status: 'loading',
+    roleLabel: 'Guest',
+    fallbackName: 'Guest User',
+    navGroups: mockNavGroupsWithPermissions,
+    settingsHref: '/login',
+  },
+  parameters: {
+    nextjs: {
+      navigation: { pathname: '/overview' },
     },
   },
 };
 
 /**
- * What the generic sidebar looks like when the user is logged out (undefined user).
+ * Sidebar displaying inline error state when data loading fails.
  */
-export const Anonymous: Story = {
+export const ErrorState: Story = {
   args: {
-    user: undefined,
-    roleLabel: 'Guest',
-    fallbackName: 'Guest User',
-    navGroups: mockNavGroups,
-    settingsHref: '/login',
+    user: mockUser,
+    status: 'authenticated',
+    roleLabel: 'Driver',
+    fallbackName: 'Driver',
+    navGroups: mockNavGroupsWithPermissions,
+    settingsHref: '/settings',
+    isError: true,
+    errorMessage: 'Failed to load navigation.',
   },
   parameters: {
     nextjs: {
-      navigation: {
-        pathname: '/dashboard',
-      },
+      navigation: { pathname: '/overview' },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Assert error state content is visible
+    await expect(canvas.getByText(/Failed to load navigation/i)).toBeInTheDocument();
   },
 };

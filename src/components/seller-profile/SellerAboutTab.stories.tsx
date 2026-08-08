@@ -57,6 +57,8 @@ export const Complete: Story = {
     profile: {
       id: 'user-123',
       name: 'Farmer John',
+      organization: null,
+      organizationId: '',
       aboutMe:
         "I've been growing organic vegetables in the Austin area for over 15 years. My focus is on soil health and heirloom varieties that you can't find in big-box grocery stores. Every harvest is hand-picked the morning of delivery.",
       specialties: ['Heirloom Tomatoes', 'Microgreens', 'Organic Spinach', 'Root Vegetables'],
@@ -80,6 +82,8 @@ export const Minimal: Story = {
     profile: {
       id: 'user-456',
       name: null,
+      organization: null,
+      organizationId: '',
       aboutMe: null,
       specialties: [],
       image: '',
