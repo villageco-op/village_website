@@ -136,7 +136,7 @@ export default function OrgMembersClient() {
           subtitle="Invite, manage, and assign roles to members."
         />
         <Button asChild variant="forest">
-          <Link href="/org/new-client" className="gap-2">
+          <Link href="/org/invite" className="gap-2">
             <UserPlus className="h-4 w-4" />
             <span>Invite New Member</span>
           </Link>

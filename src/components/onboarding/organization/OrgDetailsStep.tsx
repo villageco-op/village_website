@@ -50,8 +50,8 @@ export default function OrgDetailsStep({ type, onSubmit, onBack, isPending }: Or
   const [isSubdomainValid, setIsSubdomainValid] = useState(false);
   const [addressInfo, setAddressInfo] = useState<AddressValue>({
     address: '',
-    city: 'Gary',
-    state: 'IN',
+    city: '',
+    state: '',
     zip: '',
   });
   const [email, setEmail] = useState('');
