@@ -161,6 +161,16 @@ export const CompleteOnboardingJourney: Story = {
     await userEvent.clear(subdomainInput);
     await userEvent.type(subdomainInput, 'gary-network');
 
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Gary');
+
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+
+    const inOption = await screen.findByRole('option', { name: 'Indiana' });
+    await userEvent.click(inOption);
+
     const addressInput = canvas.getByLabelText(/Street Address/i);
     await userEvent.type(addressInput, '401 Broadway');
 

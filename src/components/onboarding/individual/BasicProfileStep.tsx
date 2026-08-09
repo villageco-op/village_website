@@ -32,8 +32,8 @@ export default function BasicProfileStep({ onSubmit, isPending, onBack }: BasicP
   const [name, setName] = useState('');
   const [addressInfo, setAddressInfo] = useState<AddressValue>({
     address: '',
-    city: 'Gary',
-    state: 'IN',
+    city: '',
+    state: '',
     zip: '',
   });
   const [imageFile, setImageFile] = useState<File | null>(null);

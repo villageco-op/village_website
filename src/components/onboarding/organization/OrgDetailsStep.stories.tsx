@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn, userEvent, within, expect, waitFor } from '@storybook/test';
+import { fn, userEvent, within, expect, waitFor, screen } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -109,6 +109,16 @@ export const ValidFlow: Story = {
     await userEvent.type(canvas.getByLabelText(/Street Address/i), '101 Civic Center Plaza');
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '46402');
 
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Gary');
+
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+
+    const inOption = await screen.findByRole('option', { name: 'Indiana' });
+    await userEvent.click(inOption);
+
     // Wait for MSW response to resolve and update local hook states
     const successText = await canvas.findByText(/Subdomain is available!/i);
     await expect(successText).toBeInTheDocument();
@@ -159,6 +169,16 @@ export const FullInteractionTest: Story = {
     await userEvent.type(canvas.getByLabelText(/Custom Subdomain/i), 'village-harvest');
     await userEvent.type(canvas.getByLabelText(/Street Address/i), '789 Sprout St');
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '46403');
+
+    const cityInput = canvas.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Gary');
+
+    const stateDropdown = canvas.getByRole('combobox');
+    await userEvent.click(stateDropdown);
+
+    const inOption = await screen.findByRole('option', { name: 'Indiana' });
+    await userEvent.click(inOption);
 
     const maxReferralsInput = canvas.getByLabelText(/Client Referral Limit/i);
     await userEvent.clear(maxReferralsInput);

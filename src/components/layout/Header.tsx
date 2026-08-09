@@ -22,7 +22,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { name: 'Home', href: '/', unAuthOnly: true },
   { name: 'Sell', href: '/seller' },
-  { name: 'Shop', href: '/buyer' },
+  { name: 'Shop', href: '/buyer/browse' },
   { name: 'Org', href: '/org/clients', orgOnly: true },
 ];
 
