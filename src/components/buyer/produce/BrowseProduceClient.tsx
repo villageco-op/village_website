@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
  * @returns A page client with a header and produce filters and results
  */
 export default function BrowseProduceClient() {
-  const [view, setView] = useState<'list' | 'map'>('list');
+  const [view, setView] = useState<'list' | 'map'>('map');
   const { user } = useAuth();
 
   return (
