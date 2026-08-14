@@ -63,6 +63,7 @@ export function ContactFormFields({
     email: null as string | null,
     company: null as string | null,
     message: '',
+    website: '', // Honeypot state
   });
 
   const resolvedName = formData.name ?? user?.name ?? '';
@@ -77,6 +78,12 @@ export function ContactFormFields({
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (formData.website) {
+      toast.success('Inquiry submitted successfully!');
+      if (onSuccess) onSuccess();
+      return;
+    }
+
     const finalMessage = subjectPrefix ? `${subjectPrefix}\n${formData.message}` : formData.message;
 
     try {
@@ -86,6 +93,7 @@ export function ContactFormFields({
           email: resolvedEmail,
           company: resolvedCompany,
           message: finalMessage,
+          website: formData.website,
         },
       });
       toast.success('Inquiry submitted successfully!');
@@ -99,6 +107,22 @@ export function ContactFormFields({
   return (
     <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div
+          className="absolute -left-2499.75 -top-2499.75 opacity-0 h-0 w-0 overflow-hidden pointer-events-none"
+          aria-hidden="true"
+        >
+          <label htmlFor="website">Website</label>
+          <input
+            type="text"
+            id="website"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={formData.website}
+            onChange={handleChange}
+          />
+        </div>
+
         {/* Name Field */}
         <div className="space-y-2">
           <Label htmlFor="name">

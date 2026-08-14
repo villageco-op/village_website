@@ -21,4 +21,6 @@ export interface ContactPayload {
    * @minLength 1
    */
   message: string;
+  /** Honeypot anti-spam field. Must be empty for legitimate users. */
+  website?: string;
 }
