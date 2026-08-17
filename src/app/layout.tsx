@@ -29,8 +29,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Village',
-  description: 'In-Development Village Website',
+  title: 'Village Co-op',
+  description: 'Community software solutions for local food abundance.',
   ...(process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview' && {
     robots: {
       index: false,

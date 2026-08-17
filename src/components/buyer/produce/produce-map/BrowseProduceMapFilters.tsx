@@ -84,18 +84,18 @@ export function BrowseProduceMapFilters({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onViewChange('list')}
-            className={`h-8 px-2.5 ${currentView === 'list' ? 'bg-slate-100 text-ink-1' : 'text-ink-4'}`}
-          >
-            <List className="mr-1.5 h-4 w-4" /> List
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
             onClick={() => onViewChange('map')}
             className={`h-8 px-2.5 ${currentView === 'map' ? 'bg-slate-100 text-ink-1' : 'text-ink-4'}`}
           >
             <MapIcon className="mr-1.5 h-4 w-4" /> Map
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onViewChange('list')}
+            className={`h-8 px-2.5 ${currentView === 'list' ? 'bg-slate-100 text-ink-1' : 'text-ink-4'}`}
+          >
+            <List className="mr-1.5 h-4 w-4" /> List
           </Button>
         </div>
 
