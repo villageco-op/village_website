@@ -17,7 +17,13 @@ export default function BrowseProduceClient() {
   const { user } = useAuth();
 
   return (
-    <div className="flex w-full flex-col p-6 sm:p-8 space-y-6 max-w-max-width mx-auto min-h-screen">
+    <div
+      className={
+        view === 'map'
+          ? 'flex w-full flex-col p-6 sm:p-8 max-w-max-width mx-auto h-auto md:h-[calc(100vh-64px-64px-64px)] md:overflow-hidden gap-6'
+          : 'flex w-full flex-col p-6 sm:p-8 space-y-6 max-w-max-width mx-auto min-h-screen'
+      }
+    >
       <PageHeader
         title="Browse Produce"
         subtitle="Fresh listings from nearby growers · Updated daily"

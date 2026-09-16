@@ -39,7 +39,6 @@ export default function BrowseProduceMapClient({
   const [searchInput, setSearchInput] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
 
-  // Use map specific params
   const [filters, setFilters] = useState<Omit<GetProduceMapParams, 'search' | 'lat' | 'lng'>>({});
 
   const [browserCoords, setBrowserCoords] = useState<{ lat: number; lng: number } | null>(null);
@@ -68,7 +67,6 @@ export default function BrowseProduceMapClient({
     }
   }, [user]);
 
-  // Default to user coordinates or fallback
   const baseLat = user?.lat ?? browserCoords?.lat ?? 41.602;
   const baseLng = user?.lng ?? browserCoords?.lng ?? -87.3371;
 
@@ -90,7 +88,7 @@ export default function BrowseProduceMapClient({
   const mapGroups = response?.data || [];
 
   return (
-    <div className="flex flex-col h-screen w-full">
+    <div className="flex flex-col h-full min-h-0 flex-1 w-full gap-4">
       <BrowseProduceMapFilters
         searchInput={searchInput}
         setSearchInput={setSearchInput}
@@ -100,7 +98,7 @@ export default function BrowseProduceMapClient({
         onViewChange={onViewChange}
       />
 
-      <div className="relative flex-1 min-h-125 w-full pt-4 overflow-hidden rounded-xl border border-forest-dark/20 bg-slate-50 shadow-sm">
+      <div className="relative flex-1 min-h-125 md:min-h-0 w-full overflow-hidden rounded-xl border border-forest-dark/20 bg-slate-50 shadow-sm">
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center bg-slate-50/50">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-deep-forest border-t-transparent" />

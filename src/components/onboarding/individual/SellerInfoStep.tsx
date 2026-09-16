@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -98,34 +99,36 @@ export default function SellerInfoStep({
           />
         </div>
 
-        <div className="bg-white p-4 rounded-lg border border-lime/30 space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="delivery"
-              checked={willDeliver}
-              onCheckedChange={(checked) => setWillDeliver(checked as boolean)}
-            />
-            <Label htmlFor="delivery" className="cursor-pointer">
-              I am willing to deliver orders myself
-            </Label>
-          </div>
-
-          {willDeliver && (
-            <div className="pl-6 animate-in fade-in slide-in-from-top-2">
-              <Label htmlFor="range" className="text-xs uppercase tracking-wide">
-                Delivery Range (Miles)
-              </Label>
-              <Input
-                id="range"
-                type="number"
-                placeholder="e.g. 15"
-                className="mt-1 max-w-30"
-                value={deliveryRangeMiles}
-                onChange={(e) => setDeliveryRangeMiles(Number(e.target.value) || '')}
+        <Card>
+          <CardContent>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="delivery"
+                checked={willDeliver}
+                onCheckedChange={(checked) => setWillDeliver(checked as boolean)}
               />
+              <Label htmlFor="delivery" className="cursor-pointer">
+                I am willing to deliver orders myself
+              </Label>
             </div>
-          )}
-        </div>
+
+            {willDeliver && (
+              <div className="pl-6 animate-in fade-in slide-in-from-top-2">
+                <Label htmlFor="range" className="text-xs uppercase tracking-wide">
+                  Delivery Range (Miles)
+                </Label>
+                <Input
+                  id="range"
+                  type="number"
+                  placeholder="e.g. 15"
+                  className="mt-1 max-w-30"
+                  value={deliveryRangeMiles}
+                  onChange={(e) => setDeliveryRangeMiles(Number(e.target.value) || '')}
+                />
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         <div className="flex justify-between items-center pt-4 border-t border-border/10 gap-3">
           {!isUpgradingToSeller && (
@@ -133,14 +136,6 @@ export default function SellerInfoStep({
               <ArrowLeft className="w-4 h-4 mr-2" /> Back
             </Button>
           )}
-          <Button
-            type="button"
-            variant="ghost"
-            className="text-ink-3 ml-auto"
-            onClick={() => handleSubmit()}
-          >
-            Skip
-          </Button>
           <Button type="submit" variant="lime">
             Continue <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
