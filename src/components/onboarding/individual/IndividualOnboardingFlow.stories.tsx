@@ -114,14 +114,13 @@ export const CompleteSellerJourney: Story = {
     const enableBtn = await canvas.findByRole('button', { name: /Enable Push Notifications/i });
     await userEvent.click(enableBtn);
 
-    // 5. Success Screen
-    const successHeading = await canvas.findByRole('heading', { name: /You're in!/i });
-    await expect(successHeading).toBeInTheDocument();
+    // 5. Stripe Onboarding Step
+    const stripeHeading = await canvas.findByRole('heading', { name: /Set up payments/i });
+    await expect(stripeHeading).toBeInTheDocument();
 
-    // Verify Stripe button is interactive
-    const stripeBtn = canvas.getByRole('button', { name: /Complete Stripe Onboarding/i });
-    await expect(stripeBtn).toBeInTheDocument();
-    await expect(stripeBtn).toBeEnabled();
+    const connectStripeBtn = canvas.getByRole('button', { name: /Connect with Stripe/i });
+    await expect(connectStripeBtn).toBeInTheDocument();
+    await expect(connectStripeBtn).toBeEnabled();
   },
 };
 
