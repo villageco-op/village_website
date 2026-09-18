@@ -1,6 +1,13 @@
 'use client';
 
-import { Package, Store, CreditCard, MessageCircle, Repeat } from 'lucide-react';
+import {
+  Package,
+  Store,
+  CreditCard,
+  MessageCircle,
+  Repeat,
+  CircleQuestionMark,
+} from 'lucide-react';
 
 import { Sidebar, type NavGroup } from '../layout/Sidebar';
 
@@ -47,7 +54,16 @@ const BUYER_NAV_GROUPS: NavGroup[] = [
   },
   {
     label: 'Support',
-    items: [{ name: 'Get Help', icon: MessageCircle, href: '/buyer/help', protected: false }],
+    items: [
+      { name: 'Get Help', icon: MessageCircle, href: '/buyer/help', protected: false },
+      {
+        name: 'Tutorials',
+        sub: '',
+        icon: CircleQuestionMark,
+        href: '/buyer/tutorials',
+        protected: true,
+      },
+    ],
   },
 ];
 

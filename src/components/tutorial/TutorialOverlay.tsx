@@ -42,7 +42,7 @@ export function TutorialOverlay() {
   if (isDisallowedPage) return null;
 
   const totalSteps = activeTutorial.steps.length;
-  const isCorrectPage = pathname === currentStep.targetRoute;
+  const isCorrectPage = currentStep.targetRoute && pathname === currentStep.targetRoute;
 
   return (
     <div className="fixed bottom-6 right-6 z-50 w-full max-w-sm shadow-2xl transition-all duration-300 print:hidden">
@@ -87,16 +87,18 @@ export function TutorialOverlay() {
                 <span className="text-xs font-semibold text-forest uppercase tracking-wider">
                   Step {currentStepIndex + 1} of {totalSteps}
                 </span>
-                <span className="text-xs text-ink-3">
-                  Location:{' '}
-                  <code className="bg-muted px-1 py-0.5 rounded">{currentStep.targetRoute}</code>
-                </span>
+                {currentStep.targetRoute && (
+                  <span className="text-xs text-ink-3">
+                    Location:{' '}
+                    <code className="bg-muted px-1 py-0.5 rounded">{currentStep.targetRoute}</code>
+                  </span>
+                )}
               </div>
 
               <h4 className="text-xs font-bold text-ink">{currentStep.title}</h4>
               <p className="text-xs text-ink-3 leading-relaxed">{currentStep.content}</p>
 
-              {!isCorrectPage && (
+              {!isCorrectPage && currentStep.targetRoute && (
                 <div className="rounded-md bg-amber-50 p-2.5 border border-amber-200 flex flex-col gap-2">
                   <div className="flex items-start gap-1.5">
                     <AlertTriangle className="h-3.5 w-3.5 text-amber-600 mt-0.5 shrink-0" />
@@ -108,7 +110,7 @@ export function TutorialOverlay() {
                     size="sm"
                     variant="outline"
                     className="h-7 text-xs w-full text-amber-900 border-amber-300 bg-white hover:bg-amber-100"
-                    onClick={() => router.push(currentStep.targetRoute)}
+                    onClick={() => router.push(currentStep.targetRoute!)}
                   >
                     Go to {currentStep.targetRoute}
                   </Button>
