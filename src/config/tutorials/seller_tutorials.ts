@@ -101,18 +101,15 @@ export const SELLER_TUTORIALS: Record<string, Tutorial> = {
         title: 'About Tab',
         content:
           'The "About" tab shows your bio, seller statistics, specialties, delivery range, and quick-order options.',
-        targetRoute: '/public-profile',
       },
       {
         title: 'Listings Tab',
         content: 'The "Listings" tab showcases all your active produce listings.',
-        targetRoute: '/public-profile',
       },
       {
         title: 'Reviews Tab',
         content:
           'The "Reviews" tab displays customer feedback, ratings, and testimonials from past orders.',
-        targetRoute: '/public-profile',
       },
     ],
   },

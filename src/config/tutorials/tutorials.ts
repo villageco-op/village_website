@@ -4,7 +4,7 @@
 export interface TutorialStep {
   title: string;
   content: string;
-  targetRoute: string;
+  targetRoute?: string;
 }
 
 /**
@@ -26,6 +26,7 @@ export enum TutorialCategory {
   ORGANIZATION = 'Organization & Members',
   LISTING_LIFECYCLE = 'Listing Lifecycle',
   ACCOUNT_PROFILE = 'Account & Public Profile',
+  PURCHASING = 'Order Creation',
 }
 
 /**
