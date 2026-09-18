@@ -6,7 +6,7 @@ import { TutorialProvider } from '../providers/TutorialProvider';
 import { TutorialOverlay } from './TutorialOverlay';
 
 import { Toaster } from '@/components/ui/sonner';
-import { TutorialCategory, type Tutorial } from '@/config/tutorials';
+import { TutorialCategory, type Tutorial } from '@/config/tutorials/tutorials';
 
 const mockTutorials: Record<string, Tutorial> = {
   mock_tutorial: {

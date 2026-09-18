@@ -1,6 +1,13 @@
 'use client';
 
-import { LayoutDashboard, Sprout, CircleDollarSign, Package, MessageCircle } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Sprout,
+  CircleDollarSign,
+  Package,
+  MessageCircle,
+  CircleQuestionMark,
+} from 'lucide-react';
 
 import { type NavGroup, Sidebar } from '../layout/Sidebar';
 
@@ -12,14 +19,14 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
     items: [
       {
         name: 'Dashboard',
-        sub: 'This week at a glance',
+        sub: '',
         icon: LayoutDashboard,
         href: '/seller',
         protected: true,
       },
       {
         name: 'My Listings',
-        sub: 'Active produce for sale',
+        sub: '',
         icon: Sprout,
         href: '/seller/listings',
         badge: 3,
@@ -32,14 +39,23 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
     items: [
       {
         name: 'Earnings',
-        sub: 'Revenue & payouts',
+        sub: '',
         icon: CircleDollarSign,
         href: '/seller/earnings',
         protected: true,
       },
       {
         name: 'Orders',
-        sub: 'Incoming & fulfilled',
+        sub: '',
+        icon: Package,
+        href: '/seller/orders',
+        badge: 2,
+        badgeVariant: 'sun',
+        protected: true,
+      },
+      {
+        name: 'Subscriptions',
+        sub: '',
         icon: Package,
         href: '/seller/orders',
         badge: 2,
@@ -52,6 +68,13 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
     label: 'Support',
     items: [
       { name: 'Get Help', sub: '', icon: MessageCircle, href: '/seller/help', protected: true },
+      {
+        name: 'Tutorials',
+        sub: '',
+        icon: CircleQuestionMark,
+        href: '/seller/tutorials',
+        protected: true,
+      },
     ],
   },
 ];
