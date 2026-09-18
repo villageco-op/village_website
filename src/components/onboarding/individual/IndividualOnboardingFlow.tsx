@@ -12,7 +12,7 @@ import StripeOnboardingStep from './StripeOnboardingStep';
 
 import { type BasicInfoData, useSubmitBasicProfile } from '@/hooks/useOnboardingActions';
 import { useGenerateStripeOnboardingLink } from '@/lib/api/generated/stripe/stripe';
-import { useUpdateCurrentUser, useRegisterFcmToken } from '@/lib/api/generated/users/users';
+import { useUpdateCurrentUser } from '@/lib/api/generated/users/users';
 
 /**
  * The different steps within the onboarding flow.
