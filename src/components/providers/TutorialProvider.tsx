@@ -100,7 +100,7 @@ export function TutorialProvider({
       saveTutorialState(tutorial, 0);
 
       const firstStep = tutorial.steps[0];
-      if (firstStep && pathname !== firstStep.targetRoute) {
+      if (firstStep && firstStep.targetRoute && pathname !== firstStep.targetRoute) {
         router.push(firstStep.targetRoute);
       }
       toast.success(`Starting: ${tutorial.title}`);
@@ -119,7 +119,7 @@ export function TutorialProvider({
       setCurrentStepIndex(nextIndex);
       saveTutorialState(activeTutorial, nextIndex);
       const nextStepObj = activeTutorial.steps[nextIndex];
-      if (nextStepObj && pathname !== nextStepObj.targetRoute) {
+      if (nextStepObj && nextStepObj.targetRoute && pathname !== nextStepObj.targetRoute) {
         router.push(nextStepObj.targetRoute);
       }
     }
@@ -132,7 +132,7 @@ export function TutorialProvider({
     setCurrentStepIndex(prevIndex);
     saveTutorialState(activeTutorial, prevIndex);
     const prevStepObj = activeTutorial.steps[prevIndex];
-    if (prevStepObj && pathname !== prevStepObj.targetRoute) {
+    if (prevStepObj && prevStepObj.targetRoute && pathname !== prevStepObj.targetRoute) {
       router.push(prevStepObj.targetRoute);
     }
   };
