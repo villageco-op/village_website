@@ -3,11 +3,13 @@ import { userEvent, within, expect, screen } from '@storybook/test';
 
 import { TutorialProvider } from '../providers/TutorialProvider';
 
-import OrgTutorialClient from './OrgTutorialClient';
+import TutorialList from './TutorialList';
 import { TutorialOverlay } from './TutorialOverlay';
 
 import { Toaster } from '@/components/ui/sonner';
-import { TutorialCategory, TUTORIALS, type Tutorial } from '@/config/tutorials';
+import { ORG_TUTORIALS } from '@/config/tutorials/org_tutorials';
+import { SELLER_TUTORIALS } from '@/config/tutorials/seller_tutorials';
+import { TutorialCategory, type Tutorial } from '@/config/tutorials/tutorials';
 
 const mockTutorials: Record<string, Tutorial> = {
   mock_tutorial: {
@@ -30,9 +32,9 @@ const mockTutorials: Record<string, Tutorial> = {
   },
 };
 
-const meta: Meta<typeof OrgTutorialClient> = {
-  title: 'Tutorials/TutorialPage',
-  component: OrgTutorialClient,
+const meta: Meta<typeof TutorialList> = {
+  title: 'Tutorials/TutorialList',
+  component: TutorialList,
   parameters: {
     layout: 'padded',
     nextjs: {
@@ -42,10 +44,16 @@ const meta: Meta<typeof OrgTutorialClient> = {
       },
     },
   },
+  args: {
+    title: 'Tutorials',
+    tutorials: mockTutorials,
+    descriptionText: 'Step-by-step guides on client & organization management.',
+    helpPath: '/org/help/',
+  },
   decorators: [
     (Story) => (
       <TutorialProvider tutorials={mockTutorials} defaultTutorialId="mock_tutorial">
-        <div className="min-h-125 w-full bg-background relative p-4">
+        <div className="relative min-h-125 w-full bg-background p-4">
           <Story />
           <TutorialOverlay />
           <Toaster />
@@ -56,7 +64,7 @@ const meta: Meta<typeof OrgTutorialClient> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof OrgTutorialClient>;
+type Story = StoryObj<typeof TutorialList>;
 
 /**
  * Click a standalone tutorial card to verify it triggers.
@@ -87,13 +95,19 @@ export const StartSelectedTutorialFlow: Story = {
 };
 
 /**
- * Render default tutorials configured via `TUTORIALS` without passing the `tutorials` prop.
+ * Render default organization tutorials configured via `TUTORIALS`.
  */
-export const DefaultTutorials: Story = {
+export const OrgTutorials: Story = {
+  args: {
+    title: 'Tutorials',
+    tutorials: ORG_TUTORIALS,
+    descriptionText: 'Step-by-step guides on client & organization management.',
+    helpPath: '/org/help/',
+  },
   decorators: [
     (Story) => (
       <TutorialProvider>
-        <div className="min-h-125 w-full bg-background relative p-4">
+        <div className="relative min-h-125 w-full bg-background p-4">
           <Story />
           <TutorialOverlay />
           <Toaster />
@@ -108,14 +122,53 @@ export const DefaultTutorials: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    // Pick the first default tutorial key dynamically from config
-    const firstTutorialKey = Object.keys(TUTORIALS)[0];
-    const defaultTutorial = TUTORIALS[firstTutorialKey];
+    const firstTutorialKey = Object.keys(ORG_TUTORIALS)[0];
+    const defaultTutorial = ORG_TUTORIALS[firstTutorialKey];
 
     if (!defaultTutorial) return;
 
     await step('Verify default tutorial title renders on page', async () => {
       await expect(await canvas.findByText(defaultTutorial.title)).toBeInTheDocument();
+    });
+  },
+};
+
+/**
+ * Render default seller tutorials configured via `SELLER_TUTORIALS`.
+ */
+export const SellerTutorials: Story = {
+  args: {
+    title: 'Seller Tutorials',
+    tutorials: SELLER_TUTORIALS,
+    descriptionText:
+      'Step-by-step guides for managing produce listings, account settings, and public seller profiles.',
+    helpPath: '/seller/help',
+  },
+  decorators: [
+    (Story) => (
+      <TutorialProvider tutorials={SELLER_TUTORIALS}>
+        <div className="relative min-h-125 w-full bg-background p-4">
+          <Story />
+          <TutorialOverlay />
+          <Toaster />
+        </div>
+      </TutorialProvider>
+    ),
+  ],
+  beforeEach: () => {
+    localStorage.clear();
+    localStorage.setItem('onboarding_completed', 'true');
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    const firstTutorialKey = Object.keys(SELLER_TUTORIALS)[0];
+    const sellerTutorial = SELLER_TUTORIALS[firstTutorialKey];
+
+    if (!sellerTutorial) return;
+
+    await step('Verify seller tutorial title renders on page', async () => {
+      await expect(await canvas.findByText(sellerTutorial.title)).toBeInTheDocument();
     });
   },
 };

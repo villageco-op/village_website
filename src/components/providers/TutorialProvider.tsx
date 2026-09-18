@@ -4,12 +4,12 @@ import { useRouter, usePathname } from 'next/navigation';
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { toast } from 'sonner';
 
+import { TUTORIALS as DEFAULT_TUTORIALS } from '@/config/tutorials/all_tutorials';
 import {
   type Tutorial,
   type TutorialStep,
-  TUTORIALS as DEFAULT_TUTORIALS,
   DISALLOWED_TUTORIAL_ROUTES as DEFAULT_DISALLOWED_ROUTES,
-} from '@/config/tutorials';
+} from '@/config/tutorials/tutorials';
 
 interface TutorialContextType {
   activeTutorial: Tutorial | null;
@@ -27,7 +27,7 @@ interface TutorialContextType {
 
 interface TutorialProviderProps {
   children: React.ReactNode;
-  /** Optional custom tutorials map (defaults to config/tutorials) */
+  /** Optional custom tutorials map */
   tutorials?: Record<string, Tutorial>;
   /** Optional disallowed routes array (defaults to config/tutorials) */
   disallowedRoutes?: string[];
