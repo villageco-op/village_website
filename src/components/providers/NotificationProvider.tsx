@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 
 import { useRegisterFcmToken, useUnregisterFcmToken } from '@/lib/api/generated/users/users';
 import { initFcmListener, initFcmUnregisterListener } from '@/lib/firebase';
@@ -20,13 +21,14 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
-      unsubUnregisterRef.current = initFcmUnregisterListener((fid) => {
+      unsubUnregisterRef.current = initFcmUnregisterListener(() => {
         void (async () => {
           try {
             await unregisterFcmToken({ data: { platform: 'web' } });
-            console.log('Successfully deleted FID from backend:', fid);
+            toast.success('Push notifications disabled.');
           } catch (error) {
-            console.error('Failed to remove FID from backend during unregistration:', error);
+            console.error('Failed to remove FID from backend:', error);
+            toast.error('Failed to update notification settings on the server.');
           }
         });
       });
@@ -38,7 +40,8 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
               try {
                 await registerFcmToken({ data: { token: fid, platform: 'web' } });
               } catch (error) {
-                console.error('Failed to silently sync FID:', error);
+                console.error('Failed to sync FID:', error);
+                toast.error('Could not sync notification token with your account.');
               }
             });
           });

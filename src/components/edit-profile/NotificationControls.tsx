@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useRegisterFcmToken } from '@/lib/api/generated/users/users';
 import { useUnregisterFcmToken } from '@/lib/api/generated/users/users';
 import { useGetFcmStatus } from '@/lib/api/generated/users/users';
-import { initFcmListener, executeUnregister } from '@/lib/firebase';
+import { executeUnregister } from '@/lib/firebase';
 
 /**
  * Controls for enabling and disabling notifications.
@@ -30,40 +30,23 @@ export function NotificationControls() {
 
   const handleToggleNotifications = async () => {
     if (isNotificationsEnabled) {
-      const toastId = toast.loading('Disabling notifications...');
       try {
         await executeUnregister();
         setOverrideEnabled(false);
-        toast.success('Notifications disabled.', { id: toastId });
       } catch (error) {
-        toast.error('Failed to disable notifications.', { id: toastId });
+        toast.error('Failed to disable notifications.');
       }
     } else {
-      const toastId = toast.loading('Enabling notifications...');
       try {
         const permission = await Notification.requestPermission();
 
         if (permission === 'granted') {
-          await initFcmListener((fid) => {
-            void (async () => {
-              try {
-                await registerToken.mutateAsync({
-                  data: { token: fid, platform: 'web' },
-                });
-                setOverrideEnabled(true);
-                toast.success('Push notifications enabled!', { id: toastId });
-              } catch (error) {
-                toast.error('Failed to save notification settings.', { id: toastId });
-              }
-            })();
-          });
+          setOverrideEnabled(true);
         } else {
-          toast.warning('Notifications were blocked. Enable them in browser settings.', {
-            id: toastId,
-          });
+          toast.warning('Notifications were blocked. Enable them in browser settings.');
         }
       } catch (error) {
-        toast.error('Failed to register for notifications.', { id: toastId });
+        toast.error('Failed to request permission.');
       }
     }
   };
