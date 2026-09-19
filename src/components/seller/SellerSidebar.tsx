@@ -29,7 +29,6 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
         sub: '',
         icon: Sprout,
         href: '/seller/listings',
-        badge: 3,
         protected: true,
       },
     ],
@@ -49,7 +48,6 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
         sub: '',
         icon: Package,
         href: '/seller/orders',
-        badge: 2,
         badgeVariant: 'sun',
         protected: true,
       },
@@ -57,8 +55,7 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
         name: 'Subscriptions',
         sub: '',
         icon: Package,
-        href: '/seller/orders',
-        badge: 2,
+        href: '/seller/subscriptions',
         badgeVariant: 'sun',
         protected: true,
       },
@@ -104,7 +101,7 @@ export function SellerSidebar({ user, status }: SellerSidebarProps) {
     <Sidebar
       user={user}
       status={status}
-      roleLabel="Producer"
+      roleLabel="Grower & Seller"
       fallbackName="New Neighbor"
       settingsHref="/settings"
       publicProfileBaseUrl="/public-profile"
