@@ -1,7 +1,11 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import type { StripeOnboardingResponse } from '@/lib/api/generated/models';
-import { fetchStripeOnboardingLink } from '@/lib/api/stripe';
+import {
+  fetchStripeOnboardingLink,
+  fetchStripeOnboardingStatus,
+  type StripeStatusResponse,
+} from '@/lib/api/stripe';
 
 describe('fetchStripeOnboardingLink', () => {
   const originalBackendUrl = process.env.BACKEND_URL;
@@ -94,5 +98,102 @@ describe('fetchStripeOnboardingLink', () => {
 
     expect(result).toBeNull();
     expect(consoleErrorSpy).toHaveBeenCalled();
+  });
+});
+
+describe('fetchStripeOnboardingStatus', () => {
+  const originalBackendUrl = process.env.BACKEND_URL;
+  const NEW_BACKEND_URL = 'http://localhost:3000';
+
+  beforeAll(() => {
+    process.env.BACKEND_URL = NEW_BACKEND_URL;
+  });
+
+  afterAll(() => {
+    process.env.BACKEND_URL = originalBackendUrl;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('successfully requests and returns onboarding status when cookies are present', async () => {
+    const mockResponse: StripeStatusResponse = {
+      isComplete: true,
+    };
+
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => mockResponse,
+    });
+    vi.stubGlobal('fetch', mockFetch);
+
+    const cookieHeader = 'authjs.session-token=fake-token';
+
+    const result = await fetchStripeOnboardingStatus(cookieHeader);
+
+    expect(mockFetch).toHaveBeenCalledWith(NEW_BACKEND_URL + '/api/stripe/connect/status', {
+      method: 'GET',
+      headers: {
+        Cookie: 'authjs.session-token=fake-token',
+        Host: 'localhost:3000',
+      },
+      cache: 'no-store',
+    });
+    expect(result).toEqual(mockResponse);
+  });
+
+  it('omits the Cookie header if no cookie is present on the incoming request', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => ({ isComplete: false }),
+    });
+    vi.stubGlobal('fetch', mockFetch);
+
+    const cookieHeader = null;
+
+    await fetchStripeOnboardingStatus(cookieHeader);
+
+    expect(mockFetch).toHaveBeenCalledWith(NEW_BACKEND_URL + '/api/stripe/connect/status', {
+      method: 'GET',
+      headers: {
+        Host: 'localhost:3000',
+      },
+      cache: 'no-store',
+    });
+  });
+
+  it('logs a warning and returns null when the API responds with a non-200 status code', async () => {
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 401,
+    });
+    vi.stubGlobal('fetch', mockFetch);
+
+    const cookieHeader = 'authjs.session-token=fake-token';
+    const result = await fetchStripeOnboardingStatus(cookieHeader);
+
+    expect(result).toBeNull();
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      'Fetch Stripe onboarding status failed with status: 401',
+    );
+  });
+
+  it('catches network errors, logs them, and returns null', async () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const mockFetch = vi.fn().mockRejectedValue(new Error('Network connection failed'));
+    vi.stubGlobal('fetch', mockFetch);
+
+    const cookieHeader = 'authjs.session-token=fake-token';
+    const result = await fetchStripeOnboardingStatus(cookieHeader);
+
+    expect(result).toBeNull();
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'Error fetching Stripe status in route:',
+      expect.any(Error),
+    );
   });
 });
