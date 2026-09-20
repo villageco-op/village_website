@@ -21,8 +21,11 @@ export interface ProduceListItem {
   /** Formatted weight/quantity string */
   amount: string;
   availableBy: string;
-  /** Distance in miles from the user */
-  distance: number;
+  /**
+   * Distance in miles from the user
+   * @nullable
+   */
+  distance: number | null;
   /** @nullable */
   isSubscribable: boolean | null;
   /**

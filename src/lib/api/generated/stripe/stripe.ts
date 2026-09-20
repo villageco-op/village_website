@@ -6,18 +6,28 @@
  * OpenAPI spec version: 1.0.0
  */
 import {
-  useMutation
+  useMutation,
+  useQuery
 } from '@tanstack/react-query';
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
-  UseMutationResult
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
   ErrorResponse,
-  StripeOnboardingResponse
+  StripeOnboardingResponse,
+  StripeStatusResponse
 } from '../models';
 
 import { apiClient } from '../../client';
@@ -112,4 +122,117 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getGenerateStripeOnboardingLinkMutationOptions(options), queryClient);
     }
+    /**
+ * Fetch the user Stripe onboarding status, with synchronous fallback check against Stripe.
+ */
+export type getStripeOnboardingStatusResponse200 = {
+  data: StripeStatusResponse
+  status: 200
+}
+
+export type getStripeOnboardingStatusResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type getStripeOnboardingStatusResponseSuccess = (getStripeOnboardingStatusResponse200) & {
+  headers: Headers;
+};
+export type getStripeOnboardingStatusResponseError = (getStripeOnboardingStatusResponse401) & {
+  headers: Headers;
+};
+
+export type getStripeOnboardingStatusResponse = (getStripeOnboardingStatusResponseSuccess | getStripeOnboardingStatusResponseError)
+
+export const getGetStripeOnboardingStatusUrl = () => {
+
+
+  
+
+  return `/api/stripe/connect/status`
+}
+
+export const getStripeOnboardingStatus = async ( options?: RequestInit): Promise<getStripeOnboardingStatusResponse> => {
+  
+  return apiClient<getStripeOnboardingStatusResponse>(getGetStripeOnboardingStatusUrl(),
+  {      
+    ...options,
+    method: 'GET'
     
+    
+  }
+);}
+  
+
+
+
+
+export const getGetStripeOnboardingStatusQueryKey = () => {
+    return [
+    `/api/stripe/connect/status`
+    ] as const;
+    }
+
+    
+export const getGetStripeOnboardingStatusQueryOptions = <TData = Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError = ErrorResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetStripeOnboardingStatusQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getStripeOnboardingStatus>>> = ({ signal }) => getStripeOnboardingStatus({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetStripeOnboardingStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getStripeOnboardingStatus>>>
+export type GetStripeOnboardingStatusQueryError = ErrorResponse
+
+
+export function useGetStripeOnboardingStatus<TData = Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError = ErrorResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getStripeOnboardingStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getStripeOnboardingStatus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetStripeOnboardingStatus<TData = Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError = ErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getStripeOnboardingStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getStripeOnboardingStatus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetStripeOnboardingStatus<TData = Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError = ErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetStripeOnboardingStatus<TData = Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError = ErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStripeOnboardingStatus>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetStripeOnboardingStatusQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
