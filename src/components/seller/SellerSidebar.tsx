@@ -7,6 +7,7 @@ import {
   Package,
   MessageCircle,
   CircleQuestionMark,
+  Repeat,
 } from 'lucide-react';
 
 import { type NavGroup, Sidebar } from '../layout/Sidebar';
@@ -54,7 +55,7 @@ const SELLER_NAV_GROUPS: NavGroup[] = [
       {
         name: 'Subscriptions',
         sub: '',
-        icon: Package,
+        icon: Repeat,
         href: '/seller/subscriptions',
         badgeVariant: 'sun',
         protected: true,

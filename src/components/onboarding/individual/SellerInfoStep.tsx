@@ -89,11 +89,11 @@ export default function SellerInfoStep({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="goal">Weekly Goal ($)</Label>
+          <Label htmlFor="goal">Monthly Goal ($)</Label>
           <Input
             id="goal"
             type="number"
-            placeholder="How much would you like to make each week?"
+            placeholder="How much would you like to make each month?"
             value={goal}
             onChange={(e) => setGoal(e.target.value === '' ? '' : Number(e.target.value))}
           />

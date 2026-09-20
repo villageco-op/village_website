@@ -219,7 +219,7 @@ export const AuthenticatedSeller: Story = {
 
     // Verify subform injection blocks are active
     await expect(await canvas.findByText('Seller Details')).toBeInTheDocument();
-    await expect(canvas.getByLabelText(/Weekly Goal \(\$\)/i)).toHaveValue(250);
+    await expect(canvas.getByLabelText(/Monthly Goal \(\$\)/i)).toHaveValue(250);
   },
 };
 
