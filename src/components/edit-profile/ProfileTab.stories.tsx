@@ -113,7 +113,7 @@ export const ActiveSeller: Story = {
 
     // Dynamic items rendered for sellers
     await expect(canvas.getByText('Seller Details')).toBeInTheDocument();
-    await expect(canvas.getByLabelText(/Weekly Goal/i)).toHaveValue(500);
+    await expect(canvas.getByLabelText(/Monthly Goal/i)).toHaveValue(500);
 
     // Delivery distance condition state verification
     const checkbox = canvas.getByLabelText(/I am willing to deliver orders myself/i);

@@ -51,7 +51,7 @@ export const Prepopulated: Story = {
       'We are a small family apiary producing raw wildflower honey and beeswax candles.',
     );
     await userEvent.type(canvas.getByLabelText(/Specialties/i), 'Raw Honey, Propolis, Beeswax');
-    await userEvent.type(canvas.getByLabelText(/Weekly Goal/i), '250');
+    await userEvent.type(canvas.getByLabelText(/Monthly Goal/i), '250');
   },
 };
 
