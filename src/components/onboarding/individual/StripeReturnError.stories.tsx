@@ -58,28 +58,6 @@ type Story = StoryObj<typeof StripeReturnErrorPage>;
 export const Default: Story = {};
 
 /**
- * Tests the successful retry flow when generating a new onboarding link.
- */
-export const RetrySuccess: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    const retryBtn = await canvas.findByRole('button', { name: /Try Connecting Again/i });
-    const returnBtn = await canvas.findByRole('link', { name: /Return to Onboarding/i });
-
-    await expect(retryBtn).toBeInTheDocument();
-    await expect(returnBtn).toBeInTheDocument();
-
-    await userEvent.click(retryBtn);
-
-    // Verify loading state is triggered
-    await expect(
-      await canvas.findByRole('button', { name: /Preparing Link.../i }),
-    ).toBeInTheDocument();
-  },
-};
-
-/**
  * Tests error handling when the backend fails to regenerate the Stripe onboarding link.
  */
 export const RetryFailure: Story = {

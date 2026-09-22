@@ -75,7 +75,7 @@ export const GuestHome: Story = {
     await expect(canvas.getByRole('link', { name: /Resturants & Markets/i })).toBeInTheDocument();
 
     // Login CTA should be present for guest users
-    await expect(canvas.getByRole('link', { name: /Get involved/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('link', { name: /Login\/Sign Up/i })).toBeInTheDocument();
   },
 };
 
@@ -125,7 +125,7 @@ export const AuthenticatedHome: Story = {
     await expect(canvas.getByRole('link', { name: /Shop/i })).toBeInTheDocument();
 
     // CTA should be hidden when authenticated
-    await expect(canvas.queryByRole('link', { name: /Get involved/i })).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('link', { name: /Login\/Sign Up/i })).not.toBeInTheDocument();
   },
 };
 
