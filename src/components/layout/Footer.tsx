@@ -21,10 +21,11 @@ const FOOTER_LINKS = [
     ],
   },
   {
-    title: 'Contact',
+    title: 'Navigation',
     links: [
       { label: 'Talk to our team', href: '/contact' },
-      { label: 'Get involved', href: '/login' },
+      { label: 'Login or sign up', href: '/login' },
+      { label: 'Mission statement', href: '/mission' },
     ],
   },
 ];
@@ -75,7 +76,7 @@ export function Footer() {
 
         <div className="border-t border-cream/5 pt-6 flex justify-between items-center flex-wrap gap-3">
           <div className="font-sans text-[0.75rem] text-cream/25">
-            &copy; {currentYear} Village. All rights reserved.
+            &copy; {currentYear} Village Co-op. All rights reserved.
           </div>
         </div>
       </div>

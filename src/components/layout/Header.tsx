@@ -64,6 +64,11 @@ const getSecondaryNavItems = (path: string): SecondaryNavItem[] => {
   return [];
 };
 
+const rightNavItems: NavItem[] = [
+  { name: 'The Problem', href: '/problem' },
+  { name: 'Our Mission', href: '/mission' },
+];
+
 /**
  * The persistent site header. Includes the page navigation links.
  * @returns The component html
@@ -87,7 +92,7 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 w-full h-16 bg-primary border-b border-border/10">
-        <div className="container-custom flex h-16 items-center">
+        <div className="w-full px-4 sm:px-6 lg:px-8 flex h-16 items-center">
           <Link href="/" className="mr-6 flex items-center shrink-0">
             <Image
               src={getAssetPath('/icons/logo-horizontal.png')}
@@ -154,13 +159,37 @@ export function Header() {
             </>
           )}
 
+          {/* Right-aligned section (left of login button) */}
+          <nav className="ml-auto flex items-center gap-1 mr-3" aria-label="Additional Navigation">
+            {rightNavItems.map((item) => {
+              const isActive = pathname === item.href;
+
+              return (
+                <Button
+                  key={item.href}
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className={cn(
+                    'font-heading text-xs font-bold uppercase tracking-wider',
+                    isActive
+                      ? 'text-lime bg-lime/10 hover:bg-lime/10 hover:text-lime'
+                      : 'text-cream/40 hover:bg-white/5 hover:text-cream/80',
+                  )}
+                >
+                  <Link href={item.href}>{item.name}</Link>
+                </Button>
+              );
+            })}
+          </nav>
+
           {!user && !isLoading && (
             <Button
               size="sm"
-              className="ml-auto bg-lime text-forest-dark font-heading text-xs font-bold transition-transform hover:bg-lime-light hover:-translate-y-px"
+              className="bg-lime text-forest-dark font-heading text-xs font-bold transition-transform hover:bg-lime-light hover:-translate-y-px"
             >
               <Link href="/login" className="hidden md:block">
-                Get involved &rarr;
+                Login/Sign Up &rarr;
               </Link>
               <Link href="/login" className="block md:hidden">
                 <LogIn />
