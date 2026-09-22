@@ -47,7 +47,7 @@ export function PredictionThesisSection({
             <p className="text-sm text-deep-forest/80 leading-relaxed mb-6">
               To train and validate the prediction models for this Master&apos;s thesis, we are
               actively looking for <strong>grocery stores and local restaurants</strong> to share
-              historical purchasing and waste data leading up to August 2027.
+              historical sales data leading up to August 2027.
             </p>
 
             {/* Partner Contact Action */}

@@ -31,7 +31,7 @@ export function ReferralFeatureSection({
   return (
     <section
       id={id}
-      className="bg-cream py-16 md:py-24 px-8 sm:px-12 lg:px-20 text-deep-forest scroll-mt-6"
+      className="bg-off-white py-16 md:py-24 px-8 sm:px-12 lg:px-20 text-deep-forest scroll-mt-6"
     >
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Left Column: Description & Action */}

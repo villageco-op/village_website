@@ -2,6 +2,7 @@ import { AnnouncementBanner } from '@/components/home/extra/AnnouncementBanner';
 import CtaSection from '@/components/home/sections/CtaSection';
 import { CustomFeaturesSection } from '@/components/home/sections/CustomFeaturesSection';
 import HeroSection from '@/components/home/sections/HeroSection';
+import { IndividualsSection } from '@/components/home/sections/IndividualsSection';
 import { PredictionThesisSection } from '@/components/home/sections/PredictionThesisSection';
 import { ReferralFeatureSection } from '@/components/home/sections/ReferralFeatureSection';
 import { Footer } from '@/components/layout/Footer';
@@ -15,6 +16,7 @@ export default function Home() {
     <main className="flex flex-col w-full min-h-screen relative">
       <AnnouncementBanner />
       <HeroSection />
+      <IndividualsSection />
       <ReferralFeatureSection />
       <CustomFeaturesSection />
       <PredictionThesisSection />
