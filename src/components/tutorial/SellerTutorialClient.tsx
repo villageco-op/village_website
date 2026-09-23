@@ -13,7 +13,7 @@ export default function SellerTutorialClient() {
     <TutorialList
       title="Seller Tutorials"
       tutorials={SELLER_TUTORIALS}
-      descriptionText="Step-by-step guides for managing produce listings, account settings, and public seller profiles."
+      descriptionText=""
       helpPath="/seller/help"
     />
   );

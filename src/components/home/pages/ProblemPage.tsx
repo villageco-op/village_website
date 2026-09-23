@@ -1,4 +1,4 @@
-import { ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { Citation } from '@/components/home/extra/Citation';
@@ -101,56 +101,6 @@ export default function ProblemPage() {
               retailers, distributors, and households?
             </h2>
           </div>
-        </div>
-
-        {/* References Section */}
-        <div className="pt-8 border-t border-forest-dark/15 space-y-3">
-          <ul className="text-xs font-mono text-ink-2 space-y-2">
-            <li>
-              [1] USDA ERS —{' '}
-              <a
-                href={citations.foodInsecure.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline text-deep-forest font-semibold"
-              >
-                Food Security in the U.S. <ExternalLink className="w-3 h-3 inline" />
-              </a>
-            </li>
-            <li>
-              [2] Wisconsin DNR —{' '}
-              <a
-                href={citations.foodWaste.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline text-deep-forest font-semibold"
-              >
-                Sustainable Management of Food Waste <ExternalLink className="w-3 h-3 inline" />
-              </a>
-            </li>
-            <li>
-              [3] Cleveland Clinic —{' '}
-              <a
-                href={citations.caloricNeeds.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline text-deep-forest font-semibold"
-              >
-                Daily Caloric Needs Guide <ExternalLink className="w-3 h-3 inline" />
-              </a>
-            </li>
-            <li>
-              [4] Rolls (2009) —{' '}
-              <a
-                href={citations.volumetrics.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline text-deep-forest font-semibold"
-              >
-                Fruit & Vegetable Consumption Research <ExternalLink className="w-3 h-3 inline" />
-              </a>
-            </li>
-          </ul>
         </div>
       </div>
 

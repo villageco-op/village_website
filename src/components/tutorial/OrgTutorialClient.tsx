@@ -15,7 +15,7 @@ export default function OrgTutorialClient() {
     <TutorialList
       title="Tutorials"
       tutorials={tutorials}
-      descriptionText="Step-by-step guides on client & organization management."
+      descriptionText=""
       helpPath="/org/help/"
     />
   );
