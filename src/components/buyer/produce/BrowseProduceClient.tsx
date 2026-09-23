@@ -5,7 +5,6 @@ import { useState } from 'react';
 import BrowseProduceListClient from './produce-list/BrowseProduceListClient';
 import BrowseProduceMapClient from './produce-map/BrowseProduceMapClient';
 
-import { PageHeader } from '@/components/ui/page-header';
 import { useAuth } from '@/hooks/useAuth';
 
 /**
