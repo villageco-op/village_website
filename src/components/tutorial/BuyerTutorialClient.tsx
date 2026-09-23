@@ -13,7 +13,7 @@ export default function BuyerTutorialClient() {
     <TutorialList
       title="Buyer Tutorials"
       tutorials={BUYER_TUTORIALS}
-      descriptionText="Step-by-step guides for browsing produce, placing orders, managing your cart, and updating account details."
+      descriptionText=""
       helpPath="/buyer/help"
     />
   );

@@ -159,29 +159,33 @@ export function Header() {
             </>
           )}
 
-          {/* Right-aligned section (left of login button) */}
-          <nav className="ml-auto flex items-center gap-1 mr-3" aria-label="Additional Navigation">
-            {rightNavItems.map((item) => {
-              const isActive = pathname === item.href;
+          {status == 'unauthenticated' && (
+            <nav
+              className="ml-auto flex items-center gap-1 mr-3"
+              aria-label="Additional Navigation"
+            >
+              {rightNavItems.map((item) => {
+                const isActive = pathname === item.href;
 
-              return (
-                <Button
-                  key={item.href}
-                  asChild
-                  variant="ghost"
-                  size="sm"
-                  className={cn(
-                    'font-heading text-xs font-bold uppercase tracking-wider',
-                    isActive
-                      ? 'text-lime bg-lime/10 hover:bg-lime/10 hover:text-lime'
-                      : 'text-cream/40 hover:bg-white/5 hover:text-cream/80',
-                  )}
-                >
-                  <Link href={item.href}>{item.name}</Link>
-                </Button>
-              );
-            })}
-          </nav>
+                return (
+                  <Button
+                    key={item.href}
+                    asChild
+                    variant="ghost"
+                    size="sm"
+                    className={cn(
+                      'font-heading text-xs font-bold uppercase tracking-wider',
+                      isActive
+                        ? 'text-lime bg-lime/10 hover:bg-lime/10 hover:text-lime'
+                        : 'text-cream/40 hover:bg-white/5 hover:text-cream/80',
+                    )}
+                  >
+                    <Link href={item.href}>{item.name}</Link>
+                  </Button>
+                );
+              })}
+            </nav>
+          )}
 
           {!user && !isLoading && (
             <Button
