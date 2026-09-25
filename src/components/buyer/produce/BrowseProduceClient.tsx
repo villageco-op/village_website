@@ -5,7 +5,6 @@ import { useState } from 'react';
 import BrowseProduceListClient from './produce-list/BrowseProduceListClient';
 import BrowseProduceMapClient from './produce-map/BrowseProduceMapClient';
 
-import { PageHeader } from '@/components/ui/page-header';
 import { useAuth } from '@/hooks/useAuth';
 
 /**
@@ -17,12 +16,13 @@ export default function BrowseProduceClient() {
   const { user } = useAuth();
 
   return (
-    <div className="flex w-full flex-col p-6 sm:p-8 space-y-6 max-w-max-width mx-auto min-h-screen">
-      <PageHeader
-        title="Browse Produce"
-        subtitle="Fresh listings from nearby growers · Updated daily"
-      />
-
+    <div
+      className={
+        view === 'map'
+          ? 'flex flex-1 flex-col w-full max-w-max-width mx-auto p-6 sm:p-8 overflow-hidden h-[calc(100dvh-64px)] '
+          : 'flex flex-col w-full max-w-max-width mx-auto p-6 sm:p-8 space-y-6 min-h-screen'
+      }
+    >
       {view === 'list' ? (
         <BrowseProduceListClient onViewChange={setView} />
       ) : (

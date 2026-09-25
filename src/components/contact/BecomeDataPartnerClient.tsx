@@ -25,8 +25,8 @@ export default function BecomeDataPartnerClient() {
           </h1>
 
           <p className="text-base sm:text-lg text-cream/80 leading-relaxed">
-            We are recruiting grocery stores and local restaurants to share purchasing and waste
-            data for a Master’s thesis research project starting in August 2027.
+            We are recruiting grocery stores and local restaurants to share sales data for a
+            Master’s thesis research project starting in August 2027.
           </p>
 
           {/* Key Partner Perks */}

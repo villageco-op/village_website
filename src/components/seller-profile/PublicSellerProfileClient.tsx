@@ -34,7 +34,7 @@ interface PublicSellerProfileProps {
  * @returns The seller profile page
  */
 export default function PublicSellerProfile({ sellerId }: PublicSellerProfileProps) {
-  const [selectedProduceId, setSelectedProduceId] = useState<string | null>(null); // Added state
+  const [selectedProduceId, setSelectedProduceId] = useState<string | null>(null);
 
   const { data: response, isLoading, isError } = useGetPublicUserProfile(sellerId);
 

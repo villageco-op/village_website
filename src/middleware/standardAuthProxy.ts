@@ -40,6 +40,10 @@ export async function checkStandardAuth(
     return '/already-logged-in';
   }
 
+  if (pathname.startsWith('/onboarding')) {
+    if (!isAuthenticated) return '/onboarding';
+  }
+
   if (pathname === '/login/success') {
     if (!isAuthenticated) {
       return '/';

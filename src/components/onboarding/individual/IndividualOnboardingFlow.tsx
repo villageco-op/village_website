@@ -8,17 +8,16 @@ import BasicProfileStep from './BasicProfileStep';
 import NotificationsStep from './NotificationStep';
 import RoleStep from './RoleStep';
 import SellerInfoStep from './SellerInfoStep';
-import SellerSuccessStep from './SellerSuccessStep';
+import StripeOnboardingStep from './StripeOnboardingStep';
 
 import { type BasicInfoData, useSubmitBasicProfile } from '@/hooks/useOnboardingActions';
 import { useGenerateStripeOnboardingLink } from '@/lib/api/generated/stripe/stripe';
-import { useUpdateCurrentUser, useRegisterFcmToken } from '@/lib/api/generated/users/users';
-import { initFcmListener } from '@/lib/firebase';
+import { useUpdateCurrentUser } from '@/lib/api/generated/users/users';
 
 /**
  * The different steps within the onboarding flow.
  */
-type Step = 'basic-info' | 'role' | 'seller-info' | 'notifications' | 'seller-success';
+type Step = 'basic-info' | 'role' | 'seller-info' | 'notifications' | 'stripe-onboarding';
 /**
  * Types of user roles supported by the application.
  */
@@ -59,9 +58,9 @@ export default function IndividualOnboardingFlow({
 
   const [step, setStep] = useState<Step>(isUpgradingToSeller ? 'seller-info' : 'basic-info');
   const [selectedRole, setSelectedRole] = useState<Role>(isUpgradingToSeller ? 'seller' : null);
+  const [isStripeLoading, setIsStripeLoading] = useState(false);
 
   const updateProfile = useUpdateCurrentUser();
-  const registerToken = useRegisterFcmToken();
   const generateStripe = useGenerateStripeOnboardingLink();
   const { submitBasicProfile, isPending } = useSubmitBasicProfile();
 
@@ -104,30 +103,19 @@ export default function IndividualOnboardingFlow({
   };
 
   const handleEnableNotifications = async () => {
-    const toastId = toast.loading('Enabling notifications...');
     try {
+      if (typeof window === 'undefined' || !('Notification' in window)) {
+        toast.error('Notifications are not supported by this browser.');
+        return;
+      }
+
       const permission = await Notification.requestPermission();
 
-      if (permission === 'granted') {
-        await initFcmListener((fid) => {
-          void (async () => {
-            try {
-              await registerToken.mutateAsync({
-                data: { token: fid, platform: 'web' },
-              });
-              toast.success('Push notifications enabled!', { id: toastId });
-            } catch (error) {
-              toast.error('Failed to save notification settings.', { id: toastId });
-            }
-          });
-        });
-      } else {
-        toast.warning('Notifications were blocked. You can enable them in browser settings.', {
-          id: toastId,
-        });
+      if (permission === 'denied') {
+        toast.warning('Notifications were blocked. You can enable them in browser settings.');
       }
     } catch (error) {
-      toast.error('Failed to register for notifications.', { id: toastId });
+      toast.error('Failed to request notification permission.');
     } finally {
       finalizeOnboarding();
     }
@@ -137,11 +125,12 @@ export default function IndividualOnboardingFlow({
     if (selectedRole === 'buyer') {
       router.push('/buyer');
     } else {
-      setStep('seller-success');
+      setStep('stripe-onboarding');
     }
   };
 
   const handleStripeRedirect = async () => {
+    setIsStripeLoading(true);
     const toastId = toast.loading('Preparing Stripe onboarding...');
     try {
       const res = await generateStripe.mutateAsync();
@@ -153,21 +142,23 @@ export default function IndividualOnboardingFlow({
       }
     } catch (error) {
       toast.error('Could not connect to Stripe. Try again in a moment.', { id: toastId });
+    } finally {
+      setIsStripeLoading(false);
     }
   };
 
   const STEPS_ORDER: Step[] = isUpgradingToSeller
-    ? ['seller-info', 'notifications', 'seller-success']
+    ? ['seller-info', 'notifications', 'stripe-onboarding']
     : isInvitedOrgMember
       ? ['basic-info', 'notifications']
-      : ['basic-info', 'role', 'seller-info', 'notifications', 'seller-success'];
+      : ['basic-info', 'role', 'seller-info', 'notifications', 'stripe-onboarding'];
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-off-white py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-xl w-full">
         <div className="flex justify-center mb-8 space-x-2">
           {STEPS_ORDER.map((s, i) => {
-            if (selectedRole === 'buyer' && (s === 'seller-info' || s === 'seller-success'))
+            if (selectedRole === 'buyer' && (s === 'seller-info' || s === 'stripe-onboarding'))
               return null;
 
             const isActive = step === s;
@@ -217,11 +208,12 @@ export default function IndividualOnboardingFlow({
             />
           )}
 
-          {step === 'seller-success' && (
-            <SellerSuccessStep
+          {step === 'stripe-onboarding' && (
+            <StripeOnboardingStep
               onStripeRedirect={() => {
                 void handleStripeRedirect();
               }}
+              isPending={isStripeLoading}
             />
           )}
         </div>

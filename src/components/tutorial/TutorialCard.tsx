@@ -4,7 +4,7 @@ import { Play } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import type { Tutorial } from '@/config/tutorials';
+import type { Tutorial } from '@/config/tutorials/tutorials';
 
 interface TutorialCardProps {
   tutorial: Tutorial;

@@ -217,11 +217,11 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="goal">Weekly Goal ($)</Label>
+                <Label htmlFor="goal">Monthly Goal ($)</Label>
                 <Input
                   id="goal"
                   type="number"
-                  placeholder="Target weekly revenue"
+                  placeholder="Target revenue each month"
                   value={goal}
                   onChange={(e) => setGoal(e.target.value === '' ? '' : e.target.value)}
                 />

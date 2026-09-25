@@ -168,6 +168,7 @@ export * from './sourceMapNode';
 export * from './sourceMapNodesResponse';
 export * from './sourceMapQuery';
 export * from './stripeOnboardingResponse';
+export * from './stripeStatusResponse';
 export * from './subscriptionDetailResponse';
 export * from './subscriptionDetailResponseBuyer';
 export * from './subscriptionDetailResponseProduct';

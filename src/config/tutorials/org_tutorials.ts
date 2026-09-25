@@ -1,40 +1,9 @@
-/**
- * A single tutorial step.
- */
-export interface TutorialStep {
-  title: string;
-  content: string;
-  targetRoute: string;
-}
+import { type Tutorial, TutorialCategory } from './tutorials';
 
 /**
- * A tutorial containing an array of steps.
+ * Tutorial config object. Contains the full list of org tutorials.
  */
-export interface Tutorial {
-  id: string;
-  title: string;
-  description: string;
-  steps: TutorialStep[];
-  category: TutorialCategory;
-}
-
-/**
- * Tutorial categories for organizing tutorials into sections.
- */
-export enum TutorialCategory {
-  CLIENTS = 'Client Management',
-  ORGANIZATION = 'Organization & Members',
-}
-
-/**
- * Routes where the tutorial overlay will show.
- */
-export const DISALLOWED_TUTORIAL_ROUTES = ['/onboarding', '/login', '/verify-invite'];
-
-/**
- * Tutorial config object. Contains the full list of tutorials.
- */
-export const TUTORIALS: Record<string, Tutorial> = {
+export const ORG_TUTORIALS: Record<string, Tutorial> = {
   add_client: {
     id: 'add_client',
     title: 'Add a Client',

@@ -4,12 +4,12 @@ import { useRouter, usePathname } from 'next/navigation';
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { toast } from 'sonner';
 
+import { TUTORIALS as DEFAULT_TUTORIALS } from '@/config/tutorials/all_tutorials';
 import {
   type Tutorial,
   type TutorialStep,
-  TUTORIALS as DEFAULT_TUTORIALS,
   DISALLOWED_TUTORIAL_ROUTES as DEFAULT_DISALLOWED_ROUTES,
-} from '@/config/tutorials';
+} from '@/config/tutorials/tutorials';
 
 interface TutorialContextType {
   activeTutorial: Tutorial | null;
@@ -27,7 +27,7 @@ interface TutorialContextType {
 
 interface TutorialProviderProps {
   children: React.ReactNode;
-  /** Optional custom tutorials map (defaults to config/tutorials) */
+  /** Optional custom tutorials map */
   tutorials?: Record<string, Tutorial>;
   /** Optional disallowed routes array (defaults to config/tutorials) */
   disallowedRoutes?: string[];
@@ -100,7 +100,7 @@ export function TutorialProvider({
       saveTutorialState(tutorial, 0);
 
       const firstStep = tutorial.steps[0];
-      if (firstStep && pathname !== firstStep.targetRoute) {
+      if (firstStep && firstStep.targetRoute && pathname !== firstStep.targetRoute) {
         router.push(firstStep.targetRoute);
       }
       toast.success(`Starting: ${tutorial.title}`);
@@ -119,7 +119,7 @@ export function TutorialProvider({
       setCurrentStepIndex(nextIndex);
       saveTutorialState(activeTutorial, nextIndex);
       const nextStepObj = activeTutorial.steps[nextIndex];
-      if (nextStepObj && pathname !== nextStepObj.targetRoute) {
+      if (nextStepObj && nextStepObj.targetRoute && pathname !== nextStepObj.targetRoute) {
         router.push(nextStepObj.targetRoute);
       }
     }
@@ -132,7 +132,7 @@ export function TutorialProvider({
     setCurrentStepIndex(prevIndex);
     saveTutorialState(activeTutorial, prevIndex);
     const prevStepObj = activeTutorial.steps[prevIndex];
-    if (prevStepObj && pathname !== prevStepObj.targetRoute) {
+    if (prevStepObj && prevStepObj.targetRoute && pathname !== prevStepObj.targetRoute) {
       router.push(prevStepObj.targetRoute);
     }
   };

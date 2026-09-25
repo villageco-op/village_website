@@ -38,17 +38,10 @@ export default function NotificationsStep({ role, onEnable, onSkip }: Notificati
       </p>
 
       <div className="mt-10 w-full space-y-3">
-        <Button
-          onClick={onEnable}
-          className="w-full h-12 bg-lime text-forest-dark hover:bg-lime-light font-bold text-md"
-        >
+        <Button onClick={onEnable} variant="lime" className="w-full">
           Enable Push Notifications
         </Button>
-        <Button
-          onClick={onSkip}
-          variant="ghost"
-          className="w-full text-ink-3 hover:text-ink hover:bg-black/5"
-        >
+        <Button onClick={onSkip} variant="ghost" className="w-full">
           Not right now
         </Button>
       </div>

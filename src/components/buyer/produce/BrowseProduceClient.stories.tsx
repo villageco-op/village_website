@@ -71,7 +71,8 @@ export const ToggleViewFlow: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(await canvas.findByText(/Active Sellers/i)).toBeInTheDocument();
+    let zoomInButton = await canvas.findByRole('button', { name: /zoom in/i });
+    await expect(zoomInButton).toBeInTheDocument();
 
     const listButton = await canvas.findByRole('button', { name: /list/i });
     await userEvent.click(listButton);
@@ -81,7 +82,8 @@ export const ToggleViewFlow: Story = {
     const mapButton = await canvas.findByRole('button', { name: /map/i });
     await userEvent.click(mapButton);
 
-    await expect(await canvas.findByText(/Active Sellers/i)).toBeInTheDocument();
+    zoomInButton = await canvas.findByRole('button', { name: /zoom in/i });
+    await expect(zoomInButton).toBeInTheDocument();
   },
 };
 

@@ -146,22 +146,6 @@ export function BrowseProduceMap({
           </div>
         </Popup>
       )}
-
-      {/* Map Legend Overlay */}
-      <div className="absolute bottom-4 left-4 flex flex-col gap-2 rounded-lg bg-white/95 p-3 shadow-sm backdrop-blur-sm border border-border/50 z-10 pointer-events-none">
-        <div className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-deep-forest border border-white shadow-sm">
-            <Store className="h-3 w-3 text-white" />
-          </div>
-          <span className="text-xs font-semibold text-ink-2">Your Location</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-lime border border-white shadow-sm">
-            <Leaf className="h-3 w-3 text-deep-forest" strokeWidth={2.5} />
-          </div>
-          <span className="text-xs font-semibold text-ink-2">Active Sellers</span>
-        </div>
-      </div>
     </Map>
   );
 }

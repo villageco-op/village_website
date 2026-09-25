@@ -112,10 +112,7 @@ export default function BuyerBillingClient() {
 
   return (
     <div className="flex w-full flex-col">
-      <PageHeader
-        title={`Billing Summary`}
-        subtitle={`${currentMonthYear} · Transparent pricing · No hidden fees`}
-      />
+      <PageHeader title={`Billing Summary`} subtitle={`${currentMonthYear}`} />
       <BillingStatsCard data={summaryData} />
 
       <div className="mt-8 flex flex-col">
