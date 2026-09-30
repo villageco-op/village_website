@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
  */
 export function OrderConfirmationSkeleton() {
   return (
-    <div className="container-custom max-w-2xl mx-auto">
+    <div className="container-custom mx-auto">
       <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden">
         <CardContent className="flex flex-col items-center justify-center p-12 sm:p-16 text-center">
           {/* Success Icon Placeholder */}

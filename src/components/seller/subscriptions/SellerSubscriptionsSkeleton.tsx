@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
  */
 export function SellerSubscriptionsSkeleton() {
   return (
-    <div className="flex w-full flex-col p-8 pt-6">
+    <div className="flex w-full flex-col">
       {/* Page Header Skeleton */}
       <div className="mb-6 space-y-2">
         <Skeleton className="h-8 w-64" />

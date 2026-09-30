@@ -16,7 +16,7 @@ export default function OrderConfirmationClient() {
   const sessionId = searchParams.get('session_id');
 
   return (
-    <div className="container-custom max-w-2xl mx-auto">
+    <div className="container-custom mx-auto">
       <Card>
         <CardContent className="flex flex-col items-center justify-center p-12 sm:p-16 text-center">
           {/* Success Icon */}

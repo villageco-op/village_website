@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
  */
 export function OrgInviteSkeleton() {
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
+    <div className="mx-auto flex w-full flex-col">
       {/* Header Skeleton with Back Button */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-3">
@@ -24,7 +24,7 @@ export function OrgInviteSkeleton() {
       {/* InviteMembersForm Skeleton Layout */}
       <div className="flex flex-col gap-6">
         {/* The Form Card */}
-        <Card className="rounded-xl border border-border bg-white shadow-sm">
+        <Card className="rounded-xl border border-border bg-background shadow-sm">
           <CardContent className="space-y-4 p-6">
             <Skeleton className="h-5 w-36" /> {/* Form Section Title */}
             <div className="flex flex-col gap-4 sm:flex-row">
@@ -44,7 +44,7 @@ export function OrgInviteSkeleton() {
         </Card>
 
         {/* Invited Members Table List Placeholder */}
-        <Card className="rounded-xl border border-border bg-white shadow-sm">
+        <Card className="rounded-xl border border-border bg-background shadow-sm">
           <CardContent className="p-6">
             <Skeleton className="mb-6 h-5 w-48" /> {/* Section Title */}
             <div className="space-y-4">

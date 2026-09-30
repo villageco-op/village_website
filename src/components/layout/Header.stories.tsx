@@ -52,6 +52,31 @@ const mockSession = (userPayload: object | null) => [
   }),
 ];
 
+const mockOrganization = (orgId: string = 'org-123') => [
+  http.get(`*/api/organizations/${orgId}`, () => {
+    return HttpResponse.json({
+      id: orgId,
+      type: 'pantry',
+      name: 'Test Pantry Org',
+      subdomain: 'test-pantry',
+      email: 'pantry@example.com',
+      website: null,
+      phone: null,
+      image: null,
+      address: null,
+      city: null,
+      state: null,
+      country: null,
+      zip: null,
+      lat: null,
+      lng: null,
+      maxReferrals: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+  }),
+];
+
 /**
  * Guest user on the homepage.
  * Shows 'Home' link, 'Get involved' CTA, and public anchor links.
@@ -149,8 +174,8 @@ export const AuthenticatedBuyerDashboard: Story = {
 
     // Protected buyer sub-nav items should now be visible
     await expect(await canvas.findByRole('link', { name: /Dashboard/i })).toBeInTheDocument();
-    await expect(canvas.getByRole('link', { name: /Browse/i })).toBeInTheDocument();
-    await expect(canvas.getByRole('link', { name: /Subscriptions/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: /Orders/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: /Support/i })).toBeInTheDocument();
 
     // Non-org user should not see 'Org' link
     await expect(canvas.queryByRole('link', { name: /Org/i })).not.toBeInTheDocument();
@@ -176,8 +201,8 @@ export const AuthenticatedSellerDashboard: Story = {
     const canvas = within(canvasElement);
 
     await expect(await canvas.findByRole('link', { name: /Dashboard/i })).toBeInTheDocument();
-    await expect(canvas.getByRole('link', { name: /Orders/i })).toBeInTheDocument();
-    await expect(canvas.getByRole('link', { name: /Subscriptions/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: /Sales/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: /Support/i })).toBeInTheDocument();
   },
 };
 
@@ -190,13 +215,16 @@ export const OrgMemberDashboard: Story = {
   parameters: {
     nextjs: { navigation: { pathname: '/org/clients' } },
     msw: {
-      handlers: mockSession({
-        id: '2',
-        name: 'Org Member',
-        email: 'member@org.com',
-        organizationId: 'org-123',
-        orgRole: 'member',
-      }),
+      handlers: [
+        ...mockSession({
+          id: '2',
+          name: 'Org Member',
+          email: 'member@org.com',
+          organizationId: 'org-123',
+          orgRole: 'member',
+        }),
+        ...mockOrganization('org-123'),
+      ],
     },
   },
   play: async ({ canvasElement }) => {
@@ -206,8 +234,8 @@ export const OrgMemberDashboard: Story = {
     await expect(await canvas.findByRole('link', { name: /Org/i })).toBeInTheDocument();
 
     // Non-admin org link visible, admin link hidden
-    await expect(canvas.getByRole('link', { name: /Clients/i })).toBeInTheDocument();
-    await expect(canvas.queryByRole('link', { name: /Members/i })).not.toBeInTheDocument();
+    await expect(await canvas.findByRole('button', { name: /Clients/i })).toBeInTheDocument();
+    await expect(canvas.queryByRole('button', { name: /Members/i })).not.toBeInTheDocument();
   },
 };
 
@@ -219,13 +247,16 @@ export const OrgAdminDashboard: Story = {
   parameters: {
     nextjs: { navigation: { pathname: '/org/clients' } },
     msw: {
-      handlers: mockSession({
-        id: '3',
-        name: 'Org Admin',
-        email: 'admin@org.com',
-        organizationId: 'org-123',
-        orgRole: 'admin',
-      }),
+      handlers: [
+        ...mockSession({
+          id: '3',
+          name: 'Org Admin',
+          email: 'admin@org.com',
+          organizationId: 'org-123',
+          orgRole: 'admin',
+        }),
+        ...mockOrganization('org-123'),
+      ],
     },
   },
   play: async ({ canvasElement }) => {
@@ -234,7 +265,7 @@ export const OrgAdminDashboard: Story = {
     await expect(await canvas.findByRole('link', { name: /Org/i })).toBeInTheDocument();
 
     // Both org secondary items should be visible for admins
-    await expect(canvas.getByRole('link', { name: /Clients/i })).toBeInTheDocument();
-    await expect(canvas.getByRole('link', { name: /Members/i })).toBeInTheDocument();
+    await expect(await canvas.findByRole('button', { name: /Clients/i })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: /Members/i })).toBeInTheDocument();
   },
 };

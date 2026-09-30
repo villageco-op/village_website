@@ -129,7 +129,7 @@ export default function OrgMembersClient() {
   const meta = membersRes?.status === 200 ? membersRes.data?.meta : undefined;
 
   return (
-    <div className="flex w-full flex-col gap-6">
+    <div className="flex w-full flex-col">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageHeader
           title="Organization Members"

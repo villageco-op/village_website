@@ -8,8 +8,8 @@ import { Skeleton } from '@/components/ui/skeleton';
  */
 export default function ProduceListingSkeleton() {
   return (
-    <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="bg-off-white">
+      <div className="mx-auto space-y-8">
         <Skeleton className="h-8 w-32" />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">

@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { MembersTableSkeleton } from './MembersTableSkeleton';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -17,6 +18,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { InlineErrorState } from '@/components/ui/state-displays';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { useInviteToOrg } from '@/lib/api/generated/invites/invites';
 import { OrgRole } from '@/lib/api/generated/models';
 import type { Invite } from '@/lib/api/generated/models';
@@ -36,7 +45,7 @@ interface InviteMembersFormProps {
  * @param props.isLoading - Are the invites loading
  * @param props.isError - Did the invites fail to load
  * @param props.onSuccessMutation - When an invite is successfully sent
- * @param props.onRetryFetch - When a the load invites button is pressed
+ * @param props.onRetryFetch - When the load invites button is pressed
  * @returns A form for sending an invite and displaying sent invites
  */
 export function InviteMembersForm({
@@ -83,8 +92,7 @@ export function InviteMembersForm({
     } catch (error) {
       console.error('OrganizationOnboardingFlow: Failed to transmit invitation', error);
       toast.error('Could not transmit invite. Please check your connection.');
-    }
-    {
+    } finally {
       setIsInviting(false);
     }
   };
@@ -96,66 +104,70 @@ export function InviteMembersForm({
 
   return (
     <div className="space-y-6">
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 bg-white p-5 border border-lime/30 rounded-xl shadow-sm"
-      >
-        <h3 className="font-heading font-bold text-sm text-ink-2 flex items-center gap-2">
-          <Mail className="w-4 h-4 text-click-green" /> New Invite Card
-        </h3>
+      {/* New Invite Form Card */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm flex items-center gap-2">
+            <Mail className="w-4 h-4 text-click-green" /> New Invite Card
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit}>
+            <div className="flex flex-col sm:flex-row gap-3 items-end">
+              {/* Email Input */}
+              <div className="w-full sm:flex-3 flex flex-col gap-1.5">
+                <Label htmlFor="inviteEmail">Member Email Address</Label>
+                <Input
+                  id="inviteEmail"
+                  type="email"
+                  placeholder="colleague@example.com"
+                  className="h-9 w-full"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isInviting}
+                />
+              </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 items-end">
-          {/* Email Input */}
-          <div className="w-full sm:flex-3 flex flex-col gap-1.5">
-            <Label htmlFor="inviteEmail">Member Email Address</Label>
-            <Input
-              id="inviteEmail"
-              type="email"
-              placeholder="colleague@example.com"
-              className="h-9 w-full"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isInviting}
-            />
-          </div>
+              {/* Role Select */}
+              <div className="w-full sm:w-48 flex flex-col gap-1.5">
+                <Label htmlFor="inviteRole">Permission Role</Label>
+                <Select
+                  value={role}
+                  onValueChange={(val) => setRole(val as OrgRole)}
+                  disabled={isInviting}
+                >
+                  <SelectTrigger id="inviteRole" className="h-9 w-full">
+                    <SelectValue placeholder="Role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={OrgRole.member}>Member</SelectItem>
+                    <SelectItem value={OrgRole.admin}>Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-          {/* Role Select */}
-          <div className="w-full sm:w-48 flex flex-col gap-1.5">
-            <Label htmlFor="inviteRole">Permission Role</Label>
-            <Select
-              value={role}
-              onValueChange={(val) => setRole(val as OrgRole)}
-              disabled={isInviting}
-            >
-              <SelectTrigger id="inviteRole" className="h-9 w-full">
-                <SelectValue placeholder="Role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={OrgRole.member}>Member</SelectItem>
-                <SelectItem value={OrgRole.admin}>Admin</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+              <div className="w-full sm:flex-1">
+                <Button
+                  type="submit"
+                  disabled={!email || isInviting}
+                  variant="lime"
+                  className="w-full h-9 flex items-center justify-center gap-1 text-sm"
+                >
+                  {isInviting ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Plus className="w-4 h-4" /> Invite
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
-          <div className="w-full sm:flex-1">
-            <Button
-              type="submit"
-              disabled={!email || isInviting}
-              variant="lime"
-              className="w-full h-9 flex items-center justify-center gap-1 text-sm"
-            >
-              {isInviting ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  <Plus className="w-4 h-4" /> Invite
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-      </form>
-
+      {/* Sent Invitations Table Section */}
       {isLoading ? (
         <MembersTableSkeleton rowCount={3} />
       ) : isError ? (
@@ -167,27 +179,28 @@ export function InviteMembersForm({
         />
       ) : (
         invitedMembers.length > 0 && (
-          <div className="space-y-2">
-            <h3 className="font-heading font-bold text-sm text-ink-2 flex items-center gap-2">
-              <UserCheck className="w-4 h-4 text-click-green" /> Sent Invitations
-            </h3>
-            <div className="overflow-hidden border border-border/40 rounded-xl bg-white shadow-sm">
-              <table className="w-full text-left border-collapse text-sm">
-                <thead>
-                  <tr className="bg-lime-pale/40 border-b border-border/30 text-ink-2 font-semibold">
-                    <th className="p-3">Email</th>
-                    <th className="p-3">Role</th>
-                    <th className="p-3 text-right">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <UserCheck className="w-4 h-4 text-click-green" /> Sent Invitations
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead className="pl-6">Email</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead className="pr-6 text-right">Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {invitedMembers.map((member) => (
-                    <tr
-                      key={member.id}
-                      className="border-b last:border-0 border-border/10 hover:bg-black/5 transition-colors"
-                    >
-                      <td className="p-3 font-medium text-ink truncate max-w-45">{member.email}</td>
-                      <td className="p-3 capitalize text-ink-2">
+                    <TableRow key={member.id}>
+                      <TableCell className="pl-6 font-medium truncate max-w-45">
+                        {member.email}
+                      </TableCell>
+                      <TableCell className="capitalize">
                         <span
                           className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold ${
                             member.role === OrgRole.admin
@@ -197,19 +210,19 @@ export function InviteMembersForm({
                         >
                           {member.role}
                         </span>
-                      </td>
-                      <td className="p-3 text-right">
+                      </TableCell>
+                      <TableCell className="pr-6 text-right">
                         <span className="inline-flex items-center gap-1 text-xs text-click-green font-semibold bg-lime-pale/50 px-2 py-0.5 rounded">
                           <span className="w-1.5 h-1.5 rounded-full bg-click-green animate-pulse" />
                           {member.status}
                         </span>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         )
       )}
     </div>

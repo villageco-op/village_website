@@ -49,7 +49,7 @@ export default function OrgHelpClient() {
   };
 
   return (
-    <div className="min-h-screen bg-off-white py-20 px-4">
+    <div className="bg-off-white">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-10">
           <div className="w-16 h-16 bg-lime-pale text-click-green rounded-full flex items-center justify-center mx-auto mb-6">
