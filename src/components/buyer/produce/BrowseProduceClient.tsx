@@ -19,8 +19,8 @@ export default function BrowseProduceClient() {
     <div
       className={
         view === 'map'
-          ? 'flex flex-1 flex-col w-full max-w-max-width mx-auto p-6 sm:p-8 overflow-hidden h-[calc(100dvh-64px)] '
-          : 'flex flex-col w-full max-w-max-width mx-auto p-6 sm:p-8 space-y-6 min-h-screen'
+          ? 'flex flex-1 flex-col w-full max-w-max-width mx-auto overflow-hidden h-[calc(90dvh-64px)] '
+          : 'flex flex-col w-full max-w-max-width mx-auto space-y-6'
       }
     >
       {view === 'list' ? (

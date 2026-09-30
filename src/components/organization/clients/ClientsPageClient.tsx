@@ -102,7 +102,7 @@ export default function ClientsPageClient() {
   const meta = clientsRes?.status === 200 ? clientsRes.data?.meta : undefined;
 
   return (
-    <div className="flex w-full flex-col gap-6">
+    <div className="flex w-full flex-col">
       <PageHeader
         title="Clients"
         subtitle="View, edit & delete clients and view referrals."

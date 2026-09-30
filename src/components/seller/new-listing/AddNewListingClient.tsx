@@ -136,8 +136,8 @@ export default function AddNewListingClient() {
   };
 
   return (
-    <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
+    <div className="bg-off-white">
+      <div className="mx-auto">
         <div className="mb-6 flex items-center justify-between">
           <div>
             <Button

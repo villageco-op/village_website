@@ -8,8 +8,8 @@ import { Skeleton } from '@/components/ui/skeleton';
  */
 export function EditListingSkeleton() {
   return (
-    <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
+    <div className="bg-off-white">
+      <div className="mx-auto">
         {/* Header Section Skeleton */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>

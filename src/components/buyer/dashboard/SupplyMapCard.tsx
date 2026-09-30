@@ -1,6 +1,6 @@
 'use client';
 
-import { Leaf, MapPin, Sprout, Star } from 'lucide-react';
+import { House, Leaf, Sprout, Star } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -107,8 +107,11 @@ export function SupplyMapCard({
 
             {/* Base Store Pin */}
             <Marker longitude={baseLng} latitude={baseLat} anchor="bottom">
-              <div className="text-[1.5rem] drop-shadow-md z-10" title="Your Store">
-                <MapPin className="text-deep-forest" />
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-deep-forest border-2 border-white shadow-lg drop-shadow-md z-20 transition-transform hover:scale-110"
+                title="Your Location"
+              >
+                <House className="h-5 w-5 text-white" />
               </div>
             </Marker>
 
@@ -228,7 +231,7 @@ export function SupplyMapCard({
           variant="outline"
           className="border-0 bg-deep-forest/10 text-deep-forest px-2.5 py-1 font-heading text-[0.65rem] font-bold uppercase tracking-[0.05em] rounded-full"
         >
-          <MapPin className="text-deep-forest" /> Your location
+          <House className="text-deep-forest" /> Your location
         </Badge>
         <Badge
           variant="outline"

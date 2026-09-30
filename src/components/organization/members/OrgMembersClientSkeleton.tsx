@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
  */
 export function OrgMembersSkeleton() {
   return (
-    <div className="flex w-full flex-col gap-6">
+    <div className="flex w-full flex-col">
       {/* Header Skeleton */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-2">
@@ -20,7 +20,7 @@ export function OrgMembersSkeleton() {
       </div>
 
       {/* Table & Controls Container */}
-      <Card className="rounded-xl border border-border bg-white shadow-sm">
+      <Card className="rounded-xl border border-border bg-background shadow-sm">
         <CardContent className="p-6">
           {/* Search and Filter Inputs Skeleton */}
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

@@ -29,7 +29,6 @@ export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
 
   const { page, limit, setPage } = usePagination(12);
 
-  // Fetch listing details to show the title in the header
   const produceQuery = useGetProduce(id, { query: { enabled: !!id } });
 
   const ordersQuery = useGetProduceOrders(id, { limit, page }, { query: { enabled: !!id } });
@@ -39,8 +38,8 @@ export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl">
+      <div className="bg-off-white">
+        <div className="mx-auto">
           <ListingOrdersSkeleton />
         </div>
       </div>
@@ -64,9 +63,8 @@ export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
   const totalOrders = meta?.total || orders.length;
 
   return (
-    <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl">
-        {/* Header Section */}
+    <div className="bg-off-white">
+      <div className="mx-auto">
         <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
@@ -84,7 +82,6 @@ export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
           </div>
         </div>
 
-        {/* Orders Table Card */}
         <ListingOrdersTable orders={orders} totalOrders={totalOrders} />
         <PaginationControls meta={meta} onPageChange={setPage} />
       </div>

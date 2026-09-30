@@ -19,8 +19,8 @@ export default function AddOrganizationClient() {
   const hasOrg = Boolean(user?.organizationId);
 
   return (
-    <div className="min-h-screen bg-off-white py-16 px-4">
-      <div className="container-custom max-w-3xl mx-auto">
+    <div className="bg-off-white">
+      <div className="container-custom mx-auto">
         {/* Hero Section */}
         <div className="text-center mb-10">
           <div className="w-16 h-16 bg-lime-pale text-click-green rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">

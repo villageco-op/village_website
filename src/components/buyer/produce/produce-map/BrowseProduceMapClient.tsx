@@ -100,7 +100,7 @@ export default function BrowseProduceMapClient({
 
       <div className="relative flex-1 min-h-125 md:min-h-0 w-full overflow-hidden rounded-xl border border-forest-dark/20 bg-slate-50 shadow-sm">
         {isLoading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-slate-50/50">
+          <div className="absolute inset-0 flex items-center justify-center bg-background">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-deep-forest border-t-transparent" />
           </div>
         ) : (

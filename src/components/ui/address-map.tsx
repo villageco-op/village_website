@@ -70,10 +70,13 @@ export function AddressMap({
           <NavigationControl position="top-right" showCompass={false} />
 
           <Marker longitude={displayLng} latitude={displayLat} anchor="bottom">
-            <div className="text-[2.2rem] drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] animate-in fade-in slide-in-from-bottom-2 duration-1000 text-deep-forest">
-              <MapPin />
-            </div>
-          </Marker>
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-deep-forest border-2 border-white shadow-lg drop-shadow-md z-20 transition-transform hover:scale-110"
+                title="Target Location"
+              >
+                <MapPin className="h-5 w-5 text-white" />
+              </div>
+            </Marker>
         </Map>
       </div>
 

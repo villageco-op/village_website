@@ -117,7 +117,7 @@ export default function ClientsExportClient() {
     progress.total > 0 ? Math.round((progress.current / progress.total) * 100) : 0;
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 space-y-8 print:p-0 print:m-0">
+    <div className="mx-auto w-full space-y-8 print:p-0 print:m-0">
       {/* HEADER SECTION */}
       <div className="print:hidden">
         <PageHeader
