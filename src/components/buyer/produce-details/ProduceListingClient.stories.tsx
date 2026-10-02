@@ -29,7 +29,7 @@ const MOCK_PRODUCE: ProduceDetail = {
   status: 'active',
   createdAt: '2026-01-01T00:00:00Z',
   updatedAt: '2026-01-01T00:00:00Z',
-  produceType: 'stone_fruits',
+  produceType: 'fruit',
   maxOrderQuantityOz: '1',
   seller: {
     id: 'seller_99',
