@@ -39,7 +39,7 @@ export function ImageGallery({ images, title, className, imageClassName, width, 
 
   if (images.length === 0) {
     return (
-      <div className={cn("flex items-center justify-center bg-slate-100 text-slate-400", className)}>
+      <div className={cn("flex items-center justify-center bg-slate-100 text-slate-400 min-h-64", className)}>
         No Image Available
       </div>
     );

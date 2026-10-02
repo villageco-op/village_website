@@ -8,7 +8,7 @@ import type { ListingFormData } from '@/components/seller/new-listing/AddNewList
 const mockFullData: ListingFormData = {
   title: 'Summer Squash',
   description: 'Squash.',
-  produceType: 'alliums',
+  produceType: 'produce_vegetables',
   pricePerLb: '2.50',
   totalLbsInventory: '20',
   maxOrderLbs: '4',

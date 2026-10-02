@@ -52,7 +52,7 @@ export const Prepopulated: Story = {
       ...mockFullData,
       title: 'Zucchini Blossoms',
       description: 'Freshly picked early morning blossoms, perfect for stuffing with ricotta.',
-      produceType: 'cucurbits',
+      produceType: 'produce_vegetables',
       pricePerLb: '12.50',
       totalLbsInventory: '5',
     },
@@ -97,11 +97,11 @@ export const InteractionTest: Story = {
     const selectTrigger = canvas.getByLabelText(/Produce Type/i);
     await userEvent.click(selectTrigger);
 
-    const option = (await screen.findAllByText('Berries'))[0];
+    const option = (await screen.findAllByText('Fruit'))[0];
     await userEvent.click(option);
 
     await expect(args.updateData).toHaveBeenCalledWith(
-      expect.objectContaining({ produceType: 'berries' }),
+      expect.objectContaining({ produceType: 'fruit' }),
     );
   },
 };

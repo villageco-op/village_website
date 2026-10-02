@@ -28,6 +28,7 @@ export const BUYER_NAV_GROUPS: NavGroup[] = [
     label: 'Orders',
     items: [
       { name: 'Browse', href: '/buyer/browse', protected: false },
+      { name: 'Orders', href: '/buyer/orders', protected: true },
       { name: 'Subscriptions', href: '/buyer/subscriptions', protected: true },
       { name: 'Billing', href: '/buyer/billing', protected: true },
     ],

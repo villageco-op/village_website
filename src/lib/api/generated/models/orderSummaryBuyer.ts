@@ -12,7 +12,7 @@ import type { Location } from './location';
 /**
  * @nullable
  */
-export type OrderDetailResponseBuyer = {
+export type OrderSummaryBuyer = {
   id: string;
   /** @nullable */
   name?: string | null;
