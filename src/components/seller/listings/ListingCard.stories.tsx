@@ -82,7 +82,7 @@ export const InventoryAlert: Story = {
       sellerId: 'seller-123',
       title: 'Heirloom Tomatoes',
       description: '',
-      produceType: 'nightshades',
+      produceType: 'produce_vegetables',
       pricePerOz: '0.75', // $12.00/lb
       totalOzInventory: '160',
       maxOrderQuantityOz: null,
@@ -136,7 +136,7 @@ export const NoAnalytics: Story = {
       sellerId: 'seller-123',
       title: 'Wild Strawberries',
       description: 'Grown wild.',
-      produceType: 'berries',
+      produceType: 'fruit',
       pricePerOz: '1.00',
       totalOzInventory: '80',
       maxOrderQuantityOz: null,
@@ -163,7 +163,7 @@ export const FallbackIcon: Story = {
     produce: {
       ...NoAnalytics.args?.produce!,
       title: 'Unknown Exotic Fruit',
-      produceType: 'tropical_fruits',
+      produceType: 'fruit',
     },
   },
 };
