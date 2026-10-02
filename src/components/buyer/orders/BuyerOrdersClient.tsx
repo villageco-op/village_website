@@ -1,9 +1,8 @@
 'use client';
 
-import { OrderHistoryCard } from './OrderHistoryCard';
-import { OrdersSkeleton } from './OrdersSkeleton';
-import { PendingOrdersCard } from './PendingOrdersCard';
-
+import { OrderHistoryCard } from '@/components/seller/orders/OrderHistoryCard';
+import { OrdersSkeleton } from '@/components/seller/orders/OrdersSkeleton';
+import { PendingOrdersCard } from '@/components/seller/orders/PendingOrdersCard';
 import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
@@ -11,10 +10,10 @@ import { usePagination } from '@/hooks/usePagination';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
 
 /**
- * The client component for the seller orders page.
+ * The client component for the buyer orders page.
  * @returns A composite view of pending and historical orders.
  */
-export default function SellerOrdersClient() {
+export default function BuyerOrdersClient() {
   const { page: pendingPage, limit: pendingLimit, setPage: pendingSetPage } = usePagination(12);
   const { page: historyPage, limit: historyLimit, setPage: historySetPage } = usePagination(12);
 
@@ -23,7 +22,7 @@ export default function SellerOrdersClient() {
     isLoading: isPendingLoading,
     isError: isPendingError,
     refetch: refetchPending,
-  } = useGetOrders({ role: 'seller', status: 'pending', limit: pendingLimit, page: pendingPage });
+  } = useGetOrders({ role: 'buyer', status: 'pending', limit: pendingLimit, page: pendingPage });
 
   const {
     data: historyRes,
@@ -31,7 +30,7 @@ export default function SellerOrdersClient() {
     isError: isHistoryError,
     refetch: refetchHistory,
   } = useGetOrders({
-    role: 'seller',
+    role: 'buyer',
     status: 'completed',
     timeframe: '30d',
     limit: historyLimit,
@@ -69,13 +68,13 @@ export default function SellerOrdersClient() {
   const historyTotal = historyMeta?.total || historyOrders.length;
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="w-full flex-col">
       <PageHeader title="Orders" subtitle="View pending and historical orders" />
 
-      <PendingOrdersCard orders={pendingOrders} pendingCount={pendingTotal} userRole="seller" />
+      <PendingOrdersCard orders={pendingOrders} pendingCount={pendingTotal} userRole="buyer" />
       <PaginationControls meta={pendingMeta} onPageChange={pendingSetPage} className="mt-2 mb-10" />
 
-      <OrderHistoryCard orders={historyOrders} completedCount={historyTotal} userRole="seller" />
+      <OrderHistoryCard orders={historyOrders} completedCount={historyTotal} userRole="buyer" />
       <PaginationControls meta={historyMeta} onPageChange={historySetPage} />
     </div>
   );

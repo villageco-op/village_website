@@ -101,6 +101,7 @@ const MOCK_ORDER_DATA: OrderDetailResponse = {
       produceSeasonStart: '2024-12-5',
       produceSeasonEnd: '2025-5-12',
       produceTotalOzInventory: '20.00',
+      images: ['https://fakeimage.jpg'],
     },
   ],
 };

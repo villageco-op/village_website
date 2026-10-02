@@ -6,14 +6,15 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ImageUrl } from './imageUrl';
-import type { OrgRole } from './orgRole';
+import type { ResourceId } from './resourceId';
 
-export interface OrgMember {
-  id: string;
+export interface OrderListItemProduce {
+  id: ResourceId;
+  title: string;
   /** @nullable */
-  name?: string | null;
+  distance?: number | null;
   /** @nullable */
-  email?: string | null;
-  image?: ImageUrl & (unknown | null);
-  orgRole: OrgRole & (unknown | null);
+  type?: string | null;
+  /** @nullable */
+  images?: ImageUrl[] | null;
 }

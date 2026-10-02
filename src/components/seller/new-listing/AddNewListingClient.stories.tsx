@@ -71,7 +71,7 @@ export const FullFormSubmission: Story = {
     const selectTrigger = canvas.getByLabelText(/Produce Type/i);
     await userEvent.click(selectTrigger);
 
-    const option = (await screen.findAllByText('Stone Fruits'))[1];
+    const option = (await screen.findAllByText('Fruit'))[1];
     await userEvent.click(option);
 
     // 2. Pricing & Inventory

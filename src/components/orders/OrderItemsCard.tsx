@@ -1,7 +1,8 @@
 'use client';
 
 import { Package } from 'lucide-react';
-import router from 'next/router';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -25,8 +26,10 @@ interface OrderItemsCardProps {
  * @returns A card displaying a table of order items
  */
 export function OrderItemsCard({ items }: OrderItemsCardProps) {
+  const router = useRouter();
+
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardContent className="p-0 sm:p-6">
         <div className="flex items-center gap-2 px-6 pt-6 sm:px-0 sm:pt-0 mb-4 border-b border-border/50 pb-4">
           <Package className="h-5 w-5 text-ink-3" />
@@ -40,7 +43,7 @@ export function OrderItemsCard({ items }: OrderItemsCardProps) {
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
-                  <TableHead>Product</TableHead>
+                  <TableHead className="w-75">Product</TableHead>
                   <TableHead className="text-right">Quantity</TableHead>
                   <TableHead className="text-right">Price/lb</TableHead>
                   <TableHead className="text-right">Subtotal</TableHead>
@@ -51,21 +54,45 @@ export function OrderItemsCard({ items }: OrderItemsCardProps) {
                   const quantityLbs = Number(item.quantityOz || 0) / 16;
                   const pricePerLb = Number(item.pricePerOz || 0) * 16;
                   const subtotal = quantityLbs * pricePerLb;
+                  const itemImage = item.images?.[0];
 
                   return (
                     <TableRow
                       key={item.id}
-                      className="cursor-pointer hover:bg-off-white"
-                      onClick={() => void router.push(`/produce/${item.id}`)}
+                      className="group cursor-pointer hover:bg-slate-50/80 transition-colors"
+                      onClick={() => void router.push(`/produce/${item.productId}`)}
                     >
-                      <TableCell className="font-medium text-ink">
-                        {item.productName || 'Unknown Product'}
+                      <TableCell className="py-3.5 font-medium text-ink">
+                        <div className="flex items-center gap-3">
+                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-slate-100 border border-border/50">
+                            {itemImage ? (
+                              <Image
+                                src={itemImage}
+                                alt={item.productName || 'Product'}
+                                fill
+                                className="object-cover transition-transform group-hover:scale-105"
+                              />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center text-[0.65rem] font-bold text-ink-3">
+                                #{item.id.slice(0, 3)}
+                              </div>
+                            )}
+                          </div>
+                          <span className="font-heading text-sm font-semibold text-ink line-clamp-1">
+                            {item.productName || 'Unknown Product'}
+                          </span>
+                        </div>
                       </TableCell>
-                      <TableCell className="text-right">
+
+                      <TableCell className="text-right py-3.5 text-sm text-ink-2">
                         {quantityLbs.toFixed(1).replace(/\.0$/, '')} lbs
                       </TableCell>
-                      <TableCell className="text-right">${pricePerLb.toFixed(2)}</TableCell>
-                      <TableCell className="text-right font-bold text-ink">
+
+                      <TableCell className="text-right py-3.5 text-sm text-ink-2">
+                        ${pricePerLb.toFixed(2)}
+                      </TableCell>
+
+                      <TableCell className="text-right py-3.5 font-heading text-sm font-bold text-ink">
                         ${subtotal.toFixed(2)}
                       </TableCell>
                     </TableRow>

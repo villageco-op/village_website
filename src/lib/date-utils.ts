@@ -131,3 +131,59 @@ export function formatAppDate(
 
   return d.toLocaleDateString('en-US', PRESETS[preset]);
 }
+
+type DateTimeFormatPreset =
+  | 'short' // Oct 2, 2026, 6:23 AM
+  | 'numeric' // 10/2/2026, 6:23 AM
+  | 'timeOnly' // 6:23 AM
+  | 'fullWithDay'; // Fri, Oct 2, 2026, 6:23 AM
+
+const DATE_TIME_PRESETS: Record<DateTimeFormatPreset, Intl.DateTimeFormatOptions> = {
+  short: {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  },
+  numeric: {
+    month: 'numeric',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  },
+  timeOnly: {
+    hour: 'numeric',
+    minute: '2-digit',
+  },
+  fullWithDay: {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  },
+};
+
+/**
+ * Standardizes date and time formatting across the application.
+ * @param date - Date string, Date object, or null/undefined
+ * @param preset - The formatting style to use
+ * @param fallback - String to return if date is missing/invalid
+ * @returns The formatted local date and time string
+ */
+export function formatAppDateTime(
+  date: string | Date | null | undefined,
+  preset: DateTimeFormatPreset = 'short',
+  fallback: string = '—',
+): string {
+  if (!date) return fallback;
+
+  const d = typeof date === 'string' ? new Date(date) : date;
+
+  if (isNaN(d.getTime())) return fallback;
+
+  return d.toLocaleString('en-US', DATE_TIME_PRESETS[preset]);
+}

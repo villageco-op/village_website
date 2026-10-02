@@ -5,6 +5,7 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
+import type { ImageUrl } from './imageUrl';
 import type { ProduceStatus } from './produceStatus';
 import type { ResourceId } from './resourceId';
 
@@ -23,4 +24,6 @@ export type OrderDetailResponseItemsItem = {
   produceSeasonEnd: string;
   quantityOz: string;
   pricePerOz: string;
+  /** @nullable */
+  images: ImageUrl[] | null;
 };

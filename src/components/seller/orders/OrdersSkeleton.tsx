@@ -19,7 +19,7 @@ export function OrdersSkeleton() {
       </div>
 
       {/* Pending Orders Card Skeleton */}
-      <Card className="rounded-xl border-border bg-white shadow-sm">
+      <Card className="rounded-xl border-border bg-background shadow-sm">
         <CardContent className="p-6">
           <div className="mb-6 flex justify-between">
             <div className="space-y-2">
