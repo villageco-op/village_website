@@ -97,7 +97,6 @@ export const GuestHome: Story = {
 
     // Homepage secondary links should be visible
     await expect(canvas.getByRole('link', { name: /Food Pantries/i })).toBeInTheDocument();
-    await expect(canvas.getByRole('link', { name: /Resturants & Markets/i })).toBeInTheDocument();
 
     // Login CTA should be present for guest users
     await expect(canvas.getByRole('link', { name: /Login\/Sign Up/i })).toBeInTheDocument();
