@@ -1,99 +1,143 @@
-import { ArrowRight, ShoppingBag, Sprout } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface IndividualsSectionProps {
   id?: string;
 }
 
+interface RoleCard {
+  id: string;
+  title: string;
+  description: string;
+  isAvailable: boolean;
+  actionText?: string;
+  actionHref?: string;
+}
+
+const ROLES: RoleCard[] = [
+  {
+    id: 'buyer',
+    title: 'Buyer',
+    description:
+      'Stimulate the local economy by buying fresh produce directly from local growers and neighbors.',
+    isAvailable: true,
+    actionText: 'Browse Produce',
+    actionHref: '/buyer/browse',
+  },
+  {
+    id: 'seller',
+    title: 'Seller',
+    description:
+      'Turn your harvest into revenue with online orders, subscriptions, and mobile tap-to-pay (coming soon).',
+    isAvailable: true,
+    actionText: 'Start Selling',
+    actionHref: '/login',
+  },
+  {
+    id: 'grower',
+    title: 'Grower',
+    description:
+      'Manage growth cycles, track yield projections, and streamline daily crop maintenance tasks for any scale.',
+    isAvailable: false,
+  },
+  {
+    id: 'storage',
+    title: 'Storage',
+    description:
+      'Track inventory for fresh, frozen, and non-perishable food products, seeds, and materials. Efficiently add items with mobile QR and Barcode scanning.',
+    isAvailable: false,
+  },
+  {
+    id: 'transporter',
+    title: 'Transporter',
+    description:
+      'Transport produce efficiently with route optimization and smart batching for farm pickups, surplus runs, or direct deliveries.',
+    isAvailable: false,
+  },
+  {
+    id: 'landowner',
+    title: 'Landowner',
+    description:
+      'Optimize outdoor growing spaces, gain land insights, or share available land with community members to grow food.',
+    isAvailable: false,
+  },
+];
+
 /**
- * Section for individuals: Buyers (left) and Growers (right).
+ * Section displaying roles in a horizontally scrollable list.
  * @param props - Component props
  * @param props.id - The section Id
- * @returns A section with buyer and grower cards
+ * @returns A section with role cards
  */
 export function IndividualsSection({ id = 'individuals' }: IndividualsSectionProps) {
   return (
-    <section id={id} className="bg-cream py-16 md:py-24 px-8 sm:px-12 lg:px-20 text-deep-forest">
-      <div className="max-w-7xl mx-auto">
+    <section id={id} className="bg-cream py-16 md:py-24 text-deep-forest overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-          <span className="text-sm font-semibold tracking-wider text-forest-dark uppercase">
-            For Individuals
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mt-2">
+        <div className="max-w-3xl mb-10 md:mb-14">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mt-2 text-deep-forest">
             Choose Your Role
           </h2>
+          <p className="mt-4 text-base sm:text-lg text-deep-forest/80 leading-relaxed">
+            Choose any number of roles to unlock functionality tailored to your needs; from buying
+            and selling to growing, storing, and transporting.
+          </p>
         </div>
+      </div>
 
-        {/* Grid for Buyers and Growers */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
-          {/* Left Card: Buyer Role */}
-          <div className="flex flex-col justify-between rounded-2xl bg-white border border-deep-forest/10 p-8 sm:p-10 shadow-lg hover:shadow-xl transition-shadow">
-            <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-lime/20 text-deep-forest">
-                  <ShoppingBag className="w-6 h-6" />
-                </div>
-                <h3 className="text-2xl font-heading font-bold text-deep-forest">Buyer</h3>
-              </div>
-
-              <p className="text-base sm:text-lg text-deep-forest/80 leading-relaxed">
-                As a buyer, you play a crucial role in stimulating the local economy. By choosing
-                local produce, you incentivize passionate growers and ensure your money stays
-                directly within your neighborhood.
-              </p>
-            </div>
-
-            <div className="pt-8 mt-8 border-t border-deep-forest/10">
-              <Button
-                variant="forest"
-                size="lg"
-                className="w-full sm:w-auto h-12 px-8 font-bold"
-                asChild
+      {/* Horizontally Scrollable Row */}
+      <div className="w-full overflow-x-auto pb-8 pt-2 scrollbar-thin scrollbar-thumb-deep-forest/20 scrollbar-track-transparent">
+        <div className="flex gap-6 px-6 sm:px-8 lg:px-12 max-w-7xl mx-auto min-w-max">
+          {ROLES.map((role) => {
+            return (
+              <Card
+                key={role.id}
+                className={`w-75 sm:w-85 flex flex-col justify-between transition-colors snap-start ${
+                  role.isAvailable
+                    ? 'bg-off-white border-deep-forest/15'
+                    : 'bg-off-white/50 border-deep-forest/10 opacity-80'
+                }`}
               >
-                <Link href="/buyer/browse">
-                  Browse Produce
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
-            </div>
-          </div>
+                <CardContent>
+                  <div className="space-y-4">
+                    {/* Title & Description */}
+                    <div className="space-y-2 pt-2">
+                      <h3 className="text-xl font-heading font-bold text-deep-forest">
+                        {role.title}
+                      </h3>
+                      <p className="text-sm text-deep-forest/75 leading-relaxed">
+                        {role.description}
+                      </p>
+                    </div>
+                  </div>
 
-          {/* Right Card: Grower Role */}
-          <div className="flex flex-col justify-between rounded-2xl bg-deep-forest text-cream p-8 sm:p-10 shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden">
-            {/* Background Decorative Accent */}
-            <div className="absolute top-0 right-0 -translate-y-8 translate-x-8 w-64 h-64 rounded-full bg-[radial-gradient(circle,rgba(164,199,57,0.15)_0%,transparent_70%)] pointer-events-none" />
-
-            <div className="space-y-6 relative z-10">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-lime text-deep-forest">
-                  <Sprout className="w-6 h-6" />
-                </div>
-                <h3 className="text-2xl font-heading font-bold text-cream">Grower</h3>
-              </div>
-
-              <p className="text-base sm:text-lg text-cream/80 leading-relaxed">
-                Turn your garden or urban farm into a thriving local business. Effortlessly sell
-                online, manage orders, and build lasting relationships with neighbors.
-              </p>
-            </div>
-
-            <div className="pt-8 mt-8 border-t border-cream/10 relative z-10">
-              <Button
-                variant="lime"
-                size="lg"
-                className="w-full sm:w-auto h-12 px-8 font-bold"
-                asChild
-              >
-                <Link href="/login">
-                  Start Growing
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
-            </div>
-          </div>
+                  {/* Footer Action / Status */}
+                  <div className="pt-6 mt-6 border-t border-deep-forest/10">
+                    {role.isAvailable && role.actionText && role.actionHref ? (
+                      <Button
+                        variant="forest"
+                        size="sm"
+                        className="w-full h-10 font-semibold"
+                        asChild
+                      >
+                        <Link href={role.actionHref}>
+                          {role.actionText}
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Link>
+                      </Button>
+                    ) : (
+                      <span className="block text-xs font-medium text-deep-forest/40 uppercase tracking-wider">
+                        Not yet available
+                      </span>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </section>
