@@ -139,10 +139,7 @@ export interface SecondaryNavItem {
  */
 export const getSecondaryNavItems = (path: string): SecondaryNavItem[] => {
   if (path === '/') {
-    return [
-      { name: 'Food Pantries', href: '#referral-management', protected: false },
-      { name: 'Resturants & Markets', href: '#demand-prediction-research', protected: false },
-    ];
+    return [{ name: 'Food Pantries', href: '#referral-management', protected: false }];
   }
   return [];
 };

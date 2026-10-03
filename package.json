@@ -97,8 +97,7 @@
     ],
     "deps/api-specs": [
       "npx @apidevtools/swagger-cli validate ./deps/api-specs/openapi.json",
-      "pnpm generate:api",
-      "git add src/lib/api/generated"
+      "pnpm generate:api"
     ]
   },
   "msw": {
