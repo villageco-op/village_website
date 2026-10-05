@@ -324,7 +324,6 @@ export const RemoveMemberFlow: Story = {
       await userEvent.click(removeBtn);
     });
 
-    
     await step('Confirm member removal', async () => {
       const body = within(canvasElement.ownerDocument.body);
       await expect(body.getByText(/immediately lose access/i)).toBeInTheDocument();

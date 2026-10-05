@@ -286,9 +286,7 @@ export const DeleteClientFlow: Story = {
 
     await step('Assert deletion toast notification', async () => {
       const body = within(document.body);
-      await expect(
-        await body.findByText('Client record removed permanently.'),
-      ).toBeInTheDocument();
+      await expect(await body.findByText('Client record removed permanently.')).toBeInTheDocument();
     });
   },
 };
