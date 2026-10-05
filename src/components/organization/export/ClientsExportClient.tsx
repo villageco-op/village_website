@@ -14,6 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { PageHeader } from '@/components/ui/page-header';
 import { Progress } from '@/components/ui/progress';
@@ -151,6 +152,7 @@ export default function ClientsExportClient() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Preparing Client Data</DialogTitle>
+            <DialogDescription>This should only take a moment.</DialogDescription>
           </DialogHeader>
 
           <div className="py-4 space-y-4">

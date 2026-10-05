@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn, userEvent, within, expect, screen } from '@storybook/test';
+import { fn, userEvent, within, expect } from '@storybook/test';
 
 import BasicProfileStep from './BasicProfileStep';
 
@@ -53,7 +53,8 @@ export const FilledForm: Story = {
     const stateDropdown = canvas.getByRole('combobox');
     await userEvent.click(stateDropdown);
 
-    const txOption = await screen.findByRole('option', { name: 'Texas' });
+    const body = within(document.body);
+    const txOption = await body.findByRole('option', { name: 'Texas' });
     await userEvent.click(txOption);
 
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '78701');
@@ -80,7 +81,8 @@ export const FullInteractionTest: Story = {
 
     const stateDropdown = canvas.getByRole('combobox');
     await userEvent.click(stateDropdown);
-    const orOption = await screen.findByRole('option', { name: 'Oregon' });
+    const body = within(document.body);
+    const orOption = await body.findByRole('option', { name: 'Oregon' });
     await userEvent.click(orOption);
 
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '97204');

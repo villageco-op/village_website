@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { userEvent, within, expect, screen } from '@storybook/test';
+import { userEvent, within, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -184,7 +184,9 @@ export const SendingInvitationFlow: Story = {
     await step('Select Admin role', async () => {
       const roleDropdown = canvas.getByRole('combobox');
       await userEvent.click(roleDropdown);
-      const adminOption = await screen.findByRole('option', { name: 'Admin' });
+
+      const body = within(document.body);
+      const adminOption = await body.findByRole('option', { name: 'Admin' });
       await userEvent.click(adminOption);
     });
 
@@ -194,8 +196,9 @@ export const SendingInvitationFlow: Story = {
     });
 
     await step('Verify toast alerts success', async () => {
+      const body = within(document.body);
       await expect(
-        await screen.findByText('Invitation sent to new.designer@example.com'),
+        await body.findByText('Invitation sent to new.designer@example.com'),
       ).toBeInTheDocument();
     });
   },
@@ -248,8 +251,9 @@ export const DuplicateInvitationErrorFlow: Story = {
       const inviteBtn = canvas.getByRole('button', { name: /Invite/i });
       await userEvent.click(inviteBtn);
 
+      const body = within(document.body);
       await expect(
-        screen.getByText('An invitation has already been sent to this email address.'),
+        body.getByText('An invitation has already been sent to this email address.'),
       ).toBeInTheDocument();
     });
   },

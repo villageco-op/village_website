@@ -18,6 +18,7 @@ import type { OrgRole } from '@/lib/api/generated/models/orgRole';
 import type { OrgType } from '@/lib/api/generated/models/orgType';
 import { useCreateOrganization } from '@/lib/api/generated/organizations/organizations';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
+import { logger } from '@/lib/logger';
 
 type OrgStep = 'basic-info' | 'org-type' | 'org-details' | 'org-invite';
 
@@ -112,7 +113,7 @@ export default function OrganizationOnboardingFlow({
       toast.success('Organization registered!', { id: toastId });
       setStep('org-invite');
     } catch (error: any) {
-      console.error('OrganizationOnboardingFlow: Failed to register organization', error);
+      logger.error('OrganizationOnboardingFlow: Failed to register organization', error);
       toast.error(
         error?.message || 'Could not complete registration. Please check your connection.',
         { id: toastId },
@@ -134,7 +135,7 @@ export default function OrganizationOnboardingFlow({
         return false;
       }
     } catch (error) {
-      console.error('OrganizationOnboardingFlow: Failed to transmit invitation', error);
+      logger.error('OrganizationOnboardingFlow: Failed to transmit invitation', error);
       toast.error('Could not transmit invite. Please check your connection.');
       return false;
     }

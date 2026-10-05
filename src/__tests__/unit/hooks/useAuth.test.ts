@@ -3,6 +3,17 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import { useAuth } from '../../../hooks/useAuth';
 
+import { logger } from '@/lib/logger';
+
+vi.mock('@/lib/logger', () => ({
+  logger: {
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
 describe('useAuth', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn());
@@ -59,9 +70,6 @@ describe('useAuth', () => {
   });
 
   it('should handle fetch errors gracefully', async () => {
-    // Suppress console.error for this test to keep logs clean
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
     vi.mocked(fetch).mockRejectedValue(new Error('Network failure'));
 
     const { result } = renderHook(() => useAuth());
@@ -70,8 +78,7 @@ describe('useAuth', () => {
       expect(result.current.status).toBe('unauthenticated');
     });
 
-    expect(consoleSpy).toHaveBeenCalledWith('Failed to fetch auth session', expect.any(Error));
-    consoleSpy.mockRestore();
+    expect(logger.error).toHaveBeenCalledWith('Failed to fetch auth session', expect.any(Error));
   });
 
   it('should set unauthenticated if the fetch response is not ok', async () => {
@@ -142,8 +149,6 @@ describe('useAuth', () => {
     });
 
     it('should catch errors and log them if fetching CSRF fails', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
       // 1st fetch: useAuth init, 2nd fetch: CSRF failure
       vi.mocked(fetch)
         .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({}) } as Response)
@@ -154,17 +159,12 @@ describe('useAuth', () => {
 
       await result.current.logout();
 
-      expect(consoleSpy).toHaveBeenCalledWith('Failed to logout', expect.any(Error));
-      // Ensure it aborted before reaching the signout call or shifting location
+      expect(logger.error).toHaveBeenCalledWith('Failed to logout', expect.any(Error));
       expect(fetch).not.toHaveBeenCalledWith('/api/auth/signout', expect.any(Object));
       expect(window.location.href).not.toBe('/');
-
-      consoleSpy.mockRestore();
     });
 
     it('should catch errors and log them if the signout call fails', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
       // 1st fetch: init, 2nd fetch: CSRF success, 3rd fetch: Signout network failure
       vi.mocked(fetch)
         .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({}) } as Response)
@@ -179,10 +179,8 @@ describe('useAuth', () => {
 
       await result.current.logout();
 
-      expect(consoleSpy).toHaveBeenCalledWith('Failed to logout', expect.any(Error));
+      expect(logger.error).toHaveBeenCalledWith('Failed to logout', expect.any(Error));
       expect(window.location.href).not.toBe('/');
-
-      consoleSpy.mockRestore();
     });
   });
 });

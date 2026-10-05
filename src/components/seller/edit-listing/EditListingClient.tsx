@@ -23,6 +23,7 @@ import {
   useDeleteProduce,
 } from '@/lib/api/generated/produce/produce';
 import { UTCDateToLocal } from '@/lib/date-utils';
+import { logger } from '@/lib/logger';
 import { getStatusColors } from '@/lib/produce-utils';
 import { cn } from '@/lib/utils';
 
@@ -182,7 +183,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
         throw new Error('Failed to update listing');
       }
     } catch (error) {
-      console.error('Failed to update produce listing:', error);
+      logger.error('Failed to update produce listing:', error);
       toast.error('Could not update listing. Please try again later.', { id: toastId });
     } finally {
       setIsSubmitting(false);

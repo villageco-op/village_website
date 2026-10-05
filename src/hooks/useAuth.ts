@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
 import type { User } from '@/lib/api/generated/models/user';
+import { logger } from '@/lib/logger';
 
 /**
  * Interface for a session with a user and the expiration.
@@ -46,7 +47,7 @@ export function useAuth() {
           setStatus('unauthenticated');
         }
       } catch (error) {
-        console.error('Failed to fetch auth session', error);
+        logger.error('Failed to fetch auth session', error);
         setStatus('unauthenticated');
       }
     };
@@ -73,7 +74,7 @@ export function useAuth() {
 
       window.location.href = '/';
     } catch (error) {
-      console.error('Failed to logout', error);
+      logger.error('Failed to logout', error);
     }
   };
 

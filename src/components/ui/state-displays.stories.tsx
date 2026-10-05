@@ -9,6 +9,7 @@ import {
 } from "./state-displays";
 
 import { Button } from '@/components/ui/button';
+import { logger } from "@/lib/logger";
 
 const meta: Meta = {
   title: "UI/States",
@@ -41,7 +42,7 @@ export const InlineError: StoryObj<typeof InlineErrorState> = {
   args: {
     title: "Feed could not be loaded",
     description: "There was a temporary issue fetching your latest updates.",
-    onRetry: () => console.log("Retrying inline fetch..."),
+    onRetry: () => logger.info("Retrying inline fetch..."),
   },
 };
 

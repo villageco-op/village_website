@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubmitContactForm } from '@/lib/api/generated/contact/contact';
+import { logger } from '@/lib/logger';
 
 /**
  * Contact form props.
@@ -99,7 +100,7 @@ export function ContactFormFields({
       toast.success('Inquiry submitted successfully!');
       if (onSuccess) onSuccess();
     } catch (err) {
-      console.error('Failed to submit contact form:', err);
+      logger.error('Failed to submit contact form:', err);
       toast.error('Failed to send inquiry. Please try again later.');
     }
   };

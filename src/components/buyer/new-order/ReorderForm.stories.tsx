@@ -6,6 +6,7 @@ import { http, HttpResponse, delay } from 'msw';
 import { ReorderForm } from './ReorderForm';
 
 import { Toaster } from '@/components/ui/sonner';
+import { logger } from '@/lib/logger';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -35,7 +36,7 @@ const meta: Meta<typeof ReorderForm> = {
   },
   args: {
     orderId: MOCK_ORDER_ID,
-    onClose: () => console.log('Modal closed'),
+    onClose: () => logger.info('Modal closed'),
   },
   decorators: [
     (Story) => {

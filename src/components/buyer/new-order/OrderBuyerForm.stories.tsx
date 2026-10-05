@@ -6,6 +6,7 @@ import { http, HttpResponse, delay } from 'msw';
 import { BuyerOrderForm } from './OrderBuyerForm';
 
 import { Toaster } from '@/components/ui/sonner';
+import { logger } from '@/lib/logger';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -23,7 +24,7 @@ const meta: Meta<typeof BuyerOrderForm> = {
   },
   args: {
     produceId: MOCK_PRODUCE_ID,
-    onClose: () => console.log('On close called.'),
+    onClose: () => logger.info('On close called.'),
   },
   decorators: [
     (Story) => {

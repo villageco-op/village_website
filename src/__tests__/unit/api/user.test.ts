@@ -2,6 +2,16 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest
 
 import type { User } from '@/lib/api/generated/models/user';
 import { fetchCurrentUser } from '@/lib/api/user';
+import { logger } from '@/lib/logger';
+
+vi.mock('@/lib/logger', () => ({
+  logger: {
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
 
 describe('fetchCurrentUser', () => {
   const originalBackendUrl = process.env.BACKEND_URL;
@@ -86,8 +96,6 @@ describe('fetchCurrentUser', () => {
   });
 
   it('catches network errors, logs them, and returns null', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
     const mockFetch = vi.fn().mockRejectedValue(new Error('Network connection failed'));
     vi.stubGlobal('fetch', mockFetch);
 
@@ -95,6 +103,6 @@ describe('fetchCurrentUser', () => {
     const result = await fetchCurrentUser(cookieHeader);
 
     expect(result).toBeNull();
-    expect(consoleErrorSpy).toHaveBeenCalled();
+    expect(logger.error).toHaveBeenCalled();
   });
 });

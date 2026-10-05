@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { userEvent, within, expect, screen } from '@storybook/test';
+import { userEvent, within, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -286,7 +286,8 @@ export const ChangeMemberRoleFlow: Story = {
     });
 
     await step('Assert successful feedback toast appears', async () => {
-      await expect(await screen.findByText('Role updated successfully.')).toBeInTheDocument();
+      const body = within(document.body);
+      await expect(await body.findByText('Role updated successfully.')).toBeInTheDocument();
     });
   },
 };
@@ -323,9 +324,8 @@ export const RemoveMemberFlow: Story = {
       await userEvent.click(removeBtn);
     });
 
-    const body = within(canvasElement.ownerDocument.body);
-
     await step('Confirm member removal', async () => {
+      const body = within(canvasElement.ownerDocument.body);
       await expect(body.getByText(/immediately lose access/i)).toBeInTheDocument();
       const confirmButton = body.getByRole('button', {
         name: /Confirm Removal/i,
@@ -333,6 +333,7 @@ export const RemoveMemberFlow: Story = {
       await userEvent.click(confirmButton);
     });
 
-    await expect(await screen.findByText('Member was removed.')).toBeInTheDocument();
+    const body = within(document.body);
+    await expect(await body.findByText('Member was removed.')).toBeInTheDocument();
   },
 };

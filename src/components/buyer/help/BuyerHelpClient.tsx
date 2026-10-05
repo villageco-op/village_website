@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubmitContactForm } from '@/lib/api/generated/contact/contact';
+import { logger } from '@/lib/logger';
 
 /**
  * The Buyer Help Page.
@@ -49,7 +50,7 @@ export default function BuyerHelpClient() {
       toast.success('Message sent successfully!');
       setIsSuccess(true);
     } catch (err) {
-      console.error('Failed to submit contact form:', err);
+      logger.error('Failed to submit contact form:', err);
       toast.error('Failed to send message. Please try again later.');
     }
   };

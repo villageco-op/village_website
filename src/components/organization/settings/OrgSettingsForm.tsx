@@ -24,6 +24,7 @@ import {
 } from '@/lib/api/generated/organizations/organizations';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 import { useLeaveOrganization } from '@/lib/api/generated/users/users';
+import { logger } from '@/lib/logger';
 
 interface OrgSettingsFormProps {
   orgData: Organization | null;
@@ -150,7 +151,7 @@ export default function OrgSettingsForm({
       toast.success('Organization details updated successfully.');
       void refetchOrg();
     } catch (err) {
-      console.error(err);
+      logger.error('An error occurred while updating organization settings:', err);
       toast.error('An error occurred while updating organization settings.');
     }
   };
@@ -164,7 +165,7 @@ export default function OrgSettingsForm({
       setShowDeleteModal(false);
       onDeleteOrganization();
     } catch (err) {
-      console.error(err);
+      logger.error('Failed to delete organization:', err);
       toast.error('Failed to delete organization. Please try again.');
     }
   };
@@ -184,7 +185,7 @@ export default function OrgSettingsForm({
         toast.error('Failed to leave organization.');
       }
     } catch (err) {
-      console.error(err);
+      logger.error('An error occurred while leaving the organization:', err);
       toast.error('An error occurred while leaving the organization.');
     }
   };

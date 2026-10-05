@@ -7,6 +7,8 @@ import {
   onUnregistered,
 } from 'firebase/messaging';
 
+import { logger } from './logger';
+
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -41,7 +43,7 @@ export const initFcmListener = async (onTokenReceived: (fid: string) => void) =>
 
     return unsubscribe;
   } catch (error) {
-    console.error('Failed to initialize modern FCM registration:', error);
+    logger.error('Failed to initialize modern FCM registration:', error);
     return () => {};
   }
 };
@@ -69,7 +71,7 @@ export const executeUnregister = async (): Promise<void> => {
   try {
     await unregister(messaging);
   } catch (error) {
-    console.error('Failed to unregister FCM instance:', error);
+    logger.error('Failed to unregister FCM instance:', error);
     throw error;
   }
 };
