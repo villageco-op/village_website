@@ -1,3 +1,5 @@
+import { logger } from '../logger';
+
 import type { User } from './generated/models/user';
 
 /**
@@ -21,14 +23,14 @@ export async function fetchCurrentUser(cookieHeader: string | null): Promise<Use
     });
 
     if (!res.ok) {
-      console.warn(`Fetch current user failed with status: ${res.status}`);
+      logger.warn('Fetch current user failed with status:', res.status);
       return null;
     }
 
     const data = await res.json();
     return data as User;
   } catch (error) {
-    console.error('Error fetching current user in middleware:', error);
+    logger.error('Error fetching current user in middleware:', error);
     return null;
   }
 }

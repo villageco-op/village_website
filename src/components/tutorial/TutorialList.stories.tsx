@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { userEvent, within, expect, screen } from '@storybook/test';
+import { userEvent, within, expect } from '@storybook/test';
 
 import { TutorialProvider } from '../providers/TutorialProvider';
 
@@ -86,10 +86,11 @@ export const StartSelectedTutorialFlow: Story = {
     });
 
     await step('Confirm overlay updates with new instructions', async () => {
+      const body = within(document.body);
       await expect(
-        await screen.findByText('Select the client you want to modify'),
+        await body.findByText('Select the client you want to modify'),
       ).toBeInTheDocument();
-      await expect(await screen.findByText('Step 1 of 2')).toBeInTheDocument();
+      await expect(await body.findByText('Step 1 of 2')).toBeInTheDocument();
     });
   },
 };

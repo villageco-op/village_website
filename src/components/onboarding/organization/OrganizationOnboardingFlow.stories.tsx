@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn, userEvent, within, expect, waitFor, screen } from '@storybook/test';
+import { fn, userEvent, within, expect, waitFor } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -168,7 +168,8 @@ export const CompleteOnboardingJourney: Story = {
     const stateDropdown = canvas.getByRole('combobox');
     await userEvent.click(stateDropdown);
 
-    const inOption = await screen.findByRole('option', { name: 'Indiana' });
+    const body = within(document.body);
+    const inOption = await body.findByRole('option', { name: 'Indiana' });
     await userEvent.click(inOption);
 
     const addressInput = canvas.getByLabelText(/Street Address/i);
@@ -224,7 +225,9 @@ export const ServerErrorJourney: Story = {
 
     const stateDropdown = canvas.getByRole('combobox');
     await userEvent.click(stateDropdown);
-    const txOption = await screen.findByRole('option', { name: 'Texas' });
+
+    const body = within(document.body);
+    const txOption = await body.findByRole('option', { name: 'Texas' });
     await userEvent.click(txOption);
 
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '78701');

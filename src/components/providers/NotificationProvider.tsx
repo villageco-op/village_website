@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { useRegisterFcmToken, useUnregisterFcmToken } from '@/lib/api/generated/users/users';
 import { initFcmListener, initFcmUnregisterListener } from '@/lib/firebase';
+import { logger } from '@/lib/logger';
 
 /**
  * Handles registering and unregistering fcm tokens via listeners.
@@ -27,7 +28,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
             await unregisterFcmToken({ data: { platform: 'web' } });
             toast.success('Push notifications disabled.');
           } catch (error) {
-            console.error('Failed to remove FID from backend:', error);
+            logger.error('Failed to remove FID from backend:', error);
             toast.error('Failed to update notification settings on the server.');
           }
         });
@@ -40,7 +41,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
               try {
                 await registerFcmToken({ data: { token: fid, platform: 'web' } });
               } catch (error) {
-                console.error('Failed to sync FID:', error);
+                logger.error('Failed to sync FID:', error);
                 toast.error('Could not sync notification token with your account.');
               }
             });

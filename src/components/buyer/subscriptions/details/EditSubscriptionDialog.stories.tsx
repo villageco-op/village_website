@@ -3,6 +3,8 @@ import { userEvent, within, expect, fn } from '@storybook/test';
 
 import { EditSubscriptionDialog } from './EditSubscriptionDialog';
 
+import { logger } from '@/lib/logger';
+
 const meta: Meta<typeof EditSubscriptionDialog> = {
   title: 'Buyer/Subscriptions/Details/EditSubscriptionDialog',
   component: EditSubscriptionDialog,
@@ -14,7 +16,7 @@ const meta: Meta<typeof EditSubscriptionDialog> = {
     isOpen: true,
     onClose: fn(),
     onConfirm: fn<(qty: number, type: string) => Promise<void>>(async (qty, type) => {
-      console.log('Update confirmed:', { qty, type });
+      logger.info('Update confirmed:', { qty, type });
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }),
     isPending: false,

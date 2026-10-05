@@ -19,6 +19,7 @@ import {
 } from '@/lib/api/generated/sellers/sellers';
 import { handleDownloadSellerPayoutsCSV } from '@/lib/csv-utils';
 import { formatAppDate } from '@/lib/date-utils';
+import { logger } from '@/lib/logger';
 
 /**
  * The client component for the seller earnings page.
@@ -93,7 +94,7 @@ export default function SellerEarningsClient() {
         handleDownloadSellerPayoutsCSV(fullRes.data.data);
       }
     } catch (error) {
-      console.error('Failed to download payout history:', error);
+      logger.error('Failed to download payout history:', error);
       toast.error('Failed to download payout history.');
     } finally {
       setIsDownloading(false);

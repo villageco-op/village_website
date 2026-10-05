@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 import { useUpdateCurrentUser } from '@/lib/api/generated/users/users';
+import { logger } from '@/lib/logger';
 
 /**
  * Data structure for the basic profile information step.
@@ -79,7 +80,7 @@ export function useSubmitBasicProfile() {
       toast.success('Profile updated!', { id: toastId });
       return true;
     } catch (error: any) {
-      console.error('Failed to update profile:', error);
+      logger.error('Failed to update profile:', error);
       toast.error('Could not save profile. Please check your connection.', { id: toastId });
       return false;
     } finally {

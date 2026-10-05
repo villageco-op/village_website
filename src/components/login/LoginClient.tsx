@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { env } from '@/config/env';
+import { logger } from '@/lib/logger';
 import { getAssetPath } from '@/lib/utils';
 
 /**
@@ -104,7 +105,7 @@ export default function LoginClient() {
           }
         }
       } catch (e) {
-        console.warn('Response was not JSON, continuing execution path.');
+        logger.warn('Response was not JSON, continuing execution path.', e);
       }
 
       return res;

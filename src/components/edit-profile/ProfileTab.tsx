@@ -19,6 +19,7 @@ import { useGeocodeAddress } from '@/lib/api/generated/location/location';
 import type { User } from '@/lib/api/generated/models/user';
 import { useUploadImage } from '@/lib/api/generated/upload/upload';
 import { useUpdateCurrentUser } from '@/lib/api/generated/users/users';
+import { logger } from '@/lib/logger';
 
 interface ProfileTabProps {
   user: User;
@@ -134,7 +135,7 @@ export default function ProfileTab({ user, isSeller }: ProfileTabProps) {
 
       toast.success('Profile updated successfully!', { id: toastId });
     } catch (error) {
-      console.error('EditProfile: Failed to update profile', error);
+      logger.error('EditProfile: Failed to update profile', error);
       toast.error('Could not save profile. Please try again.', { id: toastId });
     } finally {
       setIsSaving(false);

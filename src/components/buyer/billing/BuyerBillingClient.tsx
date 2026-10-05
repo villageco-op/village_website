@@ -15,6 +15,7 @@ import type { GetOrdersParams, OrderStatus } from '@/lib/api/generated/models';
 import { getOrders, useGetOrders } from '@/lib/api/generated/orders/orders';
 import { handleDownloadBuyerInvoicesCSV } from '@/lib/csv-utils';
 import { formatAppDate } from '@/lib/date-utils';
+import { logger } from '@/lib/logger';
 
 /**
  * The client component for the buyer billing & order history page.
@@ -99,7 +100,7 @@ export default function BuyerBillingClient() {
         handleDownloadBuyerInvoicesCSV(fullRes.data.data);
       }
     } catch (error) {
-      console.error('Failed to download invoice history:', error);
+      logger.error('Failed to download invoice history:', error);
     } finally {
       setIsDownloading(false);
     }

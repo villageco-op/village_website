@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn, userEvent, within, expect, waitFor, screen } from '@storybook/test';
+import { fn, userEvent, within, expect, waitFor } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -116,7 +116,8 @@ export const ValidFlow: Story = {
     const stateDropdown = canvas.getByRole('combobox');
     await userEvent.click(stateDropdown);
 
-    const inOption = await screen.findByRole('option', { name: 'Indiana' });
+    const body = within(document.body);
+    const inOption = await body.findByRole('option', { name: 'Indiana' });
     await userEvent.click(inOption);
 
     // Wait for MSW response to resolve and update local hook states
@@ -177,7 +178,8 @@ export const FullInteractionTest: Story = {
     const stateDropdown = canvas.getByRole('combobox');
     await userEvent.click(stateDropdown);
 
-    const inOption = await screen.findByRole('option', { name: 'Indiana' });
+    const body = within(document.body);
+    const inOption = await body.findByRole('option', { name: 'Indiana' });
     await userEvent.click(inOption);
 
     const maxReferralsInput = canvas.getByLabelText(/Client Referral Limit/i);

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, userEvent, expect, screen } from '@storybook/test';
+import { within, userEvent, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -92,7 +92,8 @@ export const CompleteSellerJourney: Story = {
 
     const stateDropdown = canvas.getByRole('combobox');
     await userEvent.click(stateDropdown);
-    const txOption = await screen.findByRole('option', { name: 'Texas' });
+    const body = within(document.body);
+    const txOption = await body.findByRole('option', { name: 'Texas' });
     await userEvent.click(txOption);
 
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '78701');
@@ -141,7 +142,9 @@ export const CompleteBuyerJourney: Story = {
 
     const stateDropdown = canvas.getByRole('combobox');
     await userEvent.click(stateDropdown);
-    const orOption = await screen.findByRole('option', { name: 'Oregon' });
+
+    const body = within(document.body);
+    const orOption = await body.findByRole('option', { name: 'Oregon' });
     await userEvent.click(orOption);
 
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '97204');
@@ -184,7 +187,9 @@ export const ProfileUpdateError: Story = {
 
     const stateDropdown = canvas.getByRole('combobox');
     await userEvent.click(stateDropdown);
-    const wyOption = await screen.findByRole('option', { name: 'Wyoming' });
+
+    const body = within(document.body);
+    const wyOption = await body.findByRole('option', { name: 'Wyoming' });
     await userEvent.click(wyOption);
 
     await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '82001');

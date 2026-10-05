@@ -29,6 +29,7 @@ import {
 import { useInviteToOrg } from '@/lib/api/generated/invites/invites';
 import { OrgRole } from '@/lib/api/generated/models';
 import type { Invite } from '@/lib/api/generated/models';
+import { logger } from '@/lib/logger';
 
 interface InviteMembersFormProps {
   invitedMembers: Invite[];
@@ -90,7 +91,7 @@ export function InviteMembersForm({
         toast.error((res.data as any)?.error || 'Failed to send invite.');
       }
     } catch (error) {
-      console.error('OrganizationOnboardingFlow: Failed to transmit invitation', error);
+      logger.error('OrganizationOnboardingFlow: Failed to transmit invitation', error);
       toast.error('Could not transmit invite. Please check your connection.');
     } finally {
       setIsInviting(false);

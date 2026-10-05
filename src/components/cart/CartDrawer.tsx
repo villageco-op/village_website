@@ -20,6 +20,7 @@ import {
 import { useCreateStripeSession } from '@/lib/api/generated/checkout/checkout';
 import type { UpdateCartPayload, CartCheckoutGroup, CartSeller } from '@/lib/api/generated/models';
 import { calculateGroupTotal } from '@/lib/cart-utils';
+import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 
 /**
@@ -105,7 +106,7 @@ export function CartDrawer() {
         throw new Error('No checkout URL returned');
       }
     } catch (err) {
-      console.error(err);
+      logger.error('Error while initiating checkout:', err);
       toast.error('Failed to initiate checkout. Please try again.');
     }
   };

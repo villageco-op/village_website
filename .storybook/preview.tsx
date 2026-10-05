@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/nextjs-vite';
+import { configure } from '@storybook/test';
 import { Bricolage_Grotesque, Sora, Playfair_Display } from 'next/font/google';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 
@@ -28,7 +29,17 @@ const playfair = Playfair_Display({
 const isSubpath = window.location.pathname.startsWith('/village_website');
 const baseUrl = isSubpath ? '/village_website/' : '/';
 
+configure({
+  getElementError(message) {
+    const cleanMessage = message ? message.split('Ignored nodes:')[0] : '';
+    const error = new Error(`${cleanMessage.trim()}\n\n(DOM tree output truncated)`);
+    error.name = 'TestingLibraryElementError';
+    return error;
+  },
+});
+
 initialize({
+  quiet: true,
   onUnhandledRequest: 'bypass',
   serviceWorker: {
     url: `${baseUrl}mockServiceWorker.js`,
@@ -37,6 +48,11 @@ initialize({
 
 const preview: Preview = {
   parameters: {
+    nextjs: {
+      image: {
+        unoptimized: true,
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

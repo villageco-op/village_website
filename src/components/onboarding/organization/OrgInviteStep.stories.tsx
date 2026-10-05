@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { userEvent, within, expect, screen, waitFor } from '@storybook/test';
+import { userEvent, within, expect, waitFor } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -161,8 +161,8 @@ export const SendingInvitationFlow: Story = {
     const roleDropdown = canvas.getByRole('combobox');
     await userEvent.click(roleDropdown);
 
-    // Pick Admin option from Radix portal overlay context
-    const adminOption = await screen.findByRole('option', { name: 'Admin' });
+    const body = within(document.body);
+    const adminOption = await body.findByRole('option', { name: 'Admin' });
     await userEvent.click(adminOption);
 
     // Click trigger action button
