@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubmitContactForm } from '@/lib/api/generated/contact/contact';
+import { logger } from '@/lib/logger';
 
 /**
  * The Buyer Help Page.
@@ -49,13 +50,13 @@ export default function BuyerHelpClient() {
       toast.success('Message sent successfully!');
       setIsSuccess(true);
     } catch (err) {
-      console.error('Failed to submit contact form:', err);
+      logger.error('Failed to submit contact form:', err);
       toast.error('Failed to send message. Please try again later.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-off-white py-20 px-4">
+    <div className="min-h-screen bg-off-white">
       <div className="container-custom max-w-2xl mx-auto">
         <div className="text-center mb-10">
           <div className="w-16 h-16 bg-lime-pale text-click-green rounded-full flex items-center justify-center mx-auto mb-6">

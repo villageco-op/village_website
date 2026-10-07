@@ -7,6 +7,9 @@ const meta: Meta<typeof OrderItemsCard> = {
   component: OrderItemsCard,
   parameters: {
     layout: 'padded',
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ['autodocs'],
   decorators: [
@@ -37,6 +40,10 @@ export const Default: Story = {
         produceSeasonStart: '2024-12-5',
         produceSeasonEnd: '2025-5-12',
         produceTotalOzInventory: '20.00',
+        images: [
+          'https://unsplash.com/photos/assorted-fruits-zeFy-oCUhV8',
+          'https://unsplash.com/photos/half-peeled-banana-fruit-0v_1TPz1uXw',
+        ],
       },
       {
         id: 'item-2',
@@ -51,6 +58,7 @@ export const Default: Story = {
         produceSeasonStart: '2024-12-5',
         produceSeasonEnd: '2025-5-12',
         produceTotalOzInventory: '20.00',
+        images: ['https://unsplash.com/photos/assorted-fruits-zeFy-oCUhV8'],
       },
       {
         id: 'item-3',
@@ -65,6 +73,7 @@ export const Default: Story = {
         produceSeasonStart: '2024-12-5',
         produceSeasonEnd: '2025-5-12',
         produceTotalOzInventory: '20.00',
+        images: ['https://unsplash.com/photos/assorted-fruits-zeFy-oCUhV8'],
       },
     ],
   },

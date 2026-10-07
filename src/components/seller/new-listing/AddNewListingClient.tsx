@@ -15,6 +15,7 @@ import { ListingPricingInventory } from './ListingPricingInventory';
 import type { CreateProducePayload, ProduceType } from '@/lib/api/generated/models';
 import { useCreateProduce } from '@/lib/api/generated/produce/produce';
 import { formatLocalDate } from '@/lib/date-utils';
+import { logger } from '@/lib/logger';
 
 /**
  * Interface for the new listing form.
@@ -120,7 +121,6 @@ export default function AddNewListingClient() {
       };
 
       const res = await createProduceMutation.mutateAsync({ data: payload });
-      console.log(res.status);
       if (res.status === 201) {
         toast.success('Listing created successfully!', { id: toastId });
         router.push('/seller/listings');
@@ -128,7 +128,7 @@ export default function AddNewListingClient() {
         throw new Error('Failed to create listing');
       }
     } catch (error) {
-      console.error('Failed to create produce listing:', error);
+      logger.error('Failed to create produce listing:', error);
       toast.error('Could not create listing. Please try again later.', { id: toastId });
     } finally {
       setIsSubmitting(false);
@@ -136,8 +136,8 @@ export default function AddNewListingClient() {
   };
 
   return (
-    <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
+    <div className="bg-off-white">
+      <div className="mx-auto">
         <div className="mb-6 flex items-center justify-between">
           <div>
             <Button

@@ -5,10 +5,10 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { Order } from './order';
+import type { OrderSummary } from './orderSummary';
 import type { PaginationMetadata } from './paginationMetadata';
 
 export interface OrdersListResponse {
-  data: Order[];
+  data: OrderSummary[];
   meta: PaginationMetadata;
 }

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Toaster } from "./sonner";
 
 import { Button } from "@/components/ui/button";
+import { logger } from "@/lib/logger";
 
 /*
  * Storybook Wrapper for the Branded Sonner Toaster.
@@ -25,7 +26,7 @@ const ToastDemo = ({
       action: actionLabel
         ? {
             label: actionLabel,
-            onClick: () => console.log("Action clicked"),
+            onClick: () => logger.info("Action clicked"),
           }
         : undefined,
     });

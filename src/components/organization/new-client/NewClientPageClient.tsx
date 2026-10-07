@@ -72,7 +72,7 @@ export default function NewClientPageClient() {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 py-6 px-4">
+    <div className="mx-auto flex w-full flex-col gap-6">
       <PageHeader title="Add New Client" subtitle="Add a new client to your organization." />
 
       <form onSubmit={(e) => void handleSubmit(e)} className="space-y-6">

@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/compone
 import { PageErrorState } from '@/components/ui/state-displays';
 import type { GetProduceMapParams, SellerMapGroup, User } from '@/lib/api/generated/models';
 import { useGetProduceMap } from '@/lib/api/generated/produce/produce';
+import { logger } from '@/lib/logger';
 
 interface BrowseProduceMapClientProps {
   onViewChange: (view: 'list' | 'map') => void;
@@ -60,7 +61,7 @@ export default function BrowseProduceMapClient({
           });
         },
         (error) => {
-          console.log('Map client fallback: Browser geolocation prompt declined or failed.', error);
+          logger.warn('Map client fallback: Browser geolocation prompt declined or failed.', error);
         },
         { enableHighAccuracy: false, timeout: 30000 },
       );
@@ -100,7 +101,7 @@ export default function BrowseProduceMapClient({
 
       <div className="relative flex-1 min-h-125 md:min-h-0 w-full overflow-hidden rounded-xl border border-forest-dark/20 bg-slate-50 shadow-sm">
         {isLoading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-slate-50/50">
+          <div className="absolute inset-0 flex items-center justify-center bg-background">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-deep-forest border-t-transparent" />
           </div>
         ) : (

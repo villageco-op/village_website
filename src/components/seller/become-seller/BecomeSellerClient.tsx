@@ -25,9 +25,8 @@ export default function BecomeSellerClient() {
   const isLoading = status == 'loading';
 
   return (
-    <div className="min-h-screen bg-off-white py-20 px-4">
-      <div className="container-custom max-w-4xl mx-auto">
-        {/* Hero Section */}
+    <div className="bg-off-white">
+      <div className="container-custom mx-auto">
         <div className="text-center mb-16">
           <div className="w-20 h-20 bg-lime-pale text-click-green rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
             <Sprout className="w-10 h-10" />
@@ -41,7 +40,6 @@ export default function BecomeSellerClient() {
           </p>
         </div>
 
-        {/* Key Offerings Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-16">
           <Card className="border-forest-dark/10 shadow-sm">
             <CardContent className="pt-6 text-center">
@@ -88,7 +86,6 @@ export default function BecomeSellerClient() {
           </Card>
         </div>
 
-        {/* Dynamic Call to Action based on User State */}
         <div className="max-w-2xl mx-auto bg-white border border-lime/30 rounded-2xl p-8 shadow-sm text-center">
           {isLoading ? (
             <div className="animate-pulse h-20 bg-lime-pale rounded-lg"></div>

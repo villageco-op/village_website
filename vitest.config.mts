@@ -9,7 +9,11 @@ const dirname = import.meta.dirname;
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
+  define: {
+    'process.env.IS_VITEST': 'true',
+  },
   test: {
+    reporters: ['dot'],
     projects: [
       {
         extends: true,

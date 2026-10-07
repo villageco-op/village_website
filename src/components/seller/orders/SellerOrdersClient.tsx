@@ -70,15 +70,12 @@ export default function SellerOrdersClient() {
 
   return (
     <div className="flex w-full flex-col">
-      <PageHeader
-        title="Orders"
-        subtitle={`${pendingTotal} pending · All time orders from buyers on Village`}
-      />
+      <PageHeader title="Orders" subtitle="View pending and historical orders" />
 
-      <PendingOrdersCard orders={pendingOrders} pendingCount={pendingTotal} />
+      <PendingOrdersCard orders={pendingOrders} pendingCount={pendingTotal} userRole="seller" />
       <PaginationControls meta={pendingMeta} onPageChange={pendingSetPage} className="mt-2 mb-10" />
 
-      <OrderHistoryCard orders={historyOrders} completedCount={historyTotal} />
+      <OrderHistoryCard orders={historyOrders} completedCount={historyTotal} userRole="seller" />
       <PaginationControls meta={historyMeta} onPageChange={historySetPage} />
     </div>
   );

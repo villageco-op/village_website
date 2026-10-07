@@ -16,6 +16,7 @@ import { EmptyState, PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import type { GetProduceListParams, User } from '@/lib/api/generated/models';
 import { useGetProduceList } from '@/lib/api/generated/produce/produce';
+import { logger } from '@/lib/logger';
 
 interface BrowseProduceListClientProps {
   onViewChange: (view: 'list' | 'map') => void;
@@ -75,14 +76,14 @@ export default function BrowseProduceListClient({
     if (!user && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log('Location retrieved from browser: ' + JSON.stringify(position));
+          logger.info('Location retrieved from browser:', JSON.stringify(position));
           setCustomCoords({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           });
         },
         (error) => {
-          console.log('Location access denied or unavailable, using fallback coordinates.', error);
+          logger.warn('Location access denied or unavailable, using fallback coordinates.', error);
         },
         { enableHighAccuracy: false, timeout: 30000 },
       );

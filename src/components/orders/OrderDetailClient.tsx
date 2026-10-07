@@ -74,7 +74,7 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
 
   if (orderQuery.isLoading) {
     return (
-      <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
+      <div className="bg-off-white">
         <div className="mx-auto max-w-4xl">
           <OrderDetailSkeleton />
         </div>
@@ -96,8 +96,8 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
   const isReorderable = order.status === 'completed' || order.status === 'canceled';
 
   return (
-    <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-4xl">
+    <div className="bg-off-white">
+      <div className="mx-auto">
         {/* Header */}
         <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>

@@ -22,7 +22,7 @@ export function CustomFeaturesSection({
   return (
     <section
       id={id}
-      className="bg-forest-dark text-cream py-12 md:py-16 px-8 sm:px-12 lg:px-20 border-t border-b border-cream/10"
+      className="bg-forest-mid text-cream py-12 md:py-16 px-8 sm:px-12 lg:px-20 border-t border-b border-cream/10"
     >
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
         {/* Content */}

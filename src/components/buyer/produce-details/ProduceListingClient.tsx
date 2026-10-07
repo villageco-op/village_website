@@ -51,8 +51,8 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
   const produce = data.data;
 
   return (
-    <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="bg-off-white">
+      <div className="mx-auto">
         {/* Navigation & Header */}
         <Button variant="ghost" className="mb-6 -ml-3 text-ink-3" onClick={() => router.back()}>
           <ArrowLeft className="w-4 h-4 mr-2" />

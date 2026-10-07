@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { EntityId } from './entityId';
+import type { ImageUrl } from './imageUrl';
 import type { Location } from './location';
 
 export interface UserBasicInfo {
@@ -16,4 +17,5 @@ export interface UserBasicInfo {
   /** @nullable */
   email?: string | null;
   location?: Location & (unknown | null);
+  image?: ImageUrl & (unknown | null);
 }

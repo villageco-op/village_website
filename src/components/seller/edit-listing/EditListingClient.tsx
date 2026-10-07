@@ -23,6 +23,7 @@ import {
   useDeleteProduce,
 } from '@/lib/api/generated/produce/produce';
 import { UTCDateToLocal } from '@/lib/date-utils';
+import { logger } from '@/lib/logger';
 import { getStatusColors } from '@/lib/produce-utils';
 import { cn } from '@/lib/utils';
 
@@ -182,7 +183,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
         throw new Error('Failed to update listing');
       }
     } catch (error) {
-      console.error('Failed to update produce listing:', error);
+      logger.error('Failed to update produce listing:', error);
       toast.error('Could not update listing. Please try again later.', { id: toastId });
     } finally {
       setIsSubmitting(false);
@@ -207,8 +208,8 @@ export default function EditListingClient({ id }: EditListingClientProps) {
   const isPendingMutations = updateProduceMutation.isPending || deleteProduceMutation.isPending;
 
   return (
-    <div className="min-h-screen bg-off-white py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
+    <div className="bg-off-white">
+      <div className="mx-auto">
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <Button variant="ghost" className="mb-2 -ml-3 text-ink-3" onClick={() => router.back()}>

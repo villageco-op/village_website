@@ -6,6 +6,16 @@ import {
   fetchStripeOnboardingStatus,
   type StripeStatusResponse,
 } from '@/lib/api/stripe';
+import { logger } from '@/lib/logger';
+
+vi.mock('@/lib/logger', () => ({
+  logger: {
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
 
 describe('fetchStripeOnboardingLink', () => {
   const originalBackendUrl = process.env.BACKEND_URL;
@@ -70,8 +80,6 @@ describe('fetchStripeOnboardingLink', () => {
   });
 
   it('logs a warning and returns null when the API responds with a non-200 status code', async () => {
-    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
     const mockFetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 401,
@@ -82,14 +90,13 @@ describe('fetchStripeOnboardingLink', () => {
     const result = await fetchStripeOnboardingLink(cookieHeader);
 
     expect(result).toBeNull();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      'Fetch Stripe onboarding link failed with status: 401',
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Fetch Stripe onboarding link failed with status:',
+      401,
     );
   });
 
   it('catches network errors, logs them, and returns null', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
     const mockFetch = vi.fn().mockRejectedValue(new Error('Network connection failed'));
     vi.stubGlobal('fetch', mockFetch);
 
@@ -97,7 +104,7 @@ describe('fetchStripeOnboardingLink', () => {
     const result = await fetchStripeOnboardingLink(cookieHeader);
 
     expect(result).toBeNull();
-    expect(consoleErrorSpy).toHaveBeenCalled();
+    expect(logger.error).toHaveBeenCalled();
   });
 });
 
@@ -164,8 +171,6 @@ describe('fetchStripeOnboardingStatus', () => {
   });
 
   it('logs a warning and returns null when the API responds with a non-200 status code', async () => {
-    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
     const mockFetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 401,
@@ -176,14 +181,13 @@ describe('fetchStripeOnboardingStatus', () => {
     const result = await fetchStripeOnboardingStatus(cookieHeader);
 
     expect(result).toBeNull();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      'Fetch Stripe onboarding status failed with status: 401',
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Fetch Stripe onboarding status failed with status:',
+      401,
     );
   });
 
   it('catches network errors, logs them, and returns null', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
     const mockFetch = vi.fn().mockRejectedValue(new Error('Network connection failed'));
     vi.stubGlobal('fetch', mockFetch);
 
@@ -191,7 +195,7 @@ describe('fetchStripeOnboardingStatus', () => {
     const result = await fetchStripeOnboardingStatus(cookieHeader);
 
     expect(result).toBeNull();
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
+    expect(logger.error).toHaveBeenCalledWith(
       'Error fetching Stripe status in route:',
       expect.any(Error),
     );

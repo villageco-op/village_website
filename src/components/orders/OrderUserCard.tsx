@@ -1,6 +1,7 @@
 'use client';
 
 import { Mail, User as UserIcon } from 'lucide-react';
+import Image from 'next/image';
 
 import { Card, CardContent } from '@/components/ui/card';
 import type {
@@ -34,18 +35,28 @@ export function OrderUserCard({ title, user, role }: OrderUserCardProps) {
 
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-ink-3">
-              <UserIcon className="h-5 w-5" />
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-slate-100 ring-1 ring-border/50 flex items-center justify-center">
+              {user.image ? (
+                <Image src={user.image} alt={user.name || role} fill className="object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-slate-200 text-sm font-bold text-ink-2">
+                  {user.name ? (
+                    user.name.charAt(0).toUpperCase()
+                  ) : (
+                    <UserIcon className="h-5 w-5 text-ink-3" />
+                  )}
+                </div>
+              )}
             </div>
             <div>
               <p className="text-xs text-ink-3 mb-0.5 capitalize">{role} Name</p>
-              <p className="font-medium text-sm text-ink">{user.name || 'Anonymous'}</p>
+              <p className="font-semibold text-sm text-ink">{user.name || 'Anonymous'}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-ink-3">
-              <Mail className="h-5 w-5" />
+          <div className="flex items-center gap-3 pt-2 border-t border-border/30">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-ink-3">
+              <Mail className="h-4 w-4" />
             </div>
             <div>
               <p className="text-xs text-ink-3 mb-0.5">Email</p>

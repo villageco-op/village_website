@@ -82,6 +82,13 @@ const generateMockOrders = (count: number, prefix: string, status: string) => {
     paymentMethod: 'card',
     cancelReason: null,
     stripeReceiptUrl: 'https://stripe.com/receipt',
+    items: [
+      {
+        product: {
+          title: `${prefix === 'pending' ? 'Pending Produce Batch' : 'History Crate Item'} #${i + 1}-`,
+        },
+      },
+    ],
   }));
 };
 
@@ -139,9 +146,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     // Verify Header
     await expect(await canvas.findByText(/Pending Orders/i)).toBeInTheDocument();
-    await expect(
-      canvas.getByText(/2 pending · All time orders from buyers on Village/i),
-    ).toBeInTheDocument();
+    await expect(canvas.getByText(/View pending and historical orders/i)).toBeInTheDocument();
 
     // Verify Cards
     await expect(canvas.getByText(/Order History/i)).toBeInTheDocument();
@@ -200,7 +205,7 @@ export const EmptyState: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
-      await canvas.findByText(/0 pending · All time orders from buyers on Village/i),
+      await canvas.findByText(/View pending and historical orders/i),
     ).toBeInTheDocument();
     await expect(canvas.getByText(/No historical orders found/i)).toBeInTheDocument();
   },
@@ -240,24 +245,31 @@ export const Paginated: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(await canvas.findByText(/Order #1-PEND/i)).toBeInTheDocument();
-    await expect(await canvas.findByText(/#1-HIST/i)).toBeInTheDocument();
+    // Initial Page 1 assertions
+    await expect(
+      await canvas.findByText(/Pending Produce Batch #1- from seller/i),
+    ).toBeInTheDocument();
+    await expect(await canvas.findByText(/History Crate Item #1-/)).toBeInTheDocument();
 
-    await expect(canvas.queryByText(/Order #13-PEND/i)).not.toBeInTheDocument();
-    await expect(canvas.queryByText(/#13-HIST/i)).not.toBeInTheDocument();
+    // Verify Page 2 items are not visible initially
+    await expect(canvas.queryByText(/Pending Produce Batch #13-/i)).not.toBeInTheDocument();
+    await expect(canvas.queryByText(/History Crate Item #13-/i)).not.toBeInTheDocument();
 
+    // Paginate Pending section to Page 2
     const pendingNextBtn = (await canvas.findAllByRole('button', { name: /Next/i }))[0];
     pendingNextBtn.click();
 
-    await expect(await canvas.findByText(/Order #13-PEND/i)).toBeInTheDocument();
-    await expect(canvas.getByText(/#1-HIST/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/Pending Produce Batch #13-/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/History Crate Item #1-/)).toBeInTheDocument();
 
+    // Paginate History section to Page 2
     const historyNextBtn = (await canvas.findAllByRole('button', { name: /Next/i }))[1];
     historyNextBtn.click();
 
-    await expect(await canvas.findByText(/#13-HIST/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/History Crate Item #13-/i)).toBeInTheDocument();
 
-    await expect(canvas.queryByText(/Order #1-PEND/i)).not.toBeInTheDocument();
-    await expect(canvas.queryByText(/#1-HIST/i)).not.toBeInTheDocument();
+    // Verify Page 1 items are no longer present
+    await expect(canvas.queryByText(/Pending Produce Batch #1-/i)).not.toBeInTheDocument();
+    await expect(canvas.queryByText(/History Crate Item #1-/i)).not.toBeInTheDocument();
   },
 };

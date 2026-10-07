@@ -49,8 +49,8 @@ export default function EditProfilePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 bg-off-white">
-      <div className="max-w-2xl w-full">
+    <div className="flex flex-col items-center bg-off-white">
+      <div className="w-full">
         <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back

@@ -1,3 +1,5 @@
+import { logger } from '../logger';
+
 import type { StripeOnboardingResponse } from './generated/models';
 
 /**
@@ -29,14 +31,14 @@ export async function fetchStripeOnboardingLink(
     });
 
     if (!res.ok) {
-      console.warn(`Fetch Stripe onboarding link failed with status: ${res.status}`);
+      logger.warn('Fetch Stripe onboarding link failed with status:', res.status);
       return null;
     }
 
     const data = (await res.json()) as StripeOnboardingResponse;
     return data;
   } catch (error) {
-    console.error('Error fetching Stripe onboarding link in server action/route:', error);
+    logger.error('Error fetching Stripe onboarding link in server action/route:', error);
     return null;
   }
 }
@@ -63,13 +65,13 @@ export async function fetchStripeOnboardingStatus(
     });
 
     if (!res.ok) {
-      console.warn(`Fetch Stripe onboarding status failed with status: ${res.status}`);
+      logger.warn('Fetch Stripe onboarding status failed with status:', res.status);
       return null;
     }
 
     return (await res.json()) as StripeStatusResponse;
   } catch (error) {
-    console.error('Error fetching Stripe status in route:', error);
+    logger.error('Error fetching Stripe status in route:', error);
     return null;
   }
 }

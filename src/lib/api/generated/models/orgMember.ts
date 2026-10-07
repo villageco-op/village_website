@@ -5,6 +5,7 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
+import type { ImageUrl } from './imageUrl';
 import type { OrgRole } from './orgRole';
 
 export interface OrgMember {
@@ -13,5 +14,6 @@ export interface OrgMember {
   name?: string | null;
   /** @nullable */
   email?: string | null;
+  image?: ImageUrl & (unknown | null);
   orgRole: OrgRole & (unknown | null);
 }

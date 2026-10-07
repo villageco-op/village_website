@@ -3,6 +3,8 @@ import { userEvent, within, expect, fn } from '@storybook/test';
 
 import { CancelSubscriptionDialog } from './CancelSubscriptionDialog';
 
+import { logger } from '@/lib/logger';
+
 const meta: Meta<typeof CancelSubscriptionDialog> = {
   title: 'Buyer/Subscriptions/Details/CancelSubscriptionDialog',
   component: CancelSubscriptionDialog,
@@ -14,7 +16,7 @@ const meta: Meta<typeof CancelSubscriptionDialog> = {
     isOpen: true,
     onClose: fn(),
     onConfirm: fn<(reason: string) => Promise<void>>(async (reason) => {
-      console.log('Cancellation confirmed:', reason);
+      logger.info('Cancellation confirmed:', reason);
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }),
     isPending: false,

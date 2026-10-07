@@ -14,6 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { PageHeader } from '@/components/ui/page-header';
 import { Progress } from '@/components/ui/progress';
@@ -117,7 +118,7 @@ export default function ClientsExportClient() {
     progress.total > 0 ? Math.round((progress.current / progress.total) * 100) : 0;
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 space-y-8 print:p-0 print:m-0">
+    <div className="mx-auto w-full space-y-8 print:p-0 print:m-0">
       {/* HEADER SECTION */}
       <div className="print:hidden">
         <PageHeader
@@ -151,6 +152,7 @@ export default function ClientsExportClient() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Preparing Client Data</DialogTitle>
+            <DialogDescription>This should only take a moment.</DialogDescription>
           </DialogHeader>
 
           <div className="py-4 space-y-4">

@@ -49,7 +49,7 @@ export default function TutorialList({
   }, [tutorials]);
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-8 px-4 py-8">
+    <div className="mx-auto w-full space-y-8">
       <div className="flex flex-col gap-2">
         <h1 className="font-heading text-2xl font-bold text-ink">{title}</h1>
         <p className="text-sm text-ink-3">{descriptionText}</p>

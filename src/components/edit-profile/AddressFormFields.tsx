@@ -65,8 +65,8 @@ export function AddressFormFields({ value, onChange, required = false }: Address
       </div>
 
       {/* City / State / Zip Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div className="space-y-1.5">
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+        <div className="space-y-1.5 sm:col-span-5">
           <Label htmlFor="city">City {required && <span className="text-required">*</span>}</Label>
           <Input
             id="city"
@@ -77,46 +77,42 @@ export function AddressFormFields({ value, onChange, required = false }: Address
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
-          {/* State Select Dropdown */}
-          <div className="space-y-1.5">
-            <Label htmlFor="state">
-              State {required && <span className="text-required">*</span>}
-            </Label>
-            <Select
-              value={value.state}
-              onValueChange={(val) => updateField('state', val)}
-              required={required}
-            >
-              <SelectTrigger id="state">
-                <SelectValue placeholder="State" />
-              </SelectTrigger>
-              <SelectContent>
-                {US_STATES.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    {s.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        <div className="space-y-1.5 sm:col-span-4">
+          <Label htmlFor="state">
+            State {required && <span className="text-required">*</span>}
+          </Label>
+          <Select
+            value={value.state}
+            onValueChange={(val) => updateField('state', val)}
+            required={required}
+          >
+            <SelectTrigger id="state" className="w-full">
+              <SelectValue placeholder="State" className="truncate" />
+            </SelectTrigger>
+            <SelectContent>
+              {US_STATES.map((s) => (
+                <SelectItem key={s.value} value={s.value}>
+                  {s.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-          {/* Zip Code Input */}
-          <div className="space-y-1.5">
-            <Label htmlFor="zip">
-              ZIP Code {required && <span className="text-required">*</span>}
-            </Label>
-            <Input
-              id="zip"
-              placeholder="e.g. 46402"
-              inputMode="numeric"
-              maxLength={5}
-              pattern="[0-9]*"
-              value={value.zip}
-              onChange={handleZipChange}
-              required={required}
-            />
-          </div>
+        <div className="space-y-1.5 sm:col-span-3">
+          <Label htmlFor="zip">
+            ZIP Code {required && <span className="text-required">*</span>}
+          </Label>
+          <Input
+            id="zip"
+            placeholder="46402"
+            inputMode="numeric"
+            maxLength={5}
+            pattern="[0-9]*"
+            value={value.zip}
+            onChange={handleZipChange}
+            required={required}
+          />
         </div>
       </div>
     </div>

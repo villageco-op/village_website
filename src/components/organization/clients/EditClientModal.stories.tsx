@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn, userEvent, within, expect, screen } from '@storybook/test';
+import { fn, userEvent, within, expect } from '@storybook/test';
 
 import { EditClientModal } from './EditClientModal';
 
@@ -114,7 +114,8 @@ export const SubmitFormFlow: Story = {
       const stateDropdown = body.getByRole('combobox');
       await userEvent.click(stateDropdown);
 
-      const txOption = await screen.findByRole('option', { name: 'Wisconsin' });
+      const docBody = within(document.body);
+      const txOption = await docBody.findByRole('option', { name: 'Wisconsin' });
       await userEvent.click(txOption);
 
       const zipInput = body.getByLabelText(/ZIP Code/i);

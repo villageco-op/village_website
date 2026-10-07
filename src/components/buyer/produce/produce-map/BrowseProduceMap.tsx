@@ -1,6 +1,6 @@
 'use client';
 
-import { Leaf, MapPin, Store } from 'lucide-react';
+import { House, Leaf, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import Map, { Marker, NavigationControl, Popup } from 'react-map-gl/maplibre';
@@ -52,7 +52,7 @@ export function BrowseProduceMap({
           className="flex h-10 w-10 items-center justify-center rounded-full bg-deep-forest border-2 border-white shadow-lg drop-shadow-md z-20 transition-transform hover:scale-110"
           title="Your Location"
         >
-          <Store className="h-5 w-5 text-white" />
+          <House className="h-5 w-5 text-white" />
         </div>
       </Marker>
 

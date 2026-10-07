@@ -119,7 +119,7 @@ export default function AcceptInviteClient() {
   const orgImage = organization.image;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-off-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-center bg-off-white">
       <div className="max-w-md w-full space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="bg-white border border-lime/30 shadow-sm rounded-xl p-6 sm:p-8 space-y-6">
           {/* Organization Details Section */}

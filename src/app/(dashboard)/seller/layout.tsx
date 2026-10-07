@@ -1,7 +1,6 @@
 'use client';
 
 import { AuthGuard } from '@/components/auth-guard';
-import { SellerSidebar } from '@/components/seller/SellerSidebar';
 import { useAuth } from '@/hooks/useAuth';
 
 /**
@@ -20,10 +19,7 @@ export default function SellerLayout({
 
   return (
     <AuthGuard user={user} status={status} requireStripeOnboarding>
-      <div className="flex min-h-[calc(100vh-64px)] w-full bg-off-white">
-        <SellerSidebar user={user} status={status} />
-        <main className="flex-1 px-9 py-8">{children}</main>
-      </div>
+      {children}
     </AuthGuard>
   );
 }

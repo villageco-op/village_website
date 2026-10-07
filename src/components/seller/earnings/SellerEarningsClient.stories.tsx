@@ -187,7 +187,7 @@ export const GoalExceeded: Story = {
           });
         }),
         http.get('*/api/seller/payouts', () => {
-          return HttpResponse.json({ data: MOCK_PAYOUTS, status: 200 });
+          return HttpResponse.json(MOCK_PAYOUTS);
         }),
       ],
     },
@@ -203,11 +203,9 @@ export const Loading: Story = {
       handlers: [
         http.get('*/api/seller/earnings', async () => {
           await delay('infinite');
-          return HttpResponse.json({});
         }),
         http.get('*/api/seller/payouts', async () => {
           await delay('infinite');
-          return HttpResponse.json({});
         }),
       ],
     },

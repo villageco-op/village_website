@@ -3,6 +3,8 @@ import { userEvent, within, expect, fn } from '@storybook/test';
 
 import { RescheduleOrderDialog } from './RescheduleOrderDialog';
 
+import { logger } from '@/lib/logger';
+
 const meta: Meta<typeof RescheduleOrderDialog> = {
   title: 'Orders/OrderDetails/RescheduleOrderDialog',
   component: RescheduleOrderDialog,
@@ -14,7 +16,7 @@ const meta: Meta<typeof RescheduleOrderDialog> = {
     isOpen: true,
     onClose: fn(),
     onConfirm: fn<(newTimeIso: string) => Promise<void>>(async (time) => {
-      console.log('Confirmed new time:', time);
+      logger.info('Confirmed new time:', time);
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }),
     currentScheduledTime: '2026-04-20T14:30:00Z',

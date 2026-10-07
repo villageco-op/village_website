@@ -24,6 +24,7 @@ import {
   GetProduceListIsSubscribable,
   Season,
 } from '@/lib/api/generated/models';
+import { logger } from '@/lib/logger';
 
 interface BrowseProduceFiltersProps {
   searchInput: string;
@@ -88,7 +89,7 @@ export function BrowseProduceFilters({
             onLocationChange(lat, lng);
           }
         } catch (error) {
-          console.error('Failed to resolve address coordinates:', error);
+          logger.error('Failed to resolve address coordinates:', error);
         }
       };
 
@@ -107,7 +108,7 @@ export function BrowseProduceFilters({
         setIsLocating(false);
       },
       (error) => {
-        console.error('Error retrieving device position:', error);
+        logger.error('Error retrieving device position:', error);
         setIsLocating(false);
       },
       { enableHighAccuracy: true, timeout: 8000 },

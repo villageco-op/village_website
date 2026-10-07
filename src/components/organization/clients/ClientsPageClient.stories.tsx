@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { userEvent, within, expect, screen } from '@storybook/test';
+import { userEvent, within, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -285,9 +285,8 @@ export const DeleteClientFlow: Story = {
     });
 
     await step('Assert deletion toast notification', async () => {
-      await expect(
-        await screen.findByText('Client record removed permanently.'),
-      ).toBeInTheDocument();
+      const body = within(document.body);
+      await expect(await body.findByText('Client record removed permanently.')).toBeInTheDocument();
     });
   },
 };
