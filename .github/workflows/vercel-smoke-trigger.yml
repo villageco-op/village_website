@@ -3,13 +3,24 @@ name: Trigger Smoke Test on Vercel Deployment
 on:
   issue_comment:
     types: [created, edited]
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: 'Vercel Preview Deployment URL'
+        required: true
+        default: 'https://staging.villageco-op.com'
+      pr_num:
+        description: 'PR Number'
+        required: true
+        default: '1'
 
 jobs:
   check-vercel-and-trigger:
     name: Check Vercel Status
     if: |
-      github.event.issue.pull_request &&
-      (github.event.comment.user.login == 'vercel[bot]' || contains(github.event.comment.body, 'Vercel for GitHub'))
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.pull_request &&
+      (github.event.comment.user.login == 'vercel[bot]' || contains(github.event.comment.body, 'Vercel for GitHub')))
     runs-on: ubuntu-latest
 
     steps:
@@ -22,8 +33,12 @@ jobs:
             echo "✅ Vercel deployment is ready!"
             
             PREVIEW_URL=$(echo "$COMMENT_BODY" | grep -oE 'https://[a-zA-Z0-9_-]+\.vercel\.app' | head -n 1)
+
+            PR_JSON=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.issue.number }})
+            HEAD_SHA=$(echo "$PR_JSON" | jq -r '.head.sha')
             
             echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+            echo "head_sha=$HEAD_SHA" >> $GITHUB_OUTPUT
             echo "IS_READY=true" >> $GITHUB_ENV
           else
             echo "⏳ Vercel deployment is still building or failed. Skipping smoke test."
@@ -45,4 +60,10 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
           repository: villageco-op/e2e-tests
           event-type: frontend-pr-smoke
-          client-payload: '{"repo": "${{ github.repository }}", "pr_num": "${{ github.event.pull_request.number }}", "target_url": "${{ steps.check_status.outputs.preview_url }}"}'
+          client-payload: >
+            {
+              "repo": "${{ github.repository }}",
+              "pr_num": "${{ github.event.issue.number }}",
+              "sha": "${{ steps.check_status.outputs.head_sha }}",
+              "target_url": "${{ steps.check_status.outputs.preview_url }}"
+            }
