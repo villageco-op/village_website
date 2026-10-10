@@ -49,7 +49,7 @@ export function BrowseProduceMap({
       {/* Base Store/User Location Pin */}
       <Marker longitude={baseLng} latitude={baseLat} anchor="bottom">
         <div
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-deep-forest border-2 border-white shadow-lg drop-shadow-md z-20 transition-transform hover:scale-110"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-deep-forest border-2 border-white shadow-lg drop-shadow-md z-20 transition-transform"
           title="Your Location"
         >
           <House className="h-5 w-5 text-white" />
@@ -89,10 +89,10 @@ export function BrowseProduceMap({
         <Popup
           longitude={hoveredGroup.lng}
           latitude={hoveredGroup.lat}
-          offset={16}
+          offset={28}
           closeButton={false}
           closeOnClick={false}
-          className="z-50"
+          className="z-50 pointer-events-none **:pointer-events-none"
           maxWidth="300px"
         >
           <div

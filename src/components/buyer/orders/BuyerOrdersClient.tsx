@@ -68,11 +68,11 @@ export default function BuyerOrdersClient() {
   const historyTotal = historyMeta?.total || historyOrders.length;
 
   return (
-    <div className="w-full flex-col">
+    <div className="w-full flex-col gap-6">
       <PageHeader title="Orders" subtitle="View pending and historical orders" />
 
       <PendingOrdersCard orders={pendingOrders} pendingCount={pendingTotal} userRole="buyer" />
-      <PaginationControls meta={pendingMeta} onPageChange={pendingSetPage} className="mt-2 mb-10" />
+      <PaginationControls meta={pendingMeta} onPageChange={pendingSetPage} className="mt-2" />
 
       <OrderHistoryCard orders={historyOrders} completedCount={historyTotal} userRole="buyer" />
       <PaginationControls meta={historyMeta} onPageChange={historySetPage} />

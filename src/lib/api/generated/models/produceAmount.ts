@@ -7,7 +7,7 @@
  */
 import type { PriceDollars } from './priceDollars';
 
-export interface ProduceSales {
+export interface ProduceAmount {
   produceName: string;
   amount: PriceDollars;
 }

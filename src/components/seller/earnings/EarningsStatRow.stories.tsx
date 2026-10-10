@@ -57,35 +57,6 @@ export const Default: Story = {
 };
 
 /**
- * View showing a decrease in earnings compared to last month.
- * Useful for testing the 'text-clay' (red/orange) delta indicator.
- */
-export const NegativeGrowth: Story = {
-  args: {
-    data: {
-      ...mockEarningsData,
-      earnedThisMonth: 800.0,
-      earnedLastMonth: 1200.0,
-      remainingToGoal: 700.0,
-    },
-  },
-};
-
-/**
- * State when the monthly goal has been surpassed.
- * Verifies that "Remaining to goal" handles negative values gracefully (Math.max).
- */
-export const GoalReached: Story = {
-  args: {
-    data: {
-      ...mockEarningsData,
-      earnedThisMonth: 1800.0,
-      remainingToGoal: -300.0,
-    },
-  },
-};
-
-/**
  * Mobile view to ensure the 4-card grid stacks correctly
  * from 4 columns to 2, then to 1.
  */

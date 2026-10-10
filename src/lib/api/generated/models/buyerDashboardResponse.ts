@@ -5,22 +5,14 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { ActiveSubscription } from './activeSubscription';
 import type { PriceDollars } from './priceDollars';
 
 export interface BuyerDashboardResponse {
   /** Total weight of produce scheduled for delivery this week */
   onOrderThisWeekLbs: number;
-  /** Percentage change in order volume compared to the previous week */
-  percentChangeFromLastWeek: number;
   totalSpendThisMonth: PriceDollars;
-  totalSpendLastMonth: PriceDollars;
-  /** List of currently active recurring orders */
-  activeSubscriptions: ActiveSubscription[];
+  /** Count of active subscriptions */
+  activeSubscriptions: number;
   /** Count of local growers currently fulfilling orders */
   localGrowersSupplying: number;
-  /** Distance in miles to the most distant supplier */
-  furthestGrowerDistanceMiles: number;
-  /** Mean distance in miles across all active suppliers */
-  avgGrowerDistanceMiles: number;
 }

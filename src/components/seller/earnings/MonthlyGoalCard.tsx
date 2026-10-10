@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent } from '@/components/ui/card';
-import type { ProduceSales } from '@/lib/api/generated/models';
+import type { ProduceAmount } from '@/lib/api/generated/models';
 import { formatAppDate } from '@/lib/date-utils';
 
 /**
@@ -10,7 +10,7 @@ import { formatAppDate } from '@/lib/date-utils';
 interface MonthlyGoalCardProps {
   earnedThisMonth: number;
   monthlyGoal: number;
-  produceBreakdown: ProduceSales[];
+  produceBreakdown: ProduceAmount[];
 }
 
 /**

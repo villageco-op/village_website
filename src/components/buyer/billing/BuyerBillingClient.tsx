@@ -112,11 +112,11 @@ export default function BuyerBillingClient() {
   const currentMonthYear = formatAppDate(new Date(), 'longMonthYear');
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col gap-6">
       <PageHeader title={`Billing Summary`} subtitle={`${currentMonthYear}`} />
       <BillingStatsCard data={summaryData} />
 
-      <div className="mt-8 flex flex-col">
+      <div className="flex flex-col">
         <InvoiceHistoryCard
           orders={ordersData}
           onDownload={handleDownloadAll}

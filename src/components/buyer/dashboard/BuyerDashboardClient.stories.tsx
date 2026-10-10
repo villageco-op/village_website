@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect, userEvent } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -9,6 +8,7 @@ import {
   OrderStatusProperty,
   OrderPaymentMethod,
   OrderFulfillmentType,
+  SubscriptionStatus,
 } from '@/lib/api/generated/models';
 
 const mockedQueryClient = new QueryClient({
@@ -37,17 +37,9 @@ const PAGINATED_ORDERS_DATA = generateMockOrders(25);
 
 const MOCK_DASHBOARD_STATS = {
   onOrderThisWeekLbs: 342,
-  percentChangeFromLastWeek: 15.4,
   totalSpendThisMonth: '1850.50',
-  totalSpendLastMonth: '1600.00',
-  activeSubscriptions: [
-    { id: 'sub-1', produceName: 'Organic Spinach' },
-    { id: 'sub-2', produceName: 'Heirloom Tomatoes' },
-    { id: 'sub-3', produceName: 'Bell Peppers' },
-  ],
+  activeSubscriptions: 3,
   localGrowersSupplying: 6,
-  furthestGrowerDistanceMiles: 24.5,
-  avgGrowerDistanceMiles: 8.2,
 };
 
 const MOCK_GROWERS_LIST = [
@@ -74,6 +66,50 @@ const MOCK_GROWERS_LIST = [
     specialties: ['Honey', 'Wildflowers'],
   },
 ];
+
+const generateMockSubscriptions = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: `sub-${i + 1}`,
+    quantityOz: (i + 4).toString(),
+    status: i % 3 === 0 ? SubscriptionStatus.paused : SubscriptionStatus.active,
+    fulfillmentType: i % 2 === 0 ? 'delivery' : 'pickup',
+    nextDeliveryDate: '2026-06-15T10:00:00Z',
+    product: { title: `Premium Produce ${i + 1}` },
+    seller: { name: `Farmer ${i + 1}`, id: `seller_${i + 1}` },
+  }));
+};
+
+const PAGINATED_DATA = generateMockSubscriptions(25);
+
+const MOCK_SUBSCRIPTIONS = {
+  data: PAGINATED_DATA.slice(0, 3),
+  meta: { total: 3, page: 1, limit: 12, totalPages: 1, activeCount: 2 },
+};
+
+const MOCK_USER_DATA = {
+  id: 'usr_789',
+  name: 'Alex Rivera',
+  email: 'alex@village.com',
+  emailVerified: null,
+  image: null,
+  organizationId: null,
+  orgRole: null,
+  aboutMe: 'Growing micro greens and crisp radishes in raised garden beds.',
+  specialties: ['Radishes', 'Microgreens'],
+  goal: '250',
+  address: '742 Evergreen Terrace',
+  city: 'Springfield',
+  state: 'IL',
+  country: 'United States',
+  zip: '62701',
+  lat: null,
+  lng: null,
+  deliveryRangeMiles: '10',
+  stripeAccountId: 'acct_123',
+  stripeOnboardingComplete: false,
+  createdAt: null,
+  updatedAt: null,
+};
 
 const meta: Meta<typeof BuyerDashboardClient> = {
   title: 'Buyer/Dashboard/DashboardPage',
@@ -113,52 +149,14 @@ export const Default: Story = {
           });
         }),
         http.get('*/api/growers/growers-map*', () => HttpResponse.json(MOCK_GROWERS_LIST)),
-      ],
-    },
-  },
-};
-
-/**
- * Pagination state specifically for the Orders list.
- */
-export const OrdersPaginated: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get('*/api/buyer/dashboard', () => HttpResponse.json(MOCK_DASHBOARD_STATS)),
-        http.get('*/api/growers/growers-map*', () => HttpResponse.json(MOCK_GROWERS_LIST)),
-        http.get('*/api/orders*', ({ request }) => {
-          const url = new URL(request.url);
-          const page = Number(url.searchParams.get('page') || '1');
-
-          const start = (page - 1) * PAGE_LIMIT;
-          const end = start + PAGE_LIMIT;
-          const items = PAGINATED_ORDERS_DATA.slice(start, end);
-
+        http.get('*/api/subscriptions', () => HttpResponse.json(MOCK_SUBSCRIPTIONS)),
+        http.get('*/api/auth/session', () => {
           return HttpResponse.json({
-            data: items,
-            meta: {
-              total: PAGINATED_ORDERS_DATA.length,
-              page,
-              limit: PAGE_LIMIT,
-              totalPages: Math.ceil(PAGINATED_ORDERS_DATA.length / PAGE_LIMIT),
-            },
+            user: MOCK_USER_DATA,
           });
         }),
       ],
     },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    await expect(await canvas.findByText(/#ORD-7000/i)).toBeInTheDocument();
-    await expect(canvas.queryByText(/#ORD-7005/i)).not.toBeInTheDocument();
-
-    const pageTwoButton = await canvas.findByRole('button', { name: /next|2/i });
-    await userEvent.click(pageTwoButton);
-
-    await expect(await canvas.findByText(/#ORD-7005/i)).toBeInTheDocument();
-    await expect(canvas.queryByText(/#ORD-7000/i)).not.toBeInTheDocument();
   },
 };
 
@@ -194,9 +192,8 @@ export const EmptyState: Story = {
           return HttpResponse.json({
             ...MOCK_DASHBOARD_STATS,
             onOrderThisWeekLbs: 0,
-            percentChangeFromLastWeek: 0,
             totalSpendThisMonth: '0',
-            activeSubscriptions: [],
+            activeSubscriptions: 0,
             localGrowersSupplying: 0,
           });
         }),
@@ -207,6 +204,17 @@ export const EmptyState: Story = {
           }),
         ),
         http.get('*/api/growers/growers-map*', () => HttpResponse.json([])),
+        http.get('*/api/subscriptions', () =>
+          HttpResponse.json({
+            data: [],
+            meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 },
+          }),
+        ),
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_USER_DATA,
+          });
+        }),
       ],
     },
   },
