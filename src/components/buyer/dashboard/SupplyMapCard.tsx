@@ -1,24 +1,22 @@
 'use client';
 
-import { House, Leaf, Sprout, Star } from 'lucide-react';
-import Image from 'next/image';
+import { House, Store } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Map, { Marker, NavigationControl, Popup } from 'react-map-gl/maplibre';
+import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
+import { SupplyMapPopup } from './SupplyMapPopup';
+
+import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { InlineErrorState } from '@/components/ui/state-displays';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetGrowersForMap } from '@/lib/api/generated/growers/growers';
 import type { MapGrower } from '@/lib/api/generated/models';
-import { cn } from '@/lib/utils';
 
 interface SupplyMapCardProps {
   localGrowersSupplying: number;
-  avgGrowerDistanceMiles: number;
 }
 
 /**
@@ -27,41 +25,27 @@ interface SupplyMapCardProps {
  *
  * @param props - The props containing mapping metadata
  * @param props.localGrowersSupplying - Amount of unique growers the buyer has ordered from
- * @param props.avgGrowerDistanceMiles - Average distance between buyer and growers
  * @returns A component with a map and statistics
  */
-export function SupplyMapCard({
-  localGrowersSupplying,
-  avgGrowerDistanceMiles,
-}: SupplyMapCardProps) {
-  const { user } = useAuth();
+export function SupplyMapCard({ localGrowersSupplying }: SupplyMapCardProps) {
+  const { user, status } = useAuth();
   const router = useRouter();
 
   const [hoveredGrower, setHoveredGrower] = useState<MapGrower | null>(null);
 
   const {
     data: response,
-    isLoading,
+    isLoading: isGrowersLoading,
     isError,
   } = useGetGrowersForMap({
     buyerId: user?.id,
   });
 
+  const isLoading = isGrowersLoading || status === 'loading';
+
   // Use Gary, IN bounds as fallback base point if user location is missing
   const baseLat = user?.lat ?? 41.602;
   const baseLng = user?.lng ?? -87.3371;
-
-  if (isLoading) {
-    return (
-      <Card className="mb-5 flex flex-col rounded-xl border border-forest-dark/10 p-6 shadow-sm h-100">
-        <div className="mb-5 space-y-2">
-          <Skeleton className="h-5 w-40" />
-          <Skeleton className="h-4 w-64" />
-        </div>
-        <Skeleton className="flex-1 w-full rounded-[10px]" />
-      </Card>
-    );
-  }
 
   let growers: MapGrower[] = [];
 
@@ -69,195 +53,73 @@ export function SupplyMapCard({
     growers = response?.data || [];
   }
 
-  const getPillColor = (index: number) => {
-    const styles = [
-      'bg-lime/20 text-deep-forest hover:bg-lime/30',
-      'bg-sun/20 text-yellow-900 hover:bg-sun/30',
-      'bg-clay/10 text-clay hover:bg-clay/20',
-    ];
-    return styles[index % styles.length];
-  };
-
   return (
-    <Card className="mb-5 flex flex-col p-6">
-      <div className="mb-5">
-        <h2 className="font-heading text-[0.95rem] font-bold text-ink">Your Supply Map</h2>
-        <p className="mt-0.5 font-sans text-[0.78rem] text-ink-3">
-          {localGrowersSupplying} active growers · All within{' '}
-          {Math.ceil(avgGrowerDistanceMiles * 1.5)} miles
-        </p>
-      </div>
+    <Card className="flex flex-col w-full">
+      <CardContent>
+        <div className="mb-5">
+          <h2 className="font-heading text-[0.95rem] font-bold text-ink">Your Supply Map</h2>
+          <p className="mt-0.5 font-sans text-[0.78rem] text-ink-3">
+            {localGrowersSupplying} active growers
+          </p>
+        </div>
 
-      {/* Map Container */}
-      <div className="relative flex h-48 w-full items-center justify-center overflow-hidden rounded-[10px] bg-linear-to-br from-[#e8f0e0] to-[#d4e6c8]">
-        {isError ? (
-          <InlineErrorState title="Failed to load map data" />
-        ) : (
-          <Map
-            initialViewState={{
-              longitude: baseLng,
-              latitude: baseLat,
-              zoom: 11,
-            }}
-            style={{ width: '100%', height: '100%' }}
-            mapStyle="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
-            attributionControl={false}
-          >
-            <NavigationControl position="top-right" showCompass={false} />
+        {/* Map Container */}
+        <div className="relative flex h-72 w-full items-center justify-center overflow-hidden rounded-[10px] bg-linear-to-br from-[#e8f0e0] to-[#d4e6c8]">
+          {isLoading ? (
+            <Skeleton className="h-full w-full rounded-[10px]" />
+          ) : isError ? (
+            <InlineErrorState title="Failed to load map data" />
+          ) : (
+            <Map
+              initialViewState={{
+                longitude: baseLng,
+                latitude: baseLat,
+                zoom: 11,
+              }}
+              style={{ width: '100%', height: '100%' }}
+              mapStyle="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+              attributionControl={false}
+            >
+              <NavigationControl position="top-right" showCompass={false} />
 
-            {/* Base Store Pin */}
-            <Marker longitude={baseLng} latitude={baseLat} anchor="bottom">
-              <div
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-deep-forest border-2 border-white shadow-lg drop-shadow-md z-20 transition-transform hover:scale-110"
-                title="Your Location"
-              >
-                <House className="h-5 w-5 text-white" />
-              </div>
-            </Marker>
-
-            {/* Dynamic Grower Pins */}
-            {growers.map((grower) => {
-              if (grower.lat == null || grower.lng == null) return null;
-
-              return (
-                <Marker
-                  key={String(grower.sellerId)}
-                  longitude={grower.lng}
-                  latitude={grower.lat}
-                  anchor="bottom"
+              {/* Base Store Pin */}
+              <Marker longitude={baseLng} latitude={baseLat} anchor="bottom">
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-deep-forest border-2 border-white shadow-lg drop-shadow-md z-20 transition-transform"
+                  title="Your Location"
                 >
-                  <div
-                    className="text-[1.2rem] drop-shadow-sm cursor-pointer transition-transform hover:scale-125"
-                    onMouseEnter={() => setHoveredGrower(grower)}
-                    onMouseLeave={() => setHoveredGrower(null)}
-                    onClick={() => router.push(`/seller/${grower.sellerId}`)}
-                  >
-                    <Sprout className="text-lime" />
-                  </div>
-                </Marker>
-              );
-            })}
-
-            {/* Hover Popup Overlay */}
-            {hoveredGrower && hoveredGrower.lat != null && hoveredGrower.lng != null && (
-              <Popup
-                longitude={hoveredGrower.lng}
-                latitude={hoveredGrower.lat}
-                offset={14}
-                closeButton={false}
-                closeOnClick={false}
-                className="z-50 pointer-events-none"
-                maxWidth="none"
-              >
-                <div className="flex items-center gap-3 px-1 py-0.5">
-                  {/* Image on the Left */}
-                  {hoveredGrower.image && (
-                    <Image
-                      width="10"
-                      height="10"
-                      src={hoveredGrower.image}
-                      alt={hoveredGrower.name || 'Grower'}
-                      className="h-10 w-10 shrink-0 rounded-full object-cover shadow-sm border border-forest-dark/10"
-                    />
-                  )}
-
-                  {/* Text on the Right */}
-                  <div className="flex flex-col justify-center min-w-30 overflow-hidden">
-                    <div className="font-heading text-[0.75rem] font-bold text-deep-forest leading-tight truncate">
-                      {hoveredGrower.name || 'Local Grower'}
-                    </div>
-
-                    {/* Rating, City, and Distance */}
-                    <div className="text-[0.62rem] text-ink-3 mt-0.5 flex flex-wrap items-center gap-x-1 leading-tight">
-                      {hoveredGrower.rating > 0 ? (
-                        <span className="flex items-center gap-0.5 whitespace-nowrap">
-                          <Star className="text-sun h-3 w-3 fill-current" />
-                          {hoveredGrower.rating.toFixed(1)}
-                        </span>
-                      ) : (
-                        <span className="text-ink-4 whitespace-nowrap">New</span>
-                      )}
-
-                      {(hoveredGrower.city || hoveredGrower.distanceMiles != null) && (
-                        <span className="text-ink-4/50">•</span>
-                      )}
-
-                      {hoveredGrower.city && (
-                        <span className="truncate max-w-16.25">{hoveredGrower.city}</span>
-                      )}
-
-                      {hoveredGrower.city && hoveredGrower.distanceMiles != null && (
-                        <span className="text-ink-4/50">•</span>
-                      )}
-
-                      {hoveredGrower.distanceMiles != null && (
-                        <span className="whitespace-nowrap">{hoveredGrower.distanceMiles} mi</span>
-                      )}
-                    </div>
-
-                    {/* Specialties Pills (Max 2 to prevent overcrowding) */}
-                    {hoveredGrower.specialties && hoveredGrower.specialties.length > 0 && (
-                      <div className="mt-1.5 flex flex-nowrap gap-1">
-                        {hoveredGrower.specialties.slice(0, 2).map((specialty, i) => (
-                          <Badge
-                            key={i}
-                            variant="secondary"
-                            className={cn(
-                              'border-none px-1.5 py-[0.1rem] text-[0.55rem] font-medium leading-tight rounded-sm whitespace-nowrap',
-                              getPillColor(i),
-                            )}
-                          >
-                            {specialty}
-                          </Badge>
-                        ))}
-                        {hoveredGrower.specialties.length > 2 && (
-                          <span className="text-[0.55rem] text-ink-4 self-center ml-0.5 font-medium shrink-0 whitespace-nowrap">
-                            +{hoveredGrower.specialties.length - 2}
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                  <House className="h-5 w-5 text-white" />
                 </div>
-              </Popup>
-            )}
-          </Map>
-        )}
-      </div>
+              </Marker>
 
-      {/* Legend Pills */}
-      <div className="mt-4 flex flex-wrap gap-2">
-        <Badge
-          variant="outline"
-          className="border-0 bg-deep-forest/10 text-deep-forest px-2.5 py-1 font-heading text-[0.65rem] font-bold uppercase tracking-[0.05em] rounded-full"
-        >
-          <House className="text-deep-forest" /> Your location
-        </Badge>
-        <Badge
-          variant="outline"
-          className="border-0 bg-lime-pale text-click-green px-2.5 py-1 font-heading text-[0.65rem] font-bold uppercase tracking-[0.05em] rounded-full"
-        >
-          <Sprout className="text-lime" /> Active growers
-        </Badge>
-        <Badge
-          variant="outline"
-          className="border-0 bg-sun-light text-[#8a6000] px-2.5 py-1 font-heading text-[0.65rem] font-bold uppercase tracking-[0.05em] rounded-full"
-        >
-          avg {avgGrowerDistanceMiles.toFixed(1)} mi away
-        </Badge>
-      </div>
+              {growers.map((grower) => {
+                if (grower.lat == null || grower.lng == null) return null;
 
-      {/* Impact Box */}
-      <div className="mt-3.5 rounded-lg bg-lime-pale p-3.5">
-        <div className="mb-1 flex items-center gap-2 font-heading text-[0.78rem] font-bold text-deep-forest">
-          <Leaf className="text-click-green h-4 w-4" />
-          <span>Your impact this month</span>
+                return (
+                  <Marker
+                    key={String(grower.sellerId)}
+                    longitude={grower.lng}
+                    latitude={grower.lat}
+                    anchor="bottom"
+                  >
+                    <div
+                      className="cursor-pointer flex h-10 w-10 items-center justify-center rounded-full bg-lime border-2 border-white text-deep-forest shadow-lg drop-shadow-md z-20 transition-transform hover:scale-110"
+                      onMouseEnter={() => setHoveredGrower(grower)}
+                      onMouseLeave={() => setHoveredGrower(null)}
+                      onClick={() => router.push(`/public-profile/${grower.sellerId}`)}
+                      title={grower.name || 'Grower'}
+                    >
+                      <Store className="h-5 w-5" />
+                    </div>
+                  </Marker>
+                );
+              })}
+
+              {hoveredGrower && <SupplyMapPopup grower={hoveredGrower} />}
+            </Map>
+          )}
         </div>
-        <div className="font-sans text-[0.76rem] leading-[1.55] text-ink-2">
-          Every order keeps dollars in our local community. This month your purchases supported{' '}
-          <strong>{localGrowersSupplying} local families.</strong>
-        </div>
-      </div>
+      </CardContent>
     </Card>
   );
 }

@@ -76,7 +76,6 @@ const MOCK_GROWERS = [
 export const Default: Story = {
   args: {
     localGrowersSupplying: 3,
-    avgGrowerDistanceMiles: 4.2,
   },
   parameters: {
     msw: {
@@ -95,7 +94,6 @@ export const Default: Story = {
 export const Loading: Story = {
   args: {
     localGrowersSupplying: 0,
-    avgGrowerDistanceMiles: 0,
   },
   parameters: {
     msw: {
@@ -115,7 +113,6 @@ export const Loading: Story = {
 export const ErrorState: Story = {
   args: {
     localGrowersSupplying: 3,
-    avgGrowerDistanceMiles: 5.5,
   },
   parameters: {
     msw: {
@@ -134,7 +131,6 @@ export const ErrorState: Story = {
 export const LargeNetwork: Story = {
   args: {
     localGrowersSupplying: 12,
-    avgGrowerDistanceMiles: 8.7,
   },
   parameters: {
     msw: {

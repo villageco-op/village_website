@@ -107,15 +107,12 @@ export default function SellerEarningsClient() {
   const monthYear = formatAppDate(new Date(), 'longMonthYear');
 
   return (
-    <div className="flex w-full flex-col">
-      <PageHeader
-        title="Earnings"
-        subtitle={`${monthYear} · All earnings from Village produce sales`}
-      />
+    <div className="flex w-full flex-col gap-6">
+      <PageHeader title="Earnings" subtitle={`${monthYear}`} />
 
       <EarningsStatRow data={earningsData} />
 
-      <div className="mb-5 flex flex-col">
+      <div className="flex flex-col">
         <MonthlyGoalCard
           earnedThisMonth={earningsData.earnedThisMonth}
           monthlyGoal={earningsData.monthlyGoal}

@@ -15,7 +15,7 @@ interface BillingStatsCardProps {
  */
 export function BillingStatsCard({ data }: BillingStatsCardProps) {
   return (
-    <Card className="mb-5">
+    <Card>
       <CardContent className="p-0">
         <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-4">
           <div className="rounded-lg bg-cream p-4 text-center">
@@ -32,8 +32,8 @@ export function BillingStatsCard({ data }: BillingStatsCardProps) {
             <div className="font-sans text-xs text-ink-3">Total produce</div>
           </div>
 
-          <div className="rounded-lg bg-cream p-4 text-center">
-            <div className="font-heading text-2xl font-extrabold text-sun">
+          <div className="rounded-lg bg-slate-100 p-4 text-center">
+            <div className="font-heading text-2xl font-extrabold text-deep-forest">
               ${data.avgCostPerLb.toFixed(2)}
             </div>
             <div className="font-sans text-xs text-ink-3">Avg cost per lb</div>

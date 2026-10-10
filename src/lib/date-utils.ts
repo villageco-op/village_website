@@ -187,3 +187,60 @@ export function formatAppDateTime(
 
   return d.toLocaleString('en-US', DATE_TIME_PRESETS[preset]);
 }
+
+/**
+ * Returns a time-of-day greeting (Good morning, Good afternoon, Good evening)
+ * based on the current hour in a specific timezone or user's local timezone.
+ * @param date - The date object
+ * @param timeZone - The timezone
+ * @returns The greeting (e.g., Good morning, Good afternoon, Good evening)
+ */
+export function getTimeGreeting(date: Date = new Date(), timeZone?: string): string {
+  // Use Intl to extract hour in the target timezone accurately
+  const hourStr = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    hour12: false,
+    timeZone,
+  }).format(date);
+
+  const hour = parseInt(hourStr, 10);
+
+  if (hour >= 5 && hour < 12) {
+    return 'Good morning';
+  } else if (hour >= 12 && hour < 18) {
+    return 'Good afternoon';
+  } else {
+    return 'Good evening';
+  }
+}
+
+/**
+ * Formats the current or given week range (e.g. "Oct 4–10" or "Oct 28–Nov 3")
+ * @param date - The date object
+ * @param timeZone - The timezone
+ * @returns The week range string
+ */
+export function formatWeekRange(date: Date = new Date(), timeZone?: string): string {
+  const targetDate = new Date(date);
+
+  // Calculate start (Sunday) and end (Saturday) of current week
+  const dayOfWeek = targetDate.getDay();
+  const weekStart = new Date(targetDate);
+  weekStart.setDate(targetDate.getDate() - dayOfWeek);
+
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6);
+
+  const sameMonth = weekStart.getMonth() === weekEnd.getMonth();
+
+  const startMonth = weekStart.toLocaleString('default', { month: 'short', timeZone });
+  const startDate = weekStart.getDate();
+  const endDate = weekEnd.getDate();
+
+  if (sameMonth) {
+    return `${startMonth} ${startDate}–${endDate}`;
+  }
+
+  const endMonth = weekEnd.toLocaleString('default', { month: 'short', timeZone });
+  return `${startMonth} ${startDate}–${endMonth} ${endDate}`;
+}

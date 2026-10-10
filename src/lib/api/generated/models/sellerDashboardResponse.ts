@@ -5,18 +5,17 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { EarningsByProduce } from './earningsByProduce';
 import type { Location } from './location';
+import type { ProduceAmount } from './produceAmount';
 
 export interface SellerDashboardResponse {
   earnedThisMonth: number;
-  earnedLastMonth: number;
-  soldThisWeekLbs: number;
   /** Calculated status indicating if the seller is likely to hit their monthly goal */
   onTrackWithGoal: boolean;
   monthlyGoal: number;
-  activeListingsCount: number;
-  activeListingsNames: string[];
-  earningsByProduceThisMonth: EarningsByProduce[];
+  completedOrdersThisMonth: number;
+  pendingOrders: number;
+  activeSubscriptions: number;
+  earningsByProduceThisMonth: ProduceAmount[];
   sellerLocation: Location;
 }

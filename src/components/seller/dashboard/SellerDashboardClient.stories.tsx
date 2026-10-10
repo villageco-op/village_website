@@ -5,6 +5,13 @@ import { http, HttpResponse, delay } from 'msw';
 
 import SellerDashboardClient from './SellerDashboardClient';
 
+import {
+  SubscriptionStatus,
+  OrderPaymentMethod,
+  OrderFulfillmentType,
+  OrderStatusProperty,
+} from '@/lib/api/generated/models';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -18,17 +25,78 @@ const MOCK_DASHBOARD_DATA = {
     address: 'Austin, TX',
   },
   earnedThisMonth: 1250.5,
-  earnedLastMonth: 980.0,
-  soldThisWeekLbs: 45.2,
+  completedOrdersThisMonth: 56,
+  pendingOrders: 3,
+  activeSubscriptions: 5,
   onTrackWithGoal: true,
-  activeListingsCount: 12,
-  activeListingsNames: ['Organic Strawberries', 'Heirloom Tomatoes', 'Wild Honey'],
   monthlyGoal: 2000.0,
   earningsByProduceThisMonth: [
-    { produceName: 'Strawberries', earned: 450 },
-    { produceName: 'Tomatoes', earned: 300 },
-    { produceName: 'Honey', earned: 500.5 },
+    { produceName: 'Strawberries', amount: 450 },
+    { produceName: 'Tomatoes', amount: 300 },
+    { produceName: 'Honey', amount: 500.5 },
   ],
+};
+
+const PAGE_LIMIT = 5;
+
+const generateMockOrders = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: `ORD-${7000 + i}`,
+    buyerId: 'me',
+    sellerId: i % 2 === 0 ? 'grower-alpha' : 'grower-beta',
+    paymentMethod: OrderPaymentMethod.card,
+    fulfillmentType: OrderFulfillmentType.delivery,
+    scheduledTime: new Date().toISOString(),
+    status: OrderStatusProperty.pending,
+    totalAmount: (Math.random() * 100 + 20).toFixed(2),
+    createdAt: new Date().toISOString(),
+  }));
+};
+
+const PAGINATED_ORDERS_DATA = generateMockOrders(25);
+
+const generateMockSubscriptions = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: `sub-${i + 1}`,
+    quantityOz: (i + 4).toString(),
+    status: i % 3 === 0 ? SubscriptionStatus.paused : SubscriptionStatus.active,
+    fulfillmentType: i % 2 === 0 ? 'delivery' : 'pickup',
+    nextDeliveryDate: '2026-06-15T10:00:00Z',
+    product: { title: `Premium Produce ${i + 1}` },
+    seller: { name: `Farmer ${i + 1}`, id: `seller_${i + 1}` },
+  }));
+};
+
+const PAGINATED_DATA = generateMockSubscriptions(25);
+
+const MOCK_SUBSCRIPTIONS = {
+  data: PAGINATED_DATA.slice(0, 3),
+  meta: { total: 3, page: 1, limit: 12, totalPages: 1, activeCount: 2 },
+};
+
+const MOCK_USER_DATA = {
+  id: 'usr_789',
+  name: 'Alex Rivera',
+  email: 'alex@village.com',
+  emailVerified: null,
+  image: null,
+  organizationId: null,
+  orgRole: null,
+  aboutMe: 'Growing micro greens and crisp radishes in raised garden beds.',
+  specialties: ['Radishes', 'Microgreens'],
+  goal: '250',
+  address: '742 Evergreen Terrace',
+  city: 'Springfield',
+  state: 'IL',
+  country: 'United States',
+  zip: '62701',
+  lat: null,
+  lng: null,
+  deliveryRangeMiles: '10',
+  stripeAccountId: 'acct_123',
+  stripeOnboardingComplete: false,
+  createdAt: null,
+  updatedAt: null,
 };
 
 const meta: Meta<typeof SellerDashboardClient> = {
@@ -67,6 +135,18 @@ export const Default: Story = {
         http.get('*/api/seller/dashboard', () => {
           return HttpResponse.json(MOCK_DASHBOARD_DATA);
         }),
+        http.get('*/api/orders*', () => {
+          return HttpResponse.json({
+            data: PAGINATED_ORDERS_DATA.slice(0, 2),
+            meta: { total: 2, page: 1, limit: PAGE_LIMIT, totalPages: 1 },
+          });
+        }),
+        http.get('*/api/subscriptions', () => HttpResponse.json(MOCK_SUBSCRIPTIONS)),
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_USER_DATA,
+          });
+        }),
       ],
     },
   },
@@ -74,14 +154,16 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     // Check if header rendered
-    await expect(await canvas.findByText(/Plot: Austin, TX/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/Alex/i)).toBeInTheDocument();
 
     // Check if stats are visible
-    await expect(canvas.getAllByText(/1,250.5/i)).toHaveLength(2);
-    await expect(canvas.getByText(/45.2 lbs/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/56/i)).toBeInTheDocument();
+
+    // Check if progress is visible
+    await expect(canvas.getByText(/1251/i)).toBeInTheDocument();
 
     // Check for specific produce in the breakdown
-    await expect(canvas.getByText(/Organic Strawberries/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/Strawberries/i)).toBeInTheDocument();
   },
 };
 
@@ -132,13 +214,29 @@ export const EmptyState: Story = {
           return HttpResponse.json({
             sellerLocation: 'New York, NY',
             earnedThisMonth: 0,
-            earnedLastMonth: 0,
-            soldThisWeekLbs: 0,
+            completedOrdersThisMonth: 0,
+            pendingOrders: 0,
+            activeSubscriptions: 0,
             onTrackWithGoal: false,
-            activeListingsCount: 0,
-            activeListingsNames: [],
             monthlyGoal: 1000,
             earningsByProduceThisMonth: [],
+          });
+        }),
+        http.get('*/api/orders*', () =>
+          HttpResponse.json({
+            data: [],
+            meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 },
+          }),
+        ),
+        http.get('*/api/subscriptions', () =>
+          HttpResponse.json({
+            data: [],
+            meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 },
+          }),
+        ),
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_USER_DATA,
           });
         }),
       ],

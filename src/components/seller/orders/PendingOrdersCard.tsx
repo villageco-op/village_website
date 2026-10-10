@@ -29,7 +29,7 @@ interface PendingOrdersCardProps {
  */
 export function PendingOrdersCard({ orders, pendingCount, userRole }: PendingOrdersCardProps) {
   return (
-    <Card className="mb-6">
+    <Card className="mb-6 mt-6">
       <CardContent className="p-6">
         <div className="mb-6 flex items-center justify-between border-b border-border/40 pb-4">
           <div>

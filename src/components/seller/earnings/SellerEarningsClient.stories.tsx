@@ -116,8 +116,9 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     // Check main stats
-    await expect(await canvas.findByText(/\$850\.50/i)).toBeInTheDocument();
-    await expect(canvas.getByText(/\$1000\.00/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/\$149\.50/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/\$4250\.75/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/\$4\.25/i)).toBeInTheDocument();
 
     // Check produce breakdown
     await expect(canvas.getByText('Lacinato Kale')).toBeInTheDocument();

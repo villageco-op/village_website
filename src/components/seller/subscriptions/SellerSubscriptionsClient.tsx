@@ -79,7 +79,7 @@ export default function SellerSubscriptionsClient() {
     response.data.meta.activeCount || subscriptions.filter((sub) => sub.status === 'active').length;
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col gap-6">
       <PageHeader
         title="Customer Subscriptions"
         subtitle={`You are fulfilling ${activeCount} active subscription${activeCount !== 1 ? 's' : ''}`}
