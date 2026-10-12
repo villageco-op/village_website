@@ -7,48 +7,13 @@ import SubscriptionDetailClient from './SubscriptionDetailsClient';
 
 import { Toaster } from '@/components/ui/sonner';
 import { SubscriptionStatus } from '@/lib/api/generated/models';
+import { BASE_MOCK_SUBSCRIPTION } from '@/lib/storybook/mocks/subscription.mock';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
   },
 });
-
-const MOCK_SUB_ID = 'sub-123';
-
-const MOCK_BASE_SUBSCRIPTION = {
-  id: MOCK_SUB_ID,
-  status: SubscriptionStatus.active,
-  quantityOz: '16',
-  fulfillmentType: 'delivery',
-  createdAt: '2026-01-15T08:00:00Z',
-  nextDeliveryDate: '2026-05-01T10:00:00Z',
-  product: {
-    id: 'prod-1',
-    title: 'Gourmet Salad Mix',
-    pricePerOz: '1.25',
-    harvestFrequencyDays: 7,
-  },
-  seller: {
-    id: 'seller-1',
-    name: 'Valley Farms',
-    email: 'contact@valleyfarms.example',
-    location: {
-      address: '100 Farm Lane, Austin, TX 78701',
-      lat: 30.2672,
-      lng: -97.7431,
-    },
-  },
-  buyer: {
-    id: 'buyer-1',
-    name: 'Jane Customer',
-    location: {
-      address: '456 Residential Way, Austin, TX 78704',
-      lat: 30.25,
-      lng: -97.75,
-    },
-  },
-};
 
 const meta: Meta<typeof SubscriptionDetailClient> = {
   title: 'Buyer/Subscriptions/Details/SubscriptionDetailClient',
@@ -60,7 +25,7 @@ const meta: Meta<typeof SubscriptionDetailClient> = {
     },
   },
   args: {
-    id: 'sub-123',
+    id: BASE_MOCK_SUBSCRIPTION.id,
   },
   decorators: [
     (Story) => {
@@ -87,8 +52,8 @@ export const Active: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, () => {
-          return HttpResponse.json(MOCK_BASE_SUBSCRIPTION);
+        http.get(`*/api/subscriptions/${BASE_MOCK_SUBSCRIPTION.id}`, () => {
+          return HttpResponse.json(BASE_MOCK_SUBSCRIPTION);
         }),
       ],
     },
@@ -98,8 +63,8 @@ export const Active: Story = {
 
     // Verify main components rendered
     await expect(await canvas.findByText(/Subscription Details/i)).toBeInTheDocument();
-    await expect(canvas.getByText('Valley Farms')).toBeInTheDocument();
-    await expect(canvas.getByText(/Gourmet Salad Mix/i)).toBeInTheDocument();
+    await expect(canvas.getByText(BASE_MOCK_SUBSCRIPTION.seller.name!)).toBeInTheDocument();
+    await expect(canvas.getByText(/Fresh Organic Microgreens/i)).toBeInTheDocument();
 
     // Verify action buttons are present
     await expect(canvas.getByRole('button', { name: /Cancel/i })).toBeInTheDocument();
@@ -115,9 +80,9 @@ export const Paused: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, () => {
+        http.get(`*/api/subscriptions/${BASE_MOCK_SUBSCRIPTION.id}`, () => {
           return HttpResponse.json({
-            ...MOCK_BASE_SUBSCRIPTION,
+            ...BASE_MOCK_SUBSCRIPTION,
             status: SubscriptionStatus.paused,
           });
         }),
@@ -137,9 +102,9 @@ export const Canceled: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, () => {
+        http.get(`*/api/subscriptions/${BASE_MOCK_SUBSCRIPTION.id}`, () => {
           return HttpResponse.json({
-            ...MOCK_BASE_SUBSCRIPTION,
+            ...BASE_MOCK_SUBSCRIPTION,
             status: SubscriptionStatus.canceled,
             cancelReason: 'Slow harvests, can no longer meet demand.',
           });
@@ -166,7 +131,7 @@ export const Loading: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, async () => {
+        http.get(`*/api/subscriptions/${BASE_MOCK_SUBSCRIPTION.id}`, async () => {
           await delay('infinite');
           return HttpResponse.json({});
         }),
@@ -182,7 +147,7 @@ export const ErrorState: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, () => {
+        http.get(`*/api/subscriptions/${BASE_MOCK_SUBSCRIPTION.id}`, () => {
           return new HttpResponse(null, { status: 404 });
         }),
       ],

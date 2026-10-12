@@ -22,11 +22,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import type { Order, OrderStatus } from '@/lib/api/generated/models';
+import type { OrderStatus, OrderSummary } from '@/lib/api/generated/models';
 import { formatAppDate } from '@/lib/date-utils';
 
 interface InvoiceHistoryCardProps {
-  orders: Order[];
+  orders: OrderSummary[];
   onDownload: () => Promise<void>;
   isDownloading?: boolean;
   statusFilter: OrderStatus | 'all';

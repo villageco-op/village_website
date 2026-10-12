@@ -5,7 +5,7 @@ import { http, HttpResponse } from 'msw';
 
 import ProfileTab from './ProfileTab';
 
-import type { User } from '@/lib/api/generated/models/user';
+import { MOCK_BUYER_USER, MOCK_SELLER_USER } from '@/lib/storybook/mocks/user.mock';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -13,31 +13,6 @@ const mockedQueryClient = new QueryClient({
     mutations: { retry: false },
   },
 });
-
-const MOCK_USER: User = {
-  id: 'user_456',
-  name: 'Jane Doe',
-  email: 'jane@example.com',
-  emailVerified: null,
-  image: null,
-  organizationId: null,
-  orgRole: null,
-  aboutMe: 'Passionate urban farmer growing organic microgreens.',
-  specialties: ['Heirloom Tomatoes', 'Honey', 'Sourdough'],
-  goal: '500',
-  address: '123 Farm Lane',
-  city: 'Madison',
-  state: 'WI',
-  country: 'United States',
-  zip: '53703',
-  lat: null,
-  lng: null,
-  deliveryRangeMiles: '15',
-  stripeOnboardingComplete: null,
-  isOnboardingComplete: false,
-  createdAt: null,
-  updatedAt: null,
-};
 
 const handlers = [
   // Mock image upload endpoint
@@ -84,15 +59,15 @@ type Story = StoryObj<typeof ProfileTab>;
  */
 export const RegularBuyer: Story = {
   args: {
-    user: { ...MOCK_USER, specialties: [] },
+    user: { ...MOCK_BUYER_USER, specialties: [] },
     isSeller: false,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
     // Core inputs should render
-    await expect(canvas.getByLabelText(/Real Name/i)).toHaveValue('Jane Doe');
-    await expect(canvas.getByLabelText(/Street Address/i)).toHaveValue('123 Farm Lane');
+    await expect(canvas.getByLabelText(/Real Name/i)).toHaveValue(MOCK_BUYER_USER.name);
+    await expect(canvas.getByLabelText(/Street Address/i)).toHaveValue(MOCK_BUYER_USER.address);
 
     // Seller sections must be hidden
     await expect(canvas.queryByText('Seller Details')).not.toBeInTheDocument();
@@ -105,7 +80,7 @@ export const RegularBuyer: Story = {
  */
 export const ActiveSeller: Story = {
   args: {
-    user: MOCK_USER,
+    user: MOCK_SELLER_USER,
     isSeller: true,
   },
   play: async ({ canvasElement }) => {
@@ -113,12 +88,12 @@ export const ActiveSeller: Story = {
 
     // Dynamic items rendered for sellers
     await expect(canvas.getByText('Seller Details')).toBeInTheDocument();
-    await expect(canvas.getByLabelText(/Monthly Goal/i)).toHaveValue(500);
+    await expect(canvas.getByLabelText(/Monthly Goal/i)).toHaveValue(250);
 
     // Delivery distance condition state verification
     const checkbox = canvas.getByLabelText(/I am willing to deliver orders myself/i);
     await expect(checkbox).toBeChecked();
-    await expect(canvas.getByLabelText(/Delivery Range/i)).toHaveValue(15);
+    await expect(canvas.getByLabelText(/Delivery Range/i)).toHaveValue(10);
   },
 };
 
@@ -127,7 +102,7 @@ export const ActiveSeller: Story = {
  */
 export const FormSubmissionSuccess: Story = {
   args: {
-    user: MOCK_USER,
+    user: MOCK_SELLER_USER,
     isSeller: true,
   },
   play: async ({ canvasElement }) => {

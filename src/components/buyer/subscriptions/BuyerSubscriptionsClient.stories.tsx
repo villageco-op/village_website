@@ -9,6 +9,7 @@ import BuyerSubscriptionsClient from './BuyerSubscriptionsClient';
 
 import { Toaster } from '@/components/ui/sonner';
 import { SubscriptionStatus } from '@/lib/api/generated/models';
+import { createPaginatedResponse } from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -27,6 +28,8 @@ const generateMockSubscriptions = (count: number) => {
     seller: { name: `Farmer ${i + 1}`, id: `seller_${i + 1}` },
   }));
 };
+
+const PAGINATED_SUBSCRIPTIONS_DATA = generateMockSubscriptions(25);
 
 const PAGINATED_DATA = generateMockSubscriptions(25);
 
@@ -68,7 +71,11 @@ type Story = StoryObj<typeof BuyerSubscriptionsClient>;
 export const Default: Story = {
   parameters: {
     msw: {
-      handlers: [http.get('*/api/subscriptions', () => HttpResponse.json(MOCK_SUBSCRIPTIONS))],
+      handlers: [
+        http.get('*/api/subscriptions', () =>
+          HttpResponse.json(createPaginatedResponse(PAGINATED_SUBSCRIPTIONS_DATA, 1, 3)),
+        ),
+      ],
     },
   },
   play: async ({ canvasElement }) => {
@@ -98,22 +105,8 @@ export const Paginated: Story = {
         http.get('*/api/subscriptions', ({ request }) => {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
-          const limit = 12;
 
-          const start = (page - 1) * limit;
-          const end = start + limit;
-          const items = PAGINATED_DATA.slice(start, end);
-
-          return HttpResponse.json({
-            data: items,
-            meta: {
-              total: PAGINATED_DATA.length,
-              page,
-              limit,
-              totalPages: Math.ceil(PAGINATED_DATA.length / limit),
-              activeCount: 19,
-            },
-          });
+          return HttpResponse.json(createPaginatedResponse(PAGINATED_SUBSCRIPTIONS_DATA, page, 12));
         }),
       ],
     },

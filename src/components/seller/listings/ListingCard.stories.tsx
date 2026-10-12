@@ -3,6 +3,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { ListingCard } from './ListingCard';
 
+import { MOCK_PRODUCE_LISTING } from '@/lib/storybook/mocks/produce.mock';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -39,23 +41,8 @@ type Story = StoryObj<typeof ListingCard>;
 export const ActiveWithAnalytics: Story = {
   args: {
     produce: {
-      id: '1',
-      sellerId: 'seller-123',
-      title: 'Organic Lacinato Kale',
-      description: 'We plant early in the spring and harvest throughout the year.',
-      produceType: 'leafy_greens',
-      pricePerOz: '0.50', // $8.00/lb
-      totalOzInventory: '320',
-      maxOrderQuantityOz: null,
-      availableBy: new Date().toISOString(),
+      ...MOCK_PRODUCE_LISTING,
       status: 'active',
-      harvestFrequencyDays: 7,
-      seasonStart: '2024-01-01',
-      seasonEnd: '2024-12-31',
-      images: ['https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=100&h=100&fit=crop'],
-      isSubscribable: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       analytics: {
         totalOzSold: 160,
         totalMonthlyEarnings: 120.0,
@@ -78,23 +65,8 @@ export const ActiveWithAnalytics: Story = {
 export const InventoryAlert: Story = {
   args: {
     produce: {
-      id: '2',
-      sellerId: 'seller-123',
-      title: 'Heirloom Tomatoes',
-      description: '',
-      produceType: 'produce_vegetables',
-      pricePerOz: '0.75', // $12.00/lb
-      totalOzInventory: '160',
-      maxOrderQuantityOz: null,
-      availableBy: new Date().toISOString(),
+      ...MOCK_PRODUCE_LISTING,
       status: 'active',
-      harvestFrequencyDays: 3,
-      seasonStart: '2024-06-01',
-      seasonEnd: '2024-09-01',
-      images: {},
-      isSubscribable: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       analytics: {
         totalOzSold: 140,
         totalMonthlyEarnings: 450.0,
@@ -117,7 +89,7 @@ export const InventoryAlert: Story = {
 export const PausedState: Story = {
   args: {
     produce: {
-      ...ActiveWithAnalytics.args?.produce!,
+      ...MOCK_PRODUCE_LISTING,
       status: 'paused',
       title: 'Fresh Basil (Paused)',
       produceType: 'fresh_herbs',
@@ -132,24 +104,8 @@ export const PausedState: Story = {
 export const NoAnalytics: Story = {
   args: {
     produce: {
-      id: '3',
-      sellerId: 'seller-123',
-      title: 'Wild Strawberries',
-      description: 'Grown wild.',
-      produceType: 'fruit',
-      pricePerOz: '1.00',
-      totalOzInventory: '80',
-      maxOrderQuantityOz: null,
-      availableBy: '2024-10-15T00:00:00Z',
-      status: 'active',
-      harvestFrequencyDays: 14,
-      seasonStart: '2024-10-01',
-      seasonEnd: '2024-11-01',
-      images: {},
-      isSubscribable: false,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      analytics: undefined,
+      ...MOCK_PRODUCE_LISTING,
+      analytics: {} as any,
     },
   },
 };

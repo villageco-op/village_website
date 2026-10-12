@@ -39,9 +39,9 @@ export function ListingPricingInventory({ data, updateData }: StepComponentProps
           <Input
             id="inventory"
             type="number"
-            step="0.1"
+            step="0.01"
             required
-            min="0.1"
+            min="0.01"
             placeholder="e.g. 50"
             value={data.totalLbsInventory}
             onChange={(e) => updateData({ totalLbsInventory: e.target.value })}
@@ -52,7 +52,7 @@ export function ListingPricingInventory({ data, updateData }: StepComponentProps
           <Input
             id="maxOrder"
             type="number"
-            step="0.1"
+            step="0.01"
             min="0"
             placeholder="No limit (leave empty)"
             value={data.maxOrderLbs}

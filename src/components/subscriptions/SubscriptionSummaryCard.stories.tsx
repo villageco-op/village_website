@@ -2,11 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { SubscriptionSummaryCard } from './SubscriptionSummaryCard';
 
-import {
-  type ProduceType,
-  type SubscriptionDetailResponseProductStatus,
-  SubscriptionStatus,
-} from '@/lib/api/generated/models';
+import { BASE_MOCK_SUBSCRIPTION } from '@/lib/storybook/mocks/subscription.mock';
 
 const meta: Meta<typeof SubscriptionSummaryCard> = {
   title: 'Subscriptions/SubscriptionSummaryCard',
@@ -27,55 +23,16 @@ const meta: Meta<typeof SubscriptionSummaryCard> = {
 export default meta;
 type Story = StoryObj<typeof SubscriptionSummaryCard>;
 
-const mockSubscription = {
-  id: 'sub-123',
-  buyerId: 'user-1',
-  productId: 'prod-1',
-  sellerId: 'seller-1',
-  quantityOz: '16',
-  status: SubscriptionStatus.active,
-  fulfillmentType: 'delivery',
-  nextDeliveryDate: '2026-06-15T10:00:00Z',
-  cancelReason: null,
-  createdAt: '2026-01-01T00:00:00Z',
-  updatedAt: '2026-01-01T00:00:00Z',
-  product: {
-    id: 'prod-1',
-    sellerId: 'seller-1',
-    title: 'Gourmet Spring Mix',
-    description: null,
-    produceType: 'leafy_greens' as ProduceType,
-    pricePerOz: '1.25',
-    harvestFrequencyDays: 14,
-    totalOzInventory: '500',
-    maxOrderQuantityOz: '',
-    availableBy: '2026-01-01',
-    seasonStart: '2026-01-01',
-    seasonEnd: '2026-12-31',
-    images: [],
-    isSubscribable: true,
-    status: 'active' as SubscriptionDetailResponseProductStatus,
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-01T00:00:00Z',
-  },
-  seller: {
-    id: 'user-seller',
-    name: 'Sun-Kissed Acres',
-    email: 'contact@sunkissed.com',
-  },
-  buyer: null,
-};
-
 export const Default: Story = {
   args: {
-    subscription: mockSubscription,
+    subscription: BASE_MOCK_SUBSCRIPTION,
   },
 };
 
 export const PendingDelivery: Story = {
   args: {
     subscription: {
-      ...mockSubscription,
+      ...BASE_MOCK_SUBSCRIPTION,
       nextDeliveryDate: null,
     },
   },
@@ -84,9 +41,9 @@ export const PendingDelivery: Story = {
 export const CustomFrequency: Story = {
   args: {
     subscription: {
-      ...mockSubscription,
+      ...BASE_MOCK_SUBSCRIPTION,
       product: {
-        ...mockSubscription.product,
+        ...BASE_MOCK_SUBSCRIPTION.product,
         title: 'Microgreens Subscription',
         harvestFrequencyDays: 3,
         pricePerOz: '4.50',

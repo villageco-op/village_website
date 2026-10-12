@@ -1,7 +1,5 @@
 'use client';
 
-import { Store, Truck } from 'lucide-react';
-
 import { AddressMap } from '../ui/address-map';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -26,13 +24,11 @@ export function SubscriptionLocationCard({ subscription }: SubscriptionLocationC
   const location = targetUser?.location;
 
   const title = isDelivery ? 'Delivery Location' : 'Pickup Location';
-  const headerIcon = isDelivery ? <Truck /> : <Store />;
 
   return (
     <Card>
       <CardContent className="p-6">
         <div className="mb-4 flex items-center gap-2 border-b border-border/50 pb-3">
-          <span className="leading-none h-5 w-5 text-deep-forest">{headerIcon}</span>
           <h2 className="font-heading text-[0.95rem] font-bold text-ink">{title}</h2>
         </div>
 

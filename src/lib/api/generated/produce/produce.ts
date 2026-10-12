@@ -32,7 +32,7 @@ import type {
   GetProduceMapParams,
   GetProduceOrdersParams,
   GetSellerListingsParams,
-  ProduceDetail,
+  ProduceDetails,
   ProduceListResponse,
   ProduceOrderListResponse,
   SellerMapGroupList,
@@ -559,7 +559,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  * Get details of a specific produce listing. Used by buyers to view items and sellers to populate edit forms.
  */
 export type getProduceResponse200 = {
-  data: ProduceDetail
+  data: ProduceDetails
   status: 200
 }
 

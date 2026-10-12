@@ -29,6 +29,24 @@ const playfair = Playfair_Display({
 const isSubpath = window.location.pathname.startsWith('/village_website');
 const baseUrl = isSubpath ? '/village_website/' : '/';
 
+const originalWarn = console.warn;
+const originalError = console.error;
+
+const shouldSuppress = (args: any[]) => {
+  const message = typeof args[0] === 'string' ? args[0] : '';
+  return message.includes('was detected as the Largest Contentful Paint (LCP)');
+};
+
+console.warn = (...args) => {
+  if (shouldSuppress(args)) return;
+  originalWarn(...args);
+};
+
+console.error = (...args) => {
+  if (shouldSuppress(args)) return;
+  originalError(...args);
+};
+
 configure({
   getElementError(message) {
     const cleanMessage = message ? message.split('Ignored nodes:')[0] : '';

@@ -9,7 +9,7 @@ import type { ImageUrl } from './imageUrl';
 import type { ProduceStatus } from './produceStatus';
 import type { ResourceId } from './resourceId';
 
-export interface OrderItemDetail {
+export interface OrderItemDetails {
   id: ResourceId;
   productId: ResourceId;
   productName: string;

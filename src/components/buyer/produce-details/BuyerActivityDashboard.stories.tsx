@@ -5,6 +5,9 @@ import { http, HttpResponse, delay } from 'msw';
 
 import BuyerActivityDashboard from './BuyerActivityDashboard';
 
+import { BASE_MOCK_ORDER } from '@/lib/storybook/mocks/order.mock';
+import { BASE_MOCK_SUBSCRIPTION } from '@/lib/storybook/mocks/subscription.mock';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -16,12 +19,14 @@ const SELLER_ID = 'seller_456';
 
 const MOCK_ORDERS = [
   {
+    ...BASE_MOCK_ORDER,
     id: 'ord_active_1',
     status: 'pending',
     scheduledTime: new Date(Date.now() + 86400000).toISOString(),
     createdAt: new Date().toISOString(),
   },
   {
+    ...BASE_MOCK_ORDER,
     id: 'ord_past_1',
     status: 'completed',
     scheduledTime: new Date(Date.now() - 86400000).toISOString(),
@@ -31,6 +36,7 @@ const MOCK_ORDERS = [
 
 const MOCK_SUBS = [
   {
+    ...BASE_MOCK_SUBSCRIPTION,
     id: 'sub_active_1',
     status: 'active',
     quantityOz: 16,
@@ -38,6 +44,7 @@ const MOCK_SUBS = [
     updatedAt: new Date().toISOString(),
   },
   {
+    ...BASE_MOCK_SUBSCRIPTION,
     id: 'sub_past_1',
     status: 'canceled',
     quantityOz: 8,

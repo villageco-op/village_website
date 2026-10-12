@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import SellerInfoMapCard from './SellerInfoMapCard';
 
+import { MOCK_SELLER_USER } from '@/lib/storybook/mocks/user.mock';
+
 const meta: Meta<typeof SellerInfoMapCard> = {
   title: 'Buyer/ProduceDetails/SellerInfoMapCard',
   component: SellerInfoMapCard,
@@ -21,34 +23,16 @@ const meta: Meta<typeof SellerInfoMapCard> = {
 export default meta;
 type Story = StoryObj<typeof SellerInfoMapCard>;
 
-const mockSeller = {
-  id: 'seller-123',
-  name: 'Green Valley Organics',
-  organization: null,
-  image: 'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=150&h=150&fit=crop',
-  canDeliver: true,
-  deliveryRangeMiles: 15,
-  location: {
-    lat: 41.8781,
-    lng: -87.6298,
-    address: '123 Farm Road',
-    city: 'Chicago',
-    state: 'IL',
-    country: 'USA',
-    zip: '60601',
-  },
-};
-
 export const Default: Story = {
   args: {
-    seller: mockSeller,
+    seller: MOCK_SELLER_USER,
   },
 };
 
 export const PickupOnly: Story = {
   args: {
     seller: {
-      ...mockSeller,
+      ...MOCK_SELLER_USER,
       name: 'Old Oak Farmstead',
       canDeliver: false,
       deliveryRangeMiles: null,

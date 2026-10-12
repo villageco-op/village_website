@@ -5,11 +5,10 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
+import type { Produce } from './produce';
 import type { ResourceId } from './resourceId';
-import type { SubscriptionDetailResponseBuyer } from './subscriptionDetailResponseBuyer';
-import type { SubscriptionDetailResponseProduct } from './subscriptionDetailResponseProduct';
-import type { SubscriptionDetailResponseSeller } from './subscriptionDetailResponseSeller';
 import type { SubscriptionStatus } from './subscriptionStatus';
+import type { UserBasicInfo } from './userBasicInfo';
 import type { UserId } from './userId';
 
 export interface SubscriptionDetailResponse {
@@ -28,9 +27,7 @@ export interface SubscriptionDetailResponse {
   createdAt: string | null;
   /** @nullable */
   updatedAt: string | null;
-  product: SubscriptionDetailResponseProduct;
-  /** @nullable */
-  buyer: SubscriptionDetailResponseBuyer;
-  /** @nullable */
-  seller: SubscriptionDetailResponseSeller;
+  product: Produce;
+  buyer: UserBasicInfo & (unknown | null);
+  seller: UserBasicInfo & (unknown | null);
 }

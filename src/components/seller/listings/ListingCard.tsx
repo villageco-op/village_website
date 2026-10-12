@@ -33,6 +33,8 @@ export function ListingCard({ produce }: ListingCardProps) {
   const pricePerLb = (Number(produce.pricePerOz || 0) * 16).toFixed(2);
   const statusColors = getStatusColors(produce.status);
 
+  const hasAnalytics =
+    produce.analytics && typeof produce.analytics.totalMonthlyEarnings === 'number';
   const analytics = produce.analytics;
 
   const availableLbs = analytics
@@ -90,7 +92,7 @@ export function ListingCard({ produce }: ListingCardProps) {
         </div>
 
         {/* Analytics Section */}
-        {analytics && (
+        {hasAnalytics && analytics && (
           <div className="mb-4 flex flex-col gap-3">
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 gap-2 rounded-lg bg-slate-50 p-3 text-xs">

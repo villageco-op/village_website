@@ -12,7 +12,7 @@ import type { OrderStatus } from './orderStatus';
 import type { ProduceOrderBuyer } from './produceOrderBuyer';
 import type { ResourceId } from './resourceId';
 
-export type ProduceOrderListResponseDataItem = {
+export interface ProduceOrderListItem {
   id: ResourceId;
   status: OrderStatus & (unknown | null);
   fulfillmentType: FulfillmentType;
@@ -21,4 +21,4 @@ export type ProduceOrderListResponseDataItem = {
   quantityOz: string;
   createdAt: IsoDateTime & (unknown | null);
   buyer: ProduceOrderBuyer;
-};
+}

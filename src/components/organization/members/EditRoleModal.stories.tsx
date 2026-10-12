@@ -5,13 +5,7 @@ import { useState } from 'react';
 import { EditRoleModal } from './EditRoleModal';
 
 import { OrgRole } from '@/lib/api/generated/models';
-
-const MOCK_MEMBER = {
-  id: 'usr_123',
-  name: 'Jane Doe',
-  email: 'jane.doe@example.com',
-  orgRole: OrgRole.member,
-};
+import { BASE_MOCK_MEMBER } from '@/lib/storybook/mocks/organization.mock';
 
 const meta: Meta<typeof EditRoleModal> = {
   title: 'Org/Members/EditRoleModal',
@@ -20,7 +14,7 @@ const meta: Meta<typeof EditRoleModal> = {
     layout: 'centered',
   },
   args: {
-    member: MOCK_MEMBER,
+    member: BASE_MOCK_MEMBER,
     targetRole: OrgRole.member,
     onTargetRoleChange: fn(),
     onClose: fn(),

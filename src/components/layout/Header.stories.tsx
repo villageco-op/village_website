@@ -8,6 +8,7 @@ import { http, HttpResponse } from 'msw';
 import { Header } from './Header';
 
 import { CartProvider } from '@/hooks/useCartUI';
+import { BASE_MOCK_ORGANIZATION } from '@/lib/storybook/mocks/organization.mock';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -55,24 +56,8 @@ const mockSession = (userPayload: object | null) => [
 const mockOrganization = (orgId: string = 'org-123') => [
   http.get(`*/api/organizations/${orgId}`, () => {
     return HttpResponse.json({
+      ...BASE_MOCK_ORGANIZATION,
       id: orgId,
-      type: 'pantry',
-      name: 'Test Pantry Org',
-      subdomain: 'test-pantry',
-      email: 'pantry@example.com',
-      website: null,
-      phone: null,
-      image: null,
-      address: null,
-      city: null,
-      state: null,
-      country: null,
-      zip: null,
-      lat: null,
-      lng: null,
-      maxReferrals: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     });
   }),
 ];

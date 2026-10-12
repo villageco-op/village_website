@@ -5,7 +5,13 @@ import { HttpResponse, delay, http } from 'msw';
 
 import EditProfilePage from './EditProfilePage';
 
-import { OrgType } from '@/lib/api/generated/models';
+import { BASE_MOCK_ORGANIZATION } from '@/lib/storybook/mocks/organization.mock';
+import {
+  MOCK_BUYER_USER,
+  MOCK_ORG_ADMIN_USER,
+  MOCK_ORG_MEMBER_USER,
+  MOCK_SELLER_USER,
+} from '@/lib/storybook/mocks/user.mock';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -13,64 +19,6 @@ const mockedQueryClient = new QueryClient({
     mutations: { retry: false },
   },
 });
-
-const MOCK_USER_DATA = {
-  id: 'usr_789',
-  name: 'Alex Rivera',
-  email: 'alex@village.com',
-  emailVerified: null,
-  image: null,
-  organizationId: null,
-  orgRole: null,
-  aboutMe: 'Growing micro greens and crisp radishes in raised garden beds.',
-  specialties: ['Radishes', 'Microgreens'],
-  goal: '250',
-  address: '742 Evergreen Terrace',
-  city: 'Springfield',
-  state: 'IL',
-  country: 'United States',
-  zip: '62701',
-  lat: null,
-  lng: null,
-  deliveryRangeMiles: '10',
-  stripeAccountId: 'acct_123',
-  stripeOnboardingComplete: false, // Default context is non-seller/buyer
-  createdAt: null,
-  updatedAt: null,
-};
-
-const MOCK_ORG_ADMIN_USER = {
-  ...MOCK_USER_DATA,
-  organizationId: 'org_123',
-  orgRole: 'admin',
-};
-
-const MOCK_ORG_MEMBER_USER = {
-  ...MOCK_USER_DATA,
-  organizationId: 'org_123',
-  orgRole: 'member',
-};
-
-const MOCK_ORGANIZATION = {
-  id: 'org_123',
-  type: OrgType.pantry,
-  name: 'Community Food Bank',
-  subdomain: 'community-food-bank',
-  email: 'contact@communityfoodbank.org',
-  website: 'https://communityfoodbank.org',
-  phone: '555-0199',
-  image: null,
-  address: '100 Main St',
-  city: 'Springfield',
-  state: 'IL',
-  country: 'United States',
-  zip: '62701',
-  lat: 39.7817,
-  lng: -89.6501,
-  maxReferrals: 4,
-  createdAt: '2026-01-01T00:00:00.000Z',
-  updatedAt: '2026-01-01T00:00:00.000Z',
-};
 
 // Standard CRUD handlers used across the rendering subcomponents
 const childComponentHandlers = [
@@ -95,10 +43,10 @@ const childComponentHandlers = [
   }),
   // Organization endpoints
   http.get('*/api/organizations/org_123', () => {
-    return HttpResponse.json(MOCK_ORGANIZATION, { status: 200 });
+    return HttpResponse.json(BASE_MOCK_ORGANIZATION, { status: 200 });
   }),
   http.put('*/api/organizations/org_123', () => {
-    return HttpResponse.json({ ...MOCK_ORGANIZATION }, { status: 200 });
+    return HttpResponse.json({ ...BASE_MOCK_ORGANIZATION }, { status: 200 });
   }),
   http.delete('*/api/organizations/org_123', () => {
     return HttpResponse.json({ success: true }, { status: 200 });
@@ -176,7 +124,7 @@ export const AuthenticatedBuyer: Story = {
         ...childComponentHandlers,
         http.get('*/api/auth/session', () => {
           return HttpResponse.json({
-            user: { ...MOCK_USER_DATA, stripeOnboardingComplete: false },
+            user: MOCK_BUYER_USER,
             expires: '9999-12-31T23:59:59.999Z',
           });
         }),
@@ -207,7 +155,7 @@ export const AuthenticatedSeller: Story = {
         ...childComponentHandlers,
         http.get('*/api/auth/session', () => {
           return HttpResponse.json({
-            user: { ...MOCK_USER_DATA, stripeOnboardingComplete: true },
+            user: MOCK_SELLER_USER,
             expires: '9999-12-31T23:59:59.999Z',
           });
         }),

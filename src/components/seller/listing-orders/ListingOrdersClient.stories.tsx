@@ -5,6 +5,11 @@ import { http, HttpResponse, delay } from 'msw';
 
 import ListingOrdersClient from './ListingOrdersClient';
 
+import {
+  createPaginatedResponse,
+  generateMockProduceOrderListItems,
+} from '@/lib/storybook/utils/mockGenerators';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -12,22 +17,9 @@ const mockedQueryClient = new QueryClient({
 });
 
 const MOCK_ID = 'prod_order_123';
-
 const PAGE_LIMIT = 12;
 
-const generateMockOrders = (count: number) => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `ord_${i + 1}`,
-    buyer: { name: `Buyer ${i + 1}`, image: '' },
-    quantityOz: 16,
-    totalAmount: '10.00',
-    fulfillmentType: i % 2 === 0 ? 'pickup' : 'delivery',
-    scheduledTime: new Date().toISOString(),
-    status: i % 3 === 0 ? 'completed' : 'pending',
-  }));
-};
-
-const PAGINATED_ORDERS = generateMockOrders(25);
+const PAGINATED_ORDERS_DATA = generateMockProduceOrderListItems(25);
 
 const meta: Meta<typeof ListingOrdersClient> = {
   title: 'Seller/ListingOrders/ListingOrdersPage',
@@ -69,29 +61,7 @@ export const Default: Story = {
           return HttpResponse.json({ title: 'Heirloom Tomatoes' });
         }),
         http.get(`*/api/produce/${MOCK_ID}/orders`, () => {
-          return HttpResponse.json({
-            data: [
-              {
-                id: 'ord_1',
-                buyer: { name: 'Alex River', image: '' },
-                quantityOz: 32,
-                totalAmount: '12.00',
-                fulfillmentType: 'pickup',
-                scheduledTime: new Date().toISOString(),
-                status: 'completed',
-              },
-              {
-                id: 'ord_2',
-                buyer: { name: 'Sam Smith', image: '' },
-                quantityOz: 16,
-                totalAmount: '6.50',
-                fulfillmentType: 'delivery',
-                scheduledTime: new Date().toISOString(),
-                status: 'pending',
-              },
-            ],
-            meta: { total: 2, totalPages: 1 },
-          });
+          return HttpResponse.json(createPaginatedResponse(PAGINATED_ORDERS_DATA, 1, PAGE_LIMIT));
         }),
       ],
     },
@@ -112,19 +82,9 @@ export const Paginated: Story = {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
 
-          const start = (page - 1) * PAGE_LIMIT;
-          const end = start + PAGE_LIMIT;
-          const items = PAGINATED_ORDERS.slice(start, end);
-
-          return HttpResponse.json({
-            data: items,
-            meta: {
-              total: PAGINATED_ORDERS.length,
-              page,
-              limit: PAGE_LIMIT,
-              totalPages: Math.ceil(PAGINATED_ORDERS.length / PAGE_LIMIT),
-            },
-          });
+          return HttpResponse.json(
+            createPaginatedResponse(PAGINATED_ORDERS_DATA, page, PAGE_LIMIT),
+          );
         }),
       ],
     },

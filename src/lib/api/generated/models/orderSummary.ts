@@ -7,16 +7,11 @@
  */
 import type { Order } from './order';
 import type { OrderListItem } from './orderListItem';
-import type { OrderSummaryBuyer } from './orderSummaryBuyer';
-import type { OrderSummaryCounterparty } from './orderSummaryCounterparty';
-import type { OrderSummarySeller } from './orderSummarySeller';
+import type { UserBasicInfo } from './userBasicInfo';
 
-export type OrderSummary = Order & {
-  /** @nullable */
-  buyer: OrderSummaryBuyer;
-  /** @nullable */
-  seller: OrderSummarySeller;
-  /** @nullable */
-  counterparty?: OrderSummaryCounterparty;
+export type OrderSummary = Order & ({
+  buyer: UserBasicInfo & (unknown | null);
+  seller: UserBasicInfo & (unknown | null);
+  counterparty?: UserBasicInfo & (unknown | null);
   items: OrderListItem[];
-};
+});

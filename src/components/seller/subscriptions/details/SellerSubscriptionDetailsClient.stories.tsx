@@ -6,6 +6,7 @@ import { http, HttpResponse, delay } from 'msw';
 import SellerSubscriptionDetailClient from './SellerSubscriptionDetailsClient';
 
 import { SubscriptionStatus } from '@/lib/api/generated/models';
+import { BASE_MOCK_SUBSCRIPTION } from '@/lib/storybook/mocks/subscription.mock';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -14,33 +15,6 @@ const mockedQueryClient = new QueryClient({
 });
 
 const MOCK_SUB_ID = 'sub-detail-1';
-
-const generateMockSubscription = (overrides = {}) => ({
-  id: MOCK_SUB_ID,
-  status: SubscriptionStatus.active,
-  createdAt: '2026-03-01T12:00:00Z',
-  quantityOz: '16',
-  fulfillmentType: 'delivery',
-  nextDeliveryDate: '2026-05-20T10:00:00Z',
-  cancelReason: null,
-  buyer: {
-    id: 'user-buyer-1',
-    name: 'Alex Johnson',
-    email: 'alex.j@example.com',
-  },
-  seller: {
-    id: 'user-seller-1',
-    name: 'Alex Johnson',
-    email: 'alex.j@example.com',
-  },
-  product: {
-    id: 'prod-001',
-    title: 'Heirloom Carrots',
-    produceType: 'Root Vegetables',
-    pricePerOz: '0.50',
-  },
-  ...overrides,
-});
 
 const meta: Meta<typeof SellerSubscriptionDetailClient> = {
   title: 'Seller/Subscriptions/Details/SellerSubscriptionDetailClient',
@@ -79,7 +53,7 @@ export const Active: Story = {
     msw: {
       handlers: [
         http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, () => {
-          return HttpResponse.json(generateMockSubscription());
+          return HttpResponse.json(BASE_MOCK_SUBSCRIPTION);
         }),
       ],
     },
@@ -100,12 +74,11 @@ export const Paused: Story = {
     msw: {
       handlers: [
         http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, () => {
-          return HttpResponse.json(
-            generateMockSubscription({
-              status: SubscriptionStatus.paused,
-              cancelReason: 'Crop needs time to regrow after heavy harvest.',
-            }),
-          );
+          return HttpResponse.json({
+            ...BASE_MOCK_SUBSCRIPTION,
+            status: SubscriptionStatus.paused,
+            cancelReason: 'Crop needs time to regrow after heavy harvest.',
+          });
         }),
       ],
     },
@@ -127,12 +100,11 @@ export const Canceled: Story = {
     msw: {
       handlers: [
         http.get(`*/api/subscriptions/${MOCK_SUB_ID}`, () => {
-          return HttpResponse.json(
-            generateMockSubscription({
-              status: SubscriptionStatus.canceled,
-              cancelReason: 'Moving farms, unable to fulfill long-term orders.',
-            }),
-          );
+          return HttpResponse.json({
+            ...BASE_MOCK_SUBSCRIPTION,
+            status: SubscriptionStatus.canceled,
+            cancelReason: 'Moving farms, unable to fulfill long-term orders.',
+          });
         }),
       ],
     },

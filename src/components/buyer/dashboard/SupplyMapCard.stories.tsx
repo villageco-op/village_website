@@ -4,6 +4,9 @@ import { http, HttpResponse, delay } from 'msw';
 
 import { SupplyMapCard } from './SupplyMapCard';
 
+import { MOCK_GROWERS_LIST } from '@/lib/storybook/mocks/grower.mock';
+import { generateMockGrowers } from '@/lib/storybook/utils/mockGenerators';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -34,42 +37,6 @@ const meta: Meta<typeof SupplyMapCard> = {
 export default meta;
 type Story = StoryObj<typeof SupplyMapCard>;
 
-const MOCK_GROWERS = [
-  {
-    sellerId: 'grower-1',
-    name: 'Sunshine Farms',
-    lat: 41.615,
-    lng: -87.35,
-    image: 'https://i.pravatar.cc/150?u=1',
-    rating: 4.8,
-    city: 'Gary',
-    distanceMiles: 2.4,
-    specialties: ['Microgreens', 'Heirloom Tomatoes', 'Herbs'],
-  },
-  {
-    sellerId: 'grower-2',
-    name: 'Lakeview Orchards',
-    lat: 41.585,
-    lng: -87.31,
-    image: null,
-    rating: 0,
-    city: 'Miller Beach',
-    distanceMiles: 5.1,
-    specialties: ['Apples', 'Peaches'],
-  },
-  {
-    sellerId: 'grower-3',
-    name: 'Green Thumb Gardens',
-    lat: 41.605,
-    lng: -87.38,
-    image: 'https://i.pravatar.cc/150?u=3',
-    rating: 4.5,
-    city: 'Hammond',
-    distanceMiles: 3.8,
-    specialties: ['Organic Kale', 'Root Vegetables'],
-  },
-];
-
 /**
  * Standard state showing several active growers on the map.
  */
@@ -81,7 +48,7 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get('*/api/growers/growers-map*', () => {
-          return HttpResponse.json(MOCK_GROWERS);
+          return HttpResponse.json(MOCK_GROWERS_LIST);
         }),
       ],
     },
@@ -136,21 +103,7 @@ export const LargeNetwork: Story = {
     msw: {
       handlers: [
         http.get('*/api/growers/growers-map*', () => {
-          const specialtyPool = ['Berries', 'Mushrooms', 'Honey', 'Flowers', 'Squash', 'Eggs'];
-          const cities = ['Gary', 'Hammond', 'Hobart', 'Merrillville', 'East Chicago'];
-
-          // Generate pseudo-random growers around Gary, IN
-          const denseGrowers = Array.from({ length: 12 }).map((_, i) => ({
-            sellerId: `grower-${i}`,
-            name: `Grower ${i}`,
-            lat: 41.602 + (Math.random() - 0.5) * 0.1,
-            lng: -87.3371 + (Math.random() - 0.5) * 0.1,
-            image: null,
-            rating: Math.random() * 2 + 3, // Random rating between 3.0 and 5.0
-            city: cities[Math.floor(Math.random() * cities.length)],
-            distanceMiles: parseFloat((Math.random() * 10 + 1).toFixed(1)),
-            specialties: specialtyPool.sort(() => 0.5 - Math.random()).slice(0, 2),
-          }));
+          const denseGrowers = generateMockGrowers(12);
           return HttpResponse.json(denseGrowers);
         }),
       ],
