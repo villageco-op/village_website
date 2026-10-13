@@ -8,7 +8,10 @@ import { http, HttpResponse, delay } from 'msw';
 import SellerSubscriptionsClient from './SellerSubscriptionsClient';
 
 import { Toaster } from '@/components/ui/sonner';
-import { SubscriptionStatus } from '@/lib/api/generated/models';
+import {
+  createPaginatedResponse,
+  generateMockSubscriptions,
+} from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -16,52 +19,7 @@ const mockedQueryClient = new QueryClient({
   },
 });
 
-const MOCK_SELLER_SUBSCRIPTIONS = {
-  data: [
-    {
-      id: 'sub-seller-1',
-      quantityOz: '16',
-      status: SubscriptionStatus.active,
-      fulfillmentType: 'delivery',
-      nextDeliveryDate: '2026-05-20T10:00:00Z',
-      product: { id: 'prod_honeycrisp', title: 'Organic Honeycrisp Apples' },
-      buyer: { id: 'user_john', name: 'John Doe' },
-    },
-    {
-      id: 'sub-seller-2',
-      quantityOz: '32',
-      status: SubscriptionStatus.active,
-      fulfillmentType: 'pickup',
-      nextDeliveryDate: '2026-05-21T09:00:00Z',
-      product: { id: 'prod_goat_milk', title: 'Raw Goat Milk' },
-      buyer: { id: 'user_jane', name: 'Jane Smith' },
-    },
-    {
-      id: 'sub-seller-3',
-      quantityOz: '4',
-      status: SubscriptionStatus.paused,
-      fulfillmentType: 'delivery',
-      nextDeliveryDate: null,
-      product: { id: 'prod_saffron', title: 'Saffron Threads' },
-      buyer: { id: 'user_robert', name: 'Robert Miller' },
-    },
-  ],
-  meta: { total: 3, page: 1, limit: 12, totalPages: 1, activeCount: 2 },
-};
-
-const generateMockSubscriptions = (count: number) => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `sub-seller-${i + 1}`,
-    quantityOz: '16',
-    status: SubscriptionStatus.active,
-    fulfillmentType: 'delivery',
-    nextDeliveryDate: '2026-05-20T10:00:00Z',
-    product: { id: `prod_${i + 1}`, title: `Subscription Item ${i + 1}` },
-    buyer: { id: `buyer_${i + 1}`, name: `Customer ${i + 1}` },
-  }));
-};
-
-const PAGINATED_DATA = generateMockSubscriptions(25);
+const MOCK_SUBSCRIPTION_DATA = generateMockSubscriptions(25);
 
 const meta: Meta<typeof SellerSubscriptionsClient> = {
   title: 'Seller/Subscriptions/SellerSubscriptionsPage',
@@ -99,7 +57,7 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get('*/api/subscriptions', () => {
-          return HttpResponse.json(MOCK_SELLER_SUBSCRIPTIONS);
+          return HttpResponse.json(createPaginatedResponse(MOCK_SUBSCRIPTION_DATA));
         }),
       ],
     },
@@ -109,23 +67,27 @@ export const Default: Story = {
 
     // Check header
     await expect(
-      await canvas.findByText(/You are fulfilling 2 active subscriptions/i),
+      await canvas.findByText(/You are fulfilling 8 active subscriptions/i),
     ).toBeInTheDocument();
 
     // Check specific card content
-    await expect(canvas.getByText('John Doe')).toBeInTheDocument();
-    await expect(canvas.getByText(/Organic Honeycrisp Apples/i)).toBeInTheDocument();
+    await expect(
+      canvas.getByText(MOCK_SUBSCRIPTION_DATA[0].product.title + ' ↗'),
+    ).toBeInTheDocument();
+    await expect(canvas.getByText(MOCK_SUBSCRIPTION_DATA[0].buyer.name!)).toBeInTheDocument();
 
     // Test Hover Actions
-    const firstCard = canvas.getByText(/Organic Honeycrisp Apples/i).closest('.group');
+    const firstCard = canvas
+      .getByText(MOCK_SUBSCRIPTION_DATA[0].product.title + ' ↗')
+      .closest('.group');
     if (firstCard) {
       await userEvent.hover(firstCard);
 
       // Verify Product Actions
-      await expect(canvas.getAllByTitle(/Filter by Product/i)).toHaveLength(3);
+      await expect(canvas.getAllByTitle(/Filter by Product/i)).toHaveLength(12);
 
       // Verify Buyer Actions
-      await expect(canvas.getAllByTitle(/Filter by Buyer/i)).toHaveLength(3);
+      await expect(canvas.getAllByTitle(/Filter by Buyer/i)).toHaveLength(12);
     }
   },
 };
@@ -139,20 +101,7 @@ export const Paginated: Story = {
           const page = Number(url.searchParams.get('page') || '1');
           const limit = 12;
 
-          const start = (page - 1) * limit;
-          const end = start + limit;
-          const items = PAGINATED_DATA.slice(start, end);
-
-          return HttpResponse.json({
-            data: items,
-            meta: {
-              total: PAGINATED_DATA.length,
-              page,
-              limit,
-              totalPages: Math.ceil(PAGINATED_DATA.length / limit),
-              activeCount: 12,
-            },
-          });
+          return HttpResponse.json(createPaginatedResponse(MOCK_SUBSCRIPTION_DATA, page, limit));
         }),
       ],
     },
@@ -160,14 +109,14 @@ export const Paginated: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(await canvas.findByText('Customer 1')).toBeInTheDocument();
-    await expect(canvas.queryByText('Customer 13')).not.toBeInTheDocument();
+    await expect(await canvas.findByText('Neighbor 1')).toBeInTheDocument();
+    await expect(canvas.queryByText('Neighbor 13')).not.toBeInTheDocument();
 
     const nextButton = await canvas.findByRole('button', { name: /next|2/i });
     await userEvent.click(nextButton);
 
-    await expect(await canvas.findByText('Customer 13')).toBeInTheDocument();
-    await expect(canvas.queryByText('Customer 1')).not.toBeInTheDocument();
+    await expect(await canvas.findByText('Neighbor 13')).toBeInTheDocument();
+    await expect(canvas.queryByText('Neighbor 1')).not.toBeInTheDocument();
   },
 };
 

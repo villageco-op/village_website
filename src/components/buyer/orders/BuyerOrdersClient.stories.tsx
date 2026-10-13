@@ -5,96 +5,25 @@ import { http, HttpResponse, delay } from 'msw';
 
 import BuyerOrdersClient from './BuyerOrdersClient';
 
+import { OrderStatusProperty } from '@/lib/api/generated/models';
+import { createPaginatedResponse, generateMockOrders } from '@/lib/storybook/utils/mockGenerators';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
   },
 });
 
-const MOCK_PENDING_ORDERS = {
-  data: [
-    {
-      id: 'ord_pending_1',
-      totalAmount: '24.99',
-      fulfillmentType: 'pickup',
-      scheduledTime: new Date().toISOString(),
-      status: 'pending',
-      sellerId: 'seller-1',
-      buyerId: 'buyer-2',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      paymentMethod: 'card',
-      cancelReason: null,
-      stripeReceiptUrl: 'https://stripe.com/receipt',
-      stripeInvoiceId: 'invoice_id',
-    },
-    {
-      id: 'ord_pending_2',
-      totalAmount: '15.00',
-      fulfillmentType: 'delivery',
-      scheduledTime: new Date().toISOString(),
-      status: 'pending',
-      sellerId: 'seller-1',
-      buyerId: 'buyer-2',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      paymentMethod: 'card',
-      cancelReason: null,
-      stripeReceiptUrl: 'https://stripe.com/receipt',
-      stripeInvoiceId: 'invoice_id',
-    },
-  ],
-  meta: { total: 2, page: 1, limit: 12, totalPages: 1 },
-};
+const MOCK_PENDING_ORDERS = createPaginatedResponse(
+  generateMockOrders(2, 'PEND', OrderStatusProperty.pending),
+);
 
-const MOCK_HISTORY_ORDERS = {
-  data: [
-    {
-      id: 'ord_hist_1',
-      totalAmount: '45.00',
-      fulfillmentType: 'pickup',
-      scheduledTime: new Date(Date.now() - 86400000).toISOString(),
-      status: 'completed',
-      sellerId: 'seller-1',
-      buyerId: 'buyer-2',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      paymentMethod: 'card',
-      cancelReason: null,
-      stripeReceiptUrl: 'https://stripe.com/receipt',
-      stripeInvoiceId: 'invoice_id',
-    },
-  ],
-  meta: { total: 1, page: 1, limit: 12, totalPages: 1 },
-};
+const MOCK_HISTORY_ORDERS = createPaginatedResponse(
+  generateMockOrders(1, 'HIST', OrderStatusProperty.completed),
+);
 
-const generateMockOrders = (count: number, prefix: string, status: string) => {
-  const isPending = prefix.toLowerCase().includes('pend');
-  return Array.from({ length: count }, (_, i) => ({
-    id: `${i + 1}-${prefix}-ord`,
-    totalAmount: (10 + i).toFixed(2),
-    fulfillmentType: i % 2 === 0 ? 'pickup' : 'delivery',
-    scheduledTime: new Date().toISOString(),
-    status,
-    sellerId: `seller-${i}`,
-    buyerId: 'buyer-1',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    paymentMethod: 'card',
-    cancelReason: null,
-    stripeReceiptUrl: 'https://stripe.com/receipt',
-    items: [
-      {
-        product: {
-          title: `${isPending ? 'Pending Produce Batch' : 'History Crate Item'} #${i + 1}-`,
-        },
-      },
-    ],
-  }));
-};
-
-const LARGE_PENDING_DATA = generateMockOrders(15, 'PEND', 'pending');
-const LARGE_HISTORY_DATA = generateMockOrders(15, 'HIST', 'completed');
+const LARGE_PENDING_DATA = generateMockOrders(15, 'PEND', OrderStatusProperty.pending);
+const LARGE_HISTORY_DATA = generateMockOrders(15, 'HIST', OrderStatusProperty.completed);
 
 const meta: Meta<typeof BuyerOrdersClient> = {
   title: 'Buyer/Orders/OrdersPage',
@@ -151,8 +80,8 @@ export const Default: Story = {
     ).toBeInTheDocument();
 
     // Verify Pending and History Cards render content
-    await expect(canvas.getByText(/\$24.99/i)).toBeInTheDocument();
-    await expect(canvas.getByText(/\$45.00/i)).toBeInTheDocument();
+    await expect(await canvas.findAllByText(/\$10\.00/i)).toHaveLength(2);
+    await expect(await canvas.findAllByText(/\$11\.00/i)).toHaveLength(1);
   },
 };
 
@@ -199,7 +128,7 @@ export const EmptyState: Story = {
     msw: {
       handlers: [
         http.get('*/api/orders', () => {
-          return HttpResponse.json({ data: [], meta: { total: 0 } });
+          return HttpResponse.json(createPaginatedResponse([]));
         }),
       ],
     },
@@ -224,22 +153,10 @@ export const Paginated: Story = {
           const url = new URL(request.url);
           const status = url.searchParams.get('status');
           const page = Number(url.searchParams.get('page') || '1');
-          const limit = 12;
 
           const allItems = status === 'pending' ? LARGE_PENDING_DATA : LARGE_HISTORY_DATA;
-          const start = (page - 1) * limit;
-          const end = start + limit;
-          const items = allItems.slice(start, end);
 
-          return HttpResponse.json({
-            data: items,
-            meta: {
-              total: allItems.length,
-              page,
-              limit,
-              totalPages: Math.ceil(allItems.length / limit),
-            },
-          });
+          return HttpResponse.json(createPaginatedResponse(allItems, page, 12));
         }),
       ],
     },

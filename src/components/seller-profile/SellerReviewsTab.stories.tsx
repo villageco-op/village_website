@@ -6,6 +6,8 @@ import { http, HttpResponse, delay } from 'msw';
 import SellerReviewsTab from './SellerReviewsTab';
 
 import type { PublicUserProfile } from '@/lib/api/generated/models';
+import { MOCK_SELLER_PUBLIC_PROFILE } from '@/lib/storybook/mocks/user.mock';
+import { generateMockReviews } from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -16,17 +18,7 @@ const mockedQueryClient = new QueryClient({
 const SELLER_ID = 'seller_123';
 
 const MOCK_PROFILE: PublicUserProfile = {
-  id: SELLER_ID,
-  name: 'Green Valley Farm',
-  organization: null,
-  organizationId: '',
-  image: '',
-  aboutMe: 'Organic produce from the heart of the valley.',
-  specialties: ['Leafy Greens', 'Root Vegetables'],
-  city: 'Austin',
-  state: 'TX',
-  country: 'USA',
-  joinedAt: '2024-01-01T00:00:00Z',
+  ...MOCK_SELLER_PUBLIC_PROFILE,
   starRating: 4.8,
   totalReviews: 25,
   activeBuyerCount: 10,
@@ -37,22 +29,6 @@ const MOCK_PROFILE: PublicUserProfile = {
     '2': 0,
     '1': 0,
   },
-};
-
-const generateMockReviews = (count: number) => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `rev_${i + 1}`,
-    rating: i % 5 === 0 ? 4 : 5,
-    comment:
-      i % 3 === 0
-        ? `The produce from this farm is always fresh and delicious. Highly recommend the spinach! (Review ${i + 1})`
-        : `Great quality and fast delivery. (Review ${i + 1})`,
-    createdAt: new Date(Date.now() - i * 86400000).toISOString(),
-    buyer: {
-      id: `buyer_${i}`,
-      name: i % 2 === 0 ? 'Jane Doe' : 'John Smith',
-    },
-  }));
 };
 
 const ALL_REVIEWS = generateMockReviews(25);
@@ -107,7 +83,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     await expect(await canvas.findByText('4.8')).toBeInTheDocument();
     await expect(canvas.getByText('Based on 25 reviews')).toBeInTheDocument();
-    await expect((await canvas.findAllByText('Jane Doe'))[0]).toBeInTheDocument();
+    await expect((await canvas.findAllByText('Alice Farmer'))[0]).toBeInTheDocument();
   },
 };
 

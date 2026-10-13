@@ -5,7 +5,11 @@ import { http, HttpResponse, delay } from 'msw';
 
 import PublicSellerProfile from './PublicSellerProfileClient';
 
-import type { PublicUserProfile } from '@/lib/api/generated/models';
+import { MOCK_SELLER_PUBLIC_PROFILE } from '@/lib/storybook/mocks/user.mock';
+import {
+  createPaginatedResponse,
+  generateMockProduceListItems,
+} from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -13,63 +17,15 @@ const mockedQueryClient = new QueryClient({
   },
 });
 
-const SELLER_ID = 'seller_village_123';
-
-const MOCK_PROFILE: PublicUserProfile = {
-  id: SELLER_ID,
-  name: 'Oak Creek Organics',
-  organization: null,
-  organizationId: '',
-  image: '',
-  aboutMe:
-    'We are a small family-run farm specializing in heirloom vegetables and sustainable growing practices. Our mission is to bring the freshest, most nutrient-dense produce directly to our neighbors.',
-  specialties: ['Heirloom Tomatoes', 'Organic Kale', 'Microgreens'],
-  city: 'Austin',
-  state: 'TX',
-  country: 'USA',
-  joinedAt: '2023-05-15T00:00:00Z',
-  starRating: 4.9,
-  totalReviews: 42,
-  activeBuyerCount: 15,
-  reviewBreakdown: { '5': 38, '4': 3, '3': 1, '2': 0, '1': 0 },
-};
+const SELLER_ID = MOCK_SELLER_PUBLIC_PROFILE.id;
+const MOCK_PRODUCE_LIST_ITEMS = generateMockProduceListItems(5);
 
 const handlers = [
   http.get(`*/api/users/${SELLER_ID}`, () => {
-    return HttpResponse.json(MOCK_PROFILE);
+    return HttpResponse.json(MOCK_SELLER_PUBLIC_PROFILE);
   }),
   http.get('*/api/produce/list', () => {
-    return HttpResponse.json({
-      data: [
-        {
-          id: 'p1',
-          thumbnail: null,
-          name: 'Baby Spinach',
-          sellerName: 'Oak Creek Organics',
-          sellerId: SELLER_ID,
-          price: '$3.50/lb',
-          amount: '20 lbs',
-          availableBy: new Date().toISOString(),
-          distance: 5,
-          isSubscribable: true,
-          description: 'Tender baby spinach leaves.',
-        },
-        {
-          id: 'p2',
-          thumbnail: null,
-          name: 'Cherry Tomatoes',
-          sellerName: 'Oak Creek Organics',
-          sellerId: SELLER_ID,
-          price: '$4.10/lb',
-          amount: '30 lbs',
-          availableBy: new Date().toISOString(),
-          distance: 5,
-          isSubscribable: false,
-          description: 'Sweet and juicy cherry tomatoes.',
-        },
-      ],
-      meta: { total: 2, page: 1, limit: 12, totalPages: 1 },
-    });
+    return HttpResponse.json(createPaginatedResponse(MOCK_PRODUCE_LIST_ITEMS));
   }),
   http.get(`*/api/users/${SELLER_ID}/reviews`, () => {
     return HttpResponse.json({
@@ -113,18 +69,20 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     // Check if Hero rendered with name
-    await expect(await canvas.findByText('Oak Creek Organics')).toBeInTheDocument();
+    await expect(await canvas.findByText('Green Thumb Microgreens')).toBeInTheDocument();
 
     // Verify Stats Row
     await expect(canvas.getByText('15 buyers')).toBeInTheDocument();
 
     // Verify Default Tab (About)
-    await expect(canvas.getByText(/About Oak/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/About Green/i)).toBeInTheDocument();
 
     // Check if Quick Order fetch populated cards correctly
     await waitFor(async () => {
-      await expect(canvas.getByText('Baby Spinach')).toBeInTheDocument();
-      await expect(canvas.getByText('Cherry Tomatoes')).toBeInTheDocument();
+      await expect(canvas.getByText(MOCK_PRODUCE_LIST_ITEMS[0].name)).toBeInTheDocument();
+      await expect(canvas.getByText(MOCK_PRODUCE_LIST_ITEMS[1].name)).toBeInTheDocument();
+      await expect(canvas.getByText(MOCK_PRODUCE_LIST_ITEMS[2].name)).toBeInTheDocument();
+      await expect(canvas.getByText(MOCK_PRODUCE_LIST_ITEMS[3].name)).toBeInTheDocument();
     });
 
     // Test Tab Switching to Listings

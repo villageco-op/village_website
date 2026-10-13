@@ -8,6 +8,8 @@ import { InviteMembersForm } from './InviteMembersForm';
 import { Toaster } from '@/components/ui/sonner';
 import { OrgRole } from '@/lib/api/generated/models';
 import type { Invite } from '@/lib/api/generated/models';
+import { BASE_MOCK_INVITE } from '@/lib/storybook/mocks/invite.mock';
+import { generateMockInvites } from '@/lib/storybook/utils/clientMockGenerators';
 
 const createQueryClient = () =>
   new QueryClient({
@@ -67,7 +69,7 @@ const meta: Meta<typeof InviteMembersForm> = {
   },
   tags: ['autodocs'],
   decorators: [
-    (Story, context) => {
+    (Story) => {
       const queryClient = createQueryClient();
       return (
         <QueryClientProvider client={queryClient}>
@@ -102,60 +104,18 @@ export const Empty: Story = {
  */
 export const DefaultWithInvites: Story = {
   beforeEach: () => {
-    mockInvitedMembers = [
-      {
-        id: 'invite_1',
-        email: 'existing.member@example.com',
-        orgId: 'org_123',
-        code: 'xyz789',
-        role: OrgRole.member,
-        status: 'pending',
-        expiresAt: new Date(Date.now() + 86400000).toISOString(),
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'invite_2',
-        email: 'administrator@example.com',
-        orgId: 'org_123',
-        code: 'xyz123',
-        role: OrgRole.admin,
-        status: 'pending',
-        expiresAt: new Date(Date.now() + 86400000).toISOString(),
-        createdAt: new Date().toISOString(),
-      },
-    ];
+    mockInvitedMembers = generateMockInvites(2);
   },
   args: {
-    invitedMembers: [
-      {
-        id: 'invite_1',
-        email: 'existing.member@example.com',
-        orgId: 'org_123',
-        code: 'xyz789',
-        role: OrgRole.member,
-        status: 'pending',
-        expiresAt: new Date(Date.now() + 86400000).toISOString(),
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'invite_2',
-        email: 'administrator@example.com',
-        orgId: 'org_123',
-        code: 'xyz123',
-        role: OrgRole.admin,
-        status: 'pending',
-        expiresAt: new Date(Date.now() + 86400000).toISOString(),
-        createdAt: new Date().toISOString(),
-      },
-    ],
+    invitedMembers: generateMockInvites(2),
     isLoading: false,
     isError: false,
     onSuccessMutation: () => {},
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(await canvas.findByText('existing.member@example.com')).toBeInTheDocument();
-    await expect(await canvas.findByText('administrator@example.com')).toBeInTheDocument();
+    await expect(await canvas.findByText('pending.teammate1@example.com')).toBeInTheDocument();
+    await expect(await canvas.findByText('pending.teammate2@example.com')).toBeInTheDocument();
   },
 };
 
@@ -211,28 +171,16 @@ export const DuplicateInvitationErrorFlow: Story = {
   beforeEach: () => {
     mockInvitedMembers = [
       {
-        id: 'invite_1',
+        ...BASE_MOCK_INVITE,
         email: 'already.invited@example.com',
-        orgId: 'org_123',
-        code: 'xyz789',
-        role: OrgRole.member,
-        status: 'pending',
-        expiresAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
       },
     ];
   },
   args: {
     invitedMembers: [
       {
-        id: 'invite_1',
+        ...BASE_MOCK_INVITE,
         email: 'already.invited@example.com',
-        orgId: 'org_123',
-        code: 'xyz789',
-        role: OrgRole.member,
-        status: 'pending',
-        expiresAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
       },
     ],
     isLoading: false,

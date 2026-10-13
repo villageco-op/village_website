@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { QuickOrderSection } from './QuickOrderSection';
 
-import type { ProduceListItem } from '@/lib/api/generated/models';
+import { BASE_MOCK_PRODUCE_LIST_ITEM } from '@/lib/storybook/mocks/produce.mock';
+import { generateMockProduceListItems } from '@/lib/storybook/utils/mockGenerators';
 
 const meta: Meta<typeof QuickOrderSection> = {
   title: 'Seller/Profile/QuickOrderSection',
@@ -23,51 +24,11 @@ const meta: Meta<typeof QuickOrderSection> = {
 export default meta;
 type Story = StoryObj<typeof QuickOrderSection>;
 
-const mockItems: ProduceListItem[] = [
-  {
-    id: 'prod-1',
-    thumbnail: '',
-    name: 'Baby Spinach',
-    sellerName: 'Farmer John',
-    sellerId: 'user-123',
-    price: '$2.90/lb',
-    amount: '20 lbs',
-    availableBy: '2024-06-12T00:00:00Z',
-    distance: 2.5,
-    isSubscribable: true,
-    description: 'Fresh organic baby spinach.',
-  },
-  {
-    id: 'prod-2',
-    thumbnail: '',
-    name: 'Cherry Tomatoes',
-    sellerName: 'Farmer John',
-    sellerId: 'user-123',
-    price: '$4.10/lb',
-    amount: '30 lbs',
-    availableBy: '2024-06-15T00:00:00Z',
-    distance: 2.5,
-    isSubscribable: false,
-    description: 'Sweet and juicy cherry tomatoes.',
-  },
-  {
-    id: 'prod-3',
-    name: 'Honey Crisp Apples',
-    sellerName: 'Farmer John',
-    sellerId: 'user-123',
-    price: '$12.00/bag',
-    amount: '5 bags',
-    availableBy: '2024-06-18T00:00:00Z',
-    distance: 2.5,
-    isSubscribable: false,
-    description: 'Crunchy local apples.',
-    thumbnail: '',
-  },
-];
+const MOCK_PRODUCE_LIST_ITEMS = generateMockProduceListItems(5);
 
 export const Default: Story = {
   args: {
-    items: mockItems,
+    items: MOCK_PRODUCE_LIST_ITEMS,
     isLoading: false,
   },
 };
@@ -88,7 +49,7 @@ export const Empty: Story = {
 
 export const SingleItem: Story = {
   args: {
-    items: [mockItems[0]],
+    items: [BASE_MOCK_PRODUCE_LIST_ITEM],
     isLoading: false,
   },
 };

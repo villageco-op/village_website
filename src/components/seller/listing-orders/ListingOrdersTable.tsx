@@ -15,10 +15,10 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/state-displays';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import type { ProduceOrderListResponseDataItem } from '@/lib/api/generated/models';
+import type { ProduceOrderListItem } from '@/lib/api/generated/models';
 
 interface ListingOrdersTableProps {
-  orders: ProduceOrderListResponseDataItem[];
+  orders: ProduceOrderListItem[];
   totalOrders: number;
 }
 

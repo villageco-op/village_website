@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { SubscriptionLocationCard } from './SubscriptionLocationCard';
 
 import { Toaster } from '@/components/ui/sonner';
-import { SubscriptionStatus } from '@/lib/api/generated/models';
+import { BASE_MOCK_SUBSCRIPTION } from '@/lib/storybook/mocks/subscription.mock';
 
 const meta: Meta<typeof SubscriptionLocationCard> = {
   title: 'Subscriptions/SubscriptionLocationCard',
@@ -25,34 +25,12 @@ const meta: Meta<typeof SubscriptionLocationCard> = {
 export default meta;
 type Story = StoryObj<typeof SubscriptionLocationCard>;
 
-const mockLocation = {
-  lat: 30.2672,
-  lng: -97.7431,
-  address: '1100 Congress Ave, Austin, TX 78701',
-  city: 'Austin',
-  state: 'TX',
-  country: 'USA',
-  zip: '78701',
-};
-
 /**
  * Pickup state: Displays the seller's location information.
  */
 export const Pickup: Story = {
   args: {
-    subscription: {
-      id: 'sub-pickup-1',
-      fulfillmentType: 'pickup',
-      status: SubscriptionStatus.active,
-      quantityOz: '10',
-      seller: {
-        id: 'seller-1',
-        name: 'Hill Country Greens',
-        location: mockLocation,
-      },
-      buyer: null,
-      product: { title: 'Fresh Kale' },
-    } as any,
+    subscription: BASE_MOCK_SUBSCRIPTION,
   },
 };
 
@@ -62,21 +40,9 @@ export const Pickup: Story = {
 export const Delivery: Story = {
   args: {
     subscription: {
-      id: 'sub-delivery-1',
+      ...BASE_MOCK_SUBSCRIPTION,
       fulfillmentType: 'delivery',
-      status: SubscriptionStatus.active,
-      quantityOz: '16',
-      buyer: {
-        id: 'buyer-1',
-        name: 'Jane Smith',
-        location: {
-          ...mockLocation,
-          address: '456 Residential Lane, Austin, TX 78704',
-        },
-      },
-      seller: null,
-      product: { title: 'Organic Spinach' },
-    } as any,
+    },
   },
 };
 
@@ -87,12 +53,12 @@ export const Delivery: Story = {
 export const MissingLocation: Story = {
   args: {
     subscription: {
-      id: 'sub-missing-1',
+      ...BASE_MOCK_SUBSCRIPTION,
       fulfillmentType: 'pickup',
       seller: {
-        id: 'seller-2',
-        location: null,
+        ...BASE_MOCK_SUBSCRIPTION.seller,
+        location: null as any,
       },
-    } as any,
+    },
   },
 };

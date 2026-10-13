@@ -5,95 +5,26 @@ import { http, HttpResponse, delay } from 'msw';
 
 import SellerOrdersClient from './SellerOrdersClient';
 
+import { OrderStatusProperty } from '@/lib/api/generated/models';
+import { createPaginatedResponse } from '@/lib/storybook/utils/mockGenerators';
+import { generateMockOrders } from '@/lib/storybook/utils/orderMockGenerators';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
   },
 });
 
-const MOCK_PENDING_ORDERS = {
-  data: [
-    {
-      id: 'ord_pending_1',
-      totalAmount: '24.99',
-      fulfillmentType: 'pickup',
-      scheduledTime: new Date().toISOString(),
-      status: 'pending',
-      sellerId: 'seller-1',
-      buyerId: 'buyer-2',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      paymentMethod: 'card',
-      cancelReason: null,
-      stripeReceiptUrl: 'https://stripe.com/receipt',
-      stripeInvoiceId: 'invoice_id',
-    },
-    {
-      id: 'ord_pending_2',
-      totalAmount: '15.00',
-      fulfillmentType: 'delivery',
-      scheduledTime: new Date().toISOString(),
-      status: 'pending',
-      sellerId: 'seller-1',
-      buyerId: 'buyer-2',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      paymentMethod: 'card',
-      cancelReason: null,
-      stripeReceiptUrl: 'https://stripe.com/receipt',
-      stripeInvoiceId: 'invoice_id',
-    },
-  ],
-  meta: { total: 2, page: 1, limit: 2, totalPages: 1 },
-};
+const MOCK_PENDING_ORDERS = createPaginatedResponse(
+  generateMockOrders(2, 'PEND', OrderStatusProperty.pending),
+);
 
-const MOCK_HISTORY_ORDERS = {
-  data: [
-    {
-      id: 'ord_hist_1',
-      totalAmount: '45.00',
-      fulfillmentType: 'pickup',
-      scheduledTime: new Date(Date.now() - 86400000).toISOString(),
-      status: 'completed',
-      sellerId: 'seller-1',
-      buyerId: 'buyer-2',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      paymentMethod: 'card',
-      cancelReason: null,
-      stripeReceiptUrl: 'https://stripe.com/receipt',
-      stripeInvoiceId: 'invoice_id',
-    },
-  ],
-  meta: { total: 1, page: 1, limit: 1, totalPages: 1 },
-};
+const MOCK_HISTORY_ORDERS = createPaginatedResponse(
+  generateMockOrders(1, 'HIST', OrderStatusProperty.completed),
+);
 
-const generateMockOrders = (count: number, prefix: string, status: string) => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `${i + 1}-${prefix}-ord`,
-    totalAmount: (10 + i).toFixed(2),
-    fulfillmentType: i % 2 === 0 ? 'pickup' : 'delivery',
-    scheduledTime: new Date().toISOString(),
-    status: status,
-    sellerId: 'seller-1',
-    buyerId: `buyer-${i}`,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    paymentMethod: 'card',
-    cancelReason: null,
-    stripeReceiptUrl: 'https://stripe.com/receipt',
-    items: [
-      {
-        product: {
-          title: `${prefix === 'pending' ? 'Pending Produce Batch' : 'History Crate Item'} #${i + 1}-`,
-        },
-      },
-    ],
-  }));
-};
-
-const LARGE_PENDING_DATA = generateMockOrders(15, 'pending', 'pending');
-const LARGE_HISTORY_DATA = generateMockOrders(15, 'history', 'completed');
+const LARGE_PENDING_DATA = generateMockOrders(15, 'PEND', OrderStatusProperty.pending);
+const LARGE_HISTORY_DATA = generateMockOrders(15, 'HIST', OrderStatusProperty.completed);
 
 const meta: Meta<typeof SellerOrdersClient> = {
   title: 'Seller/Orders/OrdersPage',
@@ -150,7 +81,8 @@ export const Default: Story = {
 
     // Verify Cards
     await expect(canvas.getByText(/Order History/i)).toBeInTheDocument();
-    await expect(canvas.getByText(/\$24.99/i)).toBeInTheDocument();
+    await expect(canvas.getAllByText(/\$10.00/i)).toHaveLength(2);
+    await expect(canvas.getAllByText(/\$11.00/i)).toHaveLength(1);
   },
 };
 
@@ -225,19 +157,8 @@ export const Paginated: Story = {
           const limit = 12;
 
           const allItems = status === 'pending' ? LARGE_PENDING_DATA : LARGE_HISTORY_DATA;
-          const start = (page - 1) * limit;
-          const end = start + limit;
-          const items = allItems.slice(start, end);
 
-          return HttpResponse.json({
-            data: items,
-            meta: {
-              total: allItems.length,
-              page,
-              limit,
-              totalPages: Math.ceil(allItems.length / limit),
-            },
-          });
+          return HttpResponse.json(createPaginatedResponse(allItems, page, limit));
         }),
       ],
     },
@@ -247,7 +168,7 @@ export const Paginated: Story = {
 
     // Initial Page 1 assertions
     await expect(
-      await canvas.findByText(/Pending Produce Batch #1- from seller/i),
+      await canvas.findByText(/Pending Produce Batch #1- from Alpha Farm co./i),
     ).toBeInTheDocument();
     await expect(await canvas.findByText(/History Crate Item #1-/)).toBeInTheDocument();
 

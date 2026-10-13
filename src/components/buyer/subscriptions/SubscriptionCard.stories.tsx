@@ -3,11 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { SubscriptionCard } from './SubscriptionCard';
 
 import { Toaster } from '@/components/ui/sonner';
-import type {
-  ProduceType,
-  SubscriptionDetailResponseProductStatus,
-  SubscriptionStatus,
-} from '@/lib/api/generated/models';
+import { BASE_MOCK_SUBSCRIPTION } from '@/lib/storybook/mocks/subscription.mock';
 
 const meta: Meta<typeof SubscriptionCard> = {
   title: 'Buyer/Subscriptions/SubscriptionCard',
@@ -29,48 +25,9 @@ const meta: Meta<typeof SubscriptionCard> = {
 export default meta;
 type Story = StoryObj<typeof SubscriptionCard>;
 
-const mockSubscription = {
-  id: 'sub-123',
-  buyerId: 'user-buyer',
-  productId: 'prod-456',
-  sellerId: 'user-seller',
-  quantityOz: '16',
-  status: 'active' as SubscriptionStatus,
-  fulfillmentType: 'delivery',
-  nextDeliveryDate: '2026-05-15T10:00:00Z',
-  cancelReason: null,
-  createdAt: '2026-01-01T00:00:00Z',
-  updatedAt: '2026-01-01T00:00:00Z',
-  product: {
-    id: 'prod-456',
-    sellerId: 'user-seller',
-    title: 'Organic Heirloom Kale',
-    description: null,
-    produceType: 'leafy_greens' as ProduceType,
-    pricePerOz: '0.75',
-    totalOzInventory: '100',
-    maxOrderQuantityOz: null,
-    availableBy: '2026-04-20',
-    harvestFrequencyDays: 7,
-    seasonStart: '2026-03-01',
-    seasonEnd: '2026-11-01',
-    images: [],
-    isSubscribable: true,
-    status: 'active' as SubscriptionDetailResponseProductStatus,
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-01T00:00:00Z',
-  },
-  seller: {
-    id: 'user-seller',
-    name: 'Sun-Kissed Acres',
-    email: 'contact@sunkissed.com',
-  },
-  buyer: null,
-};
-
 export const Active: Story = {
   args: {
-    subscription: { ...mockSubscription },
+    subscription: BASE_MOCK_SUBSCRIPTION,
     index: 0,
   },
 };
@@ -78,7 +35,7 @@ export const Active: Story = {
 export const Paused: Story = {
   args: {
     subscription: {
-      ...mockSubscription,
+      ...BASE_MOCK_SUBSCRIPTION,
       status: 'paused',
     },
     index: 1,
@@ -88,7 +45,7 @@ export const Paused: Story = {
 export const PendingDelivery: Story = {
   args: {
     subscription: {
-      ...mockSubscription,
+      ...BASE_MOCK_SUBSCRIPTION,
       nextDeliveryDate: null,
     },
     index: 2,
@@ -98,9 +55,9 @@ export const PendingDelivery: Story = {
 export const MissingData: Story = {
   args: {
     subscription: {
-      ...mockSubscription,
-      product: { ...mockSubscription.product, title: '' },
-      seller: null,
+      ...BASE_MOCK_SUBSCRIPTION,
+      product: { ...BASE_MOCK_SUBSCRIPTION.product, title: '' },
+      seller: {} as any,
     },
     index: 3,
   },

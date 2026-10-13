@@ -6,6 +6,7 @@ import { http, HttpResponse, delay } from 'msw';
 import BrowseProduceMapClient from './BrowseProduceMapClient';
 
 import { type ProduceType, Season } from '@/lib/api/generated/models';
+import { MOCK_SELLER_USER } from '@/lib/storybook/mocks/user.mock';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -13,32 +14,8 @@ const mockedQueryClient = new QueryClient({
   },
 });
 
-const MOCK_USER = {
-  id: 'user-buyer-999',
-  name: 'John Buyer',
-  email: 'john@example.com',
-  emailVerified: new Date().toISOString(),
-  image:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=faces',
-  aboutMe: 'I love local fresh produce!',
-  specialties: [], // Assuming UserSpecialties is an array
-  goal: 'Eat healthy',
-  address: '123 Main St',
-  city: 'Gary',
-  state: 'IN',
-  country: 'USA',
-  zip: '46401',
-  lat: 41.602,
-  lng: -87.3371,
-  deliveryRangeMiles: '10',
-  stripeAccountId: 'acct_123',
-  stripeOnboardingComplete: true,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-};
-
 const AUTH_SESSION_MOCK = {
-  user: MOCK_USER,
+  user: MOCK_SELLER_USER,
   expires: '2026-12-31T23:59:59.999Z',
 };
 
@@ -55,7 +32,7 @@ const MOCK_MAP_DATA = [
       {
         id: 'prod-1',
         name: 'Honeycrisp Apples',
-        type: 'stone_fruits' as ProduceType,
+        type: 'fruit' as ProduceType,
         thumbnail:
           'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=100&h=100&fit=crop',
         price: '0.15',

@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { OrderSummaryCard } from './OrderSummaryCard';
 
+import { BASE_MOCK_ORDER_DETAIL } from '@/lib/storybook/mocks/order.mock';
+
 const meta: Meta<typeof OrderSummaryCard> = {
   title: 'Orders/OrderDetails/OrderSummaryCard',
   component: OrderSummaryCard,
@@ -21,21 +23,10 @@ const meta: Meta<typeof OrderSummaryCard> = {
 export default meta;
 type Story = StoryObj<typeof OrderSummaryCard>;
 
-const baseOrder = {
-  buyerId: 'buyer-123',
-  sellerId: 'seller-456',
-  buyer: { id: 'buyer-123', name: 'Jane Doe', email: 'jane@example.com' },
-  seller: { id: 'seller-456', name: 'Green Valley Farm', email: 'farm@example.com' },
-  items: [],
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-};
-
 export const Delivery: Story = {
   args: {
     order: {
-      ...baseOrder,
-      id: 'ord_123',
+      ...BASE_MOCK_ORDER_DETAIL,
       status: 'pending',
       fulfillmentType: 'delivery',
       paymentMethod: 'card',
@@ -51,8 +42,7 @@ export const Delivery: Story = {
 export const Pickup: Story = {
   args: {
     order: {
-      ...baseOrder,
-      id: 'ord_124',
+      ...BASE_MOCK_ORDER_DETAIL,
       status: 'completed',
       fulfillmentType: 'pickup',
       paymentMethod: 'snap',
@@ -68,8 +58,7 @@ export const Pickup: Story = {
 export const Canceled: Story = {
   args: {
     order: {
-      ...baseOrder,
-      id: 'ord_125',
+      ...BASE_MOCK_ORDER_DETAIL,
       status: 'canceled',
       fulfillmentType: 'delivery',
       paymentMethod: 'card',

@@ -6,7 +6,12 @@ import { http, HttpResponse, delay } from 'msw';
 import ClientsPageClient from './ClientsPageClient';
 
 import { Toaster } from '@/components/ui/sonner';
-import type { ClientResponse, Organization } from '@/lib/api/generated/models';
+import type { ClientResponse } from '@/lib/api/generated/models';
+import {
+  generateMockClients,
+  generateMockReferrers,
+} from '@/lib/storybook/utils/clientMockGenerators';
+import { createMockOrganization } from '@/lib/storybook/utils/mockGenerators';
 
 const createQueryClient = () =>
   new QueryClient({
@@ -22,76 +27,9 @@ const createQueryClient = () =>
     },
   });
 
-const INITIAL_CLIENTS: ClientResponse[] = [
-  {
-    id: 'cli_1',
-    name: 'Jane Doe',
-    email: 'jane.doe@example.com',
-    phone: '0001231234',
-    address: '123 Forest Ave',
-    city: 'Madison',
-    state: 'WI',
-    country: 'USA',
-    zip: '53703',
-    organizationId: 'org-1',
-    createdById: 'user-1',
-    referredBy: null as any,
-    active: true,
-    createdAt: '2024-01-15T00:00:00Z',
-    updatedAt: '2024-01-15T00:00:00Z',
-  },
-  {
-    id: 'cli_2',
-    name: 'John Smith',
-    email: 'john.smith@example.com',
-    phone: '0001231234',
-    address: '200 Park Ave',
-    city: 'New York',
-    state: 'NY',
-    country: 'USA',
-    zip: '10166',
-    organizationId: 'org-1',
-    createdById: 'user-1',
-    referredBy: null as any,
-    active: true,
-    createdAt: '2024-02-01T00:00:00Z',
-    updatedAt: '2024-02-01T00:00:00Z',
-  },
-  {
-    id: 'cli_3',
-    name: 'Alice Johnson',
-    email: 'alice.johnson@example.com',
-    phone: '0001231234',
-    address: null,
-    city: null,
-    state: null,
-    country: null,
-    zip: null,
-    organizationId: 'org-1',
-    createdById: 'user-1',
-    referredBy: null as any,
-    active: false,
-    createdAt: '2024-03-10T00:00:00Z',
-    updatedAt: '2024-03-10T00:00:00Z',
-  },
-];
-
-const mockReferralsList = [
-  {
-    id: 'ref_1',
-    name: 'John Smith',
-    email: 'john.smith@example.com',
-  },
-  {
-    id: 'ref_2',
-    name: 'Alice Johnson',
-    email: 'alice.johnson@example.com',
-  },
-];
-
-const MOCK_ORGANIZATION: Organization = {
-  id: 'org_abc123',
-  type: 'pantry',
+const INITIAL_CLIENTS = generateMockClients(3);
+const mockReferralsList = generateMockReferrers(2);
+const MOCK_ORGANIZATION = createMockOrganization({
   name: 'Gary Food Pantry Network',
   subdomain: 'gary-pantry',
   email: 'contact@garypantry.org',
@@ -101,14 +39,8 @@ const MOCK_ORGANIZATION: Organization = {
   address: '401 Broadway',
   city: 'Gary',
   state: 'IN',
-  country: 'United States',
   zip: '46402',
-  lat: 41.5934,
-  lng: -87.3464,
-  maxReferrals: 4,
-  createdAt: '2026-01-01T00:00:00.000Z',
-  updatedAt: '2026-01-01T00:00:00.000Z',
-};
+});
 
 let mockClients: ClientResponse[] = [...INITIAL_CLIENTS];
 
@@ -180,7 +112,7 @@ const meta: Meta<typeof ClientsPageClient> = {
           await delay(150);
 
           mockClients = mockClients.map((client) =>
-            client.id === id ? { ...client, active: false, status: 'inactive' } : client,
+            client.id === id ? { ...client, active: false } : client,
           );
 
           return HttpResponse.json({ success: true }, { status: 200 });
@@ -198,7 +130,7 @@ const meta: Meta<typeof ClientsPageClient> = {
         http.get('/api/clients/*/referrals', () => {
           return HttpResponse.json({
             data: mockReferralsList,
-            meta: { total: 2 },
+            meta: { total: mockReferralsList.length },
           });
         }),
       ],

@@ -5,7 +5,9 @@ import { HttpResponse, http } from 'msw';
 
 import OrgTab from './OrgTab';
 
-import { OrgType, type Organization, type User } from '@/lib/api/generated/models';
+import { type Organization, type User } from '@/lib/api/generated/models';
+import { BASE_MOCK_ORGANIZATION } from '@/lib/storybook/mocks/organization.mock';
+import { MOCK_ORG_ADMIN_USER } from '@/lib/storybook/mocks/user.mock';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -14,76 +16,30 @@ const mockedQueryClient = new QueryClient({
   },
 });
 
-const MOCK_USER_WITH_ORG: User = {
-  id: 'user_123',
-  name: 'Alex Smith',
-  email: 'alex@example.com',
-  emailVerified: null,
-  image: null,
-  organizationId: 'org_abc123',
-  orgRole: 'admin',
-  aboutMe: 'Passionate urban farmer growing organic microgreens.',
-  specialties: ['Heirloom Tomatoes', 'Honey', 'Sourdough'],
-  goal: '500',
-  address: '123 Farm Lane',
-  city: 'Madison',
-  state: 'WI',
-  country: 'United States',
-  zip: '53703',
-  lat: null,
-  lng: null,
-  deliveryRangeMiles: '15',
-  stripeOnboardingComplete: null,
-  isOnboardingComplete: false,
-  createdAt: null,
-  updatedAt: null,
-};
-
 const MOCK_MEMBER_USER: User = {
-  ...MOCK_USER_WITH_ORG,
+  ...MOCK_ORG_ADMIN_USER,
   id: 'user_456',
   orgRole: 'member',
 };
 
 const MOCK_USER_WITHOUT_ORG: User = {
-  ...MOCK_USER_WITH_ORG,
+  ...MOCK_ORG_ADMIN_USER,
   organizationId: null,
   orgRole: null,
 };
 
-const MOCK_ORGANIZATION: Organization = {
-  id: 'org_abc123',
-  type: OrgType.pantry,
-  name: 'Gary Food Pantry Network',
-  subdomain: 'gary-pantry',
-  email: 'contact@garypantry.org',
-  website: 'https://garypantry.org',
-  phone: '219-555-0199',
-  image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?w=150',
-  address: '401 Broadway',
-  city: 'Gary',
-  state: 'IN',
-  country: 'United States',
-  zip: '46402',
-  lat: 41.5934,
-  lng: -87.3464,
-  maxReferrals: 5,
-  createdAt: '2026-01-01T00:00:00.000Z',
-  updatedAt: '2026-01-01T00:00:00.000Z',
-};
-
 const handlers = [
   // Mock Get Organization endpoint
-  http.get('*/api/organizations/org_abc123', () => {
-    return HttpResponse.json({ ...MOCK_ORGANIZATION });
+  http.get('*/api/organizations/*', () => {
+    return HttpResponse.json({ ...BASE_MOCK_ORGANIZATION });
   }),
   // Mock Update Organization endpoint
-  http.put('*/api/organizations/org_abc123', async ({ request }) => {
+  http.put('*/api/organizations/*', async ({ request }) => {
     const body = (await request.json()) as Organization;
-    return HttpResponse.json({ ...MOCK_ORGANIZATION, ...body });
+    return HttpResponse.json({ ...BASE_MOCK_ORGANIZATION, ...body });
   }),
   // Mock Delete Organization endpoint
-  http.delete('*/api/organizations/org_abc123', () => {
+  http.delete('*/api/organizations/*', () => {
     return HttpResponse.json({ success: true });
   }),
   // Mock Leave Organization endpoint
@@ -132,17 +88,19 @@ type Story = StoryObj<typeof OrgTab>;
  */
 export const DefaultConfigured: Story = {
   args: {
-    user: MOCK_USER_WITH_ORG,
+    user: MOCK_ORG_ADMIN_USER,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
     await expect(await canvas.findByLabelText(/Organization Name/i)).toHaveValue(
-      'Gary Food Pantry Network',
+      BASE_MOCK_ORGANIZATION.name,
     );
-    await expect(canvas.getByLabelText(/Contact Email/i)).toHaveValue('contact@garypantry.org');
-    await expect(canvas.getByLabelText(/Website/i)).toHaveValue('https://garypantry.org');
-    await expect(canvas.getByLabelText(/Client Referral Limit/i)).toHaveValue(5);
+    await expect(canvas.getByLabelText(/Contact Email/i)).toHaveValue(BASE_MOCK_ORGANIZATION.email);
+    await expect(canvas.getByLabelText(/Website/i)).toHaveValue(BASE_MOCK_ORGANIZATION.website);
+    await expect(canvas.getByLabelText(/Client Referral Limit/i)).toHaveValue(
+      BASE_MOCK_ORGANIZATION.maxReferrals,
+    );
     await expect(canvas.getByRole('button', { name: /Save Changes/i })).toBeInTheDocument();
     await expect(canvas.getByRole('button', { name: /Leave Organization/i })).toBeInTheDocument();
     await expect(canvas.getByRole('button', { name: /Delete Organization/i })).toBeInTheDocument();
@@ -165,10 +123,10 @@ export const NonAdminMemberView: Story = {
     ).toBeInTheDocument();
 
     // Verify read-only displays are rendered instead of form inputs
-    await expect(canvas.getByText('Gary Food Pantry Network')).toBeInTheDocument();
-    await expect(canvas.getByText('gary-pantry')).toBeInTheDocument();
-    await expect(canvas.getByText('contact@garypantry.org')).toBeInTheDocument();
-    await expect(canvas.getByText('https://garypantry.org')).toBeInTheDocument();
+    await expect(canvas.getByText(BASE_MOCK_ORGANIZATION.name)).toBeInTheDocument();
+    await expect(canvas.getByText(BASE_MOCK_ORGANIZATION.subdomain)).toBeInTheDocument();
+    await expect(canvas.getByText(BASE_MOCK_ORGANIZATION.email!)).toBeInTheDocument();
+    await expect(canvas.getByText(BASE_MOCK_ORGANIZATION.website!)).toBeInTheDocument();
 
     // Verify admin inputs and delete option are omitted
     await expect(canvas.queryByLabelText(/Organization Name/i)).not.toBeInTheDocument();
@@ -203,7 +161,7 @@ export const NoOrganizationAssociated: Story = {
  */
 export const FormSubmissionSuccess: Story = {
   args: {
-    user: MOCK_USER_WITH_ORG,
+    user: MOCK_ORG_ADMIN_USER,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -243,7 +201,7 @@ export const LeaveOrganizationFlow: Story = {
  */
 export const DangerZoneDeletionFlow: Story = {
   args: {
-    user: MOCK_USER_WITH_ORG,
+    user: MOCK_ORG_ADMIN_USER,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -16,7 +16,7 @@ import { ListingImageUpload } from '@/components/seller/new-listing/ListingImage
 import { ListingPricingInventory } from '@/components/seller/new-listing/ListingPricingInventory';
 import { Button } from '@/components/ui/button';
 import { NotFoundState } from '@/components/ui/state-displays';
-import type { UpdateProducePayload, ProduceDetail } from '@/lib/api/generated/models';
+import type { UpdateProducePayload, ProduceDetails } from '@/lib/api/generated/models';
 import {
   useGetProduce,
   useUpdateProduce,
@@ -53,7 +53,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
   useEffect(() => {
     if (produceQuery.isSuccess && produceQuery.data?.data) {
       if (produceQuery.data.status === 200) {
-        const produce: ProduceDetail = produceQuery.data.data;
+        const produce: ProduceDetails = produceQuery.data.data;
 
         setFormData({
           title: produce.title,
@@ -152,10 +152,8 @@ export default function EditListingClient({ id }: EditListingClientProps) {
 
       // Convert user-friendly units back to API units (Lbs -> Oz)
       const pricePerOz = Number(formData.pricePerLb) / 16;
-      const totalOzInventory = Math.round(Number(formData.totalLbsInventory) * 16);
-      const maxOrderQuantityOz = formData.maxOrderLbs
-        ? Math.round(Number(formData.maxOrderLbs) * 16)
-        : null;
+      const totalOzInventory = Number(formData.totalLbsInventory) * 16;
+      const maxOrderQuantityOz = formData.maxOrderLbs ? Number(formData.maxOrderLbs) * 16 : null;
 
       const payload: UpdateProducePayload = {
         title: formData.title,

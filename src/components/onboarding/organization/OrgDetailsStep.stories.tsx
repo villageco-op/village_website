@@ -104,14 +104,18 @@ export const ValidFlow: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await userEvent.type(canvas.getByLabelText(/Organization Name/i), 'Gary Green Network');
-    await userEvent.type(canvas.getByLabelText(/Custom Subdomain/i), 'gary-green');
-    await userEvent.type(canvas.getByLabelText(/Street Address/i), '101 Civic Center Plaza');
-    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '46402');
+    await userEvent.type(canvas.getByLabelText(/Organization Name/i), 'Gary Green Network', {
+      delay: null,
+    });
+    await userEvent.type(canvas.getByLabelText(/Custom Subdomain/i), 'gary-green', { delay: null });
+    await userEvent.type(canvas.getByLabelText(/Street Address/i), '101 Civic Center Plaza', {
+      delay: null,
+    });
+    await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '46402', { delay: null });
 
     const cityInput = canvas.getByLabelText(/City/i);
     await userEvent.clear(cityInput);
-    await userEvent.type(cityInput, 'Gary');
+    await userEvent.type(cityInput, 'Gary', { delay: null });
 
     const stateDropdown = canvas.getByRole('combobox');
     await userEvent.click(stateDropdown);
@@ -125,7 +129,10 @@ export const ValidFlow: Story = {
     await expect(successText).toBeInTheDocument();
 
     const submitBtn = canvas.getByRole('button', { name: /Create Organization/i });
-    await expect(submitBtn).toBeEnabled();
+
+    await waitFor(async () => {
+      await expect(submitBtn).toBeEnabled();
+    });
   },
 };
 

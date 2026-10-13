@@ -13,7 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { FormErrorState } from '@/components/ui/state-displays';
 import { useAddToCart } from '@/lib/api/generated/cart/cart';
-import type { OrderDetailResponseItemsItem } from '@/lib/api/generated/models';
+import type { OrderItemDetails } from '@/lib/api/generated/models';
 import { useGetOrderById } from '@/lib/api/generated/orders/orders';
 
 interface ReorderFormProps {
@@ -62,12 +62,12 @@ function ReorderFormContent({
   items,
   onClose,
 }: {
-  items: OrderDetailResponseItemsItem[];
+  items: OrderItemDetails[];
   onClose: () => void;
 }) {
   const addToCartMutation = useAddToCart();
 
-  const getItemAvailability = (item: OrderDetailResponseItemsItem) => {
+  const getItemAvailability = (item: OrderItemDetails) => {
     const now = new Date();
     const start = new Date(item.produceSeasonStart);
     const end = new Date(item.produceSeasonEnd);

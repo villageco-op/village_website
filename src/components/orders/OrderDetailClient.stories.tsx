@@ -7,7 +7,7 @@ import { Toaster } from '../ui/sonner';
 
 import OrderDetailClient from './OrderDetailClient';
 
-import type { OrderDetailResponse } from '@/lib/api/generated/models';
+import { createMockOrderDetail } from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -16,6 +16,7 @@ const mockedQueryClient = new QueryClient({
 });
 
 const MOCK_ORDER_ID = 'order_abc123';
+const MOCK_ORDER_DATA = createMockOrderDetail({ id: MOCK_ORDER_ID });
 
 const meta: Meta<typeof OrderDetailClient> = {
   title: 'Orders/OrderDetails/OrderDetailPage',
@@ -44,67 +45,6 @@ const meta: Meta<typeof OrderDetailClient> = {
 
 export default meta;
 type Story = StoryObj<typeof OrderDetailClient>;
-
-const MOCK_ORDER_DATA: OrderDetailResponse = {
-  id: MOCK_ORDER_ID,
-  status: 'pending',
-  fulfillmentType: 'delivery',
-  paymentMethod: 'card',
-  totalAmount: '42.50',
-  scheduledTime: '2026-05-15T14:00:00Z',
-  createdAt: '2026-05-10T09:30:00Z',
-  buyerId: 'buyer_1',
-  sellerId: 'seller_1',
-  stripeReceiptUrl: null,
-  stripeInvoiceId: null,
-  updatedAt: '2026-05-10T09:30:00Z',
-  cancelReason: null,
-  buyer: {
-    id: 'buyer_1',
-    name: 'Alex Gardener',
-    email: 'alex@example.com',
-    location: {
-      address: '742 Evergreen Terrace',
-      lat: 41.5934,
-      lng: -87.3464,
-      city: 'Springfield',
-      state: 'KY',
-      country: 'United States',
-      zip: '45638',
-    },
-  },
-  seller: {
-    id: 'seller_1',
-    name: 'Springfield Community Plot',
-    email: 'plots@springfield.org',
-    location: {
-      address: '123 Farm Road',
-      lat: 41.6,
-      lng: -87.35,
-      city: 'Springfield',
-      state: 'KY',
-      country: 'United States',
-      zip: '45638',
-    },
-  },
-  items: [
-    {
-      id: 'item_1',
-      productId: 'p1',
-      productName: 'Organic Carrots',
-      quantityOz: '48', // 3 lbs
-      pricePerOz: '0.125', // $2.00/lb
-      maxOrderQuantityOz: null,
-      isProduceSubscribable: true,
-      produceAvailableBy: new Date().toISOString(),
-      produceStatus: 'active',
-      produceSeasonStart: '2024-12-5',
-      produceSeasonEnd: '2025-5-12',
-      produceTotalOzInventory: '20.00',
-      images: ['https://fakeimage.jpg'],
-    },
-  ],
-};
 
 /**
  * Successful loading state with pending order (actions visible)
@@ -160,10 +100,12 @@ export const CompletedOrder: Story = {
     msw: {
       handlers: [
         http.get(`*/api/orders/${MOCK_ORDER_ID}`, () => {
-          return HttpResponse.json({
-            ...MOCK_ORDER_DATA,
-            status: 'completed',
-          });
+          return HttpResponse.json(
+            createMockOrderDetail({
+              id: MOCK_ORDER_ID,
+              status: 'completed',
+            }),
+          );
         }),
       ],
     },

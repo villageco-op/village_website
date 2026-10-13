@@ -39,10 +39,10 @@ export default function SellerListingsClient() {
   const activeCount = meta.total || listings.filter((item) => item.status === 'active').length;
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col gap-6">
       <PageHeader
         title="My Listings"
-        subtitle={`${activeCount} active · Visible to buyers on the Village marketplace`}
+        subtitle={`${activeCount} active`}
         actions={
           <Button variant="lime" size="sm" className="text-xs font-semibold">
             <Link href="/seller/new-listing">+ New listing</Link>

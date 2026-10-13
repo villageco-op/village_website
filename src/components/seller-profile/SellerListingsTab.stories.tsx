@@ -5,29 +5,9 @@ import { http, HttpResponse, delay } from 'msw';
 
 import SellerListingsTab from './SellerListingsTab';
 
-import type { ProduceListItem } from '@/lib/api/generated/models';
+import { generateMockListings } from '@/lib/storybook/utils/mockGenerators';
 
 const SELLER_ID = 'seller_789';
-
-const generateMockListings = (count: number, namePrefix = 'Listing'): ProduceListItem[] => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `prod_${i + 1}`,
-    name: `${namePrefix} ${i + 1}`,
-    sellerId: SELLER_ID,
-    sellerName: 'Green Valley Farm',
-    sellerOrg: null,
-    thumbnail:
-      i % 3 === 0
-        ? 'https://images.unsplash.com/photo-1597362868487-10501f930a04?w=400&h=300&fit=crop'
-        : '',
-    price: `$${(2.5 + i).toFixed(2)}/lb`,
-    amount: `${10 + i} lbs`,
-    availableBy: new Date(Date.now() + i * 86400000).toISOString(),
-    distance: 0.6,
-    isSubscribable: i % 2 === 0,
-    description: `Freshly harvested ${namePrefix} ${i + 1}. Grown with organic practices and zero pesticides. Perfect for your weekly meals.`,
-  }));
-};
 
 const ALL_MOCK_LISTINGS = generateMockListings(30);
 
@@ -101,7 +81,9 @@ export const Searching: Story = {
 
           let filtered = ALL_MOCK_LISTINGS;
           if (search) {
-            filtered = ALL_MOCK_LISTINGS.filter((item) => item.name.toLowerCase().includes(search));
+            filtered = ALL_MOCK_LISTINGS.filter((item) =>
+              item.title.toLowerCase().includes(search),
+            );
           }
 
           return HttpResponse.json({
@@ -116,13 +98,13 @@ export const Searching: Story = {
     const canvas = within(canvasElement);
     const searchInput = await canvas.findByPlaceholderText(/search listings/i);
 
-    await userEvent.type(searchInput, 'Listing 5');
+    await userEvent.type(searchInput, 'Listing Item 5');
 
     // Wait for debounce and API response
     await waitFor(
       async () => {
-        await expect(canvas.getByText('Listing 5')).toBeInTheDocument();
-        await expect(canvas.queryByText('Listing 1')).not.toBeInTheDocument();
+        await expect(canvas.getByText(/Listing Item 5/i)).toBeInTheDocument();
+        await expect(canvas.queryByText(/Listing Item 1/i)).not.toBeInTheDocument();
       },
       { timeout: 2000 },
     );

@@ -5,59 +5,19 @@ import { useState } from 'react';
 import { MembersTable } from './MembersTable';
 
 import { OrgRole, type OrgMember } from '@/lib/api/generated/models';
+import { BASE_MOCK_MEMBER } from '@/lib/storybook/mocks/organization.mock';
+import { MOCK_ORG_ADMIN_USER } from '@/lib/storybook/mocks/user.mock';
+import { generateMockOrgMembers } from '@/lib/storybook/utils/mockGenerators';
 
-const MOCK_CURRENT_USER = {
-  id: 'usr_admin',
-  name: 'Admin User',
-  email: 'admin@company.com',
-  organizationId: null,
-  orgRole: null,
-  emailVerified: '2024-01-01T00:00:00Z',
-  image:
-    'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=150&h=150&auto=format&fit=crop',
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-01T00:00:00Z',
-  aboutMe: 'Cool guy',
-  deliveryRangeMiles: '0',
-  specialties: [],
-  goal: '90',
-  stripeOnboardingComplete: false,
-  isOnboardingComplete: true,
-  address: '456 Market Ave',
-  city: 'Gary',
-  lat: 41.59,
-  lng: -87.34,
-  state: 'IN',
-  country: 'United States',
-  zip: '45678',
+const MOCK_MEMBERS = generateMockOrgMembers(3);
+const CURRENT_USER_MEMBER: OrgMember = {
+  ...BASE_MOCK_MEMBER,
+  id: MOCK_ORG_ADMIN_USER.id,
+  email: MOCK_ORG_ADMIN_USER.email,
+  name: MOCK_ORG_ADMIN_USER.name,
+  image: MOCK_ORG_ADMIN_USER.image ?? undefined,
+  orgRole: MOCK_ORG_ADMIN_USER.orgRole,
 };
-
-const MOCK_MEMBERS: OrgMember[] = [
-  {
-    id: 'usr_admin',
-    name: 'Admin User',
-    email: 'admin@company.com',
-    orgRole: OrgRole.admin,
-  },
-  {
-    id: 'usr_1',
-    name: 'Alice Freeman',
-    email: 'alice@company.com',
-    orgRole: OrgRole.admin,
-  },
-  {
-    id: 'usr_2',
-    name: 'Bob Vance',
-    email: 'bob@vancerefrig.com',
-    orgRole: OrgRole.member,
-  },
-  {
-    id: 'usr_3',
-    name: '',
-    email: 'unknown@example.com',
-    orgRole: OrgRole.member,
-  },
-];
 
 const meta: Meta<typeof MembersTable> = {
   title: 'Org/Members/MembersTable',
@@ -66,8 +26,8 @@ const meta: Meta<typeof MembersTable> = {
     layout: 'padded',
   },
   args: {
-    members: MOCK_MEMBERS,
-    currentUser: MOCK_CURRENT_USER,
+    members: [...MOCK_MEMBERS, CURRENT_USER_MEMBER],
+    currentUser: MOCK_ORG_ADMIN_USER,
     isLoading: false,
     isError: false,
     searchQuery: '',
@@ -122,7 +82,7 @@ export const Default: Story = {};
 
 export const MemberSelected: Story = {
   args: {
-    selectedMember: MOCK_MEMBERS[2], // Bob Vance
+    selectedMember: MOCK_MEMBERS[2],
   },
 };
 
@@ -157,11 +117,11 @@ export const InteractionTest: Story = {
 
     // 1. Test Search Input
     const searchInput = canvas.getByPlaceholderText(/Search name or email/i);
-    await userEvent.type(searchInput, 'Bob');
+    await userEvent.type(searchInput, 'Alex');
     await expect(args.setSearchQuery).toHaveBeenCalled();
 
     // 2. Verify "You" badge on current user
-    await expect(canvas.getByText(/Admin User \(You\)/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/Alex Rivera \(You\)/i)).toBeInTheDocument();
 
     // 3. Verify top action buttons are disabled initially
     const changeRoleBtn = canvas.getByRole('button', { name: /Change Role/i });
@@ -169,18 +129,18 @@ export const InteractionTest: Story = {
     await expect(changeRoleBtn).toBeDisabled();
     await expect(removeBtn).toBeDisabled();
 
-    // 4. Select Bob Vance row to enable actions
-    const bobRow = canvas.getByText('bob@vancerefrig.com');
-    await userEvent.click(bobRow);
+    // 4. Select a row to enable actions
+    const selectedRow = canvas.getByText(MOCK_MEMBERS[1].email!);
+    await userEvent.click(selectedRow);
     await expect(args.setSelectedMember).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 'usr_2' }),
+      expect.objectContaining({ id: MOCK_MEMBERS[1].id }),
     );
 
     // 5. Test Action Button Clicks after selection
     await expect(changeRoleBtn).toBeEnabled();
     await userEvent.click(changeRoleBtn);
     await expect(args.onChangeRoleClick).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 'usr_2' }),
+      expect.objectContaining({ id: MOCK_MEMBERS[1].id }),
     );
 
     // 6. Test Filter Clearing
