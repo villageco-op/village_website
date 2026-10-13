@@ -5,9 +5,9 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import LoadingSkeleton from '../ui/loading-skeleton';
 import { PageErrorState } from '../ui/state-displays';
 
-import { AcceptInviteSkeleton } from '@/components/accept-invite/AcceptInviteSkeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -97,7 +97,7 @@ export default function AcceptInviteClient() {
   const isLoading = isLoadingOrg || status === 'loading';
 
   if (isLoading) {
-    return <AcceptInviteSkeleton />;
+    return <LoadingSkeleton />;
   }
 
   if (!orgId || orgError || orgResponse?.status !== 200 || !orgResponse?.data) {

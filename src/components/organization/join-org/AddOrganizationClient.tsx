@@ -3,10 +3,9 @@
 import { Building2, Info } from 'lucide-react';
 import Link from 'next/link';
 
-import { AddOrganizationCardSkeleton } from './AddOrganizationCardSkeleton';
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { useAuth } from '@/hooks/useAuth';
 
 /**
@@ -50,7 +49,7 @@ export default function AddOrganizationClient() {
         {/* Dynamic CTA Card */}
         <Card className="p-6 sm:p-8 text-center">
           {isLoading ? (
-            <AddOrganizationCardSkeleton />
+            <LoadingSkeleton />
           ) : !user ? (
             <CardContent>
               <h2 className="font-heading text-xl sm:text-2xl font-bold text-deep-forest mb-2">

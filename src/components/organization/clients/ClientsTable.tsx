@@ -2,11 +2,10 @@
 
 import { Search, X, Edit2, Trash2, Users } from 'lucide-react';
 
-import { ClientsTableSkeleton } from './ClientsTableSkeleton';
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { EmptyState, InlineErrorState } from '@/components/ui/state-displays';
 import {
@@ -157,7 +156,7 @@ export function ClientsTable({
 
         {/* Client table or states */}
         {isLoading ? (
-          <ClientsTableSkeleton />
+          <LoadingSkeleton heights={['h-12', 'h-64']} />
         ) : isError ? (
           <InlineErrorState
             title="Unable to load clients"

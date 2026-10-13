@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
 import { DeleteListingDialog } from './DeleteListingDialog';
-import { EditListingSkeleton } from './EditListingSkeleton';
 
 import { ListingStatusActions } from '@/components/seller/edit-listing/ListingStatusActions';
 import type { ListingFormData } from '@/components/seller/new-listing/AddNewListingClient';
@@ -15,6 +14,7 @@ import { ListingHarvestDetails } from '@/components/seller/new-listing/ListingHa
 import { ListingImageUpload } from '@/components/seller/new-listing/ListingImageUpload';
 import { ListingPricingInventory } from '@/components/seller/new-listing/ListingPricingInventory';
 import { Button } from '@/components/ui/button';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { NotFoundState } from '@/components/ui/state-displays';
 import type { UpdateProducePayload, ProduceDetails } from '@/lib/api/generated/models';
 import {
@@ -189,7 +189,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
   };
 
   if ((!produceQuery.isError && !formData) || produceQuery.isLoading) {
-    return <EditListingSkeleton />;
+    return <LoadingSkeleton heights={['h-20', 'h-128']} />;
   }
 
   if (produceQuery.isError || !formData) {

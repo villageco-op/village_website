@@ -4,7 +4,7 @@ import { User as UserIcon, Star } from 'lucide-react';
 import Image from 'next/image';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { EmptyState, InlineErrorState } from '@/components/ui/state-displays';
 import type { SellerReviewItem } from '@/lib/api/generated/models';
 import { useGetSellerReviews } from '@/lib/api/generated/users/users';
@@ -32,7 +32,7 @@ export default function ProduceReviews({
   } = useGetSellerReviews(sellerId, { productId: produceId, limit: 5 });
 
   if (isLoading) {
-    return <Skeleton className="h-64 w-full rounded-xl" />;
+    return <LoadingSkeleton />;
   }
 
   if (isError || reviewsRes?.status !== 200) {

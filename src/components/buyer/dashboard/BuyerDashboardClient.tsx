@@ -1,13 +1,13 @@
 'use client';
 
 import { ActiveSubscriptionsCard } from './ActiveSubscriptionsCard';
-import BuyerDashboardSkeleton from './BuyerDashboardSkeleton';
 import { BuyerQuickLinksCard } from './BuyerQuickLinksCard';
 
 import { BuyerDashboardStats } from '@/components/buyer/dashboard/BuyerDashboardStats';
 import { SupplyMapCard } from '@/components/buyer/dashboard/SupplyMapCard';
 import { UpcomingOrdersCard } from '@/components/buyer/dashboard/UpcomingOrdersCard';
 import { DashboardHeader } from '@/components/seller/dashboard/DashboardHeader';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { useGetBuyerDashboard } from '@/lib/api/generated/buyers/buyers';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
@@ -43,7 +43,7 @@ export default function BuyerDashboardClient() {
   const isError = isDashboardError || isOrdersError || isSubsError;
 
   if (isLoading) {
-    return <BuyerDashboardSkeleton />;
+    return <LoadingSkeleton heights={['h-12', 'h-32', 'h-96']} />;
   }
 
   if (

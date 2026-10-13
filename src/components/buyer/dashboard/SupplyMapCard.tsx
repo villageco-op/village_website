@@ -9,7 +9,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { SupplyMapPopup } from './SupplyMapPopup';
 
 import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { InlineErrorState } from '@/components/ui/state-displays';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetGrowersForMap } from '@/lib/api/generated/growers/growers';
@@ -66,7 +66,7 @@ export function SupplyMapCard({ localGrowersSupplying }: SupplyMapCardProps) {
         {/* Map Container */}
         <div className="relative flex h-72 w-full items-center justify-center overflow-hidden rounded-[10px] bg-linear-to-br from-[#e8f0e0] to-[#d4e6c8]">
           {isLoading ? (
-            <Skeleton className="h-full w-full rounded-[10px]" />
+            <LoadingSkeleton />
           ) : isError ? (
             <InlineErrorState title="Failed to load map data" />
           ) : (

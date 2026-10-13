@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 
 import { SellerSubscriptionCard } from './SellerSubscriptionCard';
-import { SellerSubscriptionsSkeleton } from './SellerSubscriptionsSkeleton';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import {
@@ -63,7 +63,7 @@ export default function SellerSubscriptionsClient() {
   const { data: response, isLoading, isError, refetch } = useGetSubscriptions(queryParams);
 
   if (isLoading) {
-    return <SellerSubscriptionsSkeleton />;
+    return <LoadingSkeleton heights={['h-12', 'h-128']} />;
   }
 
   if (isError || response?.status !== 200 || !response?.data) {

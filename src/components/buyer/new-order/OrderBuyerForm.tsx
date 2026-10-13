@@ -10,6 +10,7 @@ import { OrderSubscriptionToggle } from './OrderSubscriptionToggle';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { FormErrorState } from '@/components/ui/state-displays';
 import { getGetCartQueryKey, useAddToCart } from '@/lib/api/generated/cart/cart';
 import type { ProduceDetails } from '@/lib/api/generated/models';
@@ -55,9 +56,7 @@ export function BuyerOrderForm({
   if (isLoading) {
     return (
       <Card>
-        <div className="flex justify-center p-12">
-          <Loader2 className="w-8 h-8 animate-spin text-lime" />
-        </div>
+        <LoadingSkeleton />
       </Card>
     );
   }

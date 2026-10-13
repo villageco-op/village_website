@@ -7,11 +7,11 @@ import { toast } from 'sonner';
 
 import { SellerUpdateStatusDialog } from './SellerUpdateStatusDialog';
 
-import { OrderDetailSkeleton } from '@/components/orders/OrderDetailSkeleton';
 import { SubscriptionLocationCard } from '@/components/subscriptions/SubscriptionLocationCard';
 import { SubscriptionSummaryCard } from '@/components/subscriptions/SubscriptionSummaryCard';
 import { SubscriptionUserCard } from '@/components/subscriptions/SubscriptionUserCard';
 import { Button } from '@/components/ui/button';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { NotFoundState } from '@/components/ui/state-displays';
 import { StatusPill } from '@/components/ui/status-pill';
 import {
@@ -81,13 +81,7 @@ export default function SellerSubscriptionDetailClient({
   };
 
   if (query.isLoading) {
-    return (
-      <div className="bg-off-white">
-        <div className="mx-auto">
-          <OrderDetailSkeleton />
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton heights={['h-12', 'h-56', 'h-56']} />;
   }
 
   if (query.isError || query.data?.status !== 200 || !query.data?.data) {
