@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { InlineErrorState } from '@/components/ui/state-displays';
 import { StatusPill } from '@/components/ui/status-pill';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
@@ -51,7 +51,7 @@ export default function BuyerActivityDashboard({
   });
 
   if (ordersLoading || subsLoading) {
-    return <Skeleton className="h-48 w-full rounded-xl" />;
+    return <LoadingSkeleton />;
   }
 
   if (isOrdersError || isSubsError || ordersRes?.status !== 200 || subsRes?.status !== 200) {

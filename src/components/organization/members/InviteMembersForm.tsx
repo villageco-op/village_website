@@ -4,12 +4,11 @@ import { Mail, Plus, Loader2, UserCheck, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { MembersTableSkeleton } from './MembersTableSkeleton';
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import {
   Select,
   SelectContent,
@@ -170,7 +169,7 @@ export function InviteMembersForm({
 
       {/* Sent Invitations Table Section */}
       {isLoading ? (
-        <MembersTableSkeleton rowCount={3} />
+        <LoadingSkeleton />
       ) : isError ? (
         <InlineErrorState
           title="Failed to load invitations"

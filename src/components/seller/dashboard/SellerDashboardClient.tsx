@@ -2,13 +2,13 @@
 
 import { MonthlyGoalCard } from '../earnings/MonthlyGoalCard';
 
-import DashboardSkeleton from './DashboardSkeleton';
 import { SellerQuickLinksCard } from './SellerQuickLinks';
 
 import { ActiveSubscriptionsCard } from '@/components/buyer/dashboard/ActiveSubscriptionsCard';
 import { UpcomingOrdersCard } from '@/components/buyer/dashboard/UpcomingOrdersCard';
 import { DashboardHeader } from '@/components/seller/dashboard/DashboardHeader';
 import { DashboardStats } from '@/components/seller/dashboard/DashboardStats';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
 import { useGetSellerDashboard } from '@/lib/api/generated/sellers/sellers';
@@ -44,7 +44,7 @@ export default function SellerDashboardClient() {
   const isError = isDashboardError || isOrdersError || isSubsError;
 
   if (isLoading) {
-    return <DashboardSkeleton />;
+    return <LoadingSkeleton heights={['h-12', 'h-32', 'h-96']} />;
   }
 
   if (

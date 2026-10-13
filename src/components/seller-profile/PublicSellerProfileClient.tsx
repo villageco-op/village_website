@@ -5,16 +5,12 @@ import { useState } from 'react';
 
 import { BuyerOrderForm } from '../buyer/new-order/OrderBuyerForm';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '../ui/dialog';
+import LoadingSkeleton from '../ui/loading-skeleton';
 import { NotFoundState } from '../ui/state-displays';
 
 import SellerAboutTab from './SellerAboutTab';
 import SellerHero from './SellerHero';
 import SellerListingsTab from './SellerListingsTab';
-import {
-  SellerHeroSkeleton,
-  SellerStatsRowSkeleton,
-  SellerAboutTabSkeleton,
-} from './SellerProfileSkeletons';
 import SellerReviewsTab from './SellerReviewsTab';
 import SellerStatsRow from './SellerStatsRow';
 
@@ -44,17 +40,7 @@ export default function PublicSellerProfile({ sellerId }: PublicSellerProfilePro
   });
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-off-white pb-20">
-        <SellerHeroSkeleton />
-        <div className="container-custom mt-8 max-w-250">
-          <SellerStatsRowSkeleton />
-          <div className="mt-8">
-            <SellerAboutTabSkeleton />
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton heights={['h-64', 'h-128']} />;
   }
 
   if (isError || !response?.data || response.status !== 200) {

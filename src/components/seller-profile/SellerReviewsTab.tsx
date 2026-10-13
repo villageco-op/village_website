@@ -4,9 +4,8 @@ import { Star } from 'lucide-react';
 import { useState } from 'react';
 
 import { Eyebrow } from '../ui/eyebrow';
+import LoadingSkeleton from '../ui/loading-skeleton';
 import { EmptyState, PageErrorState } from '../ui/state-displays';
-
-import { SellerReviewCardSkeleton } from './SellerProfileSkeletons';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
@@ -161,11 +160,7 @@ export default function SellerReviewsTab({ sellerId, profile }: SellerReviewsTab
 
       <div className="flex flex-col gap-4">
         {isLoading ? (
-          <>
-            <SellerReviewCardSkeleton />
-            <SellerReviewCardSkeleton />
-            <SellerReviewCardSkeleton />
-          </>
+          <LoadingSkeleton />
         ) : reviews.length > 0 ? (
           reviews.map((review) => (
             <Card key={String(review.id)}>

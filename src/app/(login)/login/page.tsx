@@ -1,7 +1,8 @@
 import { Suspense } from 'react';
 
 import LoginClient from '../../../components/login/LoginClient';
-import { LoginSkeleton } from '../../../components/login/LoginSkeleton';
+
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 
 /**
  * Login page for user login and account creation.
@@ -9,8 +10,10 @@ import { LoginSkeleton } from '../../../components/login/LoginSkeleton';
  */
 export default function Login() {
   return (
-    <main className="flex flex-col w-full min-h-screen relative">
-      <Suspense fallback={<LoginSkeleton />}>
+    <main className="flex flex-col bg-primary w-full min-h-screen relative">
+      <Suspense
+        fallback={<LoadingSkeleton heights={['h-8', 'h-64', 'h-6']} className="bg-primary" />}
+      >
         <LoginClient />
       </Suspense>
     </main>

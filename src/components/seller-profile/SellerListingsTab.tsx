@@ -6,10 +6,9 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { Eyebrow } from '../ui/eyebrow';
+import LoadingSkeleton from '../ui/loading-skeleton';
 import { ProduceIcon } from '../ui/produce-icon';
 import { PageErrorState } from '../ui/state-displays';
-
-import { SellerListingsTabSkeleton } from './SellerProfileSkeletons';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -67,7 +66,7 @@ export default function SellerListingsTab({ sellerId, onOrderItem }: SellerListi
   });
 
   if (isLoading) {
-    return <SellerListingsTabSkeleton />;
+    return <LoadingSkeleton heights={['h-40', 'h-64']} />;
   }
 
   if (response?.status !== 200 || isError) {

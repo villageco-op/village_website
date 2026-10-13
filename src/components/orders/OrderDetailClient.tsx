@@ -7,10 +7,10 @@ import { toast } from 'sonner';
 
 import { ReorderForm } from '../buyer/new-order/ReorderForm';
 import { Dialog, DialogContent } from '../ui/dialog';
+import LoadingSkeleton from '../ui/loading-skeleton';
 import { NotFoundState } from '../ui/state-displays';
 
 import { CancelOrderDialog } from './CancelOrderDialog';
-import { OrderDetailSkeleton } from './OrderDetailSkeleton';
 import { OrderItemsCard } from './OrderItemsCard';
 import { OrderLocationCard } from './OrderLocationCard';
 import { OrderSummaryCard } from './OrderSummaryCard';
@@ -73,13 +73,7 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
   };
 
   if (orderQuery.isLoading) {
-    return (
-      <div className="bg-off-white">
-        <div className="mx-auto max-w-4xl">
-          <OrderDetailSkeleton />
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton heights={['h-12', 'h-56', 'h-56']} />;
   }
 
   if (orderQuery.isError || orderQuery.data?.status !== 200) {

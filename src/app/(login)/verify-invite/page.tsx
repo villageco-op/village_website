@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 import AcceptInviteClient from '@/components/accept-invite/AcceptInviteClient';
-import { AcceptInviteSkeleton } from '@/components/accept-invite/AcceptInviteSkeleton';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 
 /**
  * Page for accepting an invitation to an organization.
@@ -10,7 +10,7 @@ import { AcceptInviteSkeleton } from '@/components/accept-invite/AcceptInviteSke
 export default function AcceptInvitePage() {
   return (
     <main className="flex flex-col w-full min-h-screen relative">
-      <Suspense fallback={<AcceptInviteSkeleton />}>
+      <Suspense fallback={<LoadingSkeleton />}>
         <AcceptInviteClient />
       </Suspense>
     </main>

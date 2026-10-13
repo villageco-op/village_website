@@ -2,11 +2,10 @@
 
 import { Edit2, Search, Trash2, X } from 'lucide-react';
 
-import { MembersTableSkeleton } from './MembersTableSkeleton';
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import {
   Select,
@@ -172,7 +171,7 @@ export function MembersTable({
 
         {/* Table display */}
         {isLoading ? (
-          <MembersTableSkeleton />
+          <LoadingSkeleton />
         ) : isError ? (
           <div className="py-12">
             <InlineErrorState

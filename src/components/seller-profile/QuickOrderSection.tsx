@@ -1,9 +1,8 @@
 'use client';
 
 import { Eyebrow } from '../ui/eyebrow';
+import LoadingSkeleton from '../ui/loading-skeleton';
 import { ProduceIcon } from '../ui/produce-icon';
-
-import { QuickOrderSkeleton } from './SellerProfileSkeletons';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,7 +26,7 @@ export function QuickOrderSection({ items, isLoading }: QuickOrderSectionProps) 
     return (
       <div>
         <Eyebrow>Quick Order</Eyebrow>
-        <QuickOrderSkeleton />
+        <LoadingSkeleton />
       </div>
     );
   }

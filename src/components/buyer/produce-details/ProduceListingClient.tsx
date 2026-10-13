@@ -10,12 +10,12 @@ import { BuyerOrderForm } from '../new-order/OrderBuyerForm';
 import BuyerActivityDashboard from './BuyerActivityDashboard';
 import OrderActionCard from './OrderActionCard';
 import ProduceHeaderCard from './ProduceHeaderCard';
-import ProduceListingSkeleton from './ProduceListingSkeleton';
 import ProduceReviews from './ProduceReviews';
 import SellerInfoMapCard from './SellerInfoMapCard';
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { NotFoundState } from '@/components/ui/state-displays';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
 
@@ -36,7 +36,7 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
   const { isError, isLoading, data } = useGetProduce(id, { query: { enabled: !!id } });
 
   if (isLoading) {
-    return <ProduceListingSkeleton />;
+    return <LoadingSkeleton heights={['h-8', 'h-125', 'h-64']} />;
   }
 
   if (isError || data?.status !== 200 || !data.data) {

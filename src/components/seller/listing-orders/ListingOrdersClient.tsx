@@ -3,9 +3,9 @@
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import { ListingOrdersSkeleton } from '@/components/seller/listing-orders/ListingOrdersSkeleton';
 import { ListingOrdersTable } from '@/components/seller/listing-orders/ListingOrdersTable';
 import { Button } from '@/components/ui/button';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
@@ -37,13 +37,7 @@ export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
   const isError = produceQuery.isError || ordersQuery.isError;
 
   if (isLoading) {
-    return (
-      <div className="bg-off-white">
-        <div className="mx-auto">
-          <ListingOrdersSkeleton />
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton heights={['h-20', 'h-64']} />;
   }
 
   if (isError || produceQuery.data?.status !== 200 || ordersQuery.data?.status !== 200) {

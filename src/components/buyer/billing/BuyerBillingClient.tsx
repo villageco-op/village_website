@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 import { BillingStatsCard } from './BillingStatsCard';
 import { InvoiceHistoryCard } from './InvoiceHistoryCard';
 
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
-import { Skeleton } from '@/components/ui/skeleton';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
 import { useGetBuyerBillingSummary } from '@/lib/api/generated/buyers/buyers';
@@ -55,13 +55,7 @@ export default function BuyerBillingClient() {
   } = useGetOrders(queryParams);
 
   if (isSummaryLoading || isOrdersLoading) {
-    return (
-      <div className="flex w-full flex-col space-y-6">
-        <Skeleton className="h-20 w-full rounded-xl" />
-        <Skeleton className="h-32 w-full rounded-xl" />
-        <Skeleton className="h-64 w-full rounded-xl" />
-      </div>
-    );
+    return <LoadingSkeleton heights={['h-20', 'h-32', 'h-64']} />;
   }
 
   if (

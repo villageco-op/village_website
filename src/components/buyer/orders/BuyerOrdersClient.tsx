@@ -1,8 +1,8 @@
 'use client';
 
 import { OrderHistoryCard } from '@/components/seller/orders/OrderHistoryCard';
-import { OrdersSkeleton } from '@/components/seller/orders/OrdersSkeleton';
 import { PendingOrdersCard } from '@/components/seller/orders/PendingOrdersCard';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
@@ -38,7 +38,7 @@ export default function BuyerOrdersClient() {
   });
 
   if (isPendingLoading || isHistoryLoading) {
-    return <OrdersSkeleton />;
+    return <LoadingSkeleton heights={['h-12', 'h-56', 'h-56']} />;
   }
 
   if (

@@ -6,10 +6,10 @@ import { useState } from 'react';
 
 import OrgTab from '../organization/settings/OrgTab';
 import { Button } from '../ui/button';
+import LoadingSkeleton from '../ui/loading-skeleton';
 import { PageHeader } from '../ui/page-header';
 import { NotFoundState } from '../ui/state-displays';
 
-import { EditProfileSkeleton } from './EditProfileSkeleton';
 import ProfileTab from './ProfileTab';
 import SettingsTab from './SettingsTab';
 
@@ -27,7 +27,7 @@ export default function EditProfilePage() {
   const router = useRouter();
 
   if (status === 'loading') {
-    return <EditProfileSkeleton />;
+    return <LoadingSkeleton heights={['h-20', 'h-128']} />;
   }
 
   if (status === 'unauthenticated' || !user) {

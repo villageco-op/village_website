@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react';
 import { BuyerOrderForm } from '../../new-order/OrderBuyerForm';
 
 import { BrowseProduceFilters } from './BrowseProduceFilters';
-import { BrowseProduceSkeleton } from './BrowseProduceSkeleton';
 import { BrowseProduceTable } from './BrowseProduceTable';
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { EmptyState, PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
@@ -113,7 +113,7 @@ export default function BrowseProduceListClient({
       />
 
       {isLoading ? (
-        <BrowseProduceSkeleton />
+        <LoadingSkeleton heights={['h-12', 'h-64']} />
       ) : produceList.length > 0 ? (
         <div className="space-y-4">
           <BrowseProduceTable

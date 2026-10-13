@@ -1,8 +1,8 @@
 'use client';
 
 import OrgSettingsForm from './OrgSettingsForm';
-import { SettingsSkeleton } from './SettingsSkeleton';
 
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageErrorState } from '@/components/ui/state-displays';
 import type { User } from '@/lib/api/generated/models';
 import { useGetOrganization } from '@/lib/api/generated/organizations/organizations';
@@ -40,7 +40,7 @@ export default function OrgTab({ user, onDeleteOrganization, onLeaveOrganization
     );
   }
 
-  if (isLoadingOrg) return <SettingsSkeleton />;
+  if (isLoadingOrg) return <LoadingSkeleton heights={['h-40', 'h-64']} />;
 
   const orgData = orgResult?.status === 200 ? orgResult.data : null;
 

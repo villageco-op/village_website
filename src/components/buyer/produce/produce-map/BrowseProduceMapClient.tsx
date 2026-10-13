@@ -11,6 +11,7 @@ import { BrowseProduceMapFilters } from './BrowseProduceMapFilters';
 import { SellerProduceSidebar } from './SellerProduceSidebar';
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageErrorState } from '@/components/ui/state-displays';
 import type { GetProduceMapParams, SellerMapGroup, User } from '@/lib/api/generated/models';
 import { useGetProduceMap } from '@/lib/api/generated/produce/produce';
@@ -99,12 +100,10 @@ export default function BrowseProduceMapClient({
         onViewChange={onViewChange}
       />
 
-      <div className="relative flex-1 min-h-125 md:min-h-0 w-full overflow-hidden rounded-xl border border-forest-dark/20 bg-slate-50 shadow-sm">
-        {isLoading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-background">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-deep-forest border-t-transparent" />
-          </div>
-        ) : (
+      {isLoading ? (
+        <LoadingSkeleton className="relative flex-1 min-h-125 md:min-h-0" />
+      ) : (
+        <div className="relative flex-1 min-h-125 md:min-h-0 w-full overflow-hidden rounded-xl border border-forest-dark/20 bg-slate-50 shadow-sm">
           <>
             <BrowseProduceMap
               baseLat={baseLat}
@@ -121,8 +120,8 @@ export default function BrowseProduceMapClient({
               />
             )}
           </>
-        )}
-      </div>
+        </div>
+      )}
 
       <Dialog
         open={!!selectedProduceId}

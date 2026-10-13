@@ -2,8 +2,6 @@
 
 import { User } from 'lucide-react';
 
-import { ReferralsSkeleton } from './ReferralsSkeleton';
-
 import {
   Dialog,
   DialogContent,
@@ -11,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { EmptyState, InlineErrorState } from '@/components/ui/state-displays';
 import { useGetClientReferrals } from '@/lib/api/generated/clients/clients';
 import type { ClientResponse } from '@/lib/api/generated/models';
@@ -72,7 +71,7 @@ export function ViewReferralsModal({ client, maxReferrals, onClose }: ViewReferr
             </p>
 
             {isLoading ? (
-              <ReferralsSkeleton />
+              <LoadingSkeleton heights={['h-12', 'h-12', 'h-12']} />
             ) : isError ? (
               <InlineErrorState
                 title="Failed to load referral list."

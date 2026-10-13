@@ -1,8 +1,8 @@
 'use client';
 
 import { InviteMembersForm } from './InviteMembersForm';
-import { OrgInviteSkeleton } from './OrgInviteClientSkeleton';
 
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
@@ -38,7 +38,7 @@ export default function OrgInviteClient() {
   );
 
   if (isUserLoading) {
-    return <OrgInviteSkeleton />;
+    return <LoadingSkeleton heights={['h-12', 'h-64', 'h-64']} />;
   }
 
   if (!isAdmin) {
@@ -56,7 +56,7 @@ export default function OrgInviteClient() {
   const meta = !isQueryFailed ? invitesRes?.data?.meta : undefined;
 
   return (
-    <div className="flex w-full flex-col mx-auto">
+    <div className="flex w-full flex-col mx-auto gap-6">
       <PageHeader title="Invite Organization Members" />
 
       <InviteMembersForm

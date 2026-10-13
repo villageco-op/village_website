@@ -8,9 +8,9 @@ import { toast } from 'sonner';
 import { ConfirmRemovalDialog } from './ConfirmMemberRemovalDialog';
 import { EditRoleModal } from './EditRoleModal';
 import { MembersTable } from './MembersTable';
-import { OrgMembersSkeleton } from './OrgMembersClientSkeleton';
 
 import { Button } from '@/components/ui/button';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { useAuth } from '@/hooks/useAuth';
@@ -72,7 +72,7 @@ export default function OrgMembersClient() {
   const { mutateAsync: removeMember, isPending: isRemovingMember } = useRemoveOrgMember();
 
   if (isUserLoading) {
-    return <OrgMembersSkeleton />;
+    return <LoadingSkeleton heights={['h-12', 'h-128']} />;
   }
 
   if (!isAdmin) {
@@ -129,7 +129,7 @@ export default function OrgMembersClient() {
   const meta = membersRes?.status === 200 ? membersRes.data?.meta : undefined;
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col gap-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageHeader
           title="Organization Members"

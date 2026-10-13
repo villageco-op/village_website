@@ -12,8 +12,8 @@ import { SubscriptionUserCard } from '../../../subscriptions/SubscriptionUserCar
 import { CancelSubscriptionDialog } from './CancelSubscriptionDialog';
 import { EditSubscriptionDialog } from './EditSubscriptionDialog';
 
-import { OrderDetailSkeleton } from '@/components/orders/OrderDetailSkeleton';
 import { Button } from '@/components/ui/button';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { NotFoundState } from '@/components/ui/state-displays';
 import { StatusPill } from '@/components/ui/status-pill';
 import type { FulfillmentType } from '@/lib/api/generated/models';
@@ -91,7 +91,7 @@ export default function SubscriptionDetailClient({ id }: SubscriptionDetailClien
     return (
       <div className="bg-off-white">
         <div className="mx-auto">
-          <OrderDetailSkeleton />
+          <LoadingSkeleton heights={['h-20', 'h-64', 'h-128']} />
         </div>
       </div>
     );

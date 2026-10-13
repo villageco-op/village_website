@@ -4,9 +4,9 @@ import Link from 'next/link';
 
 import { AddNewListingCard } from './AddNewListingCard';
 import { ListingCard } from './ListingCard';
-import { ListingsSkeleton } from './ListingsSkeleton';
 
 import { Button } from '@/components/ui/button';
+import LoadingSkeleton from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
@@ -27,7 +27,7 @@ export default function SellerListingsClient() {
   } = useGetSellerListings({ status: 'active', limit, page });
 
   if (isLoading) {
-    return <ListingsSkeleton />;
+    return <LoadingSkeleton heights={['h-20', 'h-128']} />;
   }
 
   if (isError || response?.status !== 200) {
