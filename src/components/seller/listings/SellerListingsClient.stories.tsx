@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect } from '@storybook/test';
+import { within, expect, userEvent } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -94,9 +94,9 @@ export const Paginated: Story = {
 
     // Navigate to Page 2
     const nextButton = await canvas.findByRole('button', { name: /next|2/i });
-    nextButton.click();
+    await userEvent.click(nextButton);
 
-    // Verify Page 2
+    // Verify Page 2 items appear
     await expect(await canvas.findByText(`Listing Item ${PAGE_LIMIT + 1}`)).toBeInTheDocument();
     await expect(canvas.queryByText('Listing Item 1')).not.toBeInTheDocument();
   },
