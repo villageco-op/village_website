@@ -4,14 +4,11 @@ import { Mail, User as UserIcon } from 'lucide-react';
 import Image from 'next/image';
 
 import { Card, CardContent } from '@/components/ui/card';
-import type {
-  OrderDetailResponseBuyer,
-  OrderDetailResponseSeller,
-} from '@/lib/api/generated/models';
+import type { UserBasicInfo } from '@/lib/api/generated/models';
 
 interface OrderUserCardProps {
   title: string;
-  user: OrderDetailResponseBuyer | OrderDetailResponseSeller;
+  user: UserBasicInfo;
   role: 'buyer' | 'seller';
 }
 

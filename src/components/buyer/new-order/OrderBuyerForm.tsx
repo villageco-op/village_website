@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormErrorState } from '@/components/ui/state-displays';
 import { getGetCartQueryKey, useAddToCart } from '@/lib/api/generated/cart/cart';
-import type { ProduceDetail } from '@/lib/api/generated/models';
+import type { ProduceDetails } from '@/lib/api/generated/models';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
 
 interface BuyerOrderFormProps {
@@ -76,7 +76,7 @@ export function BuyerOrderForm({
 
   // Safe defaults if data is missing
   const produce = !hasError
-    ? (produceQuery?.data as ProduceDetail)
+    ? (produceQuery?.data as ProduceDetails)
     : {
         title: 'Produce',
         totalOzInventory: 0,

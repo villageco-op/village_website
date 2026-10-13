@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 import { AddressMap } from '@/components/ui/address-map';
 import { Card, CardContent } from '@/components/ui/card';
-import type { ProduceDetail } from '@/lib/api/generated/models';
+import type { ProduceDetails } from '@/lib/api/generated/models';
 
 /**
  * Displays seller info and an interactive map showing their pickup location or delivery range.
@@ -13,7 +13,7 @@ import type { ProduceDetail } from '@/lib/api/generated/models';
  * @param props.seller - The seller information
  * @returns A map card
  */
-export default function SellerInfoMapCard({ seller }: { seller: ProduceDetail['seller'] }) {
+export default function SellerInfoMapCard({ seller }: { seller: ProduceDetails['seller'] }) {
   return (
     <Card>
       <CardContent className="p-6 pt-0 space-y-6">

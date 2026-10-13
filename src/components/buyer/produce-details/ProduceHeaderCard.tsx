@@ -3,7 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { ImageGallery } from '@/components/ui/image-gallery';
-import type { ProduceDetail } from '@/lib/api/generated/models';
+import type { ProduceDetails } from '@/lib/api/generated/models';
 import { formatAppDate } from '@/lib/date-utils';
 
 /**
@@ -12,7 +12,7 @@ import { formatAppDate } from '@/lib/date-utils';
  * @param props.produce - The produce details
  * @returns A full width header displaying large images and details
  */
-export default function ProduceHeaderCard({ produce }: { produce: ProduceDetail }) {
+export default function ProduceHeaderCard({ produce }: { produce: ProduceDetails }) {
   const pricePerLb = (Number(produce.pricePerOz) * 16).toFixed(2);
   const totalLbs = (Number(produce.totalOzInventory) / 16).toFixed(1);
   const images = (produce.images as string[]) || [];

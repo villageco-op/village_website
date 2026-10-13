@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import SellerInfoMapCard from './SellerInfoMapCard';
 
-import { MOCK_SELLER_USER } from '@/lib/storybook/mocks/user.mock';
+import { MOCK_PRODUCE_DETAILS } from '@/lib/storybook/mocks/produce.mock';
 
 const meta: Meta<typeof SellerInfoMapCard> = {
   title: 'Buyer/ProduceDetails/SellerInfoMapCard',
@@ -25,14 +25,14 @@ type Story = StoryObj<typeof SellerInfoMapCard>;
 
 export const Default: Story = {
   args: {
-    seller: MOCK_SELLER_USER,
+    seller: MOCK_PRODUCE_DETAILS.seller,
   },
 };
 
 export const PickupOnly: Story = {
   args: {
     seller: {
-      ...MOCK_SELLER_USER,
+      ...MOCK_PRODUCE_DETAILS.seller,
       name: 'Old Oak Farmstead',
       canDeliver: false,
       deliveryRangeMiles: null,

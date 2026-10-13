@@ -13,10 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import type { OrderDetailResponseItemsItem } from '@/lib/api/generated/models';
+import type { OrderItemDetails } from '@/lib/api/generated/models';
 
 interface OrderItemsCardProps {
-  items: OrderDetailResponseItemsItem[];
+  items: OrderItemDetails[];
 }
 
 /**
