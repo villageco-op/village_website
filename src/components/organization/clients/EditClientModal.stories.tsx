@@ -66,7 +66,7 @@ export const Submitting: Story = {
  * Tests editing input fields and submitting updated client payload data.
  */
 export const SubmitFormFlow: Story = {
-  play: async ({ canvasElement, args, step }) => {
+  play: async ({ canvasElement, args }) => {
     // Dialog content is rendered in a Portal on document body
     const body = within(canvasElement.ownerDocument.body);
 
@@ -85,25 +85,23 @@ export const SubmitFormFlow: Story = {
     await userEvent.clear(phoneInput);
     await userEvent.type(phoneInput, '(555) 987-6543', { delay: null });
 
-    await step('Fill out address details', async () => {
-      await userEvent.clear(addressInput);
-      await userEvent.type(addressInput, '456 Oak St', { delay: null });
+    await userEvent.clear(addressInput);
+    await userEvent.type(addressInput, '456 Oak St', { delay: null });
 
-      const cityInput = body.getByLabelText(/City/i);
-      await userEvent.clear(cityInput);
-      await userEvent.type(cityInput, 'Milwaukee', { delay: null });
+    const cityInput = body.getByLabelText(/City/i);
+    await userEvent.clear(cityInput);
+    await userEvent.type(cityInput, 'Milwaukee', { delay: null });
 
-      const stateDropdown = body.getByRole('combobox');
-      await userEvent.click(stateDropdown);
+    const stateDropdown = body.getByRole('combobox');
+    await userEvent.click(stateDropdown);
 
-      const docBody = within(document.body);
-      const txOption = await docBody.findByRole('option', { name: 'Wisconsin' });
-      await userEvent.click(txOption);
+    const docBody = within(document.body);
+    const txOption = await docBody.findByRole('option', { name: 'Wisconsin' });
+    await userEvent.click(txOption);
 
-      const zipInput = body.getByLabelText(/ZIP Code/i);
-      await userEvent.clear(zipInput);
-      await userEvent.type(zipInput, '53202');
-    });
+    const zipInput = body.getByLabelText(/ZIP Code/i);
+    await userEvent.clear(zipInput);
+    await userEvent.type(zipInput, '53202');
 
     // Submit form
     const saveButton = body.getByRole('button', { name: /save changes/i });

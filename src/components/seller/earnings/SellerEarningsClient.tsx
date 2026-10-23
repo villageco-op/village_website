@@ -7,7 +7,7 @@ import { EarningsStatRow } from './EarningsStatRow';
 import { MonthlyGoalCard } from './MonthlyGoalCard';
 import { PayoutHistoryCard } from './PayoutHistoryCard';
 
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';

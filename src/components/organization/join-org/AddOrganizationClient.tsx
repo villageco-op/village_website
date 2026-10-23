@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { useAuth } from '@/hooks/useAuth';
 
 /**

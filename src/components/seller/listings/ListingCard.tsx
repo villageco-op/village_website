@@ -30,20 +30,20 @@ export function ListingCard({ produce }: ListingCardProps) {
   const { user } = useAuth();
   const plotAddress = user?.address || 'No plot address';
 
-  const pricePerLb = (Number(produce.pricePerOz || 0) * 16).toFixed(2);
+  const pricePerOz = Number(produce.pricePerOz || 0).toFixed(2);
   const statusColors = getStatusColors(produce.status);
 
   const hasAnalytics =
     produce.analytics && typeof produce.analytics.totalMonthlyEarnings === 'number';
   const analytics = produce.analytics;
 
-  const availableLbs = analytics
-    ? (analytics.availableInventory / 16).toFixed(1).replace(/\.0$/, '')
-    : Math.floor(Number(produce.totalOzInventory || 0) / 16);
+  const availableOz = analytics
+    ? (analytics.availableInventory || 0).toFixed(1).replace(/\.0$/, '')
+    : Math.floor(Number(produce.totalOzInventory || 0));
 
-  const soldLbs = analytics ? (analytics.totalOzSold / 16).toFixed(1).replace(/\.0$/, '') : 0;
+  const soldOz = analytics ? (analytics.totalOzSold || 0).toFixed(1).replace(/\.0$/, '') : 0;
 
-  const neededLbs = analytics ? Math.ceil(analytics.upcomingSubscriptionOzNeeded / 16) : 0;
+  const neededOz = analytics ? Math.ceil(analytics.upcomingSubscriptionOzNeeded ?? 0) : 0;
 
   const rawHarvestDate = analytics?.nextHarvestDate || produce.availableBy;
   const harvestDate = formatAppDate(new Date(rawHarvestDate), 'weekdayDayMonth');
@@ -53,7 +53,6 @@ export function ListingCard({ produce }: ListingCardProps) {
     <Card className="mb-5 flex flex-col justify-between">
       <CardContent className="flex flex-col p-6">
         <div className="mb-4 flex items-start gap-4">
-          {/* Icon/Image Section */}
           {thumbnail ? (
             <Image
               src={String(thumbnail)}
@@ -68,7 +67,6 @@ export function ListingCard({ produce }: ListingCardProps) {
             </div>
           )}
 
-          {/* Title and Address Section */}
           <div className="flex flex-col">
             <div className="font-heading text-base font-extrabold text-ink">{produce.title}</div>
             <div className="font-sans text-[0.78rem] text-ink-3">Plot · {plotAddress}</div>
@@ -87,14 +85,12 @@ export function ListingCard({ produce }: ListingCardProps) {
             <span className="capitalize">{produce.status || 'Draft'}</span>
           </span>
           <span className="font-heading text-[0.9rem] font-extrabold text-deep-forest">
-            ${pricePerLb}/lb
+            ${pricePerOz}/oz
           </span>
         </div>
 
-        {/* Analytics Section */}
         {hasAnalytics && analytics && (
           <div className="mb-4 flex flex-col gap-3">
-            {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 gap-2 rounded-lg bg-slate-50 p-3 text-xs">
               <div>
                 <p className="mb-0.5 text-ink-3">Earned this month</p>
@@ -114,21 +110,19 @@ export function ListingCard({ produce }: ListingCardProps) {
               </div>
             </div>
 
-            {/* Inventory Warning */}
             {!analytics.inventorySufficientForUpcoming && (
               <div className="flex items-start gap-2 rounded-md bg-clay/10 p-2.5 text-[0.75rem] text-red-900 border border-clay/20">
                 <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-600" />
                 <span className="font-medium leading-tight">
-                  Inventory alert: You need {neededLbs} more lbs to fulfill upcoming subscriptions!
+                  Inventory alert: You need {neededOz} more oz to fulfill upcoming subscriptions!
                 </span>
               </div>
             )}
 
-            {/* Harvest & Progress Bar */}
             <div className="mt-1 flex flex-col gap-1.5">
               <div className="flex justify-between text-[0.75rem] text-ink-3">
                 <span>
-                  Avail: <strong className="font-semibold text-ink">{availableLbs} lbs</strong>
+                  Avail: <strong className="font-semibold text-ink">{availableOz} oz</strong>
                 </span>
                 <span>
                   Harvest: <strong className="font-semibold text-ink">{harvestDate}</strong>
@@ -147,20 +141,18 @@ export function ListingCard({ produce }: ListingCardProps) {
 
               <div className="flex justify-between text-[0.7rem] text-ink-3">
                 <span>{analytics.percentSold}% sold</span>
-                <span>{soldLbs} lbs pre-sold</span>
+                <span>{soldOz} oz pre-sold</span>
               </div>
             </div>
           </div>
         )}
 
-        {/* Fallback for listings without analytics */}
         {!analytics && (
           <div className="mb-4 font-sans text-[0.76rem] text-ink-3">
-            Available: {availableLbs} lbs · Harvest: {harvestDate}
+            Available: {availableOz} oz · Harvest: {harvestDate}
           </div>
         )}
 
-        {/* Actions - Pushed to the bottom */}
         <div className="mt-auto flex gap-2 pt-2">
           <Button variant="outline-forest" size="sm">
             <Link href={`/seller/listings/${produce.id}/edit`}>Edit</Link>

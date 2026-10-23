@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 import OnboardingFlow from '@/components/onboarding/OnboardingClient';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 
 /**
  * Onboarding flow that guides the user through profile setup, stripe onboarding, and enabling push notifications.

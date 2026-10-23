@@ -9,6 +9,9 @@ const meta: Meta<typeof OrderSummaryCard> = {
   component: OrderSummaryCard,
   parameters: {
     layout: 'padded',
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ['autodocs'],
   decorators: [
@@ -36,6 +39,7 @@ export const Delivery: Story = {
       stripeReceiptUrl: 'https://stripe.com/receipt',
       stripeInvoiceId: 'invoice_id',
     },
+    fromUser: BASE_MOCK_ORDER_DETAIL.buyer,
   },
 };
 
@@ -52,6 +56,7 @@ export const Pickup: Story = {
       stripeReceiptUrl: 'https://stripe.com/receipt',
       stripeInvoiceId: 'invoice_id',
     },
+    fromUser: BASE_MOCK_ORDER_DETAIL.buyer,
   },
 };
 
@@ -68,5 +73,6 @@ export const Canceled: Story = {
       stripeReceiptUrl: 'https://stripe.com/receipt',
       stripeInvoiceId: 'invoice_id',
     },
+    fromUser: BASE_MOCK_ORDER_DETAIL.buyer,
   },
 };

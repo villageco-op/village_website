@@ -109,17 +109,3 @@ export const NoAnalytics: Story = {
     },
   },
 };
-
-/**
- * A listing with a produce type not covered by the
- * icon helper, falling back to the default package icon.
- */
-export const FallbackIcon: Story = {
-  args: {
-    produce: {
-      ...NoAnalytics.args?.produce!,
-      title: 'Unknown Exotic Fruit',
-      produceType: 'fruit',
-    },
-  },
-};

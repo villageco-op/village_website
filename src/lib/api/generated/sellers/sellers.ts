@@ -25,7 +25,9 @@ import type {
   GetSellerPayoutsParams,
   PayoutHistoryResponse,
   SellerDashboardResponse,
-  SellerEarningsResponse
+  SellerEarningsResponse,
+  SellerUserProfile,
+  UserId
 } from '../models';
 
 import { apiClient } from '../../client';
@@ -375,6 +377,120 @@ export function useGetSellerDashboard<TData = Awaited<ReturnType<typeof getSelle
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetSellerDashboardQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Get public seller profile including rating/review stats. Excludes sensitive info.
+ */
+export type getSellerProfileResponse200 = {
+  data: SellerUserProfile
+  status: 200
+}
+
+export type getSellerProfileResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type getSellerProfileResponseSuccess = (getSellerProfileResponse200) & {
+  headers: Headers;
+};
+export type getSellerProfileResponseError = (getSellerProfileResponse404) & {
+  headers: Headers;
+};
+
+export type getSellerProfileResponse = (getSellerProfileResponseSuccess | getSellerProfileResponseError)
+
+export const getGetSellerProfileUrl = (id: UserId,) => {
+
+
+  
+
+  return `/api/seller/${id}`
+}
+
+export const getSellerProfile = async (id: UserId, options?: RequestInit): Promise<getSellerProfileResponse> => {
+  
+  return apiClient<getSellerProfileResponse>(getGetSellerProfileUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetSellerProfileQueryKey = (id: UserId,) => {
+    return [
+    `/api/seller/${id}`
+    ] as const;
+    }
+
+    
+export const getGetSellerProfileQueryOptions = <TData = Awaited<ReturnType<typeof getSellerProfile>>, TError = ErrorResponse>(id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSellerProfile>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSellerProfileQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSellerProfile>>> = ({ signal }) => getSellerProfile(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSellerProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSellerProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getSellerProfile>>>
+export type GetSellerProfileQueryError = ErrorResponse
+
+
+export function useGetSellerProfile<TData = Awaited<ReturnType<typeof getSellerProfile>>, TError = ErrorResponse>(
+ id: UserId, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSellerProfile>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSellerProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getSellerProfile>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSellerProfile<TData = Awaited<ReturnType<typeof getSellerProfile>>, TError = ErrorResponse>(
+ id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSellerProfile>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSellerProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getSellerProfile>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSellerProfile<TData = Awaited<ReturnType<typeof getSellerProfile>>, TError = ErrorResponse>(
+ id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSellerProfile>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetSellerProfile<TData = Awaited<ReturnType<typeof getSellerProfile>>, TError = ErrorResponse>(
+ id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSellerProfile>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSellerProfileQueryOptions(id,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

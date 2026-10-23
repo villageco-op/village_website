@@ -1,9 +1,9 @@
-import SellerSubscriptionsClient from '@/components/seller/subscriptions/SellerSubscriptionsClient';
+import SubscriptionsClient from '@/components/subscriptions/SubscriptionsClient';
 
 /**
- * The seller subscrioptions page containing active and past subscriptions.
+ * The seller subscriptions page containing active and past subscriptions.
  * @returns The seller subscriptions client
  */
 export default function SellerSubscriptions() {
-  return <SellerSubscriptionsClient />;
+  return <SubscriptionsClient role="seller" />;
 }

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { FormErrorState } from '@/components/ui/state-displays';
 import { useAddToCart } from '@/lib/api/generated/cart/cart';
 import type { OrderItemDetails } from '@/lib/api/generated/models';
@@ -33,10 +34,8 @@ export function ReorderForm({ orderId, onClose }: ReorderFormProps) {
 
   if (isLoading) {
     return (
-      <Card className="rounded-xl border border-forest-dark/10 shadow-sm bg-white overflow-hidden">
-        <div className="flex justify-center p-12">
-          <Loader2 className="w-8 h-8 animate-spin text-lime" />
-        </div>
+      <Card>
+        <LoadingSkeleton />
       </Card>
     );
   }
@@ -87,13 +86,13 @@ function ReorderFormContent({
   };
 
   const [itemsState, setItemsState] = useState<
-    Record<string, { quantityLbs: number; selected: boolean }>
+    Record<string, { quantityOz: number; selected: boolean }>
   >(() => {
-    const initialStore: Record<string, { quantityLbs: number; selected: boolean }> = {};
+    const initialStore: Record<string, { quantityOz: number; selected: boolean }> = {};
     items.forEach((item) => {
       const { isOrderable } = getItemAvailability(item);
       initialStore[item.productId] = {
-        quantityLbs: Math.max(0, parseFloat(item.quantityOz) / 16),
+        quantityOz: Math.max(0, parseFloat(item.quantityOz) / 16),
         selected: isOrderable,
       };
     });
@@ -104,7 +103,7 @@ function ReorderFormContent({
 
   const totalPrice = selectedItems.reduce((acc, item) => {
     const pricePerLb = Number(item.pricePerOz) * 16;
-    const qty = itemsState[item.productId]?.quantityLbs || 0;
+    const qty = itemsState[item.productId]?.quantityOz || 0;
     return acc + pricePerLb * qty;
   }, 0);
 
@@ -125,7 +124,7 @@ function ReorderFormContent({
   const handleQuantityChange = (productId: string, val: number) => {
     setItemsState((prev) => ({
       ...prev,
-      [productId]: { ...prev[productId], quantityLbs: val },
+      [productId]: { ...prev[productId], quantityOz: val },
     }));
   };
 
@@ -143,7 +142,7 @@ function ReorderFormContent({
           addToCartMutation.mutateAsync({
             data: {
               productId: item.productId,
-              quantityOz: Math.round(itemsState[item.productId].quantityLbs * 16),
+              quantityOz: Math.round(itemsState[item.productId].quantityOz * 16),
               isSubscription: false,
             },
           }),
@@ -157,7 +156,7 @@ function ReorderFormContent({
   };
 
   return (
-    <Card className="z-50 rounded-xl border border-forest-dark/10 shadow-lg bg-white overflow-hidden relative max-h-[90vh] flex flex-col w-full max-w-lg sm:max-w-md mx-auto">
+    <Card className="z-50 rounded-xl border border-forest-dark/10 shadow-lg bg-white overflow-auto max-h-screen relative flex flex-col w-full max-w-lg sm:max-w-md mx-auto">
       <CardHeader className="bg-off-white border-b border-lime/20 pb-4 pr-12">
         <CardTitle className="font-heading text-xl text-deep-forest">Reorder Items</CardTitle>
         <Button variant="ghost" size="icon" className="absolute right-2 top-2" onClick={onClose}>
@@ -175,7 +174,7 @@ function ReorderFormContent({
             const limitOz = item.maxOrderQuantityOz
               ? parseFloat(item.maxOrderQuantityOz)
               : inventoryOz;
-            const maxLbs = Math.min(inventoryOz, limitOz) / 16;
+            const maxOz = Math.min(inventoryOz, limitOz) / 16;
 
             return (
               <div
@@ -217,12 +216,12 @@ function ReorderFormContent({
                     className={`w-full sm:w-32 ${itemsState[item.productId]?.selected ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}
                   >
                     <OrderQuantityInput
-                      quantityLbs={itemsState[item.productId]?.quantityLbs || 0}
+                      quantityOz={itemsState[item.productId]?.quantityOz || 0}
                       onChange={(val) => handleQuantityChange(item.productId, val)}
-                      maxLbs={maxLbs}
+                      maxOz={maxOz}
                     />
                     <p className="text-[10px] text-slate-500 mt-1 text-right sm:text-left">
-                      Max: {maxLbs.toFixed(1)} lbs
+                      Max: {maxOz.toFixed(1)} oz
                     </p>
                   </div>
                 </div>

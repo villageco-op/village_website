@@ -1,12 +1,10 @@
 'use client';
 
-import { Edit2, Search, Trash2, X } from 'lucide-react';
+import { Edit2, Search, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { ClearFiltersButton } from '@/components/ui/clear-filters-button';
 import { Input } from '@/components/ui/input';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
-import { PaginationControls } from '@/components/ui/pagination-controls';
 import {
   Select,
   SelectContent,
@@ -14,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { EmptyState, InlineErrorState } from '@/components/ui/state-displays';
 import {
   Table,
   TableBody,
@@ -23,6 +20,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import RadioCell from '@/components/ui/table-cells';
+import { TablePageCardShell } from '@/components/ui/table-page-card-shell';
+import { SelectableTableRow } from '@/components/ui/table-row-selectable';
+import { TableSelectionIndicator } from '@/components/ui/table-selection-indicator';
 import {
   OrgRole,
   type PaginationMetadata,
@@ -49,7 +50,8 @@ interface MembersTableProps {
 }
 
 /**
- * Table containing organization members and buttons for setting member role and removing members.
+ * Table containing organization members utilizing the TablePageCardShell layout pattern,
+ * with selectable rows via radio buttons, search and role filters, and action buttons.
  * @param props - Component props
  * @param props.members - The members list
  * @param props.currentUser - The current user
@@ -86,164 +88,133 @@ export function MembersTable({
   onRemoveClick,
 }: MembersTableProps) {
   const isSelfSelected = selectedMember?.id === currentUser.id;
+  const hasFilters = searchQuery || roleFilter !== 'all';
+
+  const filtersSlot = (
+    <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="relative w-full sm:max-w-xs">
+        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-ink-3" />
+        <Input
+          placeholder="Search name or email..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-9 w-full h-9 text-sm"
+        />
+      </div>
+
+      <Select value={roleFilter} onValueChange={setRoleFilter}>
+        <SelectTrigger className="w-full sm:w-48 h-9 text-sm">
+          <SelectValue placeholder="All Roles" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All Roles</SelectItem>
+          <SelectItem value={OrgRole.admin}>Administrators</SelectItem>
+          <SelectItem value={OrgRole.member}>Members</SelectItem>
+        </SelectContent>
+      </Select>
+
+      {hasFilters && (
+        <ClearFiltersButton
+          onClear={() => {
+            setSearchQuery('');
+            setRoleFilter('all');
+          }}
+        />
+      )}
+    </div>
+  );
+
+  const selectionIndicatorSlot = selectedMember ? (
+    <TableSelectionIndicator
+      selectionText={`${selectedMember.name || 'Unnamed User'} ${isSelfSelected ? '(You)' : ''}`}
+    />
+  ) : null;
+
+  const actionsSlot = (
+    <div className="flex items-center gap-2">
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={!selectedMember || isSelfSelected}
+        onClick={() => selectedMember && onChangeRoleClick(selectedMember)}
+        className="h-8 gap-1.5 px-3 text-xs"
+      >
+        <Edit2 className="h-3.5 w-3.5" />
+        Change Role
+      </Button>
+      <Button
+        variant="destructive"
+        size="sm"
+        disabled={!selectedMember || isSelfSelected}
+        onClick={() => selectedMember && onRemoveClick(selectedMember)}
+        className="h-8 gap-1.5 px-3 text-xs"
+      >
+        <Trash2 className="h-3.5 w-3.5" />
+        Remove
+      </Button>
+    </div>
+  );
 
   return (
-    <Card>
-      <CardContent>
-        {/* Filters section */}
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="relative w-full sm:max-w-xs">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-ink-3" />
-              <Input
-                placeholder="Search name or email..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 w-full"
-              />
-            </div>
+    <TablePageCardShell
+      isLoading={isLoading}
+      isError={isError}
+      isEmpty={members.length === 0}
+      onRetry={onRefetch}
+      meta={meta}
+      setPage={setPage}
+      emptyTitle="No members found"
+      emptyDescription="No organization members match your search criteria."
+      filters={filtersSlot}
+      selectionIndicator={selectionIndicatorSlot}
+      actions={actionsSlot}
+    >
+      <Table className="w-full">
+        <TableHeader>
+          <TableRow className="hover:bg-transparent">
+            <TableHead className="w-12">Select</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Role</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {members.map((member) => {
+            const isSelf = member.id === currentUser.id;
+            const isSelected = selectedMember?.id === member.id;
 
-            <div className="w-full sm:w-48">
-              <Select value={roleFilter} onValueChange={setRoleFilter}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="All Roles" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Roles</SelectItem>
-                  <SelectItem value={OrgRole.admin}>Administrators</SelectItem>
-                  <SelectItem value={OrgRole.member}>Members</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {(searchQuery || roleFilter !== 'all') && (
-              <Button
-                onClick={() => {
-                  setSearchQuery('');
-                  setRoleFilter('all');
-                }}
-                variant="ghost"
-                size="sm"
-                className="h-9 px-3 text-sm text-forest hover:text-forest-hover"
+            return (
+              <SelectableTableRow
+                key={member.id}
+                id={member.id}
+                onSelect={() => setSelectedMember(member)}
+                isSelected={isSelected}
               >
-                <X className="mr-1.5 h-3.5 w-3.5" />
-                Clear Filters
-              </Button>
-            )}
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="text-xs text-muted-foreground">
-              {selectedMember && (
-                <span>
-                  Selected:{' '}
-                  <strong className="text-foreground">
-                    {selectedMember.name || 'Unnamed User'} {isSelfSelected && '(You)'}
-                  </strong>
-                </span>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={!selectedMember || isSelfSelected}
-                onClick={() => selectedMember && onChangeRoleClick(selectedMember)}
-                className="h-8 gap-1.5 px-3 text-xs"
-              >
-                <Edit2 className="h-3.5 w-3.5" />
-                Change Role
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                disabled={!selectedMember || isSelfSelected}
-                onClick={() => selectedMember && onRemoveClick(selectedMember)}
-                className="h-8 gap-1.5 px-3 text-xs"
-              >
-                <Trash2 className="h-3.5 w-3.5" />
-                Remove
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Table display */}
-        {isLoading ? (
-          <LoadingSkeleton />
-        ) : isError ? (
-          <div className="py-12">
-            <InlineErrorState
-              title="Unable to load members"
-              description="We encountered an issue fetching the organization directory. Please try again."
-              onRetry={onRefetch}
-            />
-          </div>
-        ) : members.length === 0 ? (
-          <EmptyState
-            title="No members found"
-            description="No organization members match your search criteria."
-          />
-        ) : (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="hover:bg-transparent">
-                  <TableHead>Select</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Role</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {members.map((member) => {
-                  const isSelf = member.id === currentUser.id;
-                  const isSelected = selectedMember?.id === member.id;
-
-                  return (
-                    <TableRow
-                      key={member.id}
-                      onClick={() => setSelectedMember(member)}
-                      className={`cursor-pointer ${isSelected ? 'bg-muted/60' : ''}`}
-                    >
-                      <TableCell>
-                        <input
-                          type="radio"
-                          name="member-selection"
-                          checked={isSelected}
-                          onChange={() => setSelectedMember(member)}
-                          className="h-4 w-4 cursor-pointer accent-primary"
-                        />
-                      </TableCell>
-                      <TableCell className="font-heading font-semibold text-ink">
-                        {member.name || 'Unnamed User'} {isSelf && '(You)'}
-                      </TableCell>
-                      <TableCell className="text-ink-3">
-                        {member.email || 'No email provided'}
-                      </TableCell>
-                      <TableCell>
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
-                            member.orgRole === OrgRole.admin
-                              ? 'bg-amber-50 text-amber-700 border border-amber-200/50'
-                              : 'bg-slate-50 text-slate-700 border border-slate-200/50'
-                          }`}
-                        >
-                          {member.orgRole}
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
-        )}
-
-        {/* Pagination control footer */}
-        {meta && meta.totalPages > 1 && <PaginationControls meta={meta} onPageChange={setPage} />}
-      </CardContent>
-    </Card>
+                <RadioCell
+                  name="member-selection"
+                  isSelected={isSelected}
+                  onChange={() => setSelectedMember(member)}
+                />
+                <TableCell className="font-heading font-semibold text-ink">
+                  {member.name || 'Unnamed User'} {isSelf && '(You)'}
+                </TableCell>
+                <TableCell className="text-ink-3">{member.email || 'No email provided'}</TableCell>
+                <TableCell>
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
+                      member.orgRole === OrgRole.admin
+                        ? 'bg-amber-50 text-amber-700 border border-amber-200/50'
+                        : 'bg-slate-50 text-slate-700 border border-slate-200/50'
+                    }`}
+                  >
+                    {member.orgRole}
+                  </span>
+                </TableCell>
+              </SelectableTableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </TablePageCardShell>
   );
 }

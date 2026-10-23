@@ -1,18 +1,11 @@
 'use client';
 
-import { Package } from 'lucide-react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { AmountCell, OrderProductCell, QuantityOzCell } from '@/components/ui/table-cells';
+import { SelectableTableRow } from '@/components/ui/table-row-selectable';
 import type { OrderItemDetails } from '@/lib/api/generated/models';
 
 interface OrderItemsCardProps {
@@ -32,7 +25,6 @@ export function OrderItemsCard({ items }: OrderItemsCardProps) {
     <Card className="overflow-hidden">
       <CardContent className="p-0 sm:p-6">
         <div className="flex items-center gap-2 px-6 pt-6 sm:px-0 sm:pt-0 mb-4 border-b border-border/50 pb-4">
-          <Package className="h-5 w-5 text-ink-3" />
           <h2 className="font-heading text-lg font-bold text-ink">Order Items</h2>
         </div>
 
@@ -43,59 +35,33 @@ export function OrderItemsCard({ items }: OrderItemsCardProps) {
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
-                  <TableHead className="w-75">Product</TableHead>
-                  <TableHead className="text-right">Quantity</TableHead>
-                  <TableHead className="text-right">Price/lb</TableHead>
-                  <TableHead className="text-right">Subtotal</TableHead>
+                  <TableHead>Product</TableHead>
+                  <TableHead>Quantity</TableHead>
+                  <TableHead>Price/oz</TableHead>
+                  <TableHead>Subtotal</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {items.map((item) => {
-                  const quantityLbs = Number(item.quantityOz || 0) / 16;
-                  const pricePerLb = Number(item.pricePerOz || 0) * 16;
-                  const subtotal = quantityLbs * pricePerLb;
+                  const quantityOz = Number(item.quantityOz || 0);
+                  const pricePerOz = Number(item.pricePerOz || 0);
+                  const subtotal = quantityOz * pricePerOz;
                   const itemImage = item.images?.[0];
 
                   return (
-                    <TableRow
+                    <SelectableTableRow
+                      id={item.id}
                       key={item.id}
-                      className="group cursor-pointer hover:bg-slate-50/80 transition-colors"
-                      onClick={() => void router.push(`/produce/${item.productId}`)}
+                      onSelect={() => void router.push(`/produce/${item.productId}`)}
                     >
-                      <TableCell className="py-3.5 font-medium text-ink">
-                        <div className="flex items-center gap-3">
-                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-slate-100 border border-border/50">
-                            {itemImage ? (
-                              <Image
-                                src={itemImage}
-                                alt={item.productName || 'Product'}
-                                fill
-                                className="object-cover transition-transform group-hover:scale-105"
-                              />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center text-[0.65rem] font-bold text-ink-3">
-                                #{item.id.slice(0, 3)}
-                              </div>
-                            )}
-                          </div>
-                          <span className="font-heading text-sm font-semibold text-ink line-clamp-1">
-                            {item.productName || 'Unknown Product'}
-                          </span>
-                        </div>
-                      </TableCell>
+                      <OrderProductCell title={item.productName} image={itemImage} />
 
-                      <TableCell className="text-right py-3.5 text-sm text-ink-2">
-                        {quantityLbs.toFixed(1).replace(/\.0$/, '')} lbs
-                      </TableCell>
+                      <QuantityOzCell quantityOz={quantityOz} />
 
-                      <TableCell className="text-right py-3.5 text-sm text-ink-2">
-                        ${pricePerLb.toFixed(2)}
-                      </TableCell>
+                      <AmountCell amount={pricePerOz} />
 
-                      <TableCell className="text-right py-3.5 font-heading text-sm font-bold text-ink">
-                        ${subtotal.toFixed(2)}
-                      </TableCell>
-                    </TableRow>
+                      <AmountCell amount={subtotal} />
+                    </SelectableTableRow>
                   );
                 })}
               </TableBody>

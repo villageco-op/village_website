@@ -9,9 +9,9 @@ const mockFullData: ListingFormData = {
   title: 'Honeycrisp Apples',
   description: '',
   produceType: 'fruit',
-  pricePerLb: '',
-  totalLbsInventory: '',
-  maxOrderLbs: '',
+  pricePerOz: '',
+  totalOzInventory: '',
+  maxOrderOz: '',
   availableBy: '',
   harvestFrequencyDays: '7',
   seasonStart: '',
@@ -46,8 +46,8 @@ export const Populated: Story = {
   args: {
     data: {
       ...mockFullData,
-      pricePerLb: '4.99',
-      totalLbsInventory: '150',
+      pricePerOz: '4.99',
+      totalOzInventory: '150',
     },
   },
 };
@@ -59,17 +59,17 @@ export const PriceUpdateTest: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
 
-    const priceInput = canvas.getByLabelText(/Price per lb/i);
+    const priceInput = canvas.getByLabelText(/Price per oz/i);
     const inventoryInput = canvas.getByLabelText(/Total Inventory/i);
 
     await userEvent.type(priceInput, '5.50');
     await userEvent.type(inventoryInput, '25');
 
     await expect(args.updateData).toHaveBeenCalledWith(
-      expect.objectContaining({ pricePerLb: expect.stringContaining('5') }),
+      expect.objectContaining({ pricePerOz: expect.stringContaining('5') }),
     );
     await expect(args.updateData).toHaveBeenCalledWith(
-      expect.objectContaining({ totalLbsInventory: expect.stringContaining('2') }),
+      expect.objectContaining({ totalOzInventory: expect.stringContaining('2') }),
     );
   },
 };

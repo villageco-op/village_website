@@ -5,13 +5,54 @@ import { http, HttpResponse, delay } from 'msw';
 
 import ProduceListingClient from './ProduceListingClient';
 
+import { BASE_MOCK_ORDER, BASE_MOCK_ORDER_LIST_ITEM } from '@/lib/storybook/mocks/order.mock';
 import { MOCK_PRODUCE_DETAILS } from '@/lib/storybook/mocks/produce.mock';
+import { BASE_MOCK_SUBSCRIPTION } from '@/lib/storybook/mocks/subscription.mock';
+import { createPaginatedResponse } from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
 });
 
-const MOCK_ID = 'prod_123';
+const MOCK_ID = BASE_MOCK_ORDER_LIST_ITEM.id;
+
+const MOCK_ORDERS = [
+  {
+    ...BASE_MOCK_ORDER,
+    id: 'ord_active_1',
+    status: 'pending',
+    scheduledTime: new Date(Date.now() + 86400000).toISOString(),
+    createdAt: new Date().toISOString(),
+  },
+  {
+    ...BASE_MOCK_ORDER,
+    id: 'ord_past_1',
+    status: 'completed',
+    scheduledTime: new Date(Date.now() - 86400000).toISOString(),
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+];
+
+const MOCK_SUBS = [
+  {
+    ...BASE_MOCK_SUBSCRIPTION,
+    id: 'sub_active_1',
+    productId: MOCK_ID,
+    status: 'active',
+    quantityOz: 16,
+    fulfillmentType: 'delivery',
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    ...BASE_MOCK_SUBSCRIPTION,
+    id: 'sub_past_1',
+    productId: MOCK_ID,
+    status: 'canceled',
+    quantityOz: 8,
+    fulfillmentType: 'pickup',
+    updatedAt: new Date(Date.now() - 172800000).toISOString(),
+  },
+];
 
 const meta: Meta<typeof ProduceListingClient> = {
   title: 'Buyer/ProduceDetails/ProduceListingClient',
@@ -43,9 +84,14 @@ export const Default: Story = {
         http.get(`*/api/produce/${MOCK_ID}`, () => {
           return HttpResponse.json(MOCK_PRODUCE_DETAILS);
         }),
-        // Mocking reviews call since ProduceListingClient renders ProduceReviews
         http.get(`*/api/users/${MOCK_PRODUCE_DETAILS.seller.id}/reviews`, () => {
           return HttpResponse.json({ reviews: [], meta: {} });
+        }),
+        http.get('*/api/orders', () => {
+          return HttpResponse.json(createPaginatedResponse(MOCK_ORDERS));
+        }),
+        http.get('*/api/subscriptions', () => {
+          return HttpResponse.json(createPaginatedResponse(MOCK_SUBS));
         }),
       ],
     },

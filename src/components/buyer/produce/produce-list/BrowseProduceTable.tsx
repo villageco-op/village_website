@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import router from 'next/router';
 
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { AmountCell, IdentityCell, OrderProductCell } from '@/components/ui/table-cells';
+import { SelectableTableRow } from '@/components/ui/table-row-selectable';
 import type { ProduceListItem } from '@/lib/api/generated/models';
 import { getDayFromDate } from '@/lib/date-utils';
 import { formatWeight } from '@/lib/produce-utils';
@@ -44,58 +45,31 @@ export function BrowseProduceTable({
             <TableHeader>
               <TableRow className="hover:bg-transparent">
                 <TableHead>Item</TableHead>
-                <TableHead>Grower</TableHead>
+                <TableHead>From</TableHead>
                 <TableHead>Available</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Dist.</TableHead>
-                <TableHead className="text-center">Sub.</TableHead>
+                <TableHead>Price/oz</TableHead>
+                <TableHead>Distance</TableHead>
+                <TableHead className="text-center">Subscribable</TableHead>
                 <TableHead className="w-30"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {produce.map((item) => (
-                <TableRow
+                <SelectableTableRow
                   key={item.id}
-                  className="cursor-pointer group"
-                  onClick={() => void router.push(`/produce/${item.id}`)}
+                  id={item.id}
+                  onSelect={() => void router.push(`/produce/${item.id}`)}
                 >
-                  <TableCell>
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-forest-dark/10 bg-white">
-                        {item.thumbnail ? (
-                          <Image
-                            src={item.thumbnail}
-                            alt={item.name}
-                            fill
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center bg-slate-100 text-[10px] text-slate-400">
-                            No Img
-                          </div>
-                        )}
-                      </div>
-                      <span className="truncate" title={item.name}>
-                        {item.name}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      size="sm"
-                      variant="link"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onGrowerClick(item.sellerId);
-                      }}
-                    >
-                      {item.sellerName} ↗
-                    </Button>
-                  </TableCell>
+                  <OrderProductCell title={item.name} image={item.thumbnail} />
+                  <IdentityCell
+                    name={item.sellerName || undefined}
+                    id={item.sellerId}
+                    onNameClick={() => onGrowerClick(item.sellerId)}
+                  />
                   <TableCell>
                     {formatWeight(Number(item.amount) || 0)} · {getDayFromDate(item.availableBy)}
                   </TableCell>
-                  <TableCell>${(Number(item.price) * 16).toFixed(2)}/lb</TableCell>
+                  <AmountCell amount={item.price} />
                   <TableCell>{item.distance ? `${item.distance.toFixed(1)} mi` : '--'}</TableCell>
                   <TableCell className="text-center">
                     {item.isSubscribable && (
@@ -119,7 +93,7 @@ export function BrowseProduceTable({
                       </Button>
                     </div>
                   </TableCell>
-                </TableRow>
+                </SelectableTableRow>
               ))}
             </TableBody>
           </Table>

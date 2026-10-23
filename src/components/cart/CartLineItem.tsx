@@ -62,11 +62,10 @@ export function CartLineItem({
     return () => clearTimeout(timer);
   }, [localQtyOz, item.quantityOz, item.reservationId]);
 
-  const handleIncrement = () => setLocalQtyOz((prev) => prev + 16);
-  const handleDecrement = () => setLocalQtyOz((prev) => Math.max(16, prev - 16));
+  const handleIncrement = () => setLocalQtyOz((prev) => prev + 0.5);
+  const handleDecrement = () => setLocalQtyOz((prev) => Math.max(0.5, prev - 0.5));
 
-  const qtyLbs = localQtyOz / 16;
-  const priceNum = Number(item.pricePerOz) * 16;
+  const priceNum = Number(item.pricePerOz);
   const lineTotal = Number(item.pricePerOz) * localQtyOz;
   const imageUrl = item.images?.[0];
   const isSubscribable =
@@ -112,7 +111,7 @@ export function CartLineItem({
               {item.title}
             </div>
             <div className="mt-0.5 flex gap-2 font-sans text-[0.72rem] text-ink-3">
-              <span>${priceNum.toFixed(2)}/lb</span>
+              <span>${priceNum.toFixed(2)}/oz</span>
               {item.isSubscription && item.subscriptionCostReductionPercent && (
                 <span className="font-bold text-lime">
                   ({item.subscriptionCostReductionPercent}% off)
@@ -130,12 +129,12 @@ export function CartLineItem({
               className="rounded-full border-cream-dark bg-white text-ink-2 hover:border-deep-forest hover:bg-cream disabled:opacity-50"
               onClick={handleDecrement}
               title="Decrease quantity"
-              disabled={localQtyOz <= 16} // Disable if at 1lb minimum
+              disabled={localQtyOz <= 0.5} // Disable if at 0.5oz minimum
             >
               <Minus className="size-3" />
             </Button>
             <span className="min-w-7 text-center font-heading text-[0.82rem] font-bold">
-              {qtyLbs}
+              {localQtyOz}
             </span>
             <Button
               variant="outline"

@@ -10,7 +10,7 @@ import { EditRoleModal } from './EditRoleModal';
 import { MembersTable } from './MembersTable';
 
 import { Button } from '@/components/ui/button';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { useAuth } from '@/hooks/useAuth';

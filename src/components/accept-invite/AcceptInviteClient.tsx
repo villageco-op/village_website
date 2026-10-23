@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import LoadingSkeleton from '../ui/loading-skeleton';
+import { LoadingSkeleton } from '../ui/loading-skeleton';
 import { PageErrorState } from '../ui/state-displays';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

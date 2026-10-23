@@ -95,7 +95,7 @@ export const Paginated: Story = {
     await expect(await canvas.findByText('Buyer 1')).toBeInTheDocument();
     await expect(canvas.queryByText(`Buyer ${PAGE_LIMIT + 1}`)).not.toBeInTheDocument();
 
-    const nextButton = await canvas.findByRole('button', { name: /next|2/i });
+    const nextButton = await canvas.findByRole('button', { name: /next/i });
     nextButton.click();
 
     await expect(await canvas.findByText(`Buyer ${PAGE_LIMIT + 1}`)).toBeInTheDocument();

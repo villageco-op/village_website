@@ -2,7 +2,7 @@
 
 import OrgSettingsForm from './OrgSettingsForm';
 
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageErrorState } from '@/components/ui/state-displays';
 import type { User } from '@/lib/api/generated/models';
 import { useGetOrganization } from '@/lib/api/generated/organizations/organizations';

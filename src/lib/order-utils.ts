@@ -13,16 +13,6 @@ export const formatOrderId = (id: string) => `#${id.slice(0, 8).toUpperCase()}`;
 export const formatCurrency = (amount: number | string) => `$${Number(amount || 0).toFixed(2)}`;
 
 /**
- * Converts ounces (from API) to pounds for user display.
- * @param oz - The weight in ounces to be converted.
- * @returns The weight in pounds as a string, rounded to one decimal place (removes ".0" if whole).
- */
-export const ozToLbs = (oz: number | string) => {
-  const lbs = Number(oz || 0) / 16;
-  return lbs.toFixed(1).replace(/\.0$/, '');
-};
-
-/**
  * Standardizes date formatting for order rows.
  * @param dateString - The ISO date string or null/undefined value.
  * @param options - Configuration options for the date format.

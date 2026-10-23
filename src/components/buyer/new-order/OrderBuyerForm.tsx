@@ -1,7 +1,7 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { Loader2, ShoppingCart, CalendarDays, X } from 'lucide-react';
+import { Loader2, CalendarDays, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -10,7 +10,7 @@ import { OrderSubscriptionToggle } from './OrderSubscriptionToggle';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { FormErrorState } from '@/components/ui/state-displays';
 import { getGetCartQueryKey, useAddToCart } from '@/lib/api/generated/cart/cart';
 import type { ProduceDetails } from '@/lib/api/generated/models';
@@ -19,7 +19,7 @@ import { useGetProduce } from '@/lib/api/generated/produce/produce';
 interface BuyerOrderFormProps {
   produceId: string;
   onClose?: () => void;
-  initialQuantityLbs?: number;
+  initialQuantityOz?: number;
   initialIsSubscription?: boolean;
 }
 
@@ -28,21 +28,21 @@ interface BuyerOrderFormProps {
  * @param props - Props for the order form
  * @param props.produceId - The produce listing Id
  * @param props.onClose - Called when closed
- * @param props.initialQuantityLbs - Start with a quantity entered
+ * @param props.initialQuantityOz - Start with a quantity entered
  * @param props.initialIsSubscription - Start with isSubscription set
  * @returns A small form component with order inputs
  */
 export function BuyerOrderForm({
   produceId,
   onClose,
-  initialQuantityLbs,
+  initialQuantityOz,
   initialIsSubscription,
 }: BuyerOrderFormProps) {
   const { data: produceQuery, isLoading, error, refetch } = useGetProduce(produceId);
   const addToCartMutation = useAddToCart();
   const queryClient = useQueryClient();
 
-  const [quantityLbs, setQuantityLbs] = useState<number>(initialQuantityLbs || 1);
+  const [quantityOz, setQuantityOz] = useState<number>(initialQuantityOz || 1);
   const [isSubscription, setIsSubscription] = useState<boolean>(initialIsSubscription || false);
 
   const hasError = !!error || (!isLoading && (!produceQuery?.data || produceQuery.status !== 200));
@@ -84,11 +84,11 @@ export function BuyerOrderForm({
         harvestFrequencyDays: 7,
         isSubscribable: false,
       };
-  const maxLbsInventory = Number(produce.totalOzInventory) / 16;
-  const maxOrderLbs = Number(produce.maxOrderQuantityOz) / 16;
-  const pricePerLb = Number(produce.pricePerOz) * 16;
-  const totalPrice = pricePerLb * quantityLbs;
-  const isOutOfStock = maxLbsInventory <= 0;
+  const maxOzInventory = Number(produce.totalOzInventory);
+  const maxOrderOz = Number(produce.maxOrderQuantityOz);
+  const pricePerOz = Number(produce.pricePerOz);
+  const totalPrice = pricePerOz * quantityOz;
+  const isOutOfStock = maxOzInventory <= 0;
 
   const frequencyLabel =
     produce.harvestFrequencyDays === 7 ? 'weekly' : `every ${produce.harvestFrequencyDays} days`;
@@ -98,7 +98,6 @@ export function BuyerOrderForm({
     if (isOutOfStock || hasError) return;
 
     try {
-      const quantityOz = Math.round(quantityLbs * 16);
       await addToCartMutation.mutateAsync({
         data: {
           productId: produceId,
@@ -115,7 +114,7 @@ export function BuyerOrderForm({
   };
 
   return (
-    <Card className="z-50 overflow-hidden relative max-w-[calc(100vw-2rem)] mx-auto w-full sm:max-w-md">
+    <Card className="z-50 overflow-auto max-h-screen relative max-w-[calc(100vw-2rem)] mx-auto w-full sm:max-w-md">
       <CardHeader className="pb-4 pr-12">
         <CardTitle>Order {produce.title}</CardTitle>
         {onClose && (
@@ -136,14 +135,14 @@ export function BuyerOrderForm({
           className={`space-y-6 pt-6 ${hasError ? 'opacity-50 pointer-events-none' : ''}`}
         >
           <div className="flex justify-between items-center text-ink-2">
-            <span className="font-semibold">Price per lb:</span>
-            <span className="text-lg">${pricePerLb.toFixed(2)}</span>
+            <span className="font-semibold">Price per oz:</span>
+            <span className="text-lg">${pricePerOz.toFixed(2)}</span>
           </div>
 
           <OrderQuantityInput
-            quantityLbs={quantityLbs}
-            onChange={setQuantityLbs}
-            maxLbs={Math.min(maxLbsInventory, maxOrderLbs)}
+            quantityOz={quantityOz}
+            onChange={setQuantityOz}
+            maxOz={Math.min(maxOzInventory, maxOrderOz)}
           />
 
           {produce.isSubscribable && (
@@ -188,11 +187,7 @@ export function BuyerOrderForm({
             disabled={addToCartMutation.isPending || isOutOfStock || hasError}
             className="w-full"
           >
-            {addToCartMutation.isPending ? (
-              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-            ) : (
-              <ShoppingCart className="w-5 h-5 mr-2" />
-            )}
+            {addToCartMutation.isPending && <Loader2 className="w-5 h-5 mr-2 animate-spin" />}
             {hasError ? 'Service Unavailable' : isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
           </Button>
         </CardFooter>

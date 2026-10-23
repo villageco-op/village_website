@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 /**
- * Handles UI for Pricing & Inventory in Lbs, which gets converted to Oz later.
+ * Handles UI for Pricing & Inventory in Oz.
  * @param props - Form data props
  * @param props.data - Current form data
  * @param props.updateData - Function to update the form data
@@ -19,7 +19,7 @@ export function ListingPricingInventory({ data, updateData }: StepComponentProps
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="price">
-            Price per lb ($) <span className="text-required">*</span>
+            Price per oz ($) <span className="text-required">*</span>
           </Label>
           <Input
             id="price"
@@ -28,13 +28,13 @@ export function ListingPricingInventory({ data, updateData }: StepComponentProps
             required
             min="0.01"
             placeholder="0.00"
-            value={data.pricePerLb}
-            onChange={(e) => updateData({ pricePerLb: e.target.value })}
+            value={data.pricePerOz}
+            onChange={(e) => updateData({ pricePerOz: e.target.value })}
           />
         </div>
         <div className="space-y-2">
           <Label htmlFor="inventory">
-            Total Inventory (lbs) <span className="text-required">*</span>
+            Total Inventory (oz) <span className="text-required">*</span>
           </Label>
           <Input
             id="inventory"
@@ -43,20 +43,20 @@ export function ListingPricingInventory({ data, updateData }: StepComponentProps
             required
             min="0.01"
             placeholder="e.g. 50"
-            value={data.totalLbsInventory}
-            onChange={(e) => updateData({ totalLbsInventory: e.target.value })}
+            value={data.totalOzInventory}
+            onChange={(e) => updateData({ totalOzInventory: e.target.value })}
           />
         </div>
         <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="maxOrder">Max Order per Customer (lbs)</Label>
+          <Label htmlFor="maxOrder">Max Order per Customer (oz)</Label>
           <Input
             id="maxOrder"
             type="number"
             step="0.01"
             min="0"
             placeholder="No limit (leave empty)"
-            value={data.maxOrderLbs}
-            onChange={(e) => updateData({ maxOrderLbs: e.target.value })}
+            value={data.maxOrderOz}
+            onChange={(e) => updateData({ maxOrderOz: e.target.value })}
           />
           <p className="text-xs text-ink-3">
             Limits the quantity a single customer can buy in one checkout.

@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 import OrgTab from '../organization/settings/OrgTab';
 import { Button } from '../ui/button';
-import LoadingSkeleton from '../ui/loading-skeleton';
+import { LoadingSkeleton } from '../ui/loading-skeleton';
 import { PageHeader } from '../ui/page-header';
 import { NotFoundState } from '../ui/state-displays';
 

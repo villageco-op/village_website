@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { EmptyState, InlineErrorState } from '@/components/ui/state-displays';
 import { useGetClientReferrals } from '@/lib/api/generated/clients/clients';
 import type { ClientResponse } from '@/lib/api/generated/models';

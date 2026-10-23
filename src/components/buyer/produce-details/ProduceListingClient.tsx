@@ -1,21 +1,21 @@
 'use client';
 
-import { ArrowLeft } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { ShoppingCart } from 'lucide-react';
 import { VisuallyHidden } from 'radix-ui';
 import { useState } from 'react';
 
 import { BuyerOrderForm } from '../new-order/OrderBuyerForm';
 
 import BuyerActivityDashboard from './BuyerActivityDashboard';
-import OrderActionCard from './OrderActionCard';
 import ProduceHeaderCard from './ProduceHeaderCard';
 import ProduceReviews from './ProduceReviews';
 import SellerInfoMapCard from './SellerInfoMapCard';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
+import { PageHeader } from '@/components/ui/page-header';
 import { NotFoundState } from '@/components/ui/state-displays';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
 
@@ -25,12 +25,11 @@ interface ProduceListingClientProps {
 
 /**
  * Main Client Component for viewing a produce listing as a buyer.
- * @param props - Props for the listing client
- * @param props.id - The produce Id
+ * @param props Props for the listing client
+ * @param props.id The produce Id
  * @returns The client component
  */
 export default function ProduceListingClient({ id }: ProduceListingClientProps) {
-  const router = useRouter();
   const [showOrderForm, setShowOrderForm] = useState(false);
 
   const { isError, isLoading, data } = useGetProduce(id, { query: { enabled: !!id } });
@@ -51,39 +50,48 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
   const produce = data.data;
 
   return (
-    <div className="bg-off-white">
-      <div className="mx-auto">
-        {/* Navigation & Header */}
-        <Button variant="ghost" className="mb-6 -ml-3 text-ink-3" onClick={() => router.back()}>
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Browse
-        </Button>
+    <div>
+      <div className="flex flex-col w-full mx-auto gap-6">
+        <PageHeader
+          title={produce.title}
+          subtitle={
+            <p className="flex items-center gap-2 mb-2">
+              <Badge variant="outline" className="capitalize">
+                {produce.produceType?.replace('_', ' ')}
+              </Badge>
+              {produce.isSubscribable && (
+                <Badge className="bg-lime text-forest-dark">Subscribable</Badge>
+              )}
+            </p>
+          }
+          actions={
+            <div className="flex items-center gap-4">
+              <div className="flex flex-col text-right">
+                <p className="text-2xl font-bold text-ink font-heading">
+                  ${produce.pricePerOz}{' '}
+                  <span className="text-base font-normal text-ink-3">/ oz</span>
+                </p>
+              </div>
+              <Button variant="lime" onClick={() => setShowOrderForm(true)}>
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                Order Now
+              </Button>
+            </div>
+          }
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column: Product Info & Reviews */}
-          <div className="lg:col-span-2 space-y-8">
-            <ProduceHeaderCard produce={produce} />
-            <ProduceReviews produceId={id} sellerId={produce.seller.id} />
+        <div className="flex flex-col gap-8 w-full">
+          <ProduceHeaderCard produce={produce} />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <SellerInfoMapCard seller={produce.seller} />
+            <BuyerActivityDashboard produceId={id} sellerId={produce.sellerId} />
           </div>
 
-          {/* Right Column: Order Actions, Seller Map, & Buyer Activity */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6 items-start">
-            <div className="md:col-start-2 md:row-start-2 lg:col-start-1 lg:row-start-1">
-              <OrderActionCard onOrder={() => setShowOrderForm(true)} />
-            </div>
-
-            <div className="md:col-start-2 md:row-start-1 lg:col-start-1 lg:row-start-2">
-              <SellerInfoMapCard seller={produce.seller} />
-            </div>
-
-            <div className="md:col-start-1 md:row-start-1 lg:col-start-1 lg:row-start-3">
-              <BuyerActivityDashboard produceId={id} sellerId={produce.sellerId} />
-            </div>
-          </div>
+          <ProduceReviews produceId={id} sellerId={produce.seller.id} />
         </div>
       </div>
 
-      {/* Order Modal */}
       <Dialog open={showOrderForm} onOpenChange={(open) => !open && setShowOrderForm(false)}>
         <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
           <VisuallyHidden.Root>

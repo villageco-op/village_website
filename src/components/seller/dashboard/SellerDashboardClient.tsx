@@ -8,7 +8,7 @@ import { ActiveSubscriptionsCard } from '@/components/buyer/dashboard/ActiveSubs
 import { UpcomingOrdersCard } from '@/components/buyer/dashboard/UpcomingOrdersCard';
 import { DashboardHeader } from '@/components/seller/dashboard/DashboardHeader';
 import { DashboardStats } from '@/components/seller/dashboard/DashboardStats';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
 import { useGetSellerDashboard } from '@/lib/api/generated/sellers/sellers';
@@ -97,8 +97,12 @@ export default function SellerDashboardClient() {
       </div>
 
       <div className="flex flex-col gap-6 w-full">
-        <UpcomingOrdersCard orders={pendingOrders} total={orderMeta.total} />
-        <ActiveSubscriptionsCard subscriptions={activeSubs} total={subsMeta.total} />
+        <UpcomingOrdersCard orders={pendingOrders} total={orderMeta.total} userRole="seller" />
+        <ActiveSubscriptionsCard
+          subscriptions={activeSubs}
+          total={subsMeta.total}
+          userRole="seller"
+        />
       </div>
     </div>
   );

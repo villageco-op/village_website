@@ -30,9 +30,9 @@ export function PageHeader({
           {title}
         </h1>
         {subtitle && (
-          <p className="font-sans text-[0.88rem] text-ink-3">
+          <div className="font-sans text-[0.88rem] text-ink-3">
             {subtitle}
-          </p>
+          </div>
         )}
       </div>
 
