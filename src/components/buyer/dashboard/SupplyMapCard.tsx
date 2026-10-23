@@ -9,7 +9,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { SupplyMapPopup } from './SupplyMapPopup';
 
 import { Card, CardContent } from '@/components/ui/card';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { InlineErrorState } from '@/components/ui/state-displays';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetGrowersForMap } from '@/lib/api/generated/growers/growers';

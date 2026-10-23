@@ -1,50 +1,43 @@
 'use client';
 
-import { ArrowLeft, RotateCcw } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { ReorderForm } from '../buyer/new-order/ReorderForm';
-import { Dialog, DialogContent } from '../ui/dialog';
-import LoadingSkeleton from '../ui/loading-skeleton';
-import { NotFoundState } from '../ui/state-displays';
-
+import { CancellationReasonBanner } from './CancellationReasonBanner';
 import { CancelOrderDialog } from './CancelOrderDialog';
 import { OrderItemsCard } from './OrderItemsCard';
 import { OrderLocationCard } from './OrderLocationCard';
 import { OrderSummaryCard } from './OrderSummaryCard';
-import { OrderUserCard } from './OrderUserCard';
 import { RescheduleOrderDialog } from './RescheduleOrderDialog';
 
+import { ReorderForm } from '@/components/buyer/new-order/ReorderForm';
 import { Button } from '@/components/ui/button';
-import {
-  useGetOrderById,
-  useCancelOrder,
-  useRescheduleOrder,
-} from '@/lib/api/generated/orders/orders';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { PageHeader } from '@/components/ui/page-header';
+import type { OrderDetailResponse } from '@/lib/api/generated/models';
+import { useCancelOrder, useRescheduleOrder } from '@/lib/api/generated/orders/orders';
 import { formatAppDate } from '@/lib/date-utils';
 
 interface OrderDetailClientProps {
-  id: string;
+  order: OrderDetailResponse;
+  isSeller: boolean;
 }
 
 /**
  * Client component that fetches and displays a specific order.
  * Manages states for rescheduling and canceling operations.
- *
  * @param props - Component props
- * @param props.id - The ID of the order
+ * @param props.order - The order
+ * @param props.isSeller - Is the current user the seller
  * @returns A page for viewing order details with a cancel button and reschedule button
  */
-export default function OrderDetailClient({ id }: OrderDetailClientProps) {
-  const router = useRouter();
-
+export default function OrderDetailClient({ order, isSeller }: OrderDetailClientProps) {
+  const id = order.id;
   const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
   const [isReorderOpen, setIsReorderOpen] = useState(false);
 
-  const orderQuery = useGetOrderById(id, { query: { enabled: !!id } });
   const cancelMutation = useCancelOrder();
   const rescheduleMutation = useRescheduleOrder();
 
@@ -54,7 +47,6 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
       await cancelMutation.mutateAsync({ id, data: { reason } });
       toast.success('Order has been canceled and a refund issued.', { id: toastId });
       setIsCancelOpen(false);
-      void orderQuery.refetch();
     } catch (error) {
       toast.error('Failed to cancel the order. Please try again.', { id: toastId });
     }
@@ -66,86 +58,59 @@ export default function OrderDetailClient({ id }: OrderDetailClientProps) {
       await rescheduleMutation.mutateAsync({ id, data: { newTime: newTimeIso } });
       toast.success('Reschedule request sent successfully.', { id: toastId });
       setIsRescheduleOpen(false);
-      void orderQuery.refetch();
     } catch (error) {
       toast.error('Failed to reschedule the order. Please try again.', { id: toastId });
     }
   };
 
-  if (orderQuery.isLoading) {
-    return <LoadingSkeleton heights={['h-12', 'h-56', 'h-56']} />;
-  }
-
-  if (orderQuery.isError || orderQuery.data?.status !== 200) {
-    return (
-      <NotFoundState
-        title="Order not found"
-        description="We couldn't load the details for this order."
-      />
-    );
-  }
-
-  const order = orderQuery.data.data;
   const isPending = order.status === 'pending';
   const isReorderable = order.status === 'completed' || order.status === 'canceled';
 
   return (
-    <div className="bg-off-white">
-      <div className="mx-auto">
-        {/* Header */}
-        <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-            <div className="flex items-center gap-3">
-              <h1 className="font-heading text-3xl font-bold text-deep-forest">
-                Order #{order.id.slice(0, 8).toUpperCase()}
-              </h1>
-            </div>
-            <p className="mt-1 font-sans text-sm text-ink-3">
-              Placed on {formatAppDate(order.createdAt, 'full', 'Unknown date')}
-            </p>
-          </div>
+    <div>
+      <div className="flex flex-col w-full mx-auto gap-6">
+        <PageHeader
+          title={`Order #${order.id.slice(0, 8).toUpperCase()}`}
+          subtitle={`Placed on ${formatAppDate(order.createdAt, 'full', 'Unknown date')}`}
+          actions={
+            <>
+              {isPending && (
+                <div className="flex gap-3">
+                  <Button variant="destructive" onClick={() => setIsCancelOpen(true)}>
+                    Cancel Order
+                  </Button>
+                  <Button variant="lime" onClick={() => setIsRescheduleOpen(true)}>
+                    Reschedule
+                  </Button>
+                </div>
+              )}
+              {isReorderable && (
+                <Button variant="lime" onClick={() => setIsReorderOpen(true)}>
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Order Again
+                </Button>
+              )}
+            </>
+          }
+        />
 
-          {/* Action Buttons (Only visible if the order is active/pending) */}
-          {isPending && (
-            <div className="flex gap-3">
-              <Button variant="destructive" onClick={() => setIsCancelOpen(true)}>
-                Cancel Order
-              </Button>
-              <Button variant="lime" onClick={() => setIsRescheduleOpen(true)}>
-                Reschedule
-              </Button>
-            </div>
-          )}
-
-          {isReorderable && (
-            <Button variant="lime" onClick={() => setIsReorderOpen(true)}>
-              <RotateCcw className="mr-2 h-4 w-4" />
-              Order Again
-            </Button>
-          )}
-        </div>
+        {order.status === 'canceled' && order.cancelReason && (
+          <CancellationReasonBanner reason={order.cancelReason} />
+        )}
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {/* Main Info Column */}
           <div className="flex flex-col gap-6 md:col-span-2">
-            <OrderSummaryCard order={order} />
+            <OrderSummaryCard order={order} fromUser={isSeller ? order.buyer : order.seller} />
             <OrderItemsCard items={order.items || []} />
-            <OrderLocationCard order={order} />
-          </div>
-
-          {/* Sidebar / People Info Column */}
-          <div className="flex flex-col gap-6">
-            <OrderUserCard title="Buyer Details" user={order.buyer} role="buyer" />
-            <OrderUserCard title="Seller Details" user={order.seller} role="seller" />
+            <OrderLocationCard
+              fulfillmentType={order.fulfillmentType}
+              buyer={order.buyer}
+              seller={order.seller}
+            />
           </div>
         </div>
       </div>
 
-      {/* Dialogs */}
       <CancelOrderDialog
         isOpen={isCancelOpen}
         onClose={() => setIsCancelOpen(false)}

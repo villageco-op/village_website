@@ -14,13 +14,13 @@ export function StatusPill({ status, variant, className }: StatusPillProps) {
 
   let style = { bg: 'bg-gray-100', text: 'text-gray-700' };
 
-  if (variant === 'lime' || lowerStatus.includes('delivered') || lowerStatus.includes('ready') || lowerStatus.includes('completed')) {
+  if (variant === 'lime' || lowerStatus.includes('completed') || lowerStatus.includes('paid')) {
     style = { bg: 'bg-lime/30', text: 'text-green-800' };
-  } else if (variant === 'sun' || lowerStatus.includes('pending') || lowerStatus.includes('processing')) {
+  } else if (variant === 'sun' || lowerStatus.includes('pending') || lowerStatus.includes('paused') || lowerStatus.includes('refund_pending')) {
     style = { bg: 'bg-sun/30', text: 'text-yellow-900' };
-  } else if (variant === 'clay' || lowerStatus.includes('canceled') || lowerStatus.includes('failed')) {
+  } else if (variant === 'clay' || lowerStatus.includes('canceled') || lowerStatus.includes('disputed')) {
     style = { bg: 'bg-clay/10', text: 'text-red-900' };
-  } else if (variant === 'forest') {
+  } else if (variant === 'forest' || lowerStatus.includes('active')) {
     style = { bg: 'bg-deep-forest/10', text: 'text-deep-forest' };
   }
 
@@ -33,7 +33,6 @@ export function StatusPill({ status, variant, className }: StatusPillProps) {
         className
       )}
     >
-      <span className="h-1.25 w-1.25 rounded-full bg-current" />
       {displayStatus}
     </span>
   );

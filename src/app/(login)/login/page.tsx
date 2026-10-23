@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import LoginClient from '../../../components/login/LoginClient';
 
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 
 /**
  * Login page for user login and account creation.

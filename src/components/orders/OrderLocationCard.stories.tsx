@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { Toaster } from '../ui/sonner';
-
 import { OrderLocationCard } from './OrderLocationCard';
 
+import { Toaster } from '@/components/ui/sonner';
+import { FulfillmentType } from '@/lib/api/generated/models';
 import { BASE_MOCK_ORDER_DETAIL } from '@/lib/storybook/mocks/order.mock';
 
 const meta: Meta<typeof OrderLocationCard> = {
@@ -28,31 +28,27 @@ type Story = StoryObj<typeof OrderLocationCard>;
 
 export const Pickup: Story = {
   args: {
-    order: {
-      ...BASE_MOCK_ORDER_DETAIL,
-      fulfillmentType: 'pickup',
-    },
+    buyer: BASE_MOCK_ORDER_DETAIL.buyer,
+    seller: BASE_MOCK_ORDER_DETAIL.seller,
+    fulfillmentType: FulfillmentType.pickup,
   },
 };
 
 export const Delivery: Story = {
   args: {
-    order: {
-      ...BASE_MOCK_ORDER_DETAIL,
-      fulfillmentType: 'delivery',
-    },
+    buyer: BASE_MOCK_ORDER_DETAIL.buyer,
+    seller: BASE_MOCK_ORDER_DETAIL.seller,
+    fulfillmentType: FulfillmentType.delivery,
   },
 };
 
 export const MissingLocation: Story = {
   args: {
-    order: {
-      ...BASE_MOCK_ORDER_DETAIL,
-      fulfillmentType: 'pickup',
-      seller: {
-        ...BASE_MOCK_ORDER_DETAIL.seller,
-        location: null as any,
-      },
+    buyer: BASE_MOCK_ORDER_DETAIL.buyer,
+    fulfillmentType: FulfillmentType.pickup,
+    seller: {
+      ...BASE_MOCK_ORDER_DETAIL.seller,
+      location: null as any,
     },
   },
 };

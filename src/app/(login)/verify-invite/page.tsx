@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 import AcceptInviteClient from '@/components/accept-invite/AcceptInviteClient';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 
 /**
  * Page for accepting an invitation to an organization.

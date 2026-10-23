@@ -38,7 +38,6 @@ export interface UpdateProducePayload {
   harvestFrequencyDays?: number;
   seasonStart?: IsoDate;
   seasonEnd?: IsoDate;
-  /** List of gallery images for the product */
   images?: ImageUrl[];
   /** Whether customers can set up recurring orders for this item */
   isSubscribable?: boolean;

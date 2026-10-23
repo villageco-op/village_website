@@ -28,7 +28,7 @@ const meta: Meta<typeof OrderDetailClient> = {
     },
   },
   args: {
-    id: MOCK_ORDER_ID,
+    order: MOCK_ORDER_DATA,
   },
   decorators: [
     (Story) => {

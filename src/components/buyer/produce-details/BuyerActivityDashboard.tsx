@@ -1,11 +1,10 @@
 'use client';
 
-import { Package, Calendar, RefreshCw, AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { InlineErrorState } from '@/components/ui/state-displays';
 import { StatusPill } from '@/components/ui/status-pill';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
@@ -94,7 +93,7 @@ export default function BuyerActivityDashboard({
         {(activeOrders.length > 0 || activeSubs.length > 0) && (
           <div className="p-5 border-b border-border/50">
             <h4 className="text-xs font-bold text-ink-3 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-              <AlertCircle className="w-3.5 h-3.5 text-lime-600" /> Current & Pending
+              Orders & Subscriptions
             </h4>
             <div className="space-y-3">
               {activeOrders.map((order) => (
@@ -103,7 +102,6 @@ export default function BuyerActivityDashboard({
                   className="flex items-center justify-between p-3 rounded-lg border border-border"
                 >
                   <div className="flex items-center gap-3">
-                    <Package className="w-4 h-4 text-ink-3" />
                     <div>
                       <p className="font-semibold text-sm text-ink">
                         Order #{order.id.slice(0, 6)}
@@ -123,13 +121,12 @@ export default function BuyerActivityDashboard({
                 </div>
               ))}
 
-              {activeSubs.map((sub: any) => (
+              {activeSubs.map((sub) => (
                 <div
                   key={sub.id}
                   className="flex items-center justify-between p-3 rounded-lg border border-lime-600/20"
                 >
                   <div className="flex items-center gap-3">
-                    <RefreshCw className="w-4 h-4 text-lime-700" />
                     <div>
                       <div className="flex items-center gap-2">
                         <p className="font-semibold text-sm text-lime-900">Subscription</p>
@@ -156,7 +153,7 @@ export default function BuyerActivityDashboard({
         {hasHistory && (
           <div className="p-5">
             <h4 className="text-xs font-bold text-ink-3 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" /> Purchase History
+              Purchase History
             </h4>
 
             <div className="flex flex-col gap-2">

@@ -23,9 +23,11 @@ import type {
 import type {
   BillingSummaryResponse,
   BuyerDashboardResponse,
+  BuyerUserProfile,
   ErrorResponse,
   GetBuyerGrowersParams,
-  GrowersResponse
+  GrowersResponse,
+  UserId
 } from '../models';
 
 import { apiClient } from '../../client';
@@ -375,6 +377,120 @@ export function useGetBuyerDashboard<TData = Awaited<ReturnType<typeof getBuyerD
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetBuyerDashboardQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Get public buyer profile including order stats and active subscriptions.
+ */
+export type getBuyerProfileResponse200 = {
+  data: BuyerUserProfile
+  status: 200
+}
+
+export type getBuyerProfileResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type getBuyerProfileResponseSuccess = (getBuyerProfileResponse200) & {
+  headers: Headers;
+};
+export type getBuyerProfileResponseError = (getBuyerProfileResponse404) & {
+  headers: Headers;
+};
+
+export type getBuyerProfileResponse = (getBuyerProfileResponseSuccess | getBuyerProfileResponseError)
+
+export const getGetBuyerProfileUrl = (id: UserId,) => {
+
+
+  
+
+  return `/api/buyer/${id}`
+}
+
+export const getBuyerProfile = async (id: UserId, options?: RequestInit): Promise<getBuyerProfileResponse> => {
+  
+  return apiClient<getBuyerProfileResponse>(getGetBuyerProfileUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetBuyerProfileQueryKey = (id: UserId,) => {
+    return [
+    `/api/buyer/${id}`
+    ] as const;
+    }
+
+    
+export const getGetBuyerProfileQueryOptions = <TData = Awaited<ReturnType<typeof getBuyerProfile>>, TError = ErrorResponse>(id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuyerProfile>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetBuyerProfileQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBuyerProfile>>> = ({ signal }) => getBuyerProfile(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getBuyerProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetBuyerProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getBuyerProfile>>>
+export type GetBuyerProfileQueryError = ErrorResponse
+
+
+export function useGetBuyerProfile<TData = Awaited<ReturnType<typeof getBuyerProfile>>, TError = ErrorResponse>(
+ id: UserId, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuyerProfile>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getBuyerProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getBuyerProfile>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetBuyerProfile<TData = Awaited<ReturnType<typeof getBuyerProfile>>, TError = ErrorResponse>(
+ id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuyerProfile>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getBuyerProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getBuyerProfile>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetBuyerProfile<TData = Awaited<ReturnType<typeof getBuyerProfile>>, TError = ErrorResponse>(
+ id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuyerProfile>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetBuyerProfile<TData = Awaited<ReturnType<typeof getBuyerProfile>>, TError = ErrorResponse>(
+ id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuyerProfile>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetBuyerProfileQueryOptions(id,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

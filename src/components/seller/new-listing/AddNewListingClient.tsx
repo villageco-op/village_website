@@ -1,17 +1,17 @@
 'use client';
 
-import { ArrowLeft, Loader2, ImageIcon } from 'lucide-react';
+import { Loader2, ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-
-import { Button } from '../../ui/button';
 
 import { ListingBasicInfo } from './ListingBasicInfo';
 import { ListingHarvestDetails } from './ListingHarvestDetails';
 import { ListingImageUpload } from './ListingImageUpload';
 import { ListingPricingInventory } from './ListingPricingInventory';
 
+import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/ui/page-header';
 import type { CreateProducePayload, ProduceType } from '@/lib/api/generated/models';
 import { useCreateProduce } from '@/lib/api/generated/produce/produce';
 import { formatLocalDate } from '@/lib/date-utils';
@@ -23,9 +23,9 @@ import { logger } from '@/lib/logger';
 export interface ListingFormData {
   title: string;
   produceType: ProduceType | undefined;
-  pricePerLb: string;
-  totalLbsInventory: string;
-  maxOrderLbs: string;
+  pricePerOz: string;
+  totalOzInventory: string;
+  maxOrderOz: string;
   availableBy: string;
   harvestFrequencyDays: string;
   seasonStart: string;
@@ -54,9 +54,9 @@ export default function AddNewListingClient() {
   const [formData, setFormData] = useState<ListingFormData>({
     title: '',
     produceType: undefined,
-    pricePerLb: '',
-    totalLbsInventory: '',
-    maxOrderLbs: '',
+    pricePerOz: '',
+    totalOzInventory: '',
+    maxOrderOz: '',
     availableBy: '',
     harvestFrequencyDays: '7',
     seasonStart: '',
@@ -96,11 +96,10 @@ export default function AddNewListingClient() {
       setIsSubmitting(true);
       toastId = toast.loading('Creating listing...');
 
-      // Convert user-friendly units (Lbs) to API units (Oz)
-      const pricePerOz = Number(formData.pricePerLb) / 16;
-      const totalOzInventory = Math.round(Number(formData.totalLbsInventory) * 16);
-      const maxOrderQuantityOz = formData.maxOrderLbs
-        ? Math.round(Number(formData.maxOrderLbs) * 16)
+      const pricePerOz = Number(formData.pricePerOz);
+      const totalOzInventory = Math.round(Number(formData.totalOzInventory));
+      const maxOrderQuantityOz = formData.maxOrderOz
+        ? Math.round(Number(formData.maxOrderOz))
         : null;
 
       const payload: CreateProducePayload = {
@@ -136,60 +135,43 @@ export default function AddNewListingClient() {
   };
 
   return (
-    <div className="bg-off-white">
-      <div className="mx-auto">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <Button
-              variant="ghost"
-              className="mb-2 -ml-3 text-ink-3 hover:text-ink hover:bg-slate-200/50"
-              onClick={() => router.back()}
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Listings
-            </Button>
-            <h1 className="font-heading text-3xl font-bold text-deep-forest">Create New Listing</h1>
-            <p className="font-sans text-sm text-ink-3 mt-1">
-              Add a new produce item to your marketplace.
-            </p>
-          </div>
+    <div className="flex w-full flex-col gap-6">
+      <PageHeader title="Create New Listing" />
+
+      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-6">
+        <ListingImageUpload
+          images={formData.images}
+          onAddImage={handleAddImage}
+          onRemoveImage={handleRemoveImage}
+          isUploading={isUploading}
+          setIsUploading={setIsUploading}
+        />
+
+        <ListingBasicInfo data={formData} updateData={updateFormData} />
+
+        <ListingPricingInventory data={formData} updateData={updateFormData} />
+
+        <ListingHarvestDetails data={formData} updateData={updateFormData} />
+
+        <div className="flex justify-end gap-4 pt-4 pb-12">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.back()}
+            disabled={isSubmitting || isUploading}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-35">
+            {isSubmitting ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            ) : (
+              <ImageIcon className="w-4 h-4 mr-2" />
+            )}
+            Publish Listing
+          </Button>
         </div>
-
-        <form onSubmit={(e) => void handleSubmit(e)} className="space-y-6">
-          <ListingImageUpload
-            images={formData.images}
-            onAddImage={handleAddImage}
-            onRemoveImage={handleRemoveImage}
-            isUploading={isUploading}
-            setIsUploading={setIsUploading}
-          />
-
-          <ListingBasicInfo data={formData} updateData={updateFormData} />
-
-          <ListingPricingInventory data={formData} updateData={updateFormData} />
-
-          <ListingHarvestDetails data={formData} updateData={updateFormData} />
-
-          <div className="flex justify-end gap-4 pt-4 pb-12">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.back()}
-              disabled={isSubmitting || isUploading}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-35">
-              {isSubmitting ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <ImageIcon className="w-4 h-4 mr-2" />
-              )}
-              Publish Listing
-            </Button>
-          </div>
-        </form>
-      </div>
+      </form>
     </div>
   );
 }

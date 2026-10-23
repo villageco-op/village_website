@@ -1,11 +1,7 @@
 'use client';
 
-import { ArrowLeft } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-
 import { ListingOrdersTable } from '@/components/seller/listing-orders/ListingOrdersTable';
-import { Button } from '@/components/ui/button';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
@@ -25,60 +21,62 @@ interface ListingOrdersClientProps {
  * @returns A full page view of the listing's orders
  */
 export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
-  const router = useRouter();
-
   const { page, limit, setPage } = usePagination(12);
 
-  const produceQuery = useGetProduce(id, { query: { enabled: !!id } });
+  const {
+    data: produceRes,
+    isLoading: isProduceLoading,
+    isError: isProduceError,
+    refetch: refetchProduce,
+  } = useGetProduce(id, { query: { enabled: !!id } });
 
-  const ordersQuery = useGetProduceOrders(id, { limit, page }, { query: { enabled: !!id } });
+  const {
+    data: ordersRes,
+    isLoading: isOrdersLoading,
+    isError: isOrdersError,
+    refetch: refetchOrders,
+  } = useGetProduceOrders(id, { limit, page }, { query: { enabled: !!id } });
 
-  const isLoading = produceQuery.isLoading || ordersQuery.isLoading;
-  const isError = produceQuery.isError || ordersQuery.isError;
+  const isLoading = isProduceLoading || isOrdersLoading;
+  const isError = isProduceError || isOrdersError;
 
   if (isLoading) {
     return <LoadingSkeleton heights={['h-20', 'h-64']} />;
   }
 
-  if (isError || produceQuery.data?.status !== 200 || ordersQuery.data?.status !== 200) {
+  if (isError || produceRes?.status !== 200 || ordersRes?.status !== 200) {
     return (
       <PageErrorState
         title="Failed to load orders"
         description="We couldn't load the orders for this listing. Please try again."
-        action={<Button onClick={() => router.back()}>Back to Listing</Button>}
+        onRetry={() => {
+          void refetchProduce();
+          void refetchOrders();
+        }}
       />
     );
   }
 
-  const produceTitle = produceQuery.data?.data?.title || 'Unknown Produce';
-  const orders = ordersQuery.data?.data?.data || [];
+  const produceTitle = produceRes?.data?.title || 'Unknown Produce';
+  const orders = ordersRes?.data?.data || [];
 
-  const meta = ordersQuery.data?.data?.meta;
+  const meta = ordersRes?.data?.meta;
   const totalOrders = meta?.total || orders.length;
 
   return (
-    <div className="bg-off-white">
-      <div className="mx-auto">
-        <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Listing
-            </Button>
-            <PageHeader
-              title="Orders"
-              subtitle={
-                <>
-                  Viewing all orders for <strong className="text-ink">{produceTitle}</strong>
-                </>
-              }
-            />
-          </div>
-        </div>
+    <div className="flex w-full flex-col gap-6">
+      <PageHeader
+        title="Orders"
+        subtitle={
+          <>
+            Viewing all {totalOrders} orders for{' '}
+            <strong className="text-ink">{produceTitle}</strong>
+          </>
+        }
+      />
 
-        <ListingOrdersTable orders={orders} totalOrders={totalOrders} />
-        <PaginationControls meta={meta} onPageChange={setPage} />
-      </div>
+      <ListingOrdersTable orders={orders} />
+      <PaginationControls meta={meta} onPageChange={setPage} />
     </div>
   );
 }

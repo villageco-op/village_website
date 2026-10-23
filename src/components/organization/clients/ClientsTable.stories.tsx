@@ -30,8 +30,6 @@ const meta: Meta<typeof ClientsTable> = {
     isError: false,
     searchQuery: '',
     setSearchQuery: fn(),
-    statusFilter: 'all',
-    setStatusFilter: fn(),
     meta: mockMeta,
     setPage: fn(),
     onRefetch: fn(),
@@ -81,10 +79,10 @@ export const ErrorState: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(canvas.getByText('Unable to load clients')).toBeInTheDocument();
+    await expect(await canvas.findByText('Unable to load records')).toBeInTheDocument();
 
     // Test retry action trigger
-    const retryBtn = canvas.getByRole('button', { name: /try again/i });
+    const retryBtn = await canvas.findByRole('button', { name: /try again/i });
     await userEvent.click(retryBtn);
   },
 };
@@ -95,28 +93,6 @@ export const ErrorState: Story = {
 export const Empty: Story = {
   args: {
     clients: [],
-  },
-};
-
-/**
- * Active filter state showing the clear filters button when search or status filters are applied.
- */
-export const FilteredState: Story = {
-  args: {
-    searchQuery: 'Wayne',
-    statusFilter: 'inactive',
-    clients: [MOCK_CLIENTS[2]],
-  },
-  play: async ({ canvasElement, args }) => {
-    const canvas = within(canvasElement);
-
-    const clearBtn = canvas.getByRole('button', { name: /clear filters/i });
-    await expect(clearBtn).toBeInTheDocument();
-
-    await userEvent.click(clearBtn);
-
-    await expect(args.setSearchQuery).toHaveBeenCalledWith('');
-    await expect(args.setStatusFilter).toHaveBeenCalledWith('all');
   },
 };
 
@@ -150,8 +126,6 @@ export const InteractiveWithState: Story = {
           clients={filteredClients}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
           selectedClient={selectedClient}
           setSelectedClient={setSelectedClient}
           setPage={setPage}

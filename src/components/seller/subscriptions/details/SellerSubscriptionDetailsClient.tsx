@@ -1,47 +1,38 @@
 'use client';
 
-import { ArrowLeft, Pause, Play, XCircle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { Pause, Play, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { SellerUpdateStatusDialog } from './SellerUpdateStatusDialog';
 
-import { SubscriptionLocationCard } from '@/components/subscriptions/SubscriptionLocationCard';
+import { CancellationReasonBanner } from '@/components/orders/CancellationReasonBanner';
+import { OrderLocationCard } from '@/components/orders/OrderLocationCard';
+import { PauseReasonBanner } from '@/components/subscriptions/PauseReasonBanner';
 import { SubscriptionSummaryCard } from '@/components/subscriptions/SubscriptionSummaryCard';
-import { SubscriptionUserCard } from '@/components/subscriptions/SubscriptionUserCard';
 import { Button } from '@/components/ui/button';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
-import { NotFoundState } from '@/components/ui/state-displays';
-import { StatusPill } from '@/components/ui/status-pill';
-import {
-  useGetSubscriptionById,
-  useUpdateSubscription,
-} from '@/lib/api/generated/subscriptions/subscriptions';
+import { PageHeader } from '@/components/ui/page-header';
+import type { FulfillmentType, SubscriptionDetailResponse } from '@/lib/api/generated/models';
+import { useUpdateSubscription } from '@/lib/api/generated/subscriptions/subscriptions';
 import { formatAppDate } from '@/lib/date-utils';
 
 interface SellerSubscriptionDetailClientProps {
-  id: string;
+  subscription: SubscriptionDetailResponse;
 }
 
 /**
  * Client component that fetches and displays a specific seller subscription.
- * Allows sellers to pause or cancel the subscription with a provided reason,
- * but restricts them from modifying fulfillment details or quantity.
- *
  * @param props - Component props
- * @param props.id - The ID of the subscription
- * @returns A page for viewing subscription details from the seller's perspective
+ * @param props.subscription - The subscription information
+ * @returns The client component
  */
 export default function SellerSubscriptionDetailClient({
-  id,
+  subscription,
 }: SellerSubscriptionDetailClientProps) {
-  const router = useRouter();
-
+  const id = subscription.id;
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [targetAction, setTargetAction] = useState<'canceled' | 'paused' | null>(null);
 
-  const query = useGetSubscriptionById(id, { query: { enabled: !!id } });
   const updateMutation = useUpdateSubscription();
 
   const handleUpdateStatus = async (reason: string) => {
@@ -58,7 +49,6 @@ export default function SellerSubscriptionDetailClient({
       });
       toast.success(`Subscription has been ${successText}.`, { id: toastId });
       setIsStatusDialogOpen(false);
-      void query.refetch();
     } catch (error) {
       toast.error(`Failed to update the subscription status. Please try again.`, { id: toastId });
     }
@@ -69,7 +59,6 @@ export default function SellerSubscriptionDetailClient({
     try {
       await updateMutation.mutateAsync({ id, data: { status: 'active', cancelReason: undefined } });
       toast.success('Subscription successfully resumed.', { id: toastId });
-      void query.refetch();
     } catch (error) {
       toast.error('Failed to resume subscription.', { id: toastId });
     }
@@ -80,97 +69,66 @@ export default function SellerSubscriptionDetailClient({
     setIsStatusDialogOpen(true);
   };
 
-  if (query.isLoading) {
-    return <LoadingSkeleton heights={['h-12', 'h-56', 'h-56']} />;
-  }
-
-  if (query.isError || query.data?.status !== 200 || !query.data?.data) {
-    return (
-      <NotFoundState
-        title="Subscription not found"
-        description="We couldn't load the details for this subscription."
-      />
-    );
-  }
-
-  const subscription = query.data.data;
   const isCanceled = subscription.status === 'canceled';
   const isPaused = subscription.status === 'paused';
 
   return (
-    <div className="bg-off-white">
-      <div className="mx-auto">
-        {/* Header */}
-        <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-            <div className="flex items-center gap-3">
-              <h1 className="font-heading text-3xl font-bold text-deep-forest">
-                Subscription Details
-              </h1>
-              <StatusPill status={subscription.status} />
-            </div>
-            <p className="mt-1 font-sans text-sm text-ink-3">
-              Started on {formatAppDate(subscription.createdAt, 'full', 'Unknown date')}
-            </p>
-            {/* If there's an existing reason for a paused/canceled sub, show it */}
-            {(isCanceled || isPaused) && subscription.cancelReason && (
-              <p className="mt-2 text-sm text-destructive max-w-xl">
-                <span className="font-semibold text-ink-3">Reason provided: </span>
-                {subscription.cancelReason}
-              </p>
-            )}
-          </div>
-
-          {/* Action Buttons */}
-          {!isCanceled && (
-            <div className="flex flex-wrap gap-3">
-              <Button
-                variant="destructive"
-                onClick={() => openStatusDialog('canceled')}
-                disabled={updateMutation.isPending}
-              >
-                <XCircle className="mr-2 h-4 w-4" />
-                Cancel Subscription
-              </Button>
-
-              {isPaused ? (
+    <div>
+      <div className="flex flex-col w-full mx-auto gap-6">
+        <PageHeader
+          title="Subscription Details"
+          subtitle={`Started on ${formatAppDate(subscription.createdAt, 'full', 'Unknown date')}`}
+          actions={
+            !isCanceled && (
+              <div className="flex flex-wrap gap-3">
                 <Button
-                  variant="lime"
-                  className="font-semibold"
-                  onClick={() => void handleResume()}
+                  variant="destructive"
+                  onClick={() => openStatusDialog('canceled')}
                   disabled={updateMutation.isPending}
                 >
-                  <Play className="mr-2 h-4 w-4" />
-                  Resume Subscription
+                  <XCircle className="mr-2 h-4 w-4" />
+                  Cancel
                 </Button>
-              ) : (
-                <Button
-                  variant="outline"
-                  onClick={() => openStatusDialog('paused')}
-                  disabled={updateMutation.isPending}
-                >
-                  <Pause className="mr-2 h-4 w-4" />
-                  Pause Subscription
-                </Button>
-              )}
-            </div>
-          )}
-        </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div className="flex flex-col gap-6 md:col-span-2">
-            <SubscriptionSummaryCard subscription={subscription} />
-            <SubscriptionLocationCard subscription={subscription} />
-          </div>
+                {isPaused ? (
+                  <Button
+                    variant="lime"
+                    className="font-semibold"
+                    onClick={() => void handleResume()}
+                    disabled={updateMutation.isPending}
+                  >
+                    <Play className="mr-2 h-4 w-4" />
+                    Resume
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    onClick={() => openStatusDialog('paused')}
+                    disabled={updateMutation.isPending}
+                  >
+                    <Pause className="mr-2 h-4 w-4" />
+                    Pause
+                  </Button>
+                )}
+              </div>
+            )
+          }
+        />
 
-          <div className="flex flex-col gap-6">
-            <SubscriptionUserCard title="Buyer Details" user={subscription.buyer} role="buyer" />
-          </div>
+        {isCanceled && subscription.cancelReason && (
+          <CancellationReasonBanner reason={subscription.cancelReason} />
+        )}
+        {isPaused && subscription.cancelReason && (
+          <PauseReasonBanner reason={subscription.cancelReason} />
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          <SubscriptionSummaryCard subscription={subscription} fromUser={subscription.buyer} />
+          <OrderLocationCard
+            fulfillmentType={subscription.fulfillmentType as FulfillmentType}
+            buyer={subscription.buyer}
+            seller={subscription.seller}
+          />
         </div>
       </div>
 

@@ -7,7 +7,7 @@ import { BuyerDashboardStats } from '@/components/buyer/dashboard/BuyerDashboard
 import { SupplyMapCard } from '@/components/buyer/dashboard/SupplyMapCard';
 import { UpcomingOrdersCard } from '@/components/buyer/dashboard/UpcomingOrdersCard';
 import { DashboardHeader } from '@/components/seller/dashboard/DashboardHeader';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageErrorState } from '@/components/ui/state-displays';
 import { useGetBuyerDashboard } from '@/lib/api/generated/buyers/buyers';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
@@ -85,7 +85,7 @@ export default function BuyerDashboardClient() {
 
       {pendingOrders.length > 0 && (
         <div className="flex flex-col gap-6 w-full">
-          <UpcomingOrdersCard orders={pendingOrders} total={orderMeta.total} />
+          <UpcomingOrdersCard orders={pendingOrders} total={orderMeta.total} userRole="buyer" />
         </div>
       )}
 
@@ -101,9 +101,13 @@ export default function BuyerDashboardClient() {
 
       <div className="flex flex-col gap-6 w-full">
         {pendingOrders.length === 0 && (
-          <UpcomingOrdersCard orders={pendingOrders} total={orderMeta.total} />
+          <UpcomingOrdersCard orders={pendingOrders} total={orderMeta.total} userRole="buyer" />
         )}
-        <ActiveSubscriptionsCard subscriptions={activeSubs} total={subsMeta.total} />
+        <ActiveSubscriptionsCard
+          subscriptions={activeSubs}
+          total={subsMeta.total}
+          userRole="buyer"
+        />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { Store, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import Image from 'next/image';
 import router from 'next/router';
 
@@ -39,9 +39,7 @@ export function SellerProduceSidebar({
           onClick={() => onGrowerClick(String(group.sellerId))}
           title="View Seller Profile"
         >
-          <Store className="h-4 w-4 mr-2 shrink-0" />
-          <span className="truncate max-w-45 text-left">{group.name}</span>
-          <span className="ml-1 text-sm">↗</span>
+          <span className="truncate max-w-45 text-left">{group.name || 'Seller'}</span>
         </Button>
         <Button variant="ghost" size="icon" onClick={onClose}>
           <X className="h-4 w-4" />
@@ -55,12 +53,8 @@ export function SellerProduceSidebar({
           </div>
         ) : (
           group.produce.map((item) => (
-            <Card
-              key={String(item.id)}
-              className="cursor-pointer"
-              onClick={() => void router.push(`/produce/${item.id}`)}
-            >
-              <CardContent className="flex flex-col gap-3 p-3">
+            <Card key={String(item.id)}>
+              <CardContent className="flex flex-col gap-3">
                 <div className="flex gap-3 items-center">
                   <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-forest-dark/10 bg-slate-50">
                     {item.thumbnail ? (
@@ -82,12 +76,23 @@ export function SellerProduceSidebar({
                     </div>
                     <div className="text-xs text-ink-3 mt-0.5 flex flex-col gap-0.5">
                       <span className="font-medium text-deep-forest">
-                        ${(Number(item.price) * 16).toFixed(2)}/lb
+                        ${Number(item.price).toFixed(2)}/oz
                       </span>
-                      <span>{(Number(item.availableInventory) / 16).toFixed(1)} lbs available</span>
+                      <span>{Number(item.availableInventory).toFixed(1)} oz available</span>
                     </div>
                   </div>
                 </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    void router.push(`/produce/${item.id}`);
+                  }}
+                  className="w-full"
+                >
+                  View Details
+                </Button>
                 <Button
                   variant="lime"
                   size="sm"
@@ -95,7 +100,7 @@ export function SellerProduceSidebar({
                     e.stopPropagation();
                     onOrderItem(String(item.id));
                   }}
-                  className="w-full font-semibold"
+                  className="w-full"
                 >
                   + Order
                 </Button>

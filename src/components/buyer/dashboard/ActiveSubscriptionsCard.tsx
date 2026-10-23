@@ -1,26 +1,27 @@
 'use client';
 
-import { RefreshCw, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import {
-  OrderIdentityCell,
-  OrderDateTimeCell,
-  OrderLocationCell,
-  OrderFulfillmentCell,
-  OrderQuantityOzCell,
-  SubscriptionProductCell,
-} from '@/components/orders/OrderTableCells';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/state-displays';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import type { SubscriptionDetailResponse } from '@/lib/api/generated/models';
+import {
+  IdentityCell,
+  DateTimeCell,
+  LocationCell,
+  FulfillmentCell,
+  QuantityOzCell,
+  SubscriptionProductCell,
+} from '@/components/ui/table-cells';
+import { SelectableTableRow } from '@/components/ui/table-row-selectable';
+import { type SubscriptionDetailResponse } from '@/lib/api/generated/models';
 
 interface ActiveSubscriptionsCardProps {
   subscriptions: SubscriptionDetailResponse[];
   total: number;
+  userRole: 'buyer' | 'seller';
 }
 
 /**
@@ -28,15 +29,20 @@ interface ActiveSubscriptionsCardProps {
  * @param props - Component props
  * @param props.subscriptions - An array of subscription details
  * @param props.total - The toal active subscriptions
+ * @param props.userRole - The users role
  * @returns A card containing a subscription table
  */
-export function ActiveSubscriptionsCard({ subscriptions, total }: ActiveSubscriptionsCardProps) {
+export function ActiveSubscriptionsCard({
+  subscriptions,
+  total,
+  userRole,
+}: ActiveSubscriptionsCardProps) {
   const router = useRouter();
   const hasMoreSubscriptions = subscriptions.length < total;
 
   return (
     <Card>
-      <CardContent className="p-0 sm:p-6">
+      <CardContent>
         <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between px-6 pt-6 sm:px-0 sm:pt-0 gap-3">
           <div>
             <h2 className="font-heading text-[1.05rem] font-bold text-ink">Active Subscriptions</h2>
@@ -46,26 +52,14 @@ export function ActiveSubscriptionsCard({ subscriptions, total }: ActiveSubscrip
           </div>
 
           {hasMoreSubscriptions && (
-            <Button
-              asChild
-              variant="ghost"
-              size="sm"
-              className="w-fit text-xs text-ink-2 hover:text-ink"
-            >
-              <Link href="/buyer/subscriptions">
-                View all
-                <ArrowRight className="ml-1 h-3.5 w-3.5" />
-              </Link>
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/${userRole}/subscriptions`}> View all </Link>
             </Button>
           )}
         </div>
 
         {subscriptions.length === 0 ? (
-          <EmptyState
-            icon={RefreshCw}
-            title="No active subscriptions"
-            description="When you subscribe to recurring produce, it will appear here."
-          />
+          <EmptyState title="No active subscriptions" />
         ) : (
           <div className="overflow-x-auto">
             <Table>
@@ -74,58 +68,53 @@ export function ActiveSubscriptionsCard({ subscriptions, total }: ActiveSubscrip
                   <TableHead>Product</TableHead>
                   <TableHead>From</TableHead>
                   <TableHead>Quantity</TableHead>
-                  <TableHead>Next Delivery</TableHead>
+                  <TableHead>Next Order</TableHead>
                   <TableHead>Location</TableHead>
                   <TableHead>Type</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {subscriptions.map((sub) => {
-                  const seller = sub.seller;
-                  const sellerName = seller?.name || '-';
-                  const sellerId = seller?.id || sub.sellerId || '';
-                  const sellerImage = seller?.image;
+                  const counterparty = userRole === 'seller' ? sub.buyer : sub.seller;
+                  const counterpartyName = counterparty?.name || '-';
+                  const counterpartyId = counterparty?.id || '';
+                  const counterpartyImage = counterparty?.image;
 
                   const product = sub.product;
                   const productTitle = product?.title || '-';
                   const productId = sub.productId || sub.product?.id;
 
                   return (
-                    <TableRow
+                    <SelectableTableRow
+                      id={sub.id}
                       key={sub.id}
-                      onClick={() => router.push(`/subscriptions/${sub.id}`)}
-                      className="cursor-pointer transition-colors hover:bg-slate-50/80"
+                      onSelect={() => router.push(`/${userRole}/subscriptions/${sub.id}`)}
+                      isSelected={false}
                     >
-                      {/* Product */}
                       <SubscriptionProductCell
                         title={productTitle}
                         onProductClick={() => void router.push(`/produce/${productId}`)}
                       />
 
-                      {/* Seller */}
-                      <OrderIdentityCell
-                        id={sellerId}
-                        name={sellerName}
-                        image={sellerImage}
+                      <IdentityCell
+                        id={counterpartyId}
+                        name={counterpartyName}
+                        image={counterpartyImage}
                         onNameClick={
-                          sellerId
-                            ? () => void router.push(`/public-profile/${sellerId}`)
+                          counterpartyId
+                            ? () => void router.push(`/public-profile/${counterpartyId}`)
                             : undefined
                         }
                       />
 
-                      {/* Quantity */}
-                      <OrderQuantityOzCell quantityOz={sub.quantityOz} />
+                      <QuantityOzCell quantityOz={sub.quantityOz} />
 
-                      {/* Next Delivery Date */}
-                      <OrderDateTimeCell date={sub.nextDeliveryDate} />
+                      <DateTimeCell date={sub.nextDeliveryDate} />
 
-                      {/* Location */}
-                      <OrderLocationCell location={seller?.location} />
+                      <LocationCell location={counterparty?.location} />
 
-                      {/* Fulfillment Type */}
-                      <OrderFulfillmentCell fulfillmentType={sub.fulfillmentType} />
-                    </TableRow>
+                      <FulfillmentCell fulfillmentType={sub.fulfillmentType} />
+                    </SelectableTableRow>
                   );
                 })}
               </TableBody>

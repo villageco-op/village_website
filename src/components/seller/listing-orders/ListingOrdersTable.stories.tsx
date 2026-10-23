@@ -71,7 +71,6 @@ const mockOrders = [
 export const Default: Story = {
   args: {
     orders: mockOrders as any,
-    totalOrders: 3,
   },
 };
 
@@ -81,7 +80,6 @@ export const Default: Story = {
 export const EmptyState: Story = {
   args: {
     orders: [],
-    totalOrders: 0,
   },
 };
 
@@ -104,7 +102,6 @@ export const MobileView: Story = {
  */
 export const ManyOrders: Story = {
   args: {
-    totalOrders: 20,
     orders: generateMockProduceOrderListItems(20),
   },
 };

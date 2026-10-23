@@ -10,7 +10,7 @@ import { BrowseProduceFilters } from './BrowseProduceFilters';
 import { BrowseProduceTable } from './BrowseProduceTable';
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { EmptyState, PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';

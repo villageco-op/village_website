@@ -12,7 +12,7 @@ interface PageSkeletonProps {
  * @param props.className - Optional custom wrapper class names
  * @returns The skeleton component
  */
-export default function LoadingSkeleton({
+export function LoadingSkeleton({
   heights = ['h-64'],
   className = 'flex w-full flex-col space-y-6',
 }: PageSkeletonProps) {

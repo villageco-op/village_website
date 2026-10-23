@@ -1,4 +1,9 @@
-import { OrgRole, type PublicUserProfile, type User } from '@/lib/api/generated/models';
+import {
+  type BuyerUserProfile,
+  OrgRole,
+  type SellerUserProfile,
+  type User,
+} from '@/lib/api/generated/models';
 
 /**
  * Baseline default User mock.
@@ -75,7 +80,7 @@ export const MOCK_NEW_USER: User = {
   isOnboardingComplete: false,
 };
 
-export const MOCK_SELLER_PUBLIC_PROFILE: PublicUserProfile = {
+export const MOCK_SELLER_PUBLIC_PROFILE: SellerUserProfile = {
   id: MOCK_SELLER_USER.id,
   name: MOCK_SELLER_USER.name,
   organization: null,
@@ -91,4 +96,19 @@ export const MOCK_SELLER_PUBLIC_PROFILE: PublicUserProfile = {
   totalReviews: 42,
   activeBuyerCount: 15,
   reviewBreakdown: { '5': 38, '4': 3, '3': 1, '2': 0, '1': 0 },
+};
+
+export const MOCK_BUYER_PUBLIC_PROFILE: BuyerUserProfile = {
+  id: MOCK_SELLER_USER.id,
+  name: MOCK_SELLER_USER.name,
+  organization: null,
+  organizationId: '',
+  image: MOCK_SELLER_USER.image ?? '',
+  city: MOCK_SELLER_USER.city,
+  state: MOCK_SELLER_USER.state,
+  country: MOCK_SELLER_USER.country,
+  joinedAt: '2023-05-15T00:00:00Z',
+  totalOrders: 15,
+  activeSubscriptions: 3,
+  lastOrderDate: '2026-08-14T00:00:00Z',
 };

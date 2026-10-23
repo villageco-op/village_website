@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 import OrderConfirmationClient from '@/components/buyer/checkout-success/OrderConfirmationClient';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 
 /**
  * The order confirmation page. Stripe redirects here after a successful checkout session.

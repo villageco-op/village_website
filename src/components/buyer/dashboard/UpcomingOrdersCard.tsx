@@ -1,26 +1,27 @@
 'use client';
 
-import { Package } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import {
-  OrderIdentityCell,
-  OrderAmountCell,
-  OrderFulfillmentCell,
-  OrderLocationCell,
-  OrderProductCell,
-  OrderDateTimeCell,
-} from '@/components/orders/OrderTableCells';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/state-displays';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  IdentityCell,
+  AmountCell,
+  FulfillmentCell,
+  LocationCell,
+  OrderProductCell,
+  DateTimeCell,
+} from '@/components/ui/table-cells';
+import { SelectableTableRow } from '@/components/ui/table-row-selectable';
 import type { OrderSummary } from '@/lib/api/generated/models';
 
 interface UpcomingOrdersCardProps {
   orders: OrderSummary[];
   total: number;
+  userRole: 'seller' | 'buyer';
 }
 
 /**
@@ -28,9 +29,10 @@ interface UpcomingOrdersCardProps {
  * @param props - Component props
  * @param props.orders - Array of order data items
  * @param props.total - The total number of orders
+ * @param props.userRole - The users role
  * @returns A table view of the upcoming orders
  */
-export function UpcomingOrdersCard({ orders, total }: UpcomingOrdersCardProps) {
+export function UpcomingOrdersCard({ orders, total, userRole }: UpcomingOrdersCardProps) {
   const router = useRouter();
   const hasMoreOrders = orders.length < total;
 
@@ -41,23 +43,19 @@ export function UpcomingOrdersCard({ orders, total }: UpcomingOrdersCardProps) {
           <div>
             <h2 className="font-heading text-[1.05rem] font-bold text-ink">Upcoming Orders</h2>
             <p className="mt-0.5 font-sans text-[0.8rem] text-ink-3">
-              Showing {orders.length}/{total}
+              `Showing ${orders.length}/${total}`
             </p>
           </div>
 
           {hasMoreOrders && (
             <Button asChild variant="outline" size="sm">
-              <Link href="/buyer/orders">View all</Link>
+              <Link href={`/${userRole}/orders`}>View all</Link>
             </Button>
           )}
         </div>
 
         {orders.length === 0 ? (
-          <EmptyState
-            icon={Package}
-            title="No upcoming orders"
-            description="When you place an order, it will appear here."
-          />
+          <EmptyState title="No upcoming orders" />
         ) : (
           <div className="overflow-x-auto">
             <Table>
@@ -78,42 +76,38 @@ export function UpcomingOrdersCard({ orders, total }: UpcomingOrdersCardProps) {
                   const firstItem = order.items?.[0];
                   const product = firstItem?.product;
 
-                  const counterparty = order.counterparty || order.seller;
-                  const sellerName = counterparty?.name || order.seller?.name || undefined;
+                  const counterparty =
+                    order.counterparty || (userRole === 'seller' ? order.buyer : order.seller);
+                  const counterpartyName = counterparty?.name || userRole;
+                  const counterpartyId = userRole === 'seller' ? order.buyerId : order.sellerId;
 
                   return (
-                    <TableRow
+                    <SelectableTableRow
+                      id={order.id}
                       key={order.id}
-                      onClick={() => router.push(`/orders/${order.id}`)}
-                      className="cursor-pointer transition-colors hover:bg-slate-50/80"
+                      onSelect={() => router.push(`/orders/${order.id}`)}
                     >
-                      {/* Product */}
                       <OrderProductCell
                         title={product?.title}
                         image={product?.images?.[0]}
                         extraCount={extraItemsCount}
                       />
 
-                      {/* From (Seller) */}
-                      <OrderIdentityCell
-                        id={order.sellerId}
-                        name={sellerName}
-                        onNameClick={() => void router.push(`/public-profile/${order.sellerId}`)}
+                      <IdentityCell
+                        id={counterpartyId}
+                        name={counterpartyName}
+                        onNameClick={() => void router.push(`/public-profile/${counterpartyId}`)}
                         avatarFallback={false}
                       />
 
-                      {/* Total */}
-                      <OrderAmountCell amount={order.totalAmount} />
+                      <AmountCell amount={order.totalAmount} />
 
-                      {/* Time */}
-                      <OrderDateTimeCell date={order.scheduledTime} />
+                      <DateTimeCell date={order.scheduledTime} />
 
-                      {/* Location */}
-                      <OrderLocationCell location={counterparty?.location} />
+                      <LocationCell location={counterparty?.location} />
 
-                      {/* Type */}
-                      <OrderFulfillmentCell fulfillmentType={order.fulfillmentType} />
-                    </TableRow>
+                      <FulfillmentCell fulfillmentType={order.fulfillmentType} />
+                    </SelectableTableRow>
                   );
                 })}
               </TableBody>

@@ -11,7 +11,7 @@ import { BrowseProduceMapFilters } from './BrowseProduceMapFilters';
 import { SellerProduceSidebar } from './SellerProduceSidebar';
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
-import LoadingSkeleton from '@/components/ui/loading-skeleton';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageErrorState } from '@/components/ui/state-displays';
 import type { GetProduceMapParams, SellerMapGroup, User } from '@/lib/api/generated/models';
 import { useGetProduceMap } from '@/lib/api/generated/produce/produce';

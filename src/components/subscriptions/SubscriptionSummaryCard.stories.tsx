@@ -9,6 +9,9 @@ const meta: Meta<typeof SubscriptionSummaryCard> = {
   component: SubscriptionSummaryCard,
   parameters: {
     layout: 'padded',
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ['autodocs'],
   decorators: [

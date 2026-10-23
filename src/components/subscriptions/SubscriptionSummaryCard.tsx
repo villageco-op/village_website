@@ -1,23 +1,26 @@
 'use client';
 
-import { Calendar, Package, RefreshCw } from 'lucide-react';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { Card, CardContent } from '@/components/ui/card';
-import type { SubscriptionDetailResponse } from '@/lib/api/generated/models';
+import { StatusPill } from '@/components/ui/status-pill';
+import type { SubscriptionDetailResponse, UserBasicInfo } from '@/lib/api/generated/models';
 import { formatAppDate } from '@/lib/date-utils';
 
 interface SubscriptionSummaryCardProps {
   subscription: SubscriptionDetailResponse;
+  fromUser: UserBasicInfo;
 }
 
 /**
  * A card with subscription information for displaying subscriptions.
- * @param props - Props containing the subscription
- * @param props.subscription - The subscription details
+ * @param props Component props
+ * @param props.subscription The subscription details
+ * @param props.fromUser - The other user (counter party)
  * @returns A card containing basic subscription details
  */
-export function SubscriptionSummaryCard({ subscription }: SubscriptionSummaryCardProps) {
+export function SubscriptionSummaryCard({ subscription, fromUser }: SubscriptionSummaryCardProps) {
+  const router = useRouter();
   const pricePerOz = Number(subscription.product?.pricePerOz || 0);
   const quantity = Number(subscription.quantityOz || 0);
   const totalCost = (pricePerOz * quantity).toFixed(2);
@@ -31,47 +34,70 @@ export function SubscriptionSummaryCard({ subscription }: SubscriptionSummaryCar
   return (
     <Card>
       <CardContent className="p-6">
-        <h2 className="mb-4 font-heading text-[0.95rem] font-bold text-ink border-b border-border/50 pb-3">
-          Subscription Summary
-        </h2>
-
-        <div className="mb-6">
-          <h3
-            className="cursor-pointer font-heading text-lg font-bold text-deep-forest hover:underline"
-            onClick={() => void router.push(`/produce/${subscription.productId}`)}
-          >
-            {subscription.product?.title || 'Unknown Product'} ↗
-          </h3>
-          <p className="text-sm text-ink-3">${pricePerOz.toFixed(2)} per oz</p>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="flex items-start gap-3 rounded-lg border border-border/50 p-4">
-            <Package className="mt-0.5 h-5 w-5 text-ink-3" />
-            <div>
-              <p className="text-xs text-ink-3">Current Amount</p>
-              <p className="font-semibold text-ink">{quantity} oz</p>
-              <p className="mt-1 text-xs font-medium text-forest-dark">Cycle Total: ${totalCost}</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3 rounded-lg border border-border/50 p-4">
-            <RefreshCw className="mt-0.5 h-5 w-5 text-ink-3" />
-            <div>
-              <p className="text-xs text-ink-3">Fulfillment Type</p>
-              <p className="font-semibold text-ink capitalize">{subscription.fulfillmentType}</p>
-              <p className="mt-1 text-xs text-ink-3">
-                Frequency: {subscription.product?.harvestFrequencyDays || 7} days
+        <div className="mb-5 flex items-center justify-between border-b border-border/50 pb-5">
+          <div className="flex flex-col gap-1">
+            <h3
+              className="cursor-pointer font-heading text-lg font-bold text-deep-forest hover:underline"
+              onClick={() => void router.push(`/produce/${subscription.productId}`)}
+            >
+              {subscription.product?.title || 'Unknown Product'}
+            </h3>
+            {fromUser && (
+              <p className="text-xs text-ink-3">
+                From:{' '}
+                <span
+                  className="cursor-pointer font-medium text-deep-forest hover:underline"
+                  onClick={() => void router.push(`/public-profile/${fromUser.id}`)}
+                >
+                  {fromUser.name || 'N/A'}
+                </span>
               </p>
-            </div>
+            )}
           </div>
+          <StatusPill status={subscription.status} />
         </div>
 
-        <div className="mt-4 flex items-center gap-3 rounded-lg bg-sun/10 p-4 text-sm">
-          <Calendar className="h-5 w-5 text-yellow-800" />
-          <div>
-            <p className="font-medium text-yellow-900">Next Scheduled Delivery / Pickup</p>
-            <p className="text-yellow-800">{nextDelivery}</p>
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-6 justify-between">
+          <div className="flex flex-col gap-1.5 sm:w-[calc(50%-12px)]">
+            <span className="text-xs font-bold uppercase tracking-wider text-ink-3">
+              Fulfillment Type
+            </span>
+            <p className="font-medium text-ink capitalize">
+              {subscription.fulfillmentType || 'N/A'}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1.5 sm:w-[calc(50%-12px)]">
+            <span className="text-xs font-bold uppercase tracking-wider text-ink-3">Frequency</span>
+            <p className="font-medium text-ink">
+              Every {subscription.product?.harvestFrequencyDays || 7} days
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1.5 sm:w-[calc(50%-12px)]">
+            <span className="text-xs font-bold uppercase tracking-wider text-ink-3">
+              Next Order
+            </span>
+            <p className="font-medium text-ink">{nextDelivery}</p>
+          </div>
+
+          <div className="flex flex-col gap-1.5 sm:w-[calc(50%-12px)]">
+            <span className="text-xs font-bold uppercase tracking-wider text-ink-3">Amount</span>
+            <p className="font-medium text-ink">{quantity} oz</p>
+          </div>
+
+          <div className="flex flex-col gap-1.5 sm:w-[calc(50%-12px)]">
+            <span className="text-xs font-bold uppercase tracking-wider text-ink-3">
+              Price per oz
+            </span>
+            <p className="font-medium text-ink">${pricePerOz.toFixed(2)}</p>
+          </div>
+
+          <div className="flex flex-col gap-1.5 sm:w-[calc(50%-12px)] sm:items-end">
+            <span className="text-xs font-bold uppercase tracking-wider text-ink-3">
+              Total Cost
+            </span>
+            <p className="font-heading text-2xl font-bold text-deep-forest">${totalCost}</p>
           </div>
         </div>
       </CardContent>

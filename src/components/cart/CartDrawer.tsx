@@ -117,10 +117,10 @@ export function CartDrawer() {
         <div className="flex shrink-0 items-center justify-between bg-deep-forest p-5 sm:px-6">
           <div>
             <SheetTitle className="font-heading text-[1.1rem] font-extrabold text-cream">
-              🛒 Your Cart
+              Your Cart
             </SheetTitle>
             <SheetDescription className="mt-0.5 font-sans text-[0.74rem] text-cream/55">
-              Items are checked out by farm and subscription schedule
+              Items are checked out by seller and subscription schedule
             </SheetDescription>
           </div>
           <Button
@@ -271,7 +271,7 @@ export function CartDrawer() {
                             disabled={checkoutMutation.isPending}
                           >
                             {isCheckingOut && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
-                            Checkout →
+                            Checkout
                           </Button>
                         </div>
                       </div>
