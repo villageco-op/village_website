@@ -50,7 +50,13 @@ export function BuyerQuickLinksCard() {
 
         <div className="flex flex-col gap-2 w-full">
           {QUICK_LINKS.map((link) => (
-            <Button variant="link" key={link.href} size="lg" className="items-start justify-start">
+            <Button
+              asChild
+              variant="link"
+              key={link.href}
+              size="lg"
+              className="items-start justify-start"
+            >
               <Link key={link.href} href={link.href}>
                 {link.title}
               </Link>

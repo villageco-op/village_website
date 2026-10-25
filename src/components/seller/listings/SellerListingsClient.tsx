@@ -44,13 +44,12 @@ export default function SellerListingsClient() {
         title="My Listings"
         subtitle={`${activeCount} active`}
         actions={
-          <Button variant="lime" size="sm" className="text-xs font-semibold">
+          <Button asChild variant="lime" size="sm" className="text-xs font-semibold">
             <Link href="/seller/new-listing">+ New listing</Link>
           </Button>
         }
       />
 
-      {/* 3-Column Grid */}
       <div className="mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {listings.map((produce) => (
           <ListingCard key={produce.id} produce={produce} />

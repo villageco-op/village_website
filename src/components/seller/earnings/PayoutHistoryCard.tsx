@@ -80,7 +80,7 @@ export function PayoutHistoryCard({
         {/* Filters Section */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
           <Select value={timeframeFilter} onValueChange={(val) => setTimeframeFilter(val)}>
-            <SelectTrigger className="w-full sm:w-48">
+            <SelectTrigger title="Timeframe filter select" className="w-full sm:w-48">
               <SelectValue placeholder="Filter by timeframe" />
             </SelectTrigger>
             <SelectContent>

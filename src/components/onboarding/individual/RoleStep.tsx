@@ -60,13 +60,13 @@ export default function RoleStep({ onSelectRole, onBack }: RoleStepProps) {
         </button>
       </div>
 
-      <div className="p-6 bg-black/5 border border-dashed border-border/40 rounded-xl flex items-center gap-4 opacity-70">
+      <div className="p-6 bg-white/70 border border-dashed border-border/40 rounded-xl flex items-center gap-4 opacity-90">
         <div className="w-10 h-10 bg-border/20 text-ink-3 rounded-full flex items-center justify-center shrink-0">
           <Truck className="w-5 h-5" />
         </div>
         <div>
           <h3 className="font-heading font-bold text-ink">Logistics (Coming Soon)</h3>
-          <p className="text-sm text-ink-3">Earn money delivering local goods to your neighbors.</p>
+          <p className="text-sm text-ink-2">Earn money delivering local goods to your neighbors.</p>
         </div>
       </div>
 

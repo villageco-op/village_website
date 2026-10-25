@@ -166,7 +166,7 @@ export function ContactFormFields({
           {isCompanyRequired ? (
             <span className="text-required">*</span>
           ) : (
-            <span className="text-forest-dark/50 font-normal">(Optional)</span>
+            <span className="text-ink-3 font-normal">(Optional)</span>
           )}
         </Label>
         <Input

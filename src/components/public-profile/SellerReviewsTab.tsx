@@ -102,7 +102,7 @@ export default function SellerReviewsTab({ sellerId, profile }: SellerReviewsTab
           <div className="my-3 flex justify-center gap-1">
             {renderStars(Math.round(profile.starRating), 'h-5 w-5')}
           </div>
-          <div className="font-sans text-[0.74rem] text-cream/60">
+          <div className="font-sans text-[0.74rem] text-cream/70">
             Based on {profile.totalReviews} reviews
           </div>
         </div>
@@ -125,6 +125,7 @@ export default function SellerReviewsTab({ sellerId, profile }: SellerReviewsTab
                   className={`h-2 flex-1 bg-cream-dark [&>div]:${
                     star >= 4 ? 'bg-lime' : star === 3 ? 'bg-sun' : 'bg-ink-3'
                   }`}
+                  aria-label={`Progress bar for ${star} stars`}
                 />
                 <span className="w-5 shrink-0 font-sans text-[0.7rem] text-ink-3">
                   {profile.reviewBreakdown[star.toString() as keyof typeof profile.reviewBreakdown]}
@@ -145,7 +146,7 @@ export default function SellerReviewsTab({ sellerId, profile }: SellerReviewsTab
             setPage(1);
           }}
         >
-          <SelectTrigger>
+          <SelectTrigger title="Sort Order Select">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>

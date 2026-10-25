@@ -36,12 +36,12 @@ export function SubscriptionSummaryCard({ subscription, fromUser }: Subscription
       <CardContent className="p-6">
         <div className="mb-5 flex items-center justify-between border-b border-border/50 pb-5">
           <div className="flex flex-col gap-1">
-            <h3
+            <h1
               className="cursor-pointer font-heading text-lg font-bold text-deep-forest hover:underline"
               onClick={() => void router.push(`/produce/${subscription.productId}`)}
             >
               {subscription.product?.title || 'Unknown Product'}
-            </h3>
+            </h1>
             {fromUser && (
               <p className="text-xs text-ink-3">
                 From:{' '}

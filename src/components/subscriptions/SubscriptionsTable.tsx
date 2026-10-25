@@ -87,7 +87,7 @@ export function SubscriptionsTable({
         value={statusFilter}
         onValueChange={(val) => setStatusFilter(val as SubscriptionStatus | 'all')}
       >
-        <SelectTrigger className="w-full sm:w-40 h-9 text-sm">
+        <SelectTrigger title="Status Filter" className="w-full sm:w-40 h-9 text-sm">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>

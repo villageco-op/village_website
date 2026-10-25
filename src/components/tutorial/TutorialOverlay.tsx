@@ -46,7 +46,10 @@ export function TutorialOverlay() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 w-full max-w-sm shadow-2xl transition-all duration-300 print:hidden">
-      <Card className="border-2 border-forest shadow-lg">
+      <Card
+        className="border-2 border-forest shadow-lg"
+        aria-label={`Tutorial: ${activeTutorial.title}`}
+      >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
           <div className="flex items-center gap-2">
             <HelpCircle className="h-4 w-4 text-forest" />
@@ -95,7 +98,7 @@ export function TutorialOverlay() {
                 )}
               </div>
 
-              <h4 className="text-xs font-bold text-ink">{currentStep.title}</h4>
+              <h1 className="text-xs font-bold text-ink">{currentStep.title}</h1>
               <p className="text-xs text-ink-3 leading-relaxed">{currentStep.content}</p>
 
               {!isCorrectPage && currentStep.targetRoute && (

@@ -161,7 +161,7 @@ export default function ClientsExportClient() {
                 <p className="text-sm text-ink-3">
                   Fetching records... ({progress.current} of {progress.total})
                 </p>
-                <Progress value={percentComplete} />
+                <Progress aria-label="Progress Bar" value={percentComplete} />
               </div>
             ) : error ? (
               <InlineErrorState

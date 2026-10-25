@@ -25,7 +25,7 @@ export default function ProduceHeaderCard({ produce }: ProduceHeaderCardProps) {
           images={images}
           title={produce.title}
           className="w-full h-full"
-          imageClassName="object-cover w-full h-full"
+          imageClassName="object-cover w-full"
         />
       </div>
 

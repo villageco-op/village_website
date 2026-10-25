@@ -35,11 +35,9 @@ export function ProfileHero({ name, image, joinedAt, city, state, starRating }: 
     <div className="bg-deep-forest pb-6 pt-8 shadow-sm">
       <div className="container-custom max-w-250">
         <div className="flex flex-col gap-6 md:flex-row md:items-center">
-          <Avatar className="h-24 w-24 bg-sun shadow-sm">
+          <Avatar className="h-24 w-24">
             {image && <AvatarImage src={image} alt={initials} className="object-cover" />}
-            <AvatarFallback className="bg-transparent font-heading text-3xl font-extrabold text-white">
-              {initials}
-            </AvatarFallback>
+            <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
 
           <div className="flex flex-col">
@@ -47,7 +45,7 @@ export function ProfileHero({ name, image, joinedAt, city, state, starRating }: 
               {name || 'Anonymous'}
             </h1>
             {city && state && (
-              <div className="mt-1 flex items-center gap-1.5 font-sans text-sm text-cream/60">
+              <div className="mt-1 flex items-center gap-1.5 font-sans text-sm text-cream/80">
                 <MapPin className="h-3.5 w-3.5" />
                 {city}, {state}
               </div>
@@ -55,12 +53,12 @@ export function ProfileHero({ name, image, joinedAt, city, state, starRating }: 
 
             <div className="mt-4 flex flex-wrap gap-2">
               {joinedAt && (
-                <Badge className="border-none bg-cream-dark/30 font-medium text-cream/80">
+                <Badge className="border-none bg-cream-dark/10 font-medium text-cream/90">
                   Joined {joinedDate}
                 </Badge>
               )}
               {starRating && (
-                <Badge className="border-none bg-sun/20 font-bold text-sun">
+                <Badge className="border-none bg-cream-dark/10 font-bold text-sun-light">
                   {starRating.toFixed(1)} <Star className="ml-1 inline h-3 w-3 fill-current" />
                 </Badge>
               )}

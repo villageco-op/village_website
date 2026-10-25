@@ -39,7 +39,7 @@ export function ConfirmDeleteModal({
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="flex items-center gap-2 text-red-600 mb-1">
+          <div className="flex items-center gap-2 text-deep-forest mb-1">
             <AlertOctagon className="h-5 w-5" />
             <DialogTitle className="font-heading text-lg font-bold">
               Delete Client Record

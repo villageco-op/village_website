@@ -30,7 +30,7 @@ export function CartGroupTimer({ expiresAt }: { expiresAt: number }) {
     <div
       className={cn(
         'flex items-center gap-1.5 rounded-full px-2.5 py-1 font-heading text-[0.68rem] font-bold',
-        isWarning ? 'bg-sun-light text-[#8a6000]' : 'bg-lime/12 text-click-green',
+        isWarning ? 'bg-sun-light text-[#8a6000]' : 'bg-lime/10 text-deep-forest',
       )}
     >
       <span
