@@ -67,7 +67,7 @@
   --radius-xl: calc(var(--radius) * 1.4);
 
   --color-muted: oklch(0.97 0.001 106.424);
-  --color-muted-foreground: oklch(0.440 0.013 58.071);
+  --color-muted-foreground: oklch(0.44 0.013 58.071);
 
   --color-table-border: var(--color-forest-muted);
   --color-table-row-hover: var(--color-cream);
