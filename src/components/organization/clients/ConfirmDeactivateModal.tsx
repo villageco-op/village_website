@@ -39,7 +39,7 @@ export function ConfirmDeactivateModal({
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="flex items-center gap-2 text-amber-600 mb-1">
+          <div className="flex items-center gap-2 text-red-700 mb-1">
             <AlertTriangle className="h-5 w-5" />
             <DialogTitle className="font-heading text-lg font-bold">Deactivate Client</DialogTitle>
           </div>
@@ -58,10 +58,10 @@ export function ConfirmDeactivateModal({
             Cancel
           </Button>
           <Button
-            variant="outline"
+            variant="destructive"
             onClick={() => void onConfirm()}
             disabled={isSubmitting}
-            className="border-amber-200 text-amber-700 hover:bg-amber-50 h-9 text-sm flex items-center gap-1.5"
+            className="h-9 text-sm flex items-center gap-1.5"
           >
             {isSubmitting ? (
               <>

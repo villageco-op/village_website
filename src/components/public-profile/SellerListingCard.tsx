@@ -1,4 +1,3 @@
-import { Calendar } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -41,14 +40,9 @@ export function SellerListingCard({ item, onOrderClicked }: SellerListingCardPro
           {item.name}
         </div>
         <div className="mb-3 flex flex-wrap gap-1.5">
-          <Badge className="bg-lime hover:bg-click-green border-none">
-            <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-white"></span>
-            In Season
-          </Badge>
+          <Badge className="bg-click-green border-none">In Season</Badge>
           {item.isSubscribable && (
-            <Badge className="bg-deep-forest hover:bg-forest-dark border-none">
-              <Calendar className="mr-1 h-3 w-3" /> Subscribable
-            </Badge>
+            <Badge className="bg-deep-forest hover:bg-forest-dark border-none">Subscribable</Badge>
           )}
         </div>
         <p className="mb-4 font-sans text-[0.76rem] leading-relaxed text-ink-3 line-clamp-3 flex-1">

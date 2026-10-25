@@ -51,6 +51,7 @@ export function DeleteOrganizationDialog({
               setConfirmText('');
               onClose();
             }}
+            title="Close Button"
             className="cursor-pointer text-ink-3 hover:text-ink-2"
             disabled={isPending}
           >

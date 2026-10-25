@@ -154,10 +154,10 @@ export function ListingCard({ produce }: ListingCardProps) {
         )}
 
         <div className="mt-auto flex gap-2 pt-2">
-          <Button variant="outline-forest" size="sm">
+          <Button asChild variant="outline-forest" size="sm">
             <Link href={`/seller/listings/${produce.id}/edit`}>Edit</Link>
           </Button>
-          <Button variant="forest" size="sm">
+          <Button asChild variant="forest" size="sm">
             <Link href={`/seller/listings/${produce.id}/orders`}>View orders</Link>
           </Button>
         </div>

@@ -36,7 +36,7 @@ export function DeleteAccountDialog({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-heading text-xl text-red-600">Delete Account</DialogTitle>
+          <DialogTitle className="font-heading text-xl text-red-700">Delete Account</DialogTitle>
           <DialogDescription className="text-ink-2">
             Are you absolutely sure you want to delete your account? This action cannot be undone.
             Your personal data will be anonymized, and you will lose access to all your order

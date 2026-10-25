@@ -59,7 +59,7 @@ export function NotificationControls() {
             <Bell className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-semibold text-deep-forest text-lg">Push Notifications</h3>
+            <h1 className="font-semibold text-deep-forest text-lg">Push Notifications</h1>
             <p className="text-sm text-ink-3">
               Get real-time alerts about important activity on your account.
             </p>

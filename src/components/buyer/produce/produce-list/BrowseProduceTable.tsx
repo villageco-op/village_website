@@ -50,7 +50,7 @@ export function BrowseProduceTable({
                 <TableHead>Price/oz</TableHead>
                 <TableHead>Distance</TableHead>
                 <TableHead className="text-center">Subscribable</TableHead>
-                <TableHead className="w-30"></TableHead>
+                <TableHead className="w-30">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

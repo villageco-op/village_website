@@ -38,7 +38,7 @@ export function NavDropdown({ label = 'Menu', groups, className }: NavDropdownPr
         <Button
           variant="ghost"
           size="sm"
-          className={`font-heading text-xs font-semibold bg-transparent hover:bg-white/5 hover:text-cream text-cream/50 aria-expanded:bg-transparent aria-expanded:text-cream/50 group-hover/dropdown:text-cream ${className ?? ''}`}
+          className={`font-heading text-xs font-semibold bg-transparent hover:bg-white/5 hover:text-cream text-cream/70 aria-expanded:bg-transparent aria-expanded:text-cream/50 group-hover/dropdown:text-cream ${className ?? ''}`}
         >
           {label}
           <ChevronDown className="ml-1 h-3 w-3 transition-transform" />
@@ -49,7 +49,7 @@ export function NavDropdown({ label = 'Menu', groups, className }: NavDropdownPr
           <div key={group.label || groupIdx}>
             {groupIdx > 0 && <DropdownMenuSeparator />}
             {group.label && (
-              <DropdownMenuLabel className="text-xs text-cream/50 font-bold uppercase tracking-wider">
+              <DropdownMenuLabel className="text-xs text-cream/70 font-bold uppercase tracking-wider">
                 {group.label}
               </DropdownMenuLabel>
             )}

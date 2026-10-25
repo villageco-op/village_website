@@ -62,19 +62,19 @@ export default function SellerProfile({ sellerId }: SellerProfileProps) {
         <TabsList className="h-auto w-full justify-start rounded-none border-none bg-deep-forest p-0">
           <TabsTrigger
             value="about"
-            className="cursor-pointer rounded-none border-transparent font-heading font-bold text-ink-3 data-[state=active]:border-b-2 data-[state=active]:border-b-lime  data-[state=active]:bg-transparent data-[state=active]:text-cream hover:text-cream"
+            className="cursor-pointer rounded-none border-transparent font-heading font-bold text-cream/70 data-[state=active]:border-b-2 data-[state=active]:border-b-lime  data-[state=active]:bg-transparent data-[state=active]:text-cream hover:text-cream"
           >
             About
           </TabsTrigger>
           <TabsTrigger
             value="listings"
-            className="cursor-pointer rounded-none border-transparent font-heading font-bold text-ink-3 data-[state=active]:border-b-2 data-[state=active]:border-b-lime data-[state=active]:bg-transparent data-[state=active]:text-cream hover:text-cream"
+            className="cursor-pointer rounded-none border-transparent font-heading font-bold text-cream/70 data-[state=active]:border-b-2 data-[state=active]:border-b-lime data-[state=active]:bg-transparent data-[state=active]:text-cream hover:text-cream"
           >
             Listings
           </TabsTrigger>
           <TabsTrigger
             value="reviews"
-            className="cursor-pointer rounded-none border-transparent font-heading font-bold text-ink-3 data-[state=active]:border-b-2 data-[state=active]:border-b-lime data-[state=active]:bg-transparent data-[state=active]:text-cream hover:text-cream"
+            className="cursor-pointer rounded-none border-transparent font-heading font-bold text-cream/70 data-[state=active]:border-b-2 data-[state=active]:border-b-lime data-[state=active]:bg-transparent data-[state=active]:text-cream hover:text-cream"
           >
             Reviews
           </TabsTrigger>

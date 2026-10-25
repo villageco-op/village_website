@@ -79,7 +79,7 @@ export const InteractiveRoleSelection: Story = {
     const body = within(canvasElement.ownerDocument.body);
 
     // Verify initial state is "Member"
-    const memberButton = body.getByRole('button', { name: /Member Standard access/i });
+    const memberButton = body.getByRole('button', { name: /Member Role/i });
     const adminButton = body.getByRole('button', {
       name: /Administrator Full administrative access/i,
     });

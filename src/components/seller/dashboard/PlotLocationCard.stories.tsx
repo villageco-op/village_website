@@ -63,30 +63,3 @@ export const MissingAddress: Story = {
     location: undefined,
   },
 };
-
-/**
- * View showing how the card looks within a grid-like container (common dashboard usage).
- */
-export const InDashboardContext: Story = {
-  decorators: [
-    (Story) => (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-8 rounded-lg">
-        <Story />
-        <div className="border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400">
-          Adjacent Content
-        </div>
-      </div>
-    ),
-  ],
-  args: {
-    location: {
-      address: 'Plot #42',
-      lat: 41.5934,
-      lng: -87.3464,
-      city: 'Sunset Acres',
-      state: 'IN',
-      country: 'United States',
-      zip: '45678',
-    },
-  },
-};

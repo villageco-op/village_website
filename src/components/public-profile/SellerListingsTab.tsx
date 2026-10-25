@@ -93,7 +93,7 @@ export default function SellerListingsTab({ sellerId, onOrderItem }: SellerListi
               setPage(1);
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger title="Sort By Select">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>

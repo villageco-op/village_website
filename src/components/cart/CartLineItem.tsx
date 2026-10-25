@@ -89,11 +89,11 @@ export function CartLineItem({
                 alt={item.title}
                 className={cn(
                   'h-full w-full object-cover transition-opacity',
-                  isUpdating && 'opacity-40',
+                  isUpdating && 'opacity-70',
                 )}
               />
             ) : (
-              <span className={cn(isUpdating && 'opacity-40')}>
+              <span className={cn(isUpdating && 'opacity-70')}>
                 <ProduceIcon type={item.title} className="h-5 w-5 text-ink-3" />
               </span>
             )}
@@ -113,7 +113,7 @@ export function CartLineItem({
             <div className="mt-0.5 flex gap-2 font-sans text-[0.72rem] text-ink-3">
               <span>${priceNum.toFixed(2)}/oz</span>
               {item.isSubscription && item.subscriptionCostReductionPercent && (
-                <span className="font-bold text-lime">
+                <span className="font-bold text-deep-forest">
                   ({item.subscriptionCostReductionPercent}% off)
                 </span>
               )}
@@ -151,8 +151,8 @@ export function CartLineItem({
           <div className="flex shrink-0 flex-col items-start gap-0.5 sm:items-end">
             <div
               className={cn(
-                'whitespace-nowrap font-heading text-[0.88rem] font-extrabold text-deep-forest transition-opacity duration-200',
-                isUpdating ? 'opacity-30' : 'opacity-100',
+                'whitespace-nowrap font-heading text-[0.88rem] font-extrabold text-ink-2 transition-opacity duration-200',
+                isUpdating ? 'opacity-90' : 'opacity-100',
               )}
             >
               ${lineTotal.toFixed(2)}
@@ -186,7 +186,7 @@ export function CartLineItem({
               htmlFor={`sub-${item.reservationId}`}
               className={cn(
                 'cursor-pointer font-sans text-[0.75rem] text-ink-2 transition-opacity hover:text-ink',
-                isUpdating && 'pointer-events-none opacity-50',
+                isUpdating && 'pointer-events-none opacity-70',
               )}
             >
               Subscribe & Save (Every {item.subscriptionFrequencyDays || 7} days)

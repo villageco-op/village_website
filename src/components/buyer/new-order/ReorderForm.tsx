@@ -159,7 +159,13 @@ function ReorderFormContent({
     <Card className="z-50 rounded-xl border border-forest-dark/10 shadow-lg bg-white overflow-auto max-h-screen relative flex flex-col w-full max-w-lg sm:max-w-md mx-auto">
       <CardHeader className="bg-off-white border-b border-lime/20 pb-4 pr-12">
         <CardTitle className="font-heading text-xl text-deep-forest">Reorder Items</CardTitle>
-        <Button variant="ghost" size="icon" className="absolute right-2 top-2" onClick={onClose}>
+        <Button
+          variant="ghost"
+          title="Close button"
+          size="icon"
+          className="absolute right-2 top-2"
+          onClick={onClose}
+        >
           <X className="w-5 h-5" />
         </Button>
       </CardHeader>
@@ -179,13 +185,14 @@ function ReorderFormContent({
             return (
               <div
                 key={item.id}
-                className={`p-4 rounded-lg border transition-colors ${!isOrderable ? 'bg-slate-100 opacity-75' : 'bg-slate-50/50 border-border'}`}
+                className={`p-4 rounded-lg border transition-colors ${!isOrderable ? 'bg-slate-50 opacity-90' : 'bg-slate-50/50 border-border'}`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-start gap-3 flex-1">
                     <Checkbox
                       id={`check-${item.id}`}
                       disabled={!isOrderable}
+                      title="Item Checkbox"
                       checked={!!itemsState[item.productId]?.selected && isOrderable}
                       onCheckedChange={() => handleToggleItem(item.productId, isOrderable)}
                     />
@@ -196,7 +203,7 @@ function ReorderFormContent({
                       >
                         {item.productName}
                       </Label>
-                      <div className="text-xs text-slate-500 font-medium">
+                      <div className="text-xs text-ink-2 font-medium">
                         ${pricePerLb.toFixed(2)} / lb
                       </div>
                       {!isInSeason && (
@@ -205,7 +212,7 @@ function ReorderFormContent({
                         </Badge>
                       )}
                       {isFutureAvailability && isOrderable && (
-                        <div className="flex items-center text-amber-600 text-[10px] mt-1">
+                        <div className="flex items-center text-red-700 text-[10px] mt-1">
                           <Calendar className="w-3 h-3 mr-1" /> Available {availableDateStr}
                         </div>
                       )}
@@ -213,14 +220,14 @@ function ReorderFormContent({
                   </div>
 
                   <div
-                    className={`w-full sm:w-32 ${itemsState[item.productId]?.selected ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}
+                    className={`w-full sm:w-32 ${itemsState[item.productId]?.selected ? 'opacity-100' : 'opacity-100 pointer-events-none'}`}
                   >
                     <OrderQuantityInput
                       quantityOz={itemsState[item.productId]?.quantityOz || 0}
                       onChange={(val) => handleQuantityChange(item.productId, val)}
                       maxOz={maxOz}
                     />
-                    <p className="text-[10px] text-slate-500 mt-1 text-right sm:text-left">
+                    <p className="text-[10px] text-ink-3 mt-1 text-right sm:text-left">
                       Max: {maxOz.toFixed(1)} oz
                     </p>
                   </div>

@@ -4,7 +4,6 @@ import {
   Sprout,
   CreditCard,
   Repeat,
-  ShoppingBag,
   ArrowRight,
   CheckCircle2,
   LayoutDashboard,
@@ -25,68 +24,51 @@ export default function BecomeSellerClient() {
   const isLoading = status == 'loading';
 
   return (
-    <div className="bg-off-white">
-      <div className="container-custom mx-auto">
-        <div className="text-center mb-16">
-          <div className="w-20 h-20 bg-lime-pale text-click-green rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-            <Sprout className="w-10 h-10" />
-          </div>
-          <h1 className="font-heading text-[clamp(2.4rem,4.2vw,3.6rem)] font-extrabold text-deep-forest tracking-[-0.035em] leading-[1.1] mb-6">
-            Become a Seller & Grower
-          </h1>
-          <p className="text-lg text-forest-dark/80 max-w-2xl mx-auto">
-            Join our community marketplace to list your fresh produce, artisanal goods, and farm
-            products. Reach local neighbors and manage your sales all in one place.
-          </p>
+    <div className="container-custom mx-auto flex w-full flex-col gap-6">
+      <div className="text-center">
+        <div className="w-20 h-20 bg-lime-pale text-click-green rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+          <Sprout className="w-10 h-10" />
         </div>
+        <h1 className="font-heading text-[clamp(2.4rem,4.2vw,3.6rem)] font-extrabold text-deep-forest tracking-[-0.035em] leading-[1.1] mb-6">
+          Become a Seller & Grower
+        </h1>
+        <p className="text-lg text-forest-dark/80 max-w-2xl mx-auto">
+          Join our community marketplace to list your fresh produce, artisanal goods, and farm
+          products. Reach local neighbors and manage your sales all in one place.
+        </p>
+      </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          <Card className="border-forest-dark/10 shadow-sm">
-            <CardContent className="pt-6 text-center">
-              <div className="w-12 h-12 bg-lime/20 rounded-full flex items-center justify-center mx-auto mb-4 text-click-green">
-                <CreditCard className="w-6 h-6" />
-              </div>
-              <h3 className="font-heading font-bold text-deep-forest mb-2">
-                Accept Online Payments
-              </h3>
-              <p className="text-sm text-forest-dark/70">
-                Securely process credit cards and bank transfers directly from your customers with
-                easy payouts.
-              </p>
-            </CardContent>
-          </Card>
+      <div className="grid md:grid-cols-2 gap-6">
+        <Card>
+          <CardContent className="text-center">
+            <div className="w-12 h-12 bg-lime/20 rounded-full flex items-center justify-center mx-auto mb-4 text-click-green">
+              <CreditCard className="w-6 h-6" />
+            </div>
+            <h1 className="font-heading font-bold text-deep-forest mb-2">Accept Online Payments</h1>
+            <p className="text-sm text-forest-dark/70">
+              Securely process credit cards and bank transfers directly from your customers with
+              easy payouts.
+            </p>
+          </CardContent>
+        </Card>
 
-          <Card className="border-forest-dark/10 shadow-sm">
-            <CardContent className="pt-6 text-center">
-              <div className="w-12 h-12 bg-lime/20 rounded-full flex items-center justify-center mx-auto mb-4 text-click-green">
-                <Repeat className="w-6 h-6" />
-              </div>
-              <h3 className="font-heading font-bold text-deep-forest mb-2">
-                Recurring Subscriptions
-              </h3>
-              <p className="text-sm text-forest-dark/70">
-                Allow customers to easily subscribe to your farm for recurring harvests.
-              </p>
-            </CardContent>
-          </Card>
+        <Card>
+          <CardContent className="text-center">
+            <div className="w-12 h-12 bg-lime/20 rounded-full flex items-center justify-center mx-auto mb-4 text-click-green">
+              <Repeat className="w-6 h-6" />
+            </div>
+            <h1 className="font-heading font-bold text-deep-forest mb-2">
+              Recurring Subscriptions
+            </h1>
+            <p className="text-sm text-forest-dark/70">
+              Allow customers to easily subscribe to your farm for recurring harvests.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
 
-          <Card className="border-forest-dark/10 shadow-sm bg-black/5">
-            <CardContent className="pt-6 text-center">
-              <div className="w-12 h-12 bg-border/20 rounded-full flex items-center justify-center mx-auto mb-4 text-ink-3">
-                <ShoppingBag className="w-6 h-6" />
-              </div>
-              <h3 className="font-heading font-bold text-deep-forest mb-2">
-                SNAP/EBT (Coming Soon)
-              </h3>
-              <p className="text-sm text-forest-dark/70">
-                Expand your reach and feed more of your community by accepting food assistance
-                payments online.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="max-w-2xl mx-auto bg-white border border-lime/30 rounded-2xl p-8 shadow-sm text-center">
+      <Card>
+        <CardContent className="text-center">
           {isLoading ? (
             <div className="animate-pulse h-20 bg-lime-pale rounded-lg"></div>
           ) : !user ? (
@@ -154,8 +136,8 @@ export default function BecomeSellerClient() {
               </Button>
             </>
           )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -48,7 +48,7 @@ export function IdentityCell({
       <div className="flex items-center gap-2 min-w-max">
         {avatarFallback && (
           <Avatar>
-            {image && <AvatarImage src={image} alt={displayName} />}
+            {image && <AvatarImage src={image} alt="Profile image" />}
             <AvatarFallback>{fallback}</AvatarFallback>
           </Avatar>
         )}
@@ -245,7 +245,7 @@ export function OrderProductCell({
       <div className="flex items-center gap-3 min-w-max">
         <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-border/50 bg-slate-100">
           {image ? (
-            <Image src={image} alt={displayTitle} fill className="object-cover" />
+            <Image src={image} alt="Product Image" fill className="object-cover" />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-slate-100 text-slate-400">
               <Package className="h-4 w-4" />
@@ -354,6 +354,7 @@ export default function RadioCell({
       <input
         type="radio"
         name={name}
+        aria-label={name}
         checked={isSelected}
         onChange={() => onChange()}
         className="h-4 w-4 cursor-pointer accent-primary"

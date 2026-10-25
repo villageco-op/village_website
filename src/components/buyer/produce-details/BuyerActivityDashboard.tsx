@@ -132,7 +132,7 @@ export default function BuyerActivityDashboard({
                         <p className="font-semibold text-sm text-lime-900">Subscription</p>
                         <StatusPill status={sub.status} />
                       </div>
-                      <p className="text-xs text-lime-800/70">
+                      <p className="text-xs text-lime-800">
                         {sub.quantityOz} oz • {sub.fulfillmentType}
                       </p>
                     </div>

@@ -103,7 +103,7 @@ export function MembersTable({
       </div>
 
       <Select value={roleFilter} onValueChange={setRoleFilter}>
-        <SelectTrigger className="w-full sm:w-48 h-9 text-sm">
+        <SelectTrigger title="Role filter select" className="w-full sm:w-48 h-9 text-sm">
           <SelectValue placeholder="All Roles" />
         </SelectTrigger>
         <SelectContent>

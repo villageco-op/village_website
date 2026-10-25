@@ -176,7 +176,7 @@ export default function AcceptInviteClient() {
                   className="bg-white border-lime/50 focus-visible:ring-click-green h-10 text-sm"
                 />
                 {emailParam && (
-                  <p className="text-[10px] text-ink-3/70">
+                  <p className="text-[10px] text-ink-3">
                     This invitation is tied to the specified address.
                   </p>
                 )}

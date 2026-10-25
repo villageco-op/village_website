@@ -119,7 +119,7 @@ export function CartDrawer() {
             <SheetTitle className="font-heading text-[1.1rem] font-extrabold text-cream">
               Your Cart
             </SheetTitle>
-            <SheetDescription className="mt-0.5 font-sans text-[0.74rem] text-cream/55">
+            <SheetDescription className="mt-0.5 font-sans text-[0.74rem] text-cream/70">
               Items are checked out by seller and subscription schedule
             </SheetDescription>
           </div>
@@ -191,7 +191,7 @@ export function CartDrawer() {
                             className={cn(
                               'rounded-full px-2.5 py-0.5 text-[0.68rem] font-bold uppercase tracking-[0.06em]',
                               group.isSubscription
-                                ? 'bg-lime/20 text-click-green'
+                                ? 'bg-lime/10 text-deep-forest'
                                 : 'bg-deep-forest/10 text-deep-forest',
                             )}
                           >

@@ -61,6 +61,7 @@ export function EditRoleModal({
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
+              aria-label="Member Role"
               onClick={() => onTargetRoleChange(OrgRole.member)}
               className={`cursor-pointer p-3 text-left rounded-lg border flex flex-col gap-1 transition-all ${
                 targetRole === OrgRole.member
@@ -79,6 +80,7 @@ export function EditRoleModal({
 
             <button
               type="button"
+              title="Admin Role"
               onClick={() => onTargetRoleChange(OrgRole.admin)}
               className={`cursor-pointer p-3 text-left rounded-lg border flex flex-col gap-1 transition-all ${
                 targetRole === OrgRole.admin

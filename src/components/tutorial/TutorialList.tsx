@@ -55,28 +55,32 @@ export default function TutorialList({
         <p className="text-sm text-ink-3">{descriptionText}</p>
       </div>
 
-      {/* Render tutorials grouped by category */}
       <div className="space-y-8">
-        {Object.entries(groupedTutorials).map(([category, categoryTutorials]) => (
-          <section key={category} className="space-y-4">
-            <h2 className="flex items-center gap-2 text-lg font-bold text-ink">{category}</h2>
+        {Object.entries(groupedTutorials).map(([category, categoryTutorials]) => {
+          const categoryId = `tutorial-category-${category.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
 
-            <div className="grid gap-4 md:grid-cols-2">
-              {categoryTutorials.map((tutorial) => (
-                <TutorialCard
-                  key={tutorial.id}
-                  tutorial={tutorial}
-                  isRunning={activeTutorial?.id === tutorial.id}
-                  onStart={startTutorial}
-                  onEnd={endTutorial}
-                />
-              ))}
+          return (
+            <div key={category} aria-labelledby={categoryId} className="space-y-4">
+              <h2 id={categoryId} className="flex items-center gap-2 text-lg font-bold text-ink">
+                {category}
+              </h2>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                {categoryTutorials.map((tutorial) => (
+                  <TutorialCard
+                    key={tutorial.id}
+                    tutorial={tutorial}
+                    isRunning={activeTutorial?.id === tutorial.id}
+                    onStart={startTutorial}
+                    onEnd={endTutorial}
+                  />
+                ))}
+              </div>
             </div>
-          </section>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Additional Help Card */}
       <Card>
         <CardContent className="flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center">
           <div className="space-y-1">

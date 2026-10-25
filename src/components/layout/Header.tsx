@@ -92,27 +92,31 @@ export function Header() {
     <>
       <header className="sticky top-0 z-50 w-full h-16 bg-primary border-b border-border/10">
         <div className="w-full px-4 sm:px-6 lg:px-8 flex h-16 items-center">
-          <Link href="/" className="mr-6 flex items-center shrink-0">
-            {isHome ? (
-              <>
-                <Image
-                  src={getAssetPath('/icons/logo-horizontal.png')}
-                  alt="Village Logo"
-                  width={100}
-                  height={34}
-                  className="hidden lg:block h-8 w-auto"
-                  priority
-                />
-                <Image
-                  src={getAssetPath('/icons/logo.png')}
-                  alt="Village Icon"
-                  width={34}
-                  height={34}
-                  className="block lg:hidden h-8 w-auto"
-                  priority
-                />
-              </>
-            ) : (
+          {isHome ? (
+            <div className="mr-6 flex items-center shrink-0" aria-label="Village Home">
+              <Image
+                src={getAssetPath('/icons/logo-horizontal.png')}
+                alt="Village Logo"
+                width={100}
+                height={34}
+                className="hidden lg:block h-8 w-auto"
+                priority
+              />
+              <Image
+                src={getAssetPath('/icons/logo.png')}
+                alt="Village Icon"
+                width={34}
+                height={34}
+                className="block lg:hidden h-8 w-auto"
+                priority
+              />
+            </div>
+          ) : (
+            <Link
+              href="/"
+              className="mr-6 flex items-center shrink-0"
+              aria-label="Village Home - Go to homepage"
+            >
               <Image
                 src={getAssetPath('/icons/logo.png')}
                 alt="Village Icon"
@@ -121,8 +125,8 @@ export function Header() {
                 className="h-12 w-auto"
                 priority
               />
-            )}
-          </Link>
+            </Link>
+          )}
 
           {/* Primary Nav Items */}
           <nav className="flex items-center gap-1" aria-label="Main Navigation">
@@ -138,8 +142,8 @@ export function Header() {
                   className={cn(
                     'font-heading text-xs font-bold uppercase tracking-wider',
                     isActive
-                      ? 'text-lime bg-lime/10 hover:bg-lime/10 hover:text-lime'
-                      : 'text-cream/40 hover:bg-white/5 hover:text-cream/80',
+                      ? 'text-lime-pale bg-lime-pale/15 hover:bg-lime-pale/20 hover:text-lime-pale'
+                      : 'text-cream/90 hover:bg-white/10 hover:text-white',
                   )}
                 >
                   <Link href={item.href}>{item.name}</Link>
@@ -161,7 +165,7 @@ export function Header() {
                     asChild
                     variant="ghost"
                     size="sm"
-                    className="font-heading text-xs font-semibold text-cream/50 hover:bg-white/5 hover:text-cream"
+                    className="font-heading text-xs font-semibold text-cream/70 hover:bg-white/5 hover:text-cream"
                   >
                     <Link href={item.href}>{item.name}</Link>
                   </Button>
@@ -211,7 +215,7 @@ export function Header() {
                           asChild
                           variant="ghost"
                           size="sm"
-                          className="font-heading text-xs font-semibold text-cream/50 hover:bg-white/5 hover:text-cream"
+                          className="font-heading text-xs font-semibold text-cream/70 hover:bg-white/5 hover:text-cream"
                         >
                           <Link href={item.href}>{item.name}</Link>
                         </Button>
@@ -242,8 +246,8 @@ export function Header() {
                     className={cn(
                       'font-heading text-xs font-bold uppercase tracking-wider',
                       isActive
-                        ? 'text-lime bg-lime/10 hover:bg-lime/10 hover:text-lime'
-                        : 'text-cream/40 hover:bg-white/5 hover:text-cream/80',
+                        ? 'text-lime-pale bg-lime-pale/15 hover:bg-lime-pale/20 hover:text-lime-pale'
+                        : 'text-cream/90 hover:bg-white/10 hover:text-white',
                     )}
                   >
                     <Link href={item.href}>{item.name}</Link>

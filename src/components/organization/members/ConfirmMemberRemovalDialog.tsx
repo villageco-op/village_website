@@ -39,7 +39,7 @@ export function ConfirmRemovalDialog({
     <Dialog open={!!member} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="flex items-center gap-2 text-red-600 mb-1">
+          <div className="flex items-center gap-2 text-red-700 mb-1">
             <AlertTriangle className="h-5 w-5" />
             <DialogTitle className="font-heading text-lg font-bold">Remove Member</DialogTitle>
           </div>

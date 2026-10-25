@@ -123,6 +123,7 @@ export function BuyerOrderForm({
             size="icon"
             className="absolute right-2 top-2"
             onClick={onClose}
+            title="Close"
             type="button"
           >
             <X className="w-5 h-5" />
@@ -160,7 +161,7 @@ export function BuyerOrderForm({
                   Subtotal:
                 </span>
                 {isSubscription && !hasError && (
-                  <span className="text-xs text-forest-dark/60 flex items-center mt-1">
+                  <span className="text-xs text-forest-dark flex items-center mt-1">
                     <CalendarDays className="w-3 h-3 mr-1" />
                     Billed now and {frequencyLabel}
                   </span>
@@ -171,7 +172,7 @@ export function BuyerOrderForm({
                   ${totalPrice.toFixed(2)}
                 </span>
                 {isSubscription && !hasError && (
-                  <span className="text-sm font-medium text-forest-dark/70 block">
+                  <span className="text-sm font-medium text-forest-dark block">
                     / {frequencyLabel}
                   </span>
                 )}

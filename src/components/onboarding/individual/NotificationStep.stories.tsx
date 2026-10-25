@@ -71,15 +71,15 @@ export const RoleComparison: Story = {
   render: (args) => (
     <div className="flex flex-col md:flex-row gap-8 items-start">
       <div className="p-4 border rounded-xl bg-white">
-        <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-ink-3 border-b pb-2">
+        <h1 className="mb-4 text-xs font-bold uppercase tracking-widest text-ink-3 border-b pb-2">
           Buyer Role
-        </h4>
+        </h1>
         <NotificationsStep {...args} role="buyer" />
       </div>
       <div className="p-4 border rounded-xl bg-white">
-        <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-ink-3 border-b pb-2">
+        <h1 className="mb-4 text-xs font-bold uppercase tracking-widest text-ink-3 border-b pb-2">
           Seller Role
-        </h4>
+        </h1>
         <NotificationsStep {...args} role="seller" />
       </div>
     </div>

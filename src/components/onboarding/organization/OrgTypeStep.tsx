@@ -45,15 +45,15 @@ export default function OrgTypeStep({ onSelectType, onBack, isUpgradingToOrg }: 
           <p className="text-sm text-ink-3 mt-1 text-center">Manage clients and track refferals.</p>
         </button>
 
-        <div className="flex flex-col items-center justify-center p-6 bg-black/5 border border-dashed border-border/40 rounded-xl opacity-60 relative cursor-not-allowed">
-          <span className="absolute top-3 right-3 bg-zinc-200 text-zinc-700 text-xs px-2 py-0.5 rounded font-bold uppercase tracking-wider scale-90">
+        <div className="flex flex-col items-center justify-center p-6 bg-white/80 border border-dashed border-border/40 rounded-xl opacity-90 relative cursor-not-allowed">
+          <span className="absolute top-3 right-3 bg-zinc-200/50 text-ink text-xs px-2 py-0.5 rounded font-bold uppercase tracking-wider scale-90">
             Coming Soon
           </span>
-          <div className="w-12 h-12 bg-border/20 text-ink-3 rounded-full flex items-center justify-center mb-4">
+          <div className="w-12 h-12 bg-border/20 text-ink rounded-full flex items-center justify-center mb-4">
             <Utensils className="w-6 h-6" />
           </div>
-          <h3 className="font-heading font-bold text-lg text-ink-3 text-center">Restaurant</h3>
-          <p className="text-sm text-ink-3 mt-1 text-center">
+          <h3 className="font-heading font-bold text-lg text-ink text-center">Restaurant</h3>
+          <p className="text-sm text-ink mt-1 text-center">
             Easy website setup with optional support for online orders.
           </p>
         </div>
