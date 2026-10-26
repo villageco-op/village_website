@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertTriangle, Loader2, UserMinus } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -39,8 +39,7 @@ export function ConfirmDeactivateModal({
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="flex items-center gap-2 text-red-700 mb-1">
-            <AlertTriangle className="h-5 w-5" />
+          <div className="flex items-center gap-2 text-destructive mb-1">
             <DialogTitle className="font-heading text-lg font-bold">Deactivate Client</DialogTitle>
           </div>
           <DialogDescription className="text-sm text-ink-2">
@@ -48,7 +47,7 @@ export function ConfirmDeactivateModal({
           </DialogDescription>
         </DialogHeader>
 
-        <p className="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
+        <p className="text-xs text-destructive bg-destructive/10 p-3 rounded-lg border border-destructive/20">
           Deactivating this client profile flags them as inactive. They will not be able to create
           referrals. They can be reactivated in the future.
         </p>
@@ -69,10 +68,7 @@ export function ConfirmDeactivateModal({
                 Deactivating...
               </>
             ) : (
-              <>
-                <UserMinus className="h-3.5 w-3.5" />
-                Deactivate Profile
-              </>
+              <>Deactivate Profile</>
             )}
           </Button>
         </DialogFooter>

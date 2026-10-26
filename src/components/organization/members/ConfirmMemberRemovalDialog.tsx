@@ -39,7 +39,7 @@ export function ConfirmRemovalDialog({
     <Dialog open={!!member} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="flex items-center gap-2 text-red-700 mb-1">
+          <div className="flex items-center gap-2 text-destructive mb-1">
             <AlertTriangle className="h-5 w-5" />
             <DialogTitle className="font-heading text-lg font-bold">Remove Member</DialogTitle>
           </div>
@@ -49,7 +49,7 @@ export function ConfirmRemovalDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <p className="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
+        <p className="text-xs text-destructive bg-destructive/10 p-3 rounded-lg border border-destructive/20">
           Once removed, they will immediately lose access to all shared resources, tools, and
           databases associated with this organization.
         </p>

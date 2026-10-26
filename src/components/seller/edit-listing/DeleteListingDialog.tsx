@@ -36,7 +36,9 @@ export function DeleteListingDialog({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-heading text-xl text-red-600">Delete Listing</DialogTitle>
+          <DialogTitle className="font-heading text-xl text-destructive">
+            Delete Listing
+          </DialogTitle>
           <DialogDescription className="text-ink-2">
             Are you sure you want to delete this listing? This action cannot be undone and the item
             will be permanently removed from your catalog.
