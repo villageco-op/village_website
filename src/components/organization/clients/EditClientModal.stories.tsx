@@ -67,7 +67,6 @@ export const Submitting: Story = {
  */
 export const SubmitFormFlow: Story = {
   play: async ({ canvasElement, args }) => {
-    // Dialog content is rendered in a Portal on document body
     const body = within(canvasElement.ownerDocument.body);
 
     const nameInput = body.getByLabelText(/Full Name/i);

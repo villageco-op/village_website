@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertOctagon, Loader2, Trash2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -39,19 +39,16 @@ export function ConfirmDeleteModal({
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="flex items-center gap-2 text-deep-forest mb-1">
-            <AlertOctagon className="h-5 w-5" />
-            <DialogTitle className="font-heading text-lg font-bold">
-              Delete Client Record
-            </DialogTitle>
-          </div>
+          <DialogTitle className="text-destructive font-heading text-lg font-bold">
+            Delete Client Record
+          </DialogTitle>
           <DialogDescription className="text-sm text-ink-2">
             This action is permanent. Are you sure you want to completely delete{' '}
             <strong>{client.name || 'this record'}</strong>?
           </DialogDescription>
         </DialogHeader>
 
-        <p className="text-xs text-red-700 bg-red-50 p-3 rounded-lg border border-red-100">
+        <p className="text-xs text-destructive bg-destructive/10 p-3 rounded-lg border border-destructive/20">
           All referral data will be permanently unlinked from this client and the record deleted.
           This process cannot be undone.
         </p>
@@ -72,10 +69,7 @@ export function ConfirmDeleteModal({
                 Deleting...
               </>
             ) : (
-              <>
-                <Trash2 className="h-3.5 w-3.5" />
-                Confirm Deletion
-              </>
+              <>Confirm Deletion</>
             )}
           </Button>
         </DialogFooter>
