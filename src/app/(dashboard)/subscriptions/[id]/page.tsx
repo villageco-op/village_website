@@ -1,5 +1,3 @@
-import { cookies } from 'next/headers';
-
 import BuyerSubscriptionDetailClient from '@/components/buyer/subscriptions/details/BuyerSubscriptionDetailsClient';
 import SellerSubscriptionDetailClient from '@/components/seller/subscriptions/details/SellerSubscriptionDetailsClient';
 import { NotFoundState } from '@/components/ui/state-displays';
@@ -20,13 +18,8 @@ interface SubscriptionPageProps {
  */
 export default async function SubscriptionDetailPage({ params }: SubscriptionPageProps) {
   const { id } = await params;
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
 
-  const [user, sub] = await Promise.all([
-    fetchCurrentUser(cookieHeader),
-    fetchSubscriptionById(id, cookieHeader),
-  ]);
+  const [user, sub] = await Promise.all([fetchCurrentUser(), fetchSubscriptionById(id)]);
 
   if (!user || !sub) {
     return (
