@@ -1,5 +1,3 @@
-import { cookies } from 'next/headers';
-
 import OrderDetailClient from '@/components/orders/OrderDetailClient';
 import { NotFoundState, PageErrorState } from '@/components/ui/state-displays';
 import { fetchOrderById } from '@/lib/api/order';
@@ -19,13 +17,8 @@ interface OrderDetailPageProps {
  */
 export default async function OrderDetailPage({ params }: OrderDetailPageProps) {
   const { id } = await params;
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
 
-  const [user, order] = await Promise.all([
-    fetchCurrentUser(cookieHeader),
-    fetchOrderById(id, cookieHeader),
-  ]);
+  const [user, order] = await Promise.all([fetchCurrentUser(), fetchOrderById(id)]);
 
   if (!user || !order) {
     return (

@@ -1,5 +1,3 @@
-import { cookies } from 'next/headers';
-
 import BuyerProfile from '@/components/public-profile/BuyerProfileClient';
 import SellerProfile from '@/components/public-profile/SellerProfileClient';
 import { NotFoundState } from '@/components/ui/state-displays';
@@ -14,10 +12,8 @@ import { fetchCurrentUser } from '@/lib/api/user';
  */
 export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
 
-  const user = await fetchCurrentUser(cookieHeader);
+  const user = await fetchCurrentUser();
 
   if (!user) {
     return <NotFoundState title="Profile not found" />;
