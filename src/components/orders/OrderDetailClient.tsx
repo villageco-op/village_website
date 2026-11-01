@@ -52,30 +52,10 @@ export default function OrderDetailClient({
 
   const queryClient = useQueryClient();
 
-  const cancelMutation = useCancelOrder({
-    mutation: {
-      onSuccess: () => {
-        void queryClient.invalidateQueries({
-          queryKey: [getGetOrderByIdQueryKey(id)],
-        });
-        void queryClient.invalidateQueries({
-          queryKey: [getGetOrdersQueryKey()],
-        });
-      },
-    },
-  });
+  const cancelMutation = useCancelOrder();
+  const rescheduleMutation = useRescheduleOrder();
 
-  const rescheduleMutation = useRescheduleOrder({
-    mutation: {
-      onSuccess: () => {
-        void queryClient.invalidateQueries({
-          queryKey: ['/api/orders'],
-        });
-      },
-    },
-  });
-
-  const { data, isLoading, isError } = useGetOrderById(id, {
+  const { data, isLoading, isError, refetch } = useGetOrderById(id, {
     query: {
       enabled: !!id,
       initialData: {
@@ -91,6 +71,17 @@ export default function OrderDetailClient({
     const toastId = toast.loading('Canceling order...');
     try {
       await cancelMutation.mutateAsync({ id, data: { reason } });
+
+      await queryClient.invalidateQueries({
+        queryKey: [getGetOrderByIdQueryKey(id)],
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: [getGetOrdersQueryKey()],
+      });
+
+      await refetch();
+
       toast.success('Order has been canceled and a refund issued.', { id: toastId });
       setIsCancelOpen(false);
     } catch (error) {
@@ -102,6 +93,17 @@ export default function OrderDetailClient({
     const toastId = toast.loading('Proposing new time...');
     try {
       await rescheduleMutation.mutateAsync({ id, data: { newTime: newTimeIso } });
+
+      await queryClient.invalidateQueries({
+        queryKey: [getGetOrderByIdQueryKey(id)],
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: [getGetOrdersQueryKey()],
+      });
+
+      await refetch();
+
       toast.success('Reschedule request sent successfully.', { id: toastId });
       setIsRescheduleOpen(false);
     } catch (error) {
