@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { Pause, Play } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -12,9 +13,14 @@ import { OrderLocationCard } from '@/components/orders/OrderLocationCard';
 import { PauseReasonBanner } from '@/components/subscriptions/PauseReasonBanner';
 import { SubscriptionSummaryCard } from '@/components/subscriptions/SubscriptionSummaryCard';
 import { Button } from '@/components/ui/button';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
+import { NotFoundState } from '@/components/ui/state-displays';
 import type { FulfillmentType, SubscriptionDetailResponse } from '@/lib/api/generated/models';
-import { useUpdateSubscription } from '@/lib/api/generated/subscriptions/subscriptions';
+import {
+  useGetSubscriptionById,
+  useUpdateSubscription,
+} from '@/lib/api/generated/subscriptions/subscriptions';
 import { formatAppDate } from '@/lib/date-utils';
 
 interface BuyerSubscriptionDetailClientProps {
@@ -30,13 +36,35 @@ interface BuyerSubscriptionDetailClientProps {
  * @returns A page for viewing subscription details with a cancel button and edit button
  */
 export default function BuyerSubscriptionDetailClient({
-  subscription,
+  subscription: initialSubscription,
 }: BuyerSubscriptionDetailClientProps) {
-  const id = subscription.id;
+  const id = initialSubscription.id;
   const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
-  const updateMutation = useUpdateSubscription();
+  const queryClient = useQueryClient();
+
+  const updateMutation = useUpdateSubscription({
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({
+          queryKey: ['/api/subscriptions'],
+        });
+      },
+    },
+  });
+
+  const { data, isLoading, isError } = useGetSubscriptionById(id, {
+    query: {
+      enabled: !!id,
+      initialData: {
+        data: initialSubscription,
+        status: 200,
+        headers: new Headers(),
+      },
+      staleTime: 1000 * 60 * 5,
+    },
+  });
 
   const handleCancel = async (reason: string) => {
     const toastId = toast.loading('Canceling subscription...');
@@ -77,6 +105,21 @@ export default function BuyerSubscriptionDetailClient({
       toast.error('Failed to update subscription.', { id: toastId });
     }
   };
+
+  if (isLoading) {
+    return <LoadingSkeleton heights={['h-8', 'h-125', 'h-64']} />;
+  }
+
+  if (isError || data?.status !== 200 || !data.data) {
+    return (
+      <NotFoundState
+        title="Subscription not found"
+        description="We couldn't load the details for this subscription."
+      />
+    );
+  }
+
+  const subscription = data.data;
 
   const isCanceled = subscription.status === 'canceled';
   const isPaused = subscription.status === 'paused';
