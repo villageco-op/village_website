@@ -20,6 +20,8 @@ import { PageHeader } from '@/components/ui/page-header';
 import { NotFoundState } from '@/components/ui/state-displays';
 import type { OrderDetailResponse } from '@/lib/api/generated/models';
 import {
+  getGetOrderByIdQueryKey,
+  getGetOrdersQueryKey,
   useCancelOrder,
   useGetOrderById,
   useRescheduleOrder,
@@ -54,7 +56,10 @@ export default function OrderDetailClient({
     mutation: {
       onSuccess: () => {
         void queryClient.invalidateQueries({
-          queryKey: ['/api/orders'],
+          queryKey: [getGetOrderByIdQueryKey(id)],
+        });
+        void queryClient.invalidateQueries({
+          queryKey: [getGetOrdersQueryKey()],
         });
       },
     },
