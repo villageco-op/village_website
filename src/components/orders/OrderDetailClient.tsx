@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -14,9 +15,15 @@ import { RescheduleOrderDialog } from './RescheduleOrderDialog';
 import { ReorderForm } from '@/components/buyer/new-order/ReorderForm';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
+import { NotFoundState } from '@/components/ui/state-displays';
 import type { OrderDetailResponse } from '@/lib/api/generated/models';
-import { useCancelOrder, useRescheduleOrder } from '@/lib/api/generated/orders/orders';
+import {
+  useCancelOrder,
+  useGetOrderById,
+  useRescheduleOrder,
+} from '@/lib/api/generated/orders/orders';
 import { formatAppDate } from '@/lib/date-utils';
 
 interface OrderDetailClientProps {
@@ -32,14 +39,48 @@ interface OrderDetailClientProps {
  * @param props.isSeller - Is the current user the seller
  * @returns A page for viewing order details with a cancel button and reschedule button
  */
-export default function OrderDetailClient({ order, isSeller }: OrderDetailClientProps) {
-  const id = order.id;
+export default function OrderDetailClient({
+  order: initialOrder,
+  isSeller,
+}: OrderDetailClientProps) {
+  const id = initialOrder.id;
   const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
   const [isReorderOpen, setIsReorderOpen] = useState(false);
 
-  const cancelMutation = useCancelOrder();
-  const rescheduleMutation = useRescheduleOrder();
+  const queryClient = useQueryClient();
+
+  const cancelMutation = useCancelOrder({
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({
+          queryKey: ['/api/orders'],
+        });
+      },
+    },
+  });
+
+  const rescheduleMutation = useRescheduleOrder({
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({
+          queryKey: ['/api/orders'],
+        });
+      },
+    },
+  });
+
+  const { data, isLoading, isError } = useGetOrderById(id, {
+    query: {
+      enabled: !!id,
+      initialData: {
+        data: initialOrder,
+        status: 200,
+        headers: new Headers(),
+      },
+      staleTime: 1000 * 60 * 5,
+    },
+  });
 
   const handleCancelOrder = async (reason: string) => {
     const toastId = toast.loading('Canceling order...');
@@ -62,6 +103,21 @@ export default function OrderDetailClient({ order, isSeller }: OrderDetailClient
       toast.error('Failed to reschedule the order. Please try again.', { id: toastId });
     }
   };
+
+  if (isLoading) {
+    return <LoadingSkeleton heights={['h-8', 'h-125', 'h-64']} />;
+  }
+
+  if (isError || data?.status !== 200 || !data.data) {
+    return (
+      <NotFoundState
+        title="Order not found"
+        description="We couldn't load the details for this order."
+      />
+    );
+  }
+
+  const order = data.data;
 
   const isPending = order.status === 'pending';
   const isReorderable = order.status === 'completed' || order.status === 'canceled';
