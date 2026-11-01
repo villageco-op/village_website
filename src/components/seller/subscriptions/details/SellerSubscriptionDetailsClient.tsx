@@ -17,6 +17,8 @@ import { PageHeader } from '@/components/ui/page-header';
 import { NotFoundState } from '@/components/ui/state-displays';
 import type { FulfillmentType, SubscriptionDetailResponse } from '@/lib/api/generated/models';
 import {
+  getGetSubscriptionByIdQueryKey,
+  getGetSubscriptionsQueryKey,
   useGetSubscriptionById,
   useUpdateSubscription,
 } from '@/lib/api/generated/subscriptions/subscriptions';
@@ -45,7 +47,10 @@ export default function SellerSubscriptionDetailClient({
     mutation: {
       onSuccess: () => {
         void queryClient.invalidateQueries({
-          queryKey: ['/api/subscriptions'],
+          queryKey: [getGetSubscriptionByIdQueryKey(id)],
+        });
+        void queryClient.invalidateQueries({
+          queryKey: [getGetSubscriptionsQueryKey()],
         });
       },
     },
