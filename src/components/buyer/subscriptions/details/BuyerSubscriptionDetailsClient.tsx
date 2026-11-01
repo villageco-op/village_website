@@ -99,6 +99,16 @@ export default function BuyerSubscriptionDetailClient({
     const toastId = toast.loading(`${actionText} subscription...`);
     try {
       await updateMutation.mutateAsync({ id, data: { status: newStatus } });
+
+      await queryClient.invalidateQueries({
+        queryKey: [getGetSubscriptionByIdQueryKey(id)],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [getGetSubscriptionsQueryKey()],
+      });
+
+      await refetch();
+
       toast.success(`Subscription successfully ${newStatus}.`, { id: toastId });
     } catch (error) {
       toast.error(`Failed to change subscription status.`, { id: toastId });
@@ -112,6 +122,16 @@ export default function BuyerSubscriptionDetailClient({
         id,
         data: { quantityOz, fulfillmentType: fulfillmentType as FulfillmentType },
       });
+
+      await queryClient.invalidateQueries({
+        queryKey: [getGetSubscriptionByIdQueryKey(id)],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [getGetSubscriptionsQueryKey()],
+      });
+
+      await refetch();
+
       toast.success('Subscription updated successfully. Changes apply next cycle.', {
         id: toastId,
       });
