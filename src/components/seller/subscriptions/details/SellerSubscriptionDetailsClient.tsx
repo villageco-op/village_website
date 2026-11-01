@@ -43,20 +43,9 @@ export default function SellerSubscriptionDetailClient({
 
   const queryClient = useQueryClient();
 
-  const updateMutation = useUpdateSubscription({
-    mutation: {
-      onSuccess: () => {
-        void queryClient.invalidateQueries({
-          queryKey: [getGetSubscriptionByIdQueryKey(id)],
-        });
-        void queryClient.invalidateQueries({
-          queryKey: [getGetSubscriptionsQueryKey()],
-        });
-      },
-    },
-  });
+  const updateMutation = useUpdateSubscription();
 
-  const { data, isLoading, isError } = useGetSubscriptionById(id, {
+  const { data, isLoading, isError, refetch } = useGetSubscriptionById(id, {
     query: {
       enabled: !!id,
       initialData: {
@@ -80,6 +69,16 @@ export default function SellerSubscriptionDetailClient({
         id,
         data: { status: targetAction, cancelReason: reason },
       });
+
+      await queryClient.invalidateQueries({
+        queryKey: [getGetSubscriptionByIdQueryKey(id)],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [getGetSubscriptionsQueryKey()],
+      });
+
+      await refetch();
+
       toast.success(`Subscription has been ${successText}.`, { id: toastId });
       setIsStatusDialogOpen(false);
     } catch (error) {
@@ -91,6 +90,16 @@ export default function SellerSubscriptionDetailClient({
     const toastId = toast.loading('Resuming subscription...');
     try {
       await updateMutation.mutateAsync({ id, data: { status: 'active', cancelReason: undefined } });
+
+      await queryClient.invalidateQueries({
+        queryKey: [getGetSubscriptionByIdQueryKey(id)],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [getGetSubscriptionsQueryKey()],
+      });
+
+      await refetch();
+
       toast.success('Subscription successfully resumed.', { id: toastId });
     } catch (error) {
       toast.error('Failed to resume subscription.', { id: toastId });

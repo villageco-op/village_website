@@ -59,7 +59,7 @@ export default function BuyerSubscriptionDetailClient({
     },
   });
 
-  const { data, isLoading, isError } = useGetSubscriptionById(id, {
+  const { data, isLoading, isError, refetch } = useGetSubscriptionById(id, {
     query: {
       enabled: !!id,
       initialData: {
@@ -75,6 +75,16 @@ export default function BuyerSubscriptionDetailClient({
     const toastId = toast.loading('Canceling subscription...');
     try {
       await updateMutation.mutateAsync({ id, data: { status: 'canceled', cancelReason: reason } });
+
+      await queryClient.invalidateQueries({
+        queryKey: [getGetSubscriptionByIdQueryKey(id)],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [getGetSubscriptionsQueryKey()],
+      });
+
+      await refetch();
+
       toast.success('Subscription has been canceled.', { id: toastId });
       setIsCancelOpen(false);
     } catch (error) {
