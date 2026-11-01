@@ -10,14 +10,7 @@ import {
   generateMockListings,
 } from '@/lib/storybook/utils/mockGenerators';
 
-const mockedQueryClient = new QueryClient({
-  defaultOptions: {
-    queries: { retry: false },
-  },
-});
-
 const PAGE_LIMIT = 12;
-
 const MOCK_LISTINGS_DATA = generateMockListings(25);
 
 const meta: Meta<typeof SellerListingsClient> = {
@@ -31,9 +24,14 @@ const meta: Meta<typeof SellerListingsClient> = {
   },
   decorators: [
     (Story) => {
-      mockedQueryClient.clear();
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false, gcTime: 0 },
+        },
+      });
+
       return (
-        <QueryClientProvider client={mockedQueryClient}>
+        <QueryClientProvider client={queryClient}>
           <div className="min-h-screen bg-background p-8">
             <div className="mx-auto max-w-6xl">
               <Story />
@@ -88,17 +86,18 @@ export const Paginated: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // Verify Page 1
-    await expect(await canvas.findByText('Listing Item 1')).toBeInTheDocument();
-    await expect(canvas.queryByText(`Listing Item ${PAGE_LIMIT + 1}`)).not.toBeInTheDocument();
+    const firstPageItemTitle = MOCK_LISTINGS_DATA[0].title;
+    const secondPageItemTitle = MOCK_LISTINGS_DATA[PAGE_LIMIT].title;
 
-    // Navigate to Page 2
+    await expect(await canvas.findByText(firstPageItemTitle)).toBeInTheDocument();
+    await expect(canvas.queryByText(secondPageItemTitle)).not.toBeInTheDocument();
+
     const nextButton = await canvas.findByRole('button', { name: /next|2/i });
     await userEvent.click(nextButton);
 
-    // Verify Page 2 items appear
-    await expect(await canvas.findByText(`Listing Item ${PAGE_LIMIT + 1}`)).toBeInTheDocument();
-    await expect(canvas.queryByText('Listing Item 1')).not.toBeInTheDocument();
+    await expect(await canvas.findByText(secondPageItemTitle)).toBeInTheDocument();
+
+    await expect(canvas.queryByText(firstPageItemTitle)).not.toBeInTheDocument();
   },
 };
 
