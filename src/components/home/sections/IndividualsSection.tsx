@@ -1,8 +1,10 @@
+'use client';
+
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 
 interface IndividualsSectionProps {
   id?: string;
@@ -20,16 +22,16 @@ interface RoleCard {
 const ROLES: RoleCard[] = [
   {
     id: 'buyer',
-    title: 'Buyer',
+    title: 'Shop',
     description:
       'Stimulate the local economy by buying fresh produce directly from local growers and neighbors.',
     isAvailable: true,
-    actionText: 'Browse Produce',
+    actionText: 'Browse',
     actionHref: '/buyer/browse',
   },
   {
     id: 'seller',
-    title: 'Seller',
+    title: 'Sell',
     description:
       'Turn your harvest into revenue with online orders, subscriptions, and mobile tap-to-pay (coming soon).',
     isAvailable: true,
@@ -38,28 +40,28 @@ const ROLES: RoleCard[] = [
   },
   {
     id: 'grower',
-    title: 'Grower',
+    title: 'Grow',
     description:
       'Manage growth cycles, track yield projections, and streamline daily crop maintenance tasks for any scale.',
     isAvailable: false,
   },
   {
     id: 'storage',
-    title: 'Storage',
+    title: 'Store',
     description:
       'Track inventory for fresh, frozen, and non-perishable food products, seeds, and materials. Efficiently add items with mobile QR and Barcode scanning.',
     isAvailable: false,
   },
   {
     id: 'transporter',
-    title: 'Transporter',
+    title: 'Transport',
     description:
       'Transport produce efficiently with route optimization and smart batching for farm pickups, surplus runs, or direct deliveries.',
     isAvailable: false,
   },
   {
     id: 'landowner',
-    title: 'Landowner',
+    title: 'Land Share',
     description:
       'Optimize outdoor growing spaces, gain land insights, or share available land with community members to grow food.',
     isAvailable: false,
@@ -67,16 +69,20 @@ const ROLES: RoleCard[] = [
 ];
 
 /**
- * Section displaying roles in a horizontally scrollable list.
- * @param props - Component props
+ * Section displaying roles in a vertically stacked list with expandable inactive roles.
+ * @param props - Compoent props
  * @param props.id - The section Id
- * @returns A section with role cards
+ * @returns A section with role list items
  */
 export function IndividualsSection({ id = 'individuals' }: IndividualsSectionProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const availableRoles = ROLES.filter((role) => role.isAvailable);
+  const unavailableRoles = ROLES.filter((role) => !role.isAvailable);
+
   return (
-    <section id={id} className="bg-cream py-16 md:py-24 text-deep-forest overflow-hidden">
+    <section id={id} className="bg-cream py-16 md:py-24 text-deep-forest">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        {/* Section Header */}
         <div className="max-w-3xl mb-10 md:mb-14">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mt-2 text-deep-forest">
             Choose Your Role
@@ -86,60 +92,67 @@ export function IndividualsSection({ id = 'individuals' }: IndividualsSectionPro
             and selling to growing, storing, and transporting.
           </p>
         </div>
-      </div>
 
-      {/* Horizontally Scrollable Row */}
-      <div className="w-full overflow-x-auto pb-8 pt-2 scrollbar-thin scrollbar-thumb-deep-forest/20 scrollbar-track-transparent">
-        <div className="flex gap-6 px-6 sm:px-8 lg:px-12 max-w-7xl mx-auto min-w-max">
-          {ROLES.map((role) => {
-            return (
-              <Card
-                key={role.id}
-                className={`w-75 sm:w-85 flex flex-col justify-between transition-colors snap-start ${
-                  role.isAvailable
-                    ? 'bg-off-white border-deep-forest/15'
-                    : 'bg-off-white/50 border-deep-forest/10 opacity-80'
-                }`}
-              >
-                <CardContent>
-                  <div className="space-y-4">
-                    {/* Title & Description */}
-                    <div className="space-y-2 pt-2">
-                      <h3 className="text-xl font-heading font-bold text-deep-forest">
-                        {role.title}
-                      </h3>
-                      <p className="text-sm text-deep-forest/75 leading-relaxed">
-                        {role.description}
-                      </p>
-                    </div>
-                  </div>
+        <div className="divide-y divide-deep-forest/15 border-y border-deep-forest/15">
+          {/* Always Available Roles */}
+          {availableRoles.map((role) => (
+            <RoleRow key={role.id} role={role} />
+          ))}
 
-                  {/* Footer Action / Status */}
-                  <div className="pt-6 mt-6 border-t border-deep-forest/10">
-                    {role.isAvailable && role.actionText && role.actionHref ? (
-                      <Button
-                        variant="forest"
-                        size="sm"
-                        className="w-full h-10 font-semibold"
-                        asChild
-                      >
-                        <Link href={role.actionHref}>
-                          {role.actionText}
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </Link>
-                      </Button>
-                    ) : (
-                      <span className="block text-xs font-medium text-deep-forest/40 uppercase tracking-wider">
-                        Not yet available
-                      </span>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+          {isExpanded && unavailableRoles.map((role) => <RoleRow key={role.id} role={role} />)}
         </div>
+
+        {unavailableRoles.length > 0 && (
+          <div className="mt-8 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setIsExpanded((prev) => !prev)}
+              className="group flex items-center gap-2 text-sm font-semibold text-deep-forest/80 hover:text-deep-forest transition-colors"
+            >
+              <span>{isExpanded ? 'See less roles' : 'See more roles'}</span>
+            </button>
+          </div>
+        )}
       </div>
     </section>
+  );
+}
+
+function RoleRow({ role }: { role: (typeof ROLES)[number] }) {
+  return (
+    <div
+      className={`py-6 sm:py-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 md:gap-8 ${
+        !role.isAvailable ? 'opacity-70' : ''
+      }`}
+    >
+      <div className="space-y-1 max-w-2xl">
+        <h3 className="text-xl sm:text-2xl font-heading font-bold text-deep-forest">
+          {role.title}
+        </h3>
+        <p className="text-sm sm:text-base text-deep-forest/75 leading-relaxed">
+          {role.description}
+        </p>
+      </div>
+
+      <div className="shrink-0 sm:self-center">
+        {role.isAvailable && role.actionText && role.actionHref ? (
+          <Button
+            variant="forest"
+            size="sm"
+            className="w-full sm:w-auto h-10 font-semibold px-6"
+            asChild
+          >
+            <Link href={role.actionHref}>
+              {role.actionText}
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Link>
+          </Button>
+        ) : (
+          <span className="inline-block text-xs font-medium text-deep-forest/50 uppercase tracking-wider">
+            Not yet available
+          </span>
+        )}
+      </div>
+    </div>
   );
 }
