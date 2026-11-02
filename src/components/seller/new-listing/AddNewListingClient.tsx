@@ -127,7 +127,7 @@ export default function AddNewListingClient() {
         throw new Error('Failed to create listing');
       }
     } catch (error) {
-      logger.error('Failed to create produce listing:', error);
+      logger.error('Failed to create listing:', error);
       toast.error('Could not create listing. Please try again later.', { id: toastId });
     } finally {
       setIsSubmitting(false);

@@ -70,7 +70,7 @@ export function SellerListingCard({ item, onOrderClicked }: SellerListingCardPro
               Order
             </Button>
             <Button variant="outline-forest" size="sm" asChild className="flex-1">
-              <Link href={`/produce/${item.id}`}>View Details</Link>
+              <Link href={`/listings/${item.id}`}>View Details</Link>
             </Button>
           </div>
         </div>

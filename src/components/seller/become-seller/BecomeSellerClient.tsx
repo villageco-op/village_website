@@ -130,7 +130,7 @@ export default function BecomeSellerClient() {
                 your listings and orders.
               </p>
               <Button asChild variant="forest">
-                <Link href="/producer">
+                <Link href="/seller">
                   Go to Dashboard <LayoutDashboard className="w-5 h-5 ml-2" />
                 </Link>
               </Button>

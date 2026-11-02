@@ -109,7 +109,7 @@ export default function SellerProfile({ sellerId }: SellerProfileProps) {
         <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
           <VisuallyHidden.Root>
             <DialogTitle>Order Form</DialogTitle>
-            <DialogDescription>Place an order for this produce item.</DialogDescription>
+            <DialogDescription>Place an order for this listing.</DialogDescription>
           </VisuallyHidden.Root>
           {selectedProduceId && (
             <BuyerOrderForm

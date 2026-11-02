@@ -57,7 +57,7 @@ export default function ListingOrdersClient({ id }: ListingOrdersClientProps) {
     );
   }
 
-  const produceTitle = produceRes?.data?.title || 'Unknown Produce';
+  const produceTitle = produceRes?.data?.title || 'Unknown Listing';
   const orders = ordersRes?.data?.data || [];
 
   const meta = ordersRes?.data?.meta;

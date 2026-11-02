@@ -76,7 +76,7 @@ export function CartLineItem({
   return (
     <div
       className="cursor-pointer flex flex-col border-b border-cream-dark last:border-none hover:bg-off-white"
-      onClick={() => void router.push(`/produce/${item.productId}`)}
+      onClick={() => void router.push(`/listings/${item.productId}`)}
     >
       <div className="flex flex-col items-start gap-3 p-3.5 sm:flex-row sm:items-center sm:px-4.5">
         <div className="flex min-w-0 flex-1 items-center gap-3 w-full sm:w-auto">

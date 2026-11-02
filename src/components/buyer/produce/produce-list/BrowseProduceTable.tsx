@@ -58,7 +58,7 @@ export function BrowseProduceTable({
                 <SelectableTableRow
                   key={item.id}
                   id={item.id}
-                  onSelect={() => void router.push(`/produce/${item.id}`)}
+                  onSelect={() => void router.push(`/listings/${item.id}`)}
                 >
                   <OrderProductCell title={item.name} image={item.thumbnail} />
                   <IdentityCell
