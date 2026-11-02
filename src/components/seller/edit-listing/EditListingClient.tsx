@@ -159,8 +159,8 @@ export default function EditListingClient({ id }: EditListingClientProps) {
         availableBy: formData.availableBy
           ? new Date(formData.availableBy).toISOString()
           : undefined,
-        seasonStart: new Date(formData.seasonStart).toISOString(),
-        seasonEnd: new Date(formData.seasonEnd).toISOString(),
+        seasonStart: formData.seasonStart,
+        seasonEnd: formData.seasonEnd,
         isSubscribable: formData.isSubscribable,
         images: formData.images.length > 0 ? formData.images : [],
       };
