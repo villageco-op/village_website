@@ -11,15 +11,14 @@ export const BUYER_TUTORIALS: Record<string, Tutorial> = {
     category: TutorialCategory.PURCHASING,
     steps: [
       {
-        title: 'Browse Available Produce',
-        content:
-          'Start by exploring produce listings in your area using either the map or list view.',
+        title: 'Browse Available Listings',
+        content: 'Start by exploring listings in your area using either the map or list view.',
         targetRoute: '/buyer/browse',
       },
       {
         title: 'View Listing Details',
         content:
-          'Click on a produce item to view detailed information, harvest schedule, seller information, and customer reviews.',
+          'Click on a listing to view detailed information, harvest schedule, seller information, and customer reviews.',
       },
       {
         title: 'Configure Order & Quantity',
@@ -57,7 +56,7 @@ export const BUYER_TUTORIALS: Record<string, Tutorial> = {
       {
         title: 'Basic Information & Avatar',
         content:
-          'Update your avatar photo, display name, and street address. An accurate address ensures local delivery options and nearby produce calculations work correctly.',
+          'Update your avatar photo, display name, and street address. An accurate address ensures local delivery options and nearby listing calculations work correctly.',
         targetRoute: '/settings',
       },
       {

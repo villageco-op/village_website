@@ -38,7 +38,7 @@ export function SubscriptionSummaryCard({ subscription, fromUser }: Subscription
           <div className="flex flex-col gap-1">
             <h1
               className="cursor-pointer font-heading text-lg font-bold text-deep-forest hover:underline"
-              onClick={() => void router.push(`/produce/${subscription.productId}`)}
+              onClick={() => void router.push(`/listings/${subscription.productId}`)}
             >
               {subscription.product?.title || 'Unknown Product'}
             </h1>

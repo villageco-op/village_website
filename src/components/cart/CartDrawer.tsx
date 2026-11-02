@@ -142,7 +142,7 @@ export function CartDrawer() {
                 Your cart is empty
               </div>
               <div className="font-sans text-[0.78rem]">
-                Browse produce and add items to get started
+                Browse listings and add items to get started
               </div>
             </div>
           ) : (

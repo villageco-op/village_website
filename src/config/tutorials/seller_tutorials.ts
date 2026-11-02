@@ -104,7 +104,7 @@ export const SELLER_TUTORIALS: Record<string, Tutorial> = {
       },
       {
         title: 'Listings Tab',
-        content: 'The "Listings" tab showcases all your active produce listings.',
+        content: 'The "Listings" tab showcases all your active listings.',
       },
       {
         title: 'Reviews Tab',

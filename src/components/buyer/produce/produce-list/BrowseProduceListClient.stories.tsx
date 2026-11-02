@@ -208,6 +208,6 @@ export const ErrorState: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(await canvas.findByText(/Failed to load produce listings/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/Failed to load listings/i)).toBeInTheDocument();
   },
 };

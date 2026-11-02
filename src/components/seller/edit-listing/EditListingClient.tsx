@@ -174,7 +174,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
         throw new Error('Failed to update listing');
       }
     } catch (error) {
-      logger.error('Failed to update produce listing:', error);
+      logger.error('Failed to update listing:', error);
       toast.error('Could not update listing. Please try again later.', { id: toastId });
     } finally {
       setIsSubmitting(false);
@@ -189,7 +189,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
     return (
       <NotFoundState
         title="Listing not found"
-        description="We couldn't load the details for this produce listing."
+        description="We couldn't load the details for this listing."
         action={<Button onClick={() => router.push('/seller/listings')}>Back to Listings</Button>}
       />
     );

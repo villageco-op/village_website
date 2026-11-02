@@ -180,7 +180,7 @@ export function SubscriptionsTable({
                 <SubscriptionProductCell
                   title={productTitle}
                   onProductClick={() => {
-                    void router.push(`/produce/${productId}`);
+                    void router.push(`/listings/${productId}`);
                   }}
                 />
 

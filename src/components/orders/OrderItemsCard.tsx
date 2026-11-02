@@ -52,7 +52,7 @@ export function OrderItemsCard({ items }: OrderItemsCardProps) {
                     <SelectableTableRow
                       id={item.id}
                       key={item.id}
-                      onSelect={() => void router.push(`/produce/${item.productId}`)}
+                      onSelect={() => void router.push(`/listings/${item.productId}`)}
                     >
                       <OrderProductCell title={item.productName} image={itemImage} />
 

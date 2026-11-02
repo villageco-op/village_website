@@ -83,7 +83,7 @@ export default function BrowseProduceMapClient({
 
   if (isError || (response && response.status !== 200)) {
     return (
-      <PageErrorState title="Failed to load produce map data." onRetry={() => void refetch()} />
+      <PageErrorState title="Failed to load listing map data." onRetry={() => void refetch()} />
     );
   }
 
@@ -131,7 +131,7 @@ export default function BrowseProduceMapClient({
           <VisuallyHidden.Root>
             <DialogTitle>Order Form for {selectedProduceId}</DialogTitle>
             <DialogDescription>
-              Fill out this form to place your order for the selected produce.
+              Fill out this form to place your order for the selected listing.
             </DialogDescription>
           </VisuallyHidden.Root>
           {selectedProduceId && (

@@ -87,7 +87,7 @@ export function SellerProduceSidebar({
                   size="sm"
                   onClick={(e) => {
                     e.stopPropagation();
-                    void router.push(`/produce/${item.id}`);
+                    void router.push(`/listings/${item.id}`);
                   }}
                   className="w-full"
                 >
