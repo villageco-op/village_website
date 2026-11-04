@@ -3,14 +3,7 @@ import { userEvent, within, expect, fn } from '@storybook/test';
 
 import { ConfirmRemovalDialog } from './ConfirmMemberRemovalDialog';
 
-import { OrgRole } from '@/lib/api/generated/models';
-
-const MOCK_MEMBER = {
-  id: 'usr_987',
-  name: 'John Smith',
-  email: 'john.smith@example.com',
-  orgRole: OrgRole.member,
-};
+import { BASE_MOCK_MEMBER } from '@/lib/storybook/mocks/organization.mock';
 
 const meta: Meta<typeof ConfirmRemovalDialog> = {
   title: 'Org/Members/ConfirmRemovalDialog',
@@ -19,7 +12,7 @@ const meta: Meta<typeof ConfirmRemovalDialog> = {
     layout: 'centered',
   },
   args: {
-    member: MOCK_MEMBER,
+    member: BASE_MOCK_MEMBER,
     onClose: fn(),
     onConfirm: fn(async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));

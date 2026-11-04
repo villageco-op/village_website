@@ -24,7 +24,7 @@ interface TutorialCardProps {
  */
 export default function TutorialCard({ tutorial, isRunning, onStart, onEnd }: TutorialCardProps) {
   return (
-    <Card className="flex flex-col justify-between">
+    <Card className="flex flex-col justify-between" title={`${tutorial.title} tutorial card`}>
       <CardHeader>
         <CardTitle>{tutorial.title}</CardTitle>
         <CardDescription className="mt-1 leading-relaxed">{tutorial.description}</CardDescription>

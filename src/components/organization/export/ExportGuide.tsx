@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, FileSpreadsheet, FileText, Printer } from 'lucide-react';
+import { Download, Printer } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -30,7 +30,6 @@ export function ExportGuides({ clients, loading, onTriggerPrint }: ExportGuidesP
       <Card className="flex flex-col justify-between">
         <CardHeader className="pb-4">
           <div className="flex items-center gap-2 text-forest">
-            <FileSpreadsheet className="h-5 w-5" />
             <CardTitle className="text-lg">Spreadsheet / Excel (CSV)</CardTitle>
           </div>
           <CardDescription className="pt-2">
@@ -63,7 +62,6 @@ export function ExportGuides({ clients, loading, onTriggerPrint }: ExportGuidesP
       <Card className="flex flex-col justify-between">
         <CardHeader className="pb-4">
           <div className="flex items-center gap-2 text-ink">
-            <FileText className="h-5 w-5" />
             <CardTitle className="text-lg">Print or Save as PDF</CardTitle>
           </div>
           <CardDescription className="pt-2">

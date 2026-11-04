@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react';
 import { BuyerOrderForm } from '../../new-order/OrderBuyerForm';
 
 import { BrowseProduceFilters } from './BrowseProduceFilters';
-import { BrowseProduceSkeleton } from './BrowseProduceSkeleton';
 import { BrowseProduceTable } from './BrowseProduceTable';
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { EmptyState, PageErrorState } from '@/components/ui/state-displays';
 import { usePagination } from '@/hooks/usePagination';
@@ -91,9 +91,7 @@ export default function BrowseProduceListClient({
   }, [user]);
 
   if (isError || (response && response.status !== 200)) {
-    return (
-      <PageErrorState title="Failed to load produce listings." onRetry={() => void refetch()} />
-    );
+    return <PageErrorState title="Failed to load listings." onRetry={() => void refetch()} />;
   }
 
   const produceList = response?.data?.data || [];
@@ -113,7 +111,7 @@ export default function BrowseProduceListClient({
       />
 
       {isLoading ? (
-        <BrowseProduceSkeleton />
+        <LoadingSkeleton heights={['h-12', 'h-64']} />
       ) : produceList.length > 0 ? (
         <div className="space-y-4">
           <BrowseProduceTable
@@ -124,7 +122,7 @@ export default function BrowseProduceListClient({
           <PaginationControls meta={meta} onPageChange={setPage} />
         </div>
       ) : (
-        <EmptyState title="No produce found matching your filters." />
+        <EmptyState title="No listings found matching your filters." />
       )}
       <Dialog
         open={!!selectedProduceId}
@@ -134,7 +132,7 @@ export default function BrowseProduceListClient({
           <VisuallyHidden.Root>
             <DialogTitle>Order Form for {selectedProduceId}</DialogTitle>
             <DialogDescription>
-              Fill out this form to place your order for the selected produce.
+              Fill out this form to place your order for the selected listing.
             </DialogDescription>
           </VisuallyHidden.Root>
           {selectedProduceId && (

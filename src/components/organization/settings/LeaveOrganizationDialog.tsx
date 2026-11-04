@@ -39,7 +39,7 @@ export function LeaveOrganizationDialog({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-heading text-xl text-red-600">
+          <DialogTitle className="font-heading text-xl text-red-700">
             Leave Organization
           </DialogTitle>
           <DialogDescription className="text-ink-2">

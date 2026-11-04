@@ -4,12 +4,13 @@ import { CircleCheck, Info, TriangleAlert, CircleX, Loader } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Toaster as Sonner, type ToasterProps } from "sonner"
 
-const Toaster = ({ ...props }: ToasterProps) => {
+const Toaster = ({ containerAriaLabel = "System Notifications", ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme()
 
   return (
     <Sonner
       theme={theme as ToasterProps["theme"]}
+      containerAriaLabel={containerAriaLabel}
       className="toaster group"
       position="bottom-center"
       offset="100px"

@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { ListingOrdersTable } from './ListingOrdersTable';
 
+import { generateMockProduceOrderListItems } from '@/lib/storybook/utils/mockGenerators';
+
 const meta: Meta<typeof ListingOrdersTable> = {
   title: 'Seller/ListingOrders/ListingOrdersTable',
   component: ListingOrdersTable,
@@ -69,7 +71,6 @@ const mockOrders = [
 export const Default: Story = {
   args: {
     orders: mockOrders as any,
-    totalOrders: 3,
   },
 };
 
@@ -79,7 +80,6 @@ export const Default: Story = {
 export const EmptyState: Story = {
   args: {
     orders: [],
-    totalOrders: 0,
   },
 };
 
@@ -102,11 +102,6 @@ export const MobileView: Story = {
  */
 export const ManyOrders: Story = {
   args: {
-    totalOrders: 20,
-    orders: Array.from({ length: 15 }).map((_, i) => ({
-      ...mockOrders[i % 3],
-      id: `ord_batch_${i}`,
-      quantityOz: (i + 1) * 16,
-    })) as any,
+    orders: generateMockProduceOrderListItems(20),
   },
 };

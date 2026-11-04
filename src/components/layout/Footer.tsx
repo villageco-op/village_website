@@ -7,7 +7,7 @@ const FOOTER_LINKS = [
   {
     title: 'Individuals',
     links: [
-      { label: 'Browse produce', href: '/buyer/browse' },
+      { label: 'Browse listings', href: '/buyer/browse' },
       { label: 'Sell locally', href: '/become-seller' },
     ],
   },

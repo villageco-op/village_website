@@ -6,14 +6,11 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { Order } from './order';
-import type { OrderDetailResponseBuyer } from './orderDetailResponseBuyer';
-import type { OrderDetailResponseItemsItem } from './orderDetailResponseItemsItem';
-import type { OrderDetailResponseSeller } from './orderDetailResponseSeller';
+import type { OrderItemDetails } from './orderItemDetails';
+import type { UserBasicInfo } from './userBasicInfo';
 
-export type OrderDetailResponse = Order & {
-  /** @nullable */
-  buyer: OrderDetailResponseBuyer;
-  /** @nullable */
-  seller: OrderDetailResponseSeller;
-  items: OrderDetailResponseItemsItem[];
-};
+export type OrderDetailResponse = Order & ({
+  buyer: UserBasicInfo & (unknown | null);
+  seller: UserBasicInfo & (unknown | null);
+  items: OrderItemDetails[];
+});

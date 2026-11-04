@@ -1,15 +1,14 @@
 'use client';
 
-import { Mail, Plus, Loader2, UserCheck, AlertCircle } from 'lucide-react';
+import { Plus, Loader2, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-
-import { MembersTableSkeleton } from './MembersTableSkeleton';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import {
   Select,
   SelectContent,
@@ -105,17 +104,10 @@ export function InviteMembersForm({
 
   return (
     <div className="space-y-6">
-      {/* New Invite Form Card */}
       <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm flex items-center gap-2">
-            <Mail className="w-4 h-4 text-click-green" /> New Invite Card
-          </CardTitle>
-        </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col sm:flex-row gap-3 items-end">
-              {/* Email Input */}
               <div className="w-full sm:flex-3 flex flex-col gap-1.5">
                 <Label htmlFor="inviteEmail">Member Email Address</Label>
                 <Input
@@ -129,7 +121,6 @@ export function InviteMembersForm({
                 />
               </div>
 
-              {/* Role Select */}
               <div className="w-full sm:w-48 flex flex-col gap-1.5">
                 <Label htmlFor="inviteRole">Permission Role</Label>
                 <Select
@@ -168,9 +159,8 @@ export function InviteMembersForm({
         </CardContent>
       </Card>
 
-      {/* Sent Invitations Table Section */}
       {isLoading ? (
-        <MembersTableSkeleton rowCount={3} />
+        <LoadingSkeleton />
       ) : isError ? (
         <InlineErrorState
           title="Failed to load invitations"
@@ -182,9 +172,7 @@ export function InviteMembersForm({
         invitedMembers.length > 0 && (
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm flex items-center gap-2">
-                <UserCheck className="w-4 h-4 text-click-green" /> Sent Invitations
-              </CardTitle>
+              <CardTitle className="text-sm flex items-center gap-2">Sent Invitations</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <Table>

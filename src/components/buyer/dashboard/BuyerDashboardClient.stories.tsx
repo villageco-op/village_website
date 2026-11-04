@@ -1,15 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect, userEvent } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
 import BuyerDashboardClient from './BuyerDashboardClient';
 
+import { MOCK_GROWERS_LIST } from '@/lib/storybook/mocks/grower.mock';
+import { MOCK_BUYER_USER } from '@/lib/storybook/mocks/user.mock';
 import {
-  OrderStatusProperty,
-  OrderPaymentMethod,
-  OrderFulfillmentType,
-} from '@/lib/api/generated/models';
+  generateMockOrders,
+  generateMockSubscriptions,
+  createPaginatedResponse,
+} from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -19,61 +20,15 @@ const mockedQueryClient = new QueryClient({
 
 const PAGE_LIMIT = 5;
 
-const generateMockOrders = (count: number) => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `ORD-${7000 + i}`,
-    buyerId: 'me',
-    sellerId: i % 2 === 0 ? 'grower-alpha' : 'grower-beta',
-    paymentMethod: OrderPaymentMethod.card,
-    fulfillmentType: OrderFulfillmentType.delivery,
-    scheduledTime: new Date().toISOString(),
-    status: OrderStatusProperty.pending,
-    totalAmount: (Math.random() * 100 + 20).toFixed(2),
-    createdAt: new Date().toISOString(),
-  }));
-};
-
 const PAGINATED_ORDERS_DATA = generateMockOrders(25);
+const PAGINATED_SUBSCRIPTIONS_DATA = generateMockSubscriptions(25);
 
 const MOCK_DASHBOARD_STATS = {
   onOrderThisWeekLbs: 342,
-  percentChangeFromLastWeek: 15.4,
   totalSpendThisMonth: '1850.50',
-  totalSpendLastMonth: '1600.00',
-  activeSubscriptions: [
-    { id: 'sub-1', produceName: 'Organic Spinach' },
-    { id: 'sub-2', produceName: 'Heirloom Tomatoes' },
-    { id: 'sub-3', produceName: 'Bell Peppers' },
-  ],
+  activeSubscriptions: 3,
   localGrowersSupplying: 6,
-  furthestGrowerDistanceMiles: 24.5,
-  avgGrowerDistanceMiles: 8.2,
 };
-
-const MOCK_GROWERS_LIST = [
-  {
-    sellerId: 'grower-alpha',
-    name: 'Alpha Farms',
-    lat: 41.61,
-    lng: -87.34,
-    image: 'https://i.pravatar.cc/150?u=alpha',
-    rating: 4.9,
-    city: 'Gary',
-    distanceMiles: 3.2,
-    specialties: ['Hydroponic Lettuce', 'Basil', 'Microgreens'],
-  },
-  {
-    sellerId: 'grower-beta',
-    name: 'Beta Gardens',
-    lat: 41.59,
-    lng: -87.32,
-    image: null,
-    rating: 4.2,
-    city: 'Hobart',
-    distanceMiles: 7.5,
-    specialties: ['Honey', 'Wildflowers'],
-  },
-];
 
 const meta: Meta<typeof BuyerDashboardClient> = {
   title: 'Buyer/Dashboard/DashboardPage',
@@ -106,59 +61,20 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get('*/api/buyer/dashboard', () => HttpResponse.json(MOCK_DASHBOARD_STATS)),
-        http.get('*/api/orders*', () => {
-          return HttpResponse.json({
-            data: PAGINATED_ORDERS_DATA.slice(0, 2),
-            meta: { total: 2, page: 1, limit: PAGE_LIMIT, totalPages: 1 },
-          });
-        }),
+        http.get('*/api/orders*', () =>
+          HttpResponse.json(createPaginatedResponse(PAGINATED_ORDERS_DATA, 1, PAGE_LIMIT)),
+        ),
         http.get('*/api/growers/growers-map*', () => HttpResponse.json(MOCK_GROWERS_LIST)),
-      ],
-    },
-  },
-};
-
-/**
- * Pagination state specifically for the Orders list.
- */
-export const OrdersPaginated: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get('*/api/buyer/dashboard', () => HttpResponse.json(MOCK_DASHBOARD_STATS)),
-        http.get('*/api/growers/growers-map*', () => HttpResponse.json(MOCK_GROWERS_LIST)),
-        http.get('*/api/orders*', ({ request }) => {
-          const url = new URL(request.url);
-          const page = Number(url.searchParams.get('page') || '1');
-
-          const start = (page - 1) * PAGE_LIMIT;
-          const end = start + PAGE_LIMIT;
-          const items = PAGINATED_ORDERS_DATA.slice(start, end);
-
+        http.get('*/api/subscriptions', () =>
+          HttpResponse.json(createPaginatedResponse(PAGINATED_SUBSCRIPTIONS_DATA, 1, 3)),
+        ),
+        http.get('*/api/auth/session', () => {
           return HttpResponse.json({
-            data: items,
-            meta: {
-              total: PAGINATED_ORDERS_DATA.length,
-              page,
-              limit: PAGE_LIMIT,
-              totalPages: Math.ceil(PAGINATED_ORDERS_DATA.length / PAGE_LIMIT),
-            },
+            user: MOCK_BUYER_USER,
           });
         }),
       ],
     },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    await expect(await canvas.findByText(/#ORD-7000/i)).toBeInTheDocument();
-    await expect(canvas.queryByText(/#ORD-7005/i)).not.toBeInTheDocument();
-
-    const pageTwoButton = await canvas.findByRole('button', { name: /next|2/i });
-    await userEvent.click(pageTwoButton);
-
-    await expect(await canvas.findByText(/#ORD-7005/i)).toBeInTheDocument();
-    await expect(canvas.queryByText(/#ORD-7000/i)).not.toBeInTheDocument();
   },
 };
 
@@ -194,19 +110,23 @@ export const EmptyState: Story = {
           return HttpResponse.json({
             ...MOCK_DASHBOARD_STATS,
             onOrderThisWeekLbs: 0,
-            percentChangeFromLastWeek: 0,
             totalSpendThisMonth: '0',
-            activeSubscriptions: [],
+            activeSubscriptions: 0,
             localGrowersSupplying: 0,
           });
         }),
         http.get('*/api/orders*', () =>
-          HttpResponse.json({
-            data: [],
-            meta: { total: 0, page: 1, limit: PAGE_LIMIT, totalPages: 0 },
-          }),
+          HttpResponse.json(createPaginatedResponse([], 1, PAGE_LIMIT)),
         ),
         http.get('*/api/growers/growers-map*', () => HttpResponse.json([])),
+        http.get('*/api/subscriptions', () =>
+          HttpResponse.json(createPaginatedResponse([], 1, PAGE_LIMIT)),
+        ),
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_BUYER_USER,
+          });
+        }),
       ],
     },
   },

@@ -22,11 +22,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import type { Order, OrderStatus } from '@/lib/api/generated/models';
+import type { OrderStatus, OrderSummary } from '@/lib/api/generated/models';
 import { formatAppDate } from '@/lib/date-utils';
 
 interface InvoiceHistoryCardProps {
-  orders: Order[];
+  orders: OrderSummary[];
   onDownload: () => Promise<void>;
   isDownloading?: boolean;
   statusFilter: OrderStatus | 'all';
@@ -89,7 +89,7 @@ export function InvoiceHistoryCard({
             value={statusFilter}
             onValueChange={(val) => setStatusFilter(val as OrderStatus | 'all')}
           >
-            <SelectTrigger className="w-full sm:w-48">
+            <SelectTrigger title="Status filter select" className="w-full sm:w-48">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>
@@ -100,7 +100,7 @@ export function InvoiceHistoryCard({
           </Select>
 
           <Select value={timeframeFilter} onValueChange={(val) => setTimeframeFilter(val)}>
-            <SelectTrigger className="w-full sm:w-48">
+            <SelectTrigger title="Timeframe filter select" className="w-full sm:w-48">
               <SelectValue placeholder="Filter by timeframe" />
             </SelectTrigger>
             <SelectContent>
@@ -135,7 +135,7 @@ export function InvoiceHistoryCard({
                 <TableHead>Order ID</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Total</TableHead>
-                <TableHead></TableHead>
+                <TableHead>Receipt</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

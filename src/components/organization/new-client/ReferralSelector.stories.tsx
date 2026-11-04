@@ -8,6 +8,7 @@ import { ReferralSelector } from './ReferralSelector';
 
 import { Toaster } from '@/components/ui/sonner';
 import type { Referrer } from '@/lib/api/generated/models';
+import { generateMockReferrers } from '@/lib/storybook/utils/clientMockGenerators';
 
 const createQueryClient = () =>
   new QueryClient({
@@ -23,26 +24,7 @@ const createQueryClient = () =>
     },
   });
 
-const MOCK_REFERRERS: Referrer[] = [
-  {
-    id: 'ref_1',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '555-0100',
-  },
-  {
-    id: 'ref_2',
-    name: 'Jane Smith',
-    email: 'jane.smith@example.com',
-    phone: '555-0200',
-  },
-  {
-    id: 'ref_3',
-    name: 'John Wayne',
-    email: 'bruce@wayne.com',
-    phone: '555-0300',
-  },
-];
+const MOCK_REFERRERS = generateMockReferrers(2);
 
 /**
  * Interactive wrapper to let Storybook capture state updates correctly.
@@ -125,13 +107,13 @@ export const ManualSelectionOnMultipleMatches: Story = {
       await userEvent.click(searchBtn);
     });
 
-    await step('Verify selection list contains both candidates', async () => {
-      await expect(await canvas.findByText('John Doe')).toBeInTheDocument();
-      await expect(await canvas.findByText('John Wayne')).toBeInTheDocument();
+    await step('Verify selection list contain both candidates', async () => {
+      await expect(await canvas.findByText('John Smith')).toBeInTheDocument();
+      await expect(await canvas.findByText('Alice Johnson')).toBeInTheDocument();
     });
 
-    await step('Manually select Bruce Wayne candidate', async () => {
-      const resultsContainer = canvas.getByText('John Wayne').closest('div')?.parentElement;
+    await step('Manually select candidate', async () => {
+      const resultsContainer = canvas.getByText('John Smith').closest('div')?.parentElement;
       const selectBtn = within(resultsContainer!).getByRole('button', { name: /select/i });
       await userEvent.click(selectBtn);
     });

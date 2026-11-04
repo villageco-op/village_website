@@ -36,19 +36,3 @@ export const Default: Story = {
     },
   },
 };
-
-/**
- * Preferred state with a valid active Stripe checkout session ID rendered into the DOM.
- */
-export const WithOrderReference: Story = {
-  parameters: {
-    nextjs: {
-      navigation: {
-        pathname: '/checkout-success',
-        query: {
-          session_id: 'cs_test_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
-        },
-      },
-    },
-  },
-};

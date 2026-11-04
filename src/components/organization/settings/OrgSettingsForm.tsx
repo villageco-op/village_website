@@ -374,7 +374,7 @@ export default function OrgSettingsForm({
           {/* Admin Danger Zone */}
           {isAdmin && (
             <div className="pt-4 border-t border-border/10">
-              <h3 className="font-semibold text-red-600 text-lg">Danger Zone</h3>
+              <h3 className="font-semibold text-lg">Danger Zone</h3>
               <p className="text-sm text-ink-3 mb-4">
                 Deleting this organization is permanent. All settings, inventories, lists, and
                 connected data will be removed. This cannot be undone.

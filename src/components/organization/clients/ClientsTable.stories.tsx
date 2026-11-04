@@ -5,77 +5,9 @@ import { useState } from 'react';
 import { ClientsTable } from './ClientsTable';
 
 import type { ClientResponse, PaginationMetadata } from '@/lib/api/generated/models';
+import { generateMockClients } from '@/lib/storybook/utils/clientMockGenerators';
 
-const mockClients: ClientResponse[] = [
-  {
-    id: 'cli_1',
-    name: 'Acme Corp',
-    email: 'contact@acme.com',
-    phone: '0001231234',
-    address: '123 Forest Ave',
-    city: 'Madison',
-    state: 'WI',
-    country: 'USA',
-    zip: '53703',
-    organizationId: 'org-1',
-    createdById: 'user-1',
-    referredBy: null as any,
-    active: true,
-    createdAt: '2024-01-15T00:00:00Z',
-    updatedAt: '2024-01-15T00:00:00Z',
-  },
-  {
-    id: 'cli_2',
-    name: 'Stark Industries',
-    email: 'info@stark.com',
-    phone: '0001231234',
-    address: '200 Park Ave',
-    city: 'New York',
-    state: 'NY',
-    country: 'USA',
-    zip: '10166',
-    organizationId: 'org-1',
-    createdById: 'user-1',
-    referredBy: null as any,
-    active: true,
-    createdAt: '2024-02-01T00:00:00Z',
-    updatedAt: '2024-02-01T00:00:00Z',
-  },
-  {
-    id: 'cli_3',
-    name: 'Wayne Enterprises',
-    email: 'bruce@wayne.com',
-    phone: '0001231234',
-    address: null,
-    city: null,
-    state: null,
-    country: null,
-    zip: null,
-    organizationId: 'org-1',
-    createdById: 'user-1',
-    referredBy: null as any,
-    active: false,
-    createdAt: '2024-03-10T00:00:00Z',
-    updatedAt: '2024-03-10T00:00:00Z',
-  },
-  {
-    id: 'cli_4',
-    name: 'Cyberdyne Systems',
-    email: 'support@cyberdyne.com',
-    phone: '0001231234',
-    address: null,
-    city: null,
-    state: null,
-    country: null,
-    zip: null,
-    organizationId: 'org-1',
-    createdById: 'user-1',
-    referredBy: null as any,
-    active: true,
-    createdAt: '2024-04-05T00:00:00Z',
-    updatedAt: '2024-04-05T00:00:00Z',
-  },
-];
+const MOCK_CLIENTS = generateMockClients(4);
 
 const mockMeta: PaginationMetadata = {
   total: 45,
@@ -92,14 +24,12 @@ const meta: Meta<typeof ClientsTable> = {
   },
   tags: ['autodocs'],
   args: {
-    clients: mockClients,
+    clients: MOCK_CLIENTS,
     maxReferrals: 4,
     isLoading: false,
     isError: false,
     searchQuery: '',
     setSearchQuery: fn(),
-    statusFilter: 'all',
-    setStatusFilter: fn(),
     meta: mockMeta,
     setPage: fn(),
     onRefetch: fn(),
@@ -124,7 +54,7 @@ export const Default: Story = {};
  */
 export const ClientSelected: Story = {
   args: {
-    selectedClient: mockClients[0],
+    selectedClient: MOCK_CLIENTS[0],
   },
 };
 
@@ -149,10 +79,10 @@ export const ErrorState: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(canvas.getByText('Unable to load clients')).toBeInTheDocument();
+    await expect(await canvas.findByText('Unable to load records')).toBeInTheDocument();
 
     // Test retry action trigger
-    const retryBtn = canvas.getByRole('button', { name: /try again/i });
+    const retryBtn = await canvas.findByRole('button', { name: /try again/i });
     await userEvent.click(retryBtn);
   },
 };
@@ -167,28 +97,6 @@ export const Empty: Story = {
 };
 
 /**
- * Active filter state showing the clear filters button when search or status filters are applied.
- */
-export const FilteredState: Story = {
-  args: {
-    searchQuery: 'Wayne',
-    statusFilter: 'inactive',
-    clients: [mockClients[2]],
-  },
-  play: async ({ canvasElement, args }) => {
-    const canvas = within(canvasElement);
-
-    const clearBtn = canvas.getByRole('button', { name: /clear filters/i });
-    await expect(clearBtn).toBeInTheDocument();
-
-    await userEvent.click(clearBtn);
-
-    await expect(args.setSearchQuery).toHaveBeenCalledWith('');
-    await expect(args.setStatusFilter).toHaveBeenCalledWith('all');
-  },
-};
-
-/**
  * Interactive example wrapping table state (selection, search query, status filter) locally.
  */
 export const InteractiveWithState: Story = {
@@ -199,7 +107,7 @@ export const InteractiveWithState: Story = {
       const [page, setPage] = useState(1);
       const [selectedClient, setSelectedClient] = useState<ClientResponse | null>(null);
 
-      const filteredClients = mockClients.filter((client) => {
+      const filteredClients = MOCK_CLIENTS.filter((client) => {
         const matchesSearch =
           client.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
           client.email?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -218,8 +126,6 @@ export const InteractiveWithState: Story = {
           clients={filteredClients}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
           selectedClient={selectedClient}
           setSelectedClient={setSelectedClient}
           setPage={setPage}
@@ -242,7 +148,7 @@ export const InteractiveWithState: Story = {
  */
 export const ActionSelectionInteraction: Story = {
   args: {
-    selectedClient: mockClients[0],
+    selectedClient: MOCK_CLIENTS[0],
   },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -258,12 +164,12 @@ export const ActionSelectionInteraction: Story = {
 
     // 2. Click actions and verify callback invocations
     await userEvent.click(editBtn);
-    await expect(args.onEditClick).toHaveBeenCalledWith(mockClients[0]);
+    await expect(args.onEditClick).toHaveBeenCalledWith(MOCK_CLIENTS[0]);
 
     await userEvent.click(deleteBtn);
-    await expect(args.onDeleteClick).toHaveBeenCalledWith(mockClients[0]);
+    await expect(args.onDeleteClick).toHaveBeenCalledWith(MOCK_CLIENTS[0]);
 
     await userEvent.click(referralsBtn);
-    await expect(args.onViewReferralsClick).toHaveBeenCalledWith(mockClients[0]);
+    await expect(args.onViewReferralsClick).toHaveBeenCalledWith(MOCK_CLIENTS[0]);
   },
 };

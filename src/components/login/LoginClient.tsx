@@ -234,7 +234,7 @@ export default function LoginClient() {
             </>
           )}
 
-          <p className="mt-8 text-center text-xs text-ink-3/70">
+          <p className="mt-8 text-center text-xs text-ink-3">
             By getting involved, you agree to our{' '}
             <Link href="/terms" className="underline hover:text-ink-2">
               Terms of Service

@@ -5,7 +5,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import ProduceReviews from './ProduceReviews';
 
-import type { SellerReviewItem } from '@/lib/api/generated/models';
+import { generateMockReviews } from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -15,23 +15,6 @@ const mockedQueryClient = new QueryClient({
 
 const MOCK_SELLER_ID = 'seller-abc-123';
 const MOCK_PRODUCE_ID = 'produce-xyz-789';
-
-const generateMockReviews = (count: number): SellerReviewItem[] => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `rev-${i}`,
-    rating: (i % 3) + 3, // Randomish 3-5 star ratings
-    comment:
-      i % 2 === 0
-        ? `These are the best tomatoes I've ever had! Super fresh. (Review ${i + 1})`
-        : `Really good quality, though shipping took an extra day. (Review ${i + 1})`,
-    createdAt: new Date(Date.now() - i * 3600000 * 24).toISOString(), // One day apart
-    buyer: {
-      id: `buyer-${i}`,
-      name: i % 2 === 0 ? 'Alice Farmer' : 'Bob Gardener',
-      image: '',
-    },
-  }));
-};
 
 const meta: Meta<typeof ProduceReviews> = {
   title: 'Buyer/ProduceDetails/ProduceReviews',

@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { fetchStripeOnboardingStatus } from '@/lib/api/stripe';
@@ -7,8 +6,7 @@ import { fetchStripeOnboardingStatus } from '@/lib/api/stripe';
  * Evaluates completion state after returning from Stripe Onboarding.
  */
 export async function GET() {
-  const cookieStore = await cookies();
-  const res = await fetchStripeOnboardingStatus(cookieStore.toString());
+  const res = await fetchStripeOnboardingStatus();
 
   if (!res) {
     redirect('/onboarding/stripe-return/error');

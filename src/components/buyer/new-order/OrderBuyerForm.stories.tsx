@@ -57,6 +57,7 @@ export const Default: Story = {
             title: 'Heirloom Tomatoes',
             pricePerOz: '0.25', // $4.00 per lb
             totalOzInventory: '160', // 10 lbs
+            maxOrderQuantityOz: '160',
             isSubscribable: true,
             harvestFrequencyDays: 7,
           });
@@ -106,6 +107,7 @@ export const OutOfStock: Story = {
             title: 'Out of Stock Peaches',
             pricePerOz: '0.50',
             totalOzInventory: '0',
+            maxOrderQuantityOz: '160',
             isSubscribable: false,
           });
         }),
@@ -203,6 +205,7 @@ export const BiWeeklySubscription: Story = {
             title: 'Bi-Weekly Kale',
             pricePerOz: '0.10',
             totalOzInventory: '160',
+            maxOrderQuantityOz: '160',
             isSubscribable: true,
             harvestFrequencyDays: 14,
           });

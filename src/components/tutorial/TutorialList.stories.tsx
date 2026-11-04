@@ -105,17 +105,6 @@ export const OrgTutorials: Story = {
     descriptionText: 'Step-by-step guides on client & organization management.',
     helpPath: '/org/help/',
   },
-  decorators: [
-    (Story) => (
-      <TutorialProvider>
-        <div className="relative min-h-125 w-full bg-background p-4">
-          <Story />
-          <TutorialOverlay />
-          <Toaster />
-        </div>
-      </TutorialProvider>
-    ),
-  ],
   beforeEach: () => {
     localStorage.clear();
     localStorage.setItem('onboarding_completed', 'true');
@@ -145,17 +134,6 @@ export const SellerTutorials: Story = {
       'Step-by-step guides for managing produce listings, account settings, and public seller profiles.',
     helpPath: '/seller/help',
   },
-  decorators: [
-    (Story) => (
-      <TutorialProvider tutorials={SELLER_TUTORIALS}>
-        <div className="relative min-h-125 w-full bg-background p-4">
-          <Story />
-          <TutorialOverlay />
-          <Toaster />
-        </div>
-      </TutorialProvider>
-    ),
-  ],
   beforeEach: () => {
     localStorage.clear();
     localStorage.setItem('onboarding_completed', 'true');

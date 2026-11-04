@@ -17,33 +17,33 @@ type Story = StoryObj<typeof OrderQuantityInput>;
 
 export const Default: Story = {
   args: {
-    quantityLbs: 1,
-    maxLbs: 10,
+    quantityOz: 1,
+    maxOz: 10,
   },
   render: (args) => {
-    const [val, setVal] = useState(args.quantityLbs);
-    return <OrderQuantityInput {...args} quantityLbs={val} onChange={setVal} />;
+    const [val, setVal] = useState(args.quantityOz);
+    return <OrderQuantityInput {...args} quantityOz={val} onChange={setVal} />;
   },
 };
 
 export const NearLimit: Story = {
   args: {
-    quantityLbs: 9,
-    maxLbs: 10,
+    quantityOz: 9,
+    maxOz: 10,
   },
   render: (args) => {
-    const [val, setVal] = useState(args.quantityLbs);
-    return <OrderQuantityInput {...args} quantityLbs={val} onChange={setVal} />;
+    const [val, setVal] = useState(args.quantityOz);
+    return <OrderQuantityInput {...args} quantityOz={val} onChange={setVal} />;
   },
 };
 
 export const LowStock: Story = {
   args: {
-    quantityLbs: 1,
-    maxLbs: 2.5,
+    quantityOz: 1,
+    maxOz: 2.5,
   },
   render: (args) => {
-    const [val, setVal] = useState(args.quantityLbs);
-    return <OrderQuantityInput {...args} quantityLbs={val} onChange={setVal} />;
+    const [val, setVal] = useState(args.quantityOz);
+    return <OrderQuantityInput {...args} quantityOz={val} onChange={setVal} />;
   },
 };

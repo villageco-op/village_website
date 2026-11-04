@@ -5,7 +5,8 @@ import { http, HttpResponse, delay } from 'msw';
 
 import { ViewReferralsModal } from './ViewReferralsModal';
 
-import type { ClientResponse } from '@/lib/api/generated/models';
+import { BASE_MOCK_CLIENT } from '@/lib/storybook/mocks/client.mock';
+import { generateMockReferrers } from '@/lib/storybook/utils/clientMockGenerators';
 
 const createQueryClient = () =>
   new QueryClient({
@@ -21,36 +22,7 @@ const createQueryClient = () =>
     },
   });
 
-const mockClient: ClientResponse = {
-  id: 'cli_123',
-  name: 'Sarah Connor',
-  email: 'sarah@skynet.com',
-  phone: '(555) 123-4567',
-  address: '123 Forest Ave',
-  city: 'Madison',
-  state: 'WI',
-  country: 'USA',
-  zip: '53703',
-  organizationId: 'org-1',
-  createdById: 'user-1',
-  referredBy: null as any,
-  active: true,
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-01T00:00:00Z',
-};
-
-const mockReferralsList = [
-  {
-    id: 'ref_1',
-    name: 'Kyle Reese',
-    email: 'kyle.reese@resistance.org',
-  },
-  {
-    id: 'ref_2',
-    name: 'John Connor',
-    email: 'john.connor@resistance.org',
-  },
-];
+const mockReferralsList = generateMockReferrers(2);
 
 const meta: Meta<typeof ViewReferralsModal> = {
   title: 'Org/Clients/ViewReferralsModal',
@@ -60,7 +32,7 @@ const meta: Meta<typeof ViewReferralsModal> = {
   },
   tags: ['autodocs'],
   args: {
-    client: mockClient,
+    client: BASE_MOCK_CLIENT,
     maxReferrals: 4,
     onClose: fn(),
   },
@@ -161,11 +133,7 @@ export const MaxAllotmentReached: Story = {
       handlers: [
         http.get('/api/clients/cli_123/referrals', () => {
           return HttpResponse.json({
-            data: [
-              ...mockReferralsList,
-              { id: 'ref_3', name: 'Miles Dyson', email: 'miles@cyberdyne.com' },
-              { id: 'ref_4', name: 'Marcus Wright', email: 'marcus@projectangel.org' },
-            ],
+            data: generateMockReferrers(4),
             meta: { total: 4 },
           });
         }),

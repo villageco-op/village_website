@@ -28,7 +28,6 @@ export default function ClientsPageClient() {
   const { page, limit, setPage, resetPage } = usePagination(10);
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const [selectedClient, setSelectedClient] = useState<ClientResponse | null>(null);
   const [editingClient, setEditingClient] = useState<ClientResponse | null>(null);
@@ -42,10 +41,7 @@ export default function ClientsPageClient() {
 
   useEffect(() => {
     resetPage();
-  }, [debouncedSearch, statusFilter, resetPage]);
-
-  const activeParam =
-    statusFilter === 'active' ? true : statusFilter === 'inactive' ? false : undefined;
+  }, [debouncedSearch, resetPage]);
 
   const {
     data: clientsRes,
@@ -54,7 +50,6 @@ export default function ClientsPageClient() {
     refetch: refetchClients,
   } = useGetClients({
     search: debouncedSearch || undefined,
-    active: activeParam,
     page,
     limit,
   });
@@ -102,7 +97,7 @@ export default function ClientsPageClient() {
   const meta = clientsRes?.status === 200 ? clientsRes.data?.meta : undefined;
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col gap-6">
       <PageHeader
         title="Clients"
         subtitle="View, edit & delete clients and view referrals."
@@ -121,11 +116,6 @@ export default function ClientsPageClient() {
         searchQuery={searchQuery}
         setSearchQuery={(query) => {
           setSearchQuery(query);
-          setSelectedClient(null);
-        }}
-        statusFilter={statusFilter}
-        setStatusFilter={(filter) => {
-          setStatusFilter(filter);
           setSelectedClient(null);
         }}
         meta={meta}

@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { fetchStripeOnboardingLink } from '@/lib/api/stripe';
@@ -7,8 +6,7 @@ import { fetchStripeOnboardingLink } from '@/lib/api/stripe';
  * Fetches a new Stripe onboarding link and redirects the user.
  */
 export async function GET() {
-  const cookieStore = await cookies();
-  const res = await fetchStripeOnboardingLink(cookieStore.toString());
+  const res = await fetchStripeOnboardingLink();
 
   if (res?.url) {
     redirect(res.url);

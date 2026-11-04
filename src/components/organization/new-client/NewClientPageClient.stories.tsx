@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { userEvent, within, expect, screen } from '@storybook/test';
+import { userEvent, within, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
@@ -102,32 +102,41 @@ export const CompleteFormSubmission: Story = {
     const canvas = within(canvasElement);
 
     await step('Fill out primary client details', async () => {
-      await userEvent.type(canvas.getByPlaceholderText('Enter full name'), 'Peter Parker');
-      await userEvent.type(canvas.getByPlaceholderText('name@domain.com'), 'peter@dailybugle.com');
-      await userEvent.type(canvas.getByPlaceholderText('(555) 000-0000'), '555-1962');
+      await userEvent.type(canvas.getByPlaceholderText('Enter full name'), 'Peter Parker', {
+        delay: null,
+      });
+      await userEvent.type(canvas.getByPlaceholderText('name@domain.com'), 'peter@dailybugle.com', {
+        delay: null,
+      });
+      await userEvent.type(canvas.getByPlaceholderText('(555) 000-0000'), '555-1962', {
+        delay: null,
+      });
     });
 
-    await step('Fill out address details', async () => {
-      await userEvent.type(canvas.getByLabelText(/Street Address/i), '20 Ingram St');
+    await step('Fill out address details', async ({ canvasElement }) => {
+      await userEvent.type(canvas.getByLabelText(/Street Address/i), '20 Ingram St', {
+        delay: null,
+      });
 
       const cityInput = canvas.getByLabelText(/City/i);
       await userEvent.clear(cityInput);
-      await userEvent.type(cityInput, 'Forest Hills');
+      await userEvent.type(cityInput, 'Forest Hills', { delay: null });
 
       const stateDropdown = canvas.getByRole('combobox');
       await userEvent.click(stateDropdown);
 
-      const txOption = await screen.findByRole('option', { name: 'New York' });
+      const body = within(canvasElement.ownerDocument.body);
+      const txOption = await body.findByRole('option', { name: 'New York' });
       await userEvent.click(txOption);
 
-      await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '11375');
+      await userEvent.type(canvas.getByLabelText(/ZIP Code/i), '11375', { delay: null });
     });
 
     await step('Search and assign a referrer', async () => {
       const searchInput = canvas.getByPlaceholderText(/search by name, email, or phone/i);
       const searchBtn = canvas.getByRole('button', { name: /search/i });
 
-      await userEvent.type(searchInput, 'jane');
+      await userEvent.type(searchInput, 'jane', { delay: null });
       await userEvent.click(searchBtn);
 
       await expect(await canvas.findByText('Jane Smith')).toBeInTheDocument();
@@ -139,7 +148,8 @@ export const CompleteFormSubmission: Story = {
     });
 
     await step('Assert successful registration feedback', async () => {
-      await expect(await screen.findByText('Client registered successfully.')).toBeInTheDocument();
+      const body = within(canvasElement.ownerDocument.body);
+      await expect(await body.findByText('Client registered successfully.')).toBeInTheDocument();
     });
   },
 };

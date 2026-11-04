@@ -48,7 +48,7 @@ export function ReservationBanner() {
       )}
     >
       <div className="mx-auto flex min-h-12 max-w-max-width items-center justify-between gap-3 px-4 sm:px-8 py-2 sm:py-0">
-        <span className="hidden md:block mr-4 shrink-0 font-heading text-[11px] font-bold uppercase tracking-widest text-lime/60">
+        <span className="hidden md:block mr-4 shrink-0 font-heading text-[11px] font-bold uppercase tracking-widest text-lime">
           Reserved
         </span>
 

@@ -73,8 +73,9 @@ export function ReferralSelector({ selectedReferrer, onSelect }: ReferralSelecto
               type="button"
               variant="ghost"
               size="icon"
+              aria-label="Remove Referrer Button"
               onClick={handleRemoveReferrer}
-              className="h-8 w-8 text-rose-500 hover:bg-rose-50 hover:text-rose-600"
+              className="h-8 w-8 text-red-700 hover:bg-rose-50 hover:text-rose-600"
             >
               <Trash2 className="h-4 w-4" />
             </Button>

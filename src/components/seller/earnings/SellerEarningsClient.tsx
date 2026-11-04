@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { EarningsSkeleton } from './EarningsSkeleton';
 import { EarningsStatRow } from './EarningsStatRow';
 import { MonthlyGoalCard } from './MonthlyGoalCard';
 import { PayoutHistoryCard } from './PayoutHistoryCard';
 
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { PageErrorState } from '@/components/ui/state-displays';
@@ -54,7 +54,7 @@ export default function SellerEarningsClient() {
   });
 
   if (isEarningsLoading || isPayoutsLoading) {
-    return <EarningsSkeleton />;
+    return <LoadingSkeleton heights={['h-20', 'h-64', 'h-64']} />;
   }
 
   if (
@@ -107,15 +107,12 @@ export default function SellerEarningsClient() {
   const monthYear = formatAppDate(new Date(), 'longMonthYear');
 
   return (
-    <div className="flex w-full flex-col">
-      <PageHeader
-        title="Earnings"
-        subtitle={`${monthYear} · All earnings from Village produce sales`}
-      />
+    <div className="flex w-full flex-col gap-6">
+      <PageHeader title="Earnings" subtitle={`${monthYear}`} />
 
       <EarningsStatRow data={earningsData} />
 
-      <div className="mb-5 flex flex-col">
+      <div className="flex flex-col">
         <MonthlyGoalCard
           earnedThisMonth={earningsData.earnedThisMonth}
           monthlyGoal={earningsData.monthlyGoal}

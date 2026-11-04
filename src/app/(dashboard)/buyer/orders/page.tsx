@@ -1,9 +1,9 @@
-import BuyerOrdersClient from '@/components/buyer/orders/BuyerOrdersClient';
+import OrdersClient from '@/components/orders/OrdersClient';
 
 /**
  * The buyer orders page containing pending and past orders.
  * @returns The buyer orders client
  */
 export default function BuyerOrders() {
-  return <BuyerOrdersClient />;
+  return <OrdersClient role="buyer" />;
 }

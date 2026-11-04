@@ -7,7 +7,7 @@
  */
 import type { IsoDateTime } from './isoDateTime';
 import type { PriceDollars } from './priceDollars';
-import type { ProduceSales } from './produceSales';
+import type { ProduceAmount } from './produceAmount';
 
 export interface SellerEarningsResponse {
   earnedThisMonth: PriceDollars;
@@ -18,6 +18,6 @@ export interface SellerEarningsResponse {
   ytdStartDate: IsoDateTime;
   /** Average revenue generated per pound of produce sold */
   avgPerLbSold: number;
-  /** Breakdown of sales revenue by individual produce type */
-  amountSoldDollarsPerProduceThisMonth: ProduceSales[];
+  /** Breakdown of sales revenue by individual produce name */
+  amountSoldDollarsPerProduceThisMonth: ProduceAmount[];
 }

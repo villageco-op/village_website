@@ -77,7 +77,7 @@ export function AvatarPicker({ label, value, onChange }: AvatarPickerProps) {
       />
 
       <Label
-        className="text-xs font-semibold text-ink-3 cursor-pointer"
+        className="text-xs font-semibold text-ink-2 cursor-pointer"
         onClick={() => fileInputRef.current?.click()}
       >
         {label}

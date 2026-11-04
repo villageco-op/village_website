@@ -46,7 +46,7 @@ export default function SettingsTab({ onLogout }: SettingsTabProps) {
       <Card>
         <CardContent className="space-y-6">
           <div>
-            <h3 className="font-semibold text-deep-forest text-lg">Account Management</h3>
+            <h1 className="font-semibold text-deep-forest text-lg">Account Management</h1>
             <p className="text-sm text-ink-3 mb-4">
               Manage your current session and account status.
             </p>
@@ -58,7 +58,7 @@ export default function SettingsTab({ onLogout }: SettingsTabProps) {
           <hr className="border-t border-border/20" />
 
           <div>
-            <h3 className="font-semibold text-red-600 text-lg">Danger Zone</h3>
+            <h1 className="font-semibold text-deep-forest text-lg">Danger Zone</h1>
             <p className="text-sm text-ink-3 mb-4">
               Permanently delete your account and all associated data. This action cannot be undone.
             </p>

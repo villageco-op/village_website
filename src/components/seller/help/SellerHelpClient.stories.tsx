@@ -50,7 +50,6 @@ export const SuccessfulSubmission: Story = {
   parameters: {
     msw: {
       handlers: [
-        // Mock authenticated session
         http.get('*/api/auth/session', () =>
           HttpResponse.json({
             user: { name: 'Farmer Alice', email: 'alice@villagefarm.com' },
@@ -59,7 +58,7 @@ export const SuccessfulSubmission: Story = {
         ),
         // Mock successful form submission
         http.post('*/api/contact', async () => {
-          await delay(500); // Simulate network latency
+          await delay(500);
           return HttpResponse.json({ status: 200, data: { success: true } });
         }),
       ],

@@ -7,7 +7,10 @@ import OrgInviteClient from './OrgInviteClient';
 
 import { Toaster } from '@/components/ui/sonner';
 import { OrgRole } from '@/lib/api/generated/models';
-import type { User, Invite } from '@/lib/api/generated/models';
+import type { Invite } from '@/lib/api/generated/models';
+import { BASE_MOCK_INVITE } from '@/lib/storybook/mocks/invite.mock';
+import { MOCK_ORG_ADMIN_USER, MOCK_ORG_MEMBER_USER } from '@/lib/storybook/mocks/user.mock';
+import { generateMockInvites } from '@/lib/storybook/utils/clientMockGenerators';
 
 const createQueryClient = () =>
   new QueryClient({
@@ -23,43 +26,7 @@ const createQueryClient = () =>
     },
   });
 
-let mockInvites: Invite[] = [
-  {
-    id: 'invite_1',
-    email: 'pending.teammate@example.com',
-    orgId: 'org_123',
-    code: 'abc789',
-    role: OrgRole.member,
-    status: 'pending',
-    expiresAt: new Date(Date.now() + 86400000).toISOString(),
-    createdAt: new Date().toISOString(),
-  },
-];
-
-const MOCK_ADMIN_USER: User = {
-  id: 'usr_admin',
-  name: 'Admin User',
-  email: 'admin@company.com',
-  organizationId: 'org_123',
-  orgRole: OrgRole.admin,
-  emailVerified: '2024-01-01T00:00:00Z',
-  image: null,
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-01T00:00:00Z',
-  aboutMe: null,
-  deliveryRangeMiles: '0',
-  specialties: [],
-  goal: '90',
-  stripeOnboardingComplete: false,
-  isOnboardingComplete: true,
-  address: '123 Forest Ave',
-  city: 'Madison',
-  lat: 43.07,
-  lng: -89.4,
-  state: 'WI',
-  country: 'United States',
-  zip: '53703',
-};
+let mockInvites = generateMockInvites(1);
 
 const meta: Meta<typeof OrgInviteClient> = {
   title: 'Org/Members/OrgInviteClient',
@@ -73,7 +40,7 @@ const meta: Meta<typeof OrgInviteClient> = {
       handlers: [
         http.get('*/api/auth/session', () => {
           return HttpResponse.json({
-            user: MOCK_ADMIN_USER,
+            user: MOCK_ORG_ADMIN_USER,
             expires: '9999-12-31T23:59:59.999Z',
           });
         }),
@@ -152,18 +119,7 @@ type Story = StoryObj<typeof OrgInviteClient>;
  */
 export const Default: Story = {
   beforeEach: () => {
-    mockInvites = [
-      {
-        id: 'invite_1',
-        email: 'pending.teammate@example.com',
-        orgId: 'org_123',
-        code: 'abc789',
-        role: OrgRole.member,
-        status: 'pending',
-        expiresAt: new Date(Date.now() + 86400000).toISOString(),
-        createdAt: new Date().toISOString(),
-      },
-    ];
+    mockInvites = [BASE_MOCK_INVITE];
   },
 };
 
@@ -174,13 +130,9 @@ export const AccessDenied: Story = {
   parameters: {
     msw: {
       handlers: [
-        // Override session handler to return a normal member (not Admin)
         http.get('*/api/auth/session', () => {
           return HttpResponse.json({
-            user: {
-              ...MOCK_ADMIN_USER,
-              orgRole: OrgRole.member,
-            },
+            user: MOCK_ORG_MEMBER_USER,
             expires: '9999-12-31T23:59:59.999Z',
           });
         }),
@@ -232,22 +184,13 @@ export const CreateAndRefetchInviteFlow: Story = {
  */
 export const MultiPagePagination: Story = {
   beforeEach: () => {
-    mockInvites = Array.from({ length: 15 }, (_, i) => ({
-      id: `invite_${i}`,
-      email: `user.${i}@example.com`,
-      orgId: 'org_123',
-      code: `code_${i}`,
-      role: OrgRole.member,
-      status: 'pending',
-      expiresAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    }));
+    mockInvites = generateMockInvites(15);
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
     // Wait for page 1 load
-    await expect(await canvas.findByText('user.0@example.com')).toBeInTheDocument();
+    await expect(await canvas.findByText('pending.teammate1@example.com')).toBeInTheDocument();
 
     await step('Click next page pagination trigger', async () => {
       const nextBtn = canvas.getByRole('button', { name: /next/i });
@@ -255,7 +198,7 @@ export const MultiPagePagination: Story = {
     });
 
     await step('Verify next items render from query key change', async () => {
-      await expect(await canvas.findByText('user.10@example.com')).toBeInTheDocument();
+      await expect(await canvas.findByText('pending.teammate11@example.com')).toBeInTheDocument();
     });
   },
 };

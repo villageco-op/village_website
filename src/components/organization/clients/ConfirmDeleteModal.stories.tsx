@@ -3,25 +3,7 @@ import { fn, userEvent, within, expect } from '@storybook/test';
 
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 
-import type { ClientResponse } from '@/lib/api/generated/models';
-
-const mockClient: ClientResponse = {
-  id: 'cli_456',
-  name: 'Stark Industries',
-  email: 'info@stark.com',
-  phone: null,
-  address: null,
-  city: null,
-  state: null,
-  country: null,
-  zip: null,
-  organizationId: 'org-1',
-  createdById: 'user-1',
-  referredBy: null as any,
-  active: false,
-  createdAt: '2024-02-01T00:00:00Z',
-  updatedAt: '2024-02-01T00:00:00Z',
-};
+import { BASE_MOCK_CLIENT } from '@/lib/storybook/mocks/client.mock';
 
 const meta: Meta<typeof ConfirmDeleteModal> = {
   title: 'Org/Clients/ConfirmDeleteModal',
@@ -31,7 +13,7 @@ const meta: Meta<typeof ConfirmDeleteModal> = {
   },
   tags: ['autodocs'],
   args: {
-    client: mockClient,
+    client: BASE_MOCK_CLIENT,
     isSubmitting: false,
     onClose: fn(),
     onConfirm: fn().mockImplementation(() => Promise.resolve()),
@@ -52,16 +34,9 @@ export const Default: Story = {};
 export const UnnamedClient: Story = {
   args: {
     client: {
-      id: 'cli_000',
-      phone: null,
-      address: null,
-      organizationId: 'org-1',
-      createdById: 'user-1',
-      referredBy: null as any,
-      active: false,
-      createdAt: '2024-01-01T00:00:00Z',
-      updatedAt: '2024-01-01T00:00:00Z',
-    } as ClientResponse,
+      ...BASE_MOCK_CLIENT,
+      name: null as any,
+    },
   },
 };
 

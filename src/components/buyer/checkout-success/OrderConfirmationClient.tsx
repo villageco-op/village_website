@@ -28,17 +28,12 @@ export default function OrderConfirmationClient() {
           <h1 className="font-heading text-[clamp(2rem,3vw,2.5rem)] font-extrabold text-deep-forest tracking-[-0.02em] leading-tight mb-4">
             Order Confirmed!
           </h1>
-          <p className="text-forest-dark/70 max-w-md mx-auto mb-2 text-lg">
+          <p className="text-ink-2 max-w-md mx-auto mb-2 text-lg">
             Thank you for your purchase. Every dollar spent locally re-circulates and strengthens
             your community.
           </p>
-          <p className="text-forest-dark/60 max-w-md mx-auto mb-10 text-sm">
+          <p className="text-ink-3 max-w-md mx-auto mb-10 text-sm">
             You&apos;ll receive an email confirmation shortly.
-            {sessionId && (
-              <span className="block mt-2 text-xs opacity-70 break-all">
-                Order Reference: {sessionId.slice(0, 16)}...
-              </span>
-            )}
           </p>
 
           {/* Action Buttons */}

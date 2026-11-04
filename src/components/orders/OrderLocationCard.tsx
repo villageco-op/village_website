@@ -1,39 +1,34 @@
 'use client';
 
-import { Truck, Store } from 'lucide-react';
-
-import { AddressMap } from '../ui/address-map';
-
+import { AddressMap } from '@/components/ui/address-map';
 import { Card, CardContent } from '@/components/ui/card';
-import type { OrderDetailResponse } from '@/lib/api/generated/models';
+import { FulfillmentType, type UserBasicInfo } from '@/lib/api/generated/models';
 
 interface OrderLocationCardProps {
-  order: OrderDetailResponse;
+  fulfillmentType: FulfillmentType;
+  buyer: UserBasicInfo;
+  seller: UserBasicInfo;
 }
 
 /**
  * Displays an interactive map with the fulfillment location.
- * - If pickup, shows the seller's location.
- * - If delivery, shows the buyer's location.
- *
  * @param props - Component props
- * @param props.order - The specific order detailing fulfillment type and users
+ * @param props.fulfillmentType - The order fulfillment type
+ * @param props.buyer - The buyer user info
+ * @param props.seller - The seller user info
  * @returns A card with a interactive map and open in Google Maps button
  */
-export function OrderLocationCard({ order }: OrderLocationCardProps) {
-  const isDelivery = order.fulfillmentType?.toLowerCase() === 'delivery';
-
-  const targetUser = isDelivery ? order.buyer : order.seller;
+export function OrderLocationCard({ fulfillmentType, buyer, seller }: OrderLocationCardProps) {
+  const isDelivery = fulfillmentType === FulfillmentType.delivery;
+  const targetUser = isDelivery ? buyer : seller;
   const location = targetUser?.location;
 
   const title = isDelivery ? 'Delivery Location' : 'Pickup Location';
-  const headerIcon = isDelivery ? <Truck /> : <Store />;
 
   return (
     <Card>
       <CardContent className="p-6">
         <div className="mb-4 flex items-center gap-2 border-b border-border/50 pb-3">
-          <span className="leading-none h-5 w-5 text-ink-3">{headerIcon}</span>
           <h2 className="font-heading text-[0.95rem] font-bold text-ink">{title}</h2>
         </div>
 

@@ -1,59 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect } from '@storybook/test';
+import { within, expect, userEvent } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
 import SellerListingsClient from '../listings/SellerListingsClient';
 
-import type { ProduceType } from '@/lib/api/generated/models';
-import type { ProduceStatusProperty } from '@/lib/api/generated/models/produceStatusProperty';
-
-const mockedQueryClient = new QueryClient({
-  defaultOptions: {
-    queries: { retry: false },
-  },
-});
+import {
+  createPaginatedResponse,
+  generateMockListings,
+} from '@/lib/storybook/utils/mockGenerators';
 
 const PAGE_LIMIT = 12;
-
-const generateMockListings = (count: number) => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `list_${i + 1}`,
-    sellerId: 'seller_1',
-    title: `Listing Item ${i + 1}`,
-    description: `Listing Item ${i + 1} description.`,
-    produceType: 'root_vegetables' as ProduceType,
-    pricePerOz: '0.50',
-    totalOzInventory: '100',
-    maxOrderQuantityOz: null,
-    availableBy: '2026-05-01',
-    harvestFrequencyDays: 7,
-    seasonStart: '2026-04-01',
-    seasonEnd: '2026-10-01',
-    images: ['https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=100&h=100&fit=crop'],
-    isSubscribable: true,
-    status: 'active' as ProduceStatusProperty,
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-01T00:00:00Z',
-    analytics: {
-      percentSold: 10,
-      totalMonthlyEarnings: 50,
-      totalOzSold: 5,
-      numberOfOrders: 1,
-      numberOfSubscriptions: 1,
-      upcomingSubscriptionOzNeeded: 10,
-      inventorySufficientForUpcoming: true,
-      availableInventory: 90,
-    },
-  }));
-};
-
-const PAGINATED_LISTINGS_DATA = generateMockListings(25);
-
-const MOCK_LISTINGS = {
-  data: PAGINATED_LISTINGS_DATA.slice(0, 2),
-  meta: { total: 2, page: 1, limit: 2, totalPages: 1 },
-};
+const MOCK_LISTINGS_DATA = generateMockListings(25);
 
 const meta: Meta<typeof SellerListingsClient> = {
   title: 'Seller/Listings/ListingsPage',
@@ -66,9 +24,14 @@ const meta: Meta<typeof SellerListingsClient> = {
   },
   decorators: [
     (Story) => {
-      mockedQueryClient.clear();
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false, gcTime: 0 },
+        },
+      });
+
       return (
-        <QueryClientProvider client={mockedQueryClient}>
+        <QueryClientProvider client={queryClient}>
           <div className="min-h-screen bg-background p-8">
             <div className="mx-auto max-w-6xl">
               <Story />
@@ -91,15 +54,15 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get('*/api/produce/me', () => {
-          return HttpResponse.json(MOCK_LISTINGS);
+          return HttpResponse.json(createPaginatedResponse(MOCK_LISTINGS_DATA, 1, PAGE_LIMIT));
         }),
       ],
     },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(await canvas.findByText(/2 active/i)).toBeInTheDocument();
-    await expect(canvas.getByText(/Listing Item 1/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/25 active/i)).toBeInTheDocument();
+    await expect(canvas.getByText(MOCK_LISTINGS_DATA[0].title)).toBeInTheDocument();
     await expect(canvas.getByText(/Add a new listing/i)).toBeInTheDocument();
   },
 };
@@ -115,19 +78,7 @@ export const Paginated: Story = {
           const url = new URL(request.url);
           const page = Number(url.searchParams.get('page') || '1');
 
-          const start = (page - 1) * PAGE_LIMIT;
-          const end = start + PAGE_LIMIT;
-          const items = PAGINATED_LISTINGS_DATA.slice(start, end);
-
-          return HttpResponse.json({
-            data: items,
-            meta: {
-              total: PAGINATED_LISTINGS_DATA.length,
-              page,
-              limit: PAGE_LIMIT,
-              totalPages: Math.ceil(PAGINATED_LISTINGS_DATA.length / PAGE_LIMIT),
-            },
-          });
+          return HttpResponse.json(createPaginatedResponse(MOCK_LISTINGS_DATA, page, PAGE_LIMIT));
         }),
       ],
     },
@@ -135,17 +86,18 @@ export const Paginated: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // Verify Page 1
-    await expect(await canvas.findByText('Listing Item 1')).toBeInTheDocument();
-    await expect(canvas.queryByText(`Listing Item ${PAGE_LIMIT + 1}`)).not.toBeInTheDocument();
+    const firstPageItemTitle = MOCK_LISTINGS_DATA[0].title;
+    const secondPageItemTitle = MOCK_LISTINGS_DATA[PAGE_LIMIT].title;
 
-    // Navigate to Page 2
+    await expect(await canvas.findByText(firstPageItemTitle)).toBeInTheDocument();
+    await expect(canvas.queryByText(secondPageItemTitle)).not.toBeInTheDocument();
+
     const nextButton = await canvas.findByRole('button', { name: /next|2/i });
-    nextButton.click();
+    await userEvent.click(nextButton);
 
-    // Verify Page 2
-    await expect(await canvas.findByText(`Listing Item ${PAGE_LIMIT + 1}`)).toBeInTheDocument();
-    await expect(canvas.queryByText('Listing Item 1')).not.toBeInTheDocument();
+    await expect(await canvas.findByText(secondPageItemTitle)).toBeInTheDocument();
+
+    await expect(canvas.queryByText(firstPageItemTitle)).not.toBeInTheDocument();
   },
 };
 

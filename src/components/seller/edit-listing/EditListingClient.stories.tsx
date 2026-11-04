@@ -6,6 +6,7 @@ import { http, HttpResponse, delay } from 'msw';
 import EditListingClient from './EditListingClient';
 
 import { Toaster } from '@/components/ui/sonner';
+import { BASE_MOCK_PRODUCE } from '@/lib/storybook/mocks/produce.mock';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -53,18 +54,7 @@ export const Default: Story = {
     msw: {
       handlers: [
         http.get(`*/api/produce/${MOCK_ID}`, () => {
-          return HttpResponse.json({
-            title: 'Organic Strawberries',
-            description: 'Freshly picked sun-ripened strawberries from our north field.',
-            produceType: 'berries',
-            pricePerOz: 0.5, // $8.00/lb
-            totalOzInventory: 160, // 10 lbs
-            availableBy: '2026-06-01T12:00:00Z',
-            seasonStart: '2026-05-01',
-            seasonEnd: '2026-08-01',
-            status: 'active',
-            images: [],
-          });
+          return HttpResponse.json(BASE_MOCK_PRODUCE);
         }),
       ],
     },
@@ -78,9 +68,11 @@ export const UpdateSuccess: Story = {
   parameters: {
     msw: {
       handlers: [
-        ...Default.parameters!.msw.handlers,
+        http.get(`*/api/produce/${MOCK_ID}`, () => {
+          return HttpResponse.json(BASE_MOCK_PRODUCE);
+        }),
         http.put(`*/api/produce/${MOCK_ID}`, async () => {
-          await delay(800);
+          await delay(200);
           return HttpResponse.json({ status: 200 });
         }),
       ],
@@ -127,7 +119,9 @@ export const ToggleStatus: Story = {
   parameters: {
     msw: {
       handlers: [
-        ...Default.parameters!.msw.handlers,
+        http.get(`*/api/produce/${MOCK_ID}`, () => {
+          return HttpResponse.json(BASE_MOCK_PRODUCE);
+        }),
         http.put(`*/api/produce/${MOCK_ID}`, () => {
           return HttpResponse.json(null, { status: 200 });
         }),

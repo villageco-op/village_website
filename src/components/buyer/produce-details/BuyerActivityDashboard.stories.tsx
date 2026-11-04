@@ -5,6 +5,10 @@ import { http, HttpResponse, delay } from 'msw';
 
 import BuyerActivityDashboard from './BuyerActivityDashboard';
 
+import { BASE_MOCK_ORDER } from '@/lib/storybook/mocks/order.mock';
+import { BASE_MOCK_SUBSCRIPTION } from '@/lib/storybook/mocks/subscription.mock';
+import { createPaginatedResponse } from '@/lib/storybook/utils/mockGenerators';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -16,12 +20,14 @@ const SELLER_ID = 'seller_456';
 
 const MOCK_ORDERS = [
   {
+    ...BASE_MOCK_ORDER,
     id: 'ord_active_1',
     status: 'pending',
     scheduledTime: new Date(Date.now() + 86400000).toISOString(),
     createdAt: new Date().toISOString(),
   },
   {
+    ...BASE_MOCK_ORDER,
     id: 'ord_past_1',
     status: 'completed',
     scheduledTime: new Date(Date.now() - 86400000).toISOString(),
@@ -31,6 +37,7 @@ const MOCK_ORDERS = [
 
 const MOCK_SUBS = [
   {
+    ...BASE_MOCK_SUBSCRIPTION,
     id: 'sub_active_1',
     status: 'active',
     quantityOz: 16,
@@ -38,6 +45,7 @@ const MOCK_SUBS = [
     updatedAt: new Date().toISOString(),
   },
   {
+    ...BASE_MOCK_SUBSCRIPTION,
     id: 'sub_past_1',
     status: 'canceled',
     quantityOz: 8,
@@ -84,10 +92,10 @@ export const FullActivity: Story = {
     msw: {
       handlers: [
         http.get('*/api/orders', () => {
-          return HttpResponse.json({ data: MOCK_ORDERS });
+          return HttpResponse.json(createPaginatedResponse(MOCK_ORDERS));
         }),
         http.get('*/api/subscriptions', () => {
-          return HttpResponse.json({ data: MOCK_SUBS });
+          return HttpResponse.json(createPaginatedResponse(MOCK_SUBS));
         }),
       ],
     },
@@ -95,7 +103,7 @@ export const FullActivity: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(await canvas.findByText('Your Activity')).toBeInTheDocument();
-    await expect(canvas.getByText('Current & Pending')).toBeInTheDocument();
+    await expect(canvas.getByText('Orders & Subscriptions')).toBeInTheDocument();
     await expect(canvas.getByText('Purchase History')).toBeInTheDocument();
   },
 };
@@ -109,10 +117,10 @@ export const ActiveSubscriptionOnly: Story = {
     msw: {
       handlers: [
         http.get('*/api/orders', () => {
-          return HttpResponse.json({ data: [] });
+          return HttpResponse.json(createPaginatedResponse([]));
         }),
         http.get('*/api/subscriptions', () => {
-          return HttpResponse.json({ data: [MOCK_SUBS[0]] });
+          return HttpResponse.json(createPaginatedResponse([MOCK_SUBS[0]]));
         }),
       ],
     },
@@ -128,10 +136,10 @@ export const HistoryOnly: Story = {
     msw: {
       handlers: [
         http.get('*/api/orders', () => {
-          return HttpResponse.json({ data: [MOCK_ORDERS[1]] });
+          return HttpResponse.json(createPaginatedResponse([MOCK_ORDERS[1]]));
         }),
         http.get('*/api/subscriptions', () => {
-          return HttpResponse.json({ data: [] });
+          return HttpResponse.json(createPaginatedResponse([]));
         }),
       ],
     },
@@ -147,10 +155,10 @@ export const EmptyState: Story = {
     msw: {
       handlers: [
         http.get('*/api/orders', () => {
-          return HttpResponse.json({ data: [] });
+          return HttpResponse.json(createPaginatedResponse([]));
         }),
         http.get('*/api/subscriptions', () => {
-          return HttpResponse.json({ data: [] });
+          return HttpResponse.json(createPaginatedResponse([]));
         }),
       ],
     },

@@ -5,11 +5,10 @@ import Image from 'next/image';
 import router from 'next/router';
 import { useState, useRef, useEffect } from 'react';
 
-import { Button } from '../ui/button';
-import { Checkbox } from '../ui/checkbox';
-import { Label } from '../ui/label';
-import { ProduceIcon } from '../ui/produce-icon';
-
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { ProduceIcon } from '@/components/ui/produce-icon';
 import type { CartItem } from '@/lib/api/generated/models/cartItem';
 import type { UpdateCartPayload } from '@/lib/api/generated/models/updateCartPayload';
 import { cn } from '@/lib/utils';
@@ -62,11 +61,10 @@ export function CartLineItem({
     return () => clearTimeout(timer);
   }, [localQtyOz, item.quantityOz, item.reservationId]);
 
-  const handleIncrement = () => setLocalQtyOz((prev) => prev + 16);
-  const handleDecrement = () => setLocalQtyOz((prev) => Math.max(16, prev - 16));
+  const handleIncrement = () => setLocalQtyOz((prev) => prev + 0.5);
+  const handleDecrement = () => setLocalQtyOz((prev) => Math.max(0.5, prev - 0.5));
 
-  const qtyLbs = localQtyOz / 16;
-  const priceNum = Number(item.pricePerOz) * 16;
+  const priceNum = Number(item.pricePerOz);
   const lineTotal = Number(item.pricePerOz) * localQtyOz;
   const imageUrl = item.images?.[0];
   const isSubscribable =
@@ -77,7 +75,7 @@ export function CartLineItem({
   return (
     <div
       className="cursor-pointer flex flex-col border-b border-cream-dark last:border-none hover:bg-off-white"
-      onClick={() => void router.push(`/produce/${item.productId}`)}
+      onClick={() => void router.push(`/listings/${item.productId}`)}
     >
       <div className="flex flex-col items-start gap-3 p-3.5 sm:flex-row sm:items-center sm:px-4.5">
         <div className="flex min-w-0 flex-1 items-center gap-3 w-full sm:w-auto">
@@ -90,11 +88,11 @@ export function CartLineItem({
                 alt={item.title}
                 className={cn(
                   'h-full w-full object-cover transition-opacity',
-                  isUpdating && 'opacity-40',
+                  isUpdating && 'opacity-70',
                 )}
               />
             ) : (
-              <span className={cn(isUpdating && 'opacity-40')}>
+              <span className={cn(isUpdating && 'opacity-70')}>
                 <ProduceIcon type={item.title} className="h-5 w-5 text-ink-3" />
               </span>
             )}
@@ -112,9 +110,9 @@ export function CartLineItem({
               {item.title}
             </div>
             <div className="mt-0.5 flex gap-2 font-sans text-[0.72rem] text-ink-3">
-              <span>${priceNum.toFixed(2)}/lb</span>
+              <span>${priceNum.toFixed(2)}/oz</span>
               {item.isSubscription && item.subscriptionCostReductionPercent && (
-                <span className="font-bold text-lime">
+                <span className="font-bold text-deep-forest">
                   ({item.subscriptionCostReductionPercent}% off)
                 </span>
               )}
@@ -130,12 +128,12 @@ export function CartLineItem({
               className="rounded-full border-cream-dark bg-white text-ink-2 hover:border-deep-forest hover:bg-cream disabled:opacity-50"
               onClick={handleDecrement}
               title="Decrease quantity"
-              disabled={localQtyOz <= 16} // Disable if at 1lb minimum
+              disabled={localQtyOz <= 0.5}
             >
               <Minus className="size-3" />
             </Button>
             <span className="min-w-7 text-center font-heading text-[0.82rem] font-bold">
-              {qtyLbs}
+              {localQtyOz}
             </span>
             <Button
               variant="outline"
@@ -152,8 +150,8 @@ export function CartLineItem({
           <div className="flex shrink-0 flex-col items-start gap-0.5 sm:items-end">
             <div
               className={cn(
-                'whitespace-nowrap font-heading text-[0.88rem] font-extrabold text-deep-forest transition-opacity duration-200',
-                isUpdating ? 'opacity-30' : 'opacity-100',
+                'whitespace-nowrap font-heading text-[0.88rem] font-extrabold text-ink-2 transition-opacity duration-200',
+                isUpdating ? 'opacity-90' : 'opacity-100',
               )}
             >
               ${lineTotal.toFixed(2)}
@@ -187,7 +185,7 @@ export function CartLineItem({
               htmlFor={`sub-${item.reservationId}`}
               className={cn(
                 'cursor-pointer font-sans text-[0.75rem] text-ink-2 transition-opacity hover:text-ink',
-                isUpdating && 'pointer-events-none opacity-50',
+                isUpdating && 'pointer-events-none opacity-70',
               )}
             >
               Subscribe & Save (Every {item.subscriptionFrequencyDays || 7} days)

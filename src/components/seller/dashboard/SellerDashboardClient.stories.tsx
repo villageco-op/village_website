@@ -5,6 +5,13 @@ import { http, HttpResponse, delay } from 'msw';
 
 import SellerDashboardClient from './SellerDashboardClient';
 
+import { MOCK_SELLER_USER } from '@/lib/storybook/mocks/user.mock';
+import {
+  generateMockOrders,
+  generateMockSubscriptions,
+  createPaginatedResponse,
+} from '@/lib/storybook/utils/mockGenerators';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -18,18 +25,22 @@ const MOCK_DASHBOARD_DATA = {
     address: 'Austin, TX',
   },
   earnedThisMonth: 1250.5,
-  earnedLastMonth: 980.0,
-  soldThisWeekLbs: 45.2,
+  completedOrdersThisMonth: 56,
+  pendingOrders: 3,
+  activeSubscriptions: 5,
   onTrackWithGoal: true,
-  activeListingsCount: 12,
-  activeListingsNames: ['Organic Strawberries', 'Heirloom Tomatoes', 'Wild Honey'],
   monthlyGoal: 2000.0,
   earningsByProduceThisMonth: [
-    { produceName: 'Strawberries', earned: 450 },
-    { produceName: 'Tomatoes', earned: 300 },
-    { produceName: 'Honey', earned: 500.5 },
+    { produceName: 'Strawberries', amount: 450 },
+    { produceName: 'Tomatoes', amount: 300 },
+    { produceName: 'Honey', amount: 500.5 },
   ],
 };
+
+const PAGE_LIMIT = 5;
+
+const PAGINATED_ORDERS_DATA = generateMockOrders(25);
+const PAGINATED_SUBSCRIPTIONS_DATA = generateMockSubscriptions(25);
 
 const meta: Meta<typeof SellerDashboardClient> = {
   title: 'Seller/Dashboard/DashboardPage',
@@ -67,6 +78,17 @@ export const Default: Story = {
         http.get('*/api/seller/dashboard', () => {
           return HttpResponse.json(MOCK_DASHBOARD_DATA);
         }),
+        http.get('*/api/orders*', () =>
+          HttpResponse.json(createPaginatedResponse(PAGINATED_ORDERS_DATA, 1, PAGE_LIMIT)),
+        ),
+        http.get('*/api/subscriptions', () =>
+          HttpResponse.json(createPaginatedResponse(PAGINATED_SUBSCRIPTIONS_DATA, 1, 3)),
+        ),
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_SELLER_USER,
+          });
+        }),
       ],
     },
   },
@@ -74,14 +96,16 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     // Check if header rendered
-    await expect(await canvas.findByText(/Plot: Austin, TX/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/, Green/i)).toBeInTheDocument();
 
     // Check if stats are visible
-    await expect(canvas.getAllByText(/1,250.5/i)).toHaveLength(2);
-    await expect(canvas.getByText(/45.2 lbs/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/56/i)).toBeInTheDocument();
+
+    // Check if progress is visible
+    await expect(canvas.getByText(/1251/i)).toBeInTheDocument();
 
     // Check for specific produce in the breakdown
-    await expect(canvas.getByText(/Organic Strawberries/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/Strawberries/i)).toBeInTheDocument();
   },
 };
 
@@ -132,13 +156,23 @@ export const EmptyState: Story = {
           return HttpResponse.json({
             sellerLocation: 'New York, NY',
             earnedThisMonth: 0,
-            earnedLastMonth: 0,
-            soldThisWeekLbs: 0,
+            completedOrdersThisMonth: 0,
+            pendingOrders: 0,
+            activeSubscriptions: 0,
             onTrackWithGoal: false,
-            activeListingsCount: 0,
-            activeListingsNames: [],
             monthlyGoal: 1000,
             earningsByProduceThisMonth: [],
+          });
+        }),
+        http.get('*/api/orders*', () =>
+          HttpResponse.json(createPaginatedResponse([], 1, PAGE_LIMIT)),
+        ),
+        http.get('*/api/subscriptions', () =>
+          HttpResponse.json(createPaginatedResponse([], 1, PAGE_LIMIT)),
+        ),
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_SELLER_USER,
           });
         }),
       ],

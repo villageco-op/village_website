@@ -6,9 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { PaginationMetadata } from './paginationMetadata';
-import type { ProduceOrderListResponseDataItem } from './produceOrderListResponseDataItem';
+import type { ProduceOrderListItem } from './produceOrderListItem';
 
 export interface ProduceOrderListResponse {
-  data: ProduceOrderListResponseDataItem[];
+  data: ProduceOrderListItem[];
   meta: PaginationMetadata;
 }

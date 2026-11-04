@@ -7,7 +7,8 @@ import OrgMembersClient from './OrgMembersClient';
 
 import { Toaster } from '@/components/ui/sonner';
 import { OrgRole } from '@/lib/api/generated/models';
-import type { User, OrgMember } from '@/lib/api/generated/models';
+import type { OrgMember } from '@/lib/api/generated/models';
+import { MOCK_ORG_ADMIN_USER, MOCK_ORG_MEMBER_USER } from '@/lib/storybook/mocks/user.mock';
 
 const createQueryClient = () =>
   new QueryClient({
@@ -44,31 +45,6 @@ let mockMembers: OrgMember[] = [
   },
 ];
 
-const MOCK_ADMIN_USER: User = {
-  id: 'usr_admin',
-  name: 'Admin User',
-  email: 'admin@company.com',
-  organizationId: 'org_123',
-  orgRole: OrgRole.admin,
-  emailVerified: '2024-01-01T00:00:00Z',
-  image: null,
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-01T00:00:00Z',
-  aboutMe: null,
-  deliveryRangeMiles: '0',
-  specialties: [],
-  goal: '90',
-  stripeOnboardingComplete: false,
-  isOnboardingComplete: true,
-  address: '123 Forest Ave',
-  city: 'Madison',
-  lat: 43.07,
-  lng: -89.4,
-  state: 'WI',
-  country: 'United States',
-  zip: '53703',
-};
-
 const meta: Meta<typeof OrgMembersClient> = {
   title: 'Org/Members/OrgMembersClient',
   component: OrgMembersClient,
@@ -78,7 +54,7 @@ const meta: Meta<typeof OrgMembersClient> = {
       handlers: [
         http.get('*/api/auth/session', () => {
           return HttpResponse.json({
-            user: MOCK_ADMIN_USER,
+            user: MOCK_ORG_ADMIN_USER,
             expires: '9999-12-31T23:59:59.999Z',
           });
         }),
@@ -207,10 +183,7 @@ export const AccessDenied: Story = {
       handlers: [
         http.get('*/api/auth/session', () => {
           return HttpResponse.json({
-            user: {
-              ...MOCK_ADMIN_USER,
-              orgRole: OrgRole.member,
-            },
+            user: MOCK_ORG_MEMBER_USER,
             expires: '9999-12-31T23:59:59.999Z',
           });
         }),
@@ -226,7 +199,7 @@ export const NoOrganizationFound: Story = {
         http.get('*/api/auth/session', () => {
           return HttpResponse.json({
             user: {
-              ...MOCK_ADMIN_USER,
+              ...MOCK_ORG_ADMIN_USER,
               organizationId: null,
             },
             expires: '9999-12-31T23:59:59.999Z',

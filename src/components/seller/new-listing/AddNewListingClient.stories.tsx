@@ -75,7 +75,7 @@ export const FullFormSubmission: Story = {
     await userEvent.click(option);
 
     // 2. Pricing & Inventory
-    await userEvent.type(canvas.getByLabelText(/Price per lb/i), '3.50');
+    await userEvent.type(canvas.getByLabelText(/Price per oz/i), '3.50');
     await userEvent.type(canvas.getByLabelText(/Total Inventory/i), '100');
 
     // 3. Harvest Details
@@ -118,7 +118,7 @@ export const SubmissionError: Story = {
 
     // Fill minimum required fields
     await userEvent.type(canvas.getByLabelText(/Title/i), 'Failing Listing');
-    await userEvent.type(canvas.getByLabelText(/Price per lb/i), '3.50');
+    await userEvent.type(canvas.getByLabelText(/Price per oz/i), '3.50');
     await userEvent.type(canvas.getByLabelText(/Total Inventory/i), '100');
     await userEvent.type(canvas.getByLabelText(/Season Start/i), '2026-01-01');
     await userEvent.type(canvas.getByLabelText(/Season End/i), '2026-12-31');

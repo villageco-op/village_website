@@ -74,21 +74,6 @@ export const Empty: Story = {
 };
 
 /**
- * Mobile view to ensure the table remains legible or
- * appropriately scrollable on small screens.
- */
-export const Mobile: Story = {
-  parameters: {
-    viewport: {
-      defaultViewport: 'mobile1',
-    },
-  },
-  args: {
-    payouts: mockPayouts,
-  },
-};
-
-/**
  * View with a larger list of payouts to test table
  * density and scrolling.
  */

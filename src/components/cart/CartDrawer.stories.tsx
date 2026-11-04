@@ -8,7 +8,7 @@ import { CartDrawer } from './CartDrawer';
 
 import { Toaster } from '@/components/ui/sonner';
 import { CartProvider, useCartUI } from '@/hooks/useCartUI';
-import type { User } from '@/lib/api/generated/models';
+import { MOCK_BUYER_USER } from '@/lib/storybook/mocks/user.mock';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -114,35 +114,9 @@ const MOCK_EMPTY_CART = {
   data: [],
 };
 
-const mockUser: User = {
-  id: 'buyer_123',
-  name: 'County Fresh Mkt',
-  organizationId: null,
-  orgRole: null,
-  email: 'purchasing@countyfresh.com',
-  emailVerified: '2024-01-01T00:00:00Z',
-  image:
-    'https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=150&h=150&auto=format&fit=crop',
-  aboutMe: 'A local market bringing fresh valley produce to Gary, IN.',
-  deliveryRangeMiles: '0',
-  specialties: [],
-  goal: '90',
-  stripeOnboardingComplete: false,
-  isOnboardingComplete: true,
-  address: '456 Market Ave',
-  city: 'Gary',
-  lat: 41.59,
-  lng: -87.34,
-  state: 'IN',
-  country: 'United States',
-  zip: '92921',
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-01T00:00:00Z',
-};
-
 const mockAuthSession = http.get('*/api/auth/session', () =>
   HttpResponse.json({
-    user: mockUser,
+    user: MOCK_BUYER_USER,
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
   }),
 );

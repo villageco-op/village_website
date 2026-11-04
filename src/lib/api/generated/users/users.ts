@@ -31,7 +31,6 @@ import type {
   GetSellerReviewsParams,
   Organization,
   PaginatedReviewsResponse,
-  PublicUserProfile,
   RegisterFcmTokenPayload,
   SuccessResponse,
   UnregisterFcmTokenPayload,
@@ -1054,120 +1053,6 @@ export function useGetSellerReviews<TData = Awaited<ReturnType<typeof getSellerR
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetSellerReviewsQueryOptions(id,params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return { ...query, queryKey: queryOptions.queryKey };
-}
-
-
-
-
-/**
- * Get public seller profile including rating/review stats. Excludes sensitive info.
- */
-export type getPublicUserProfileResponse200 = {
-  data: PublicUserProfile
-  status: 200
-}
-
-export type getPublicUserProfileResponse404 = {
-  data: ErrorResponse
-  status: 404
-}
-
-export type getPublicUserProfileResponseSuccess = (getPublicUserProfileResponse200) & {
-  headers: Headers;
-};
-export type getPublicUserProfileResponseError = (getPublicUserProfileResponse404) & {
-  headers: Headers;
-};
-
-export type getPublicUserProfileResponse = (getPublicUserProfileResponseSuccess | getPublicUserProfileResponseError)
-
-export const getGetPublicUserProfileUrl = (id: UserId,) => {
-
-
-  
-
-  return `/api/users/${id}`
-}
-
-export const getPublicUserProfile = async (id: UserId, options?: RequestInit): Promise<getPublicUserProfileResponse> => {
-  
-  return apiClient<getPublicUserProfileResponse>(getGetPublicUserProfileUrl(id),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-  
-
-
-
-
-export const getGetPublicUserProfileQueryKey = (id: UserId,) => {
-    return [
-    `/api/users/${id}`
-    ] as const;
-    }
-
-    
-export const getGetPublicUserProfileQueryOptions = <TData = Awaited<ReturnType<typeof getPublicUserProfile>>, TError = ErrorResponse>(id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicUserProfile>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetPublicUserProfileQueryKey(id);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicUserProfile>>> = ({ signal }) => getPublicUserProfile(id, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPublicUserProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetPublicUserProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getPublicUserProfile>>>
-export type GetPublicUserProfileQueryError = ErrorResponse
-
-
-export function useGetPublicUserProfile<TData = Awaited<ReturnType<typeof getPublicUserProfile>>, TError = ErrorResponse>(
- id: UserId, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicUserProfile>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getPublicUserProfile>>,
-          TError,
-          Awaited<ReturnType<typeof getPublicUserProfile>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetPublicUserProfile<TData = Awaited<ReturnType<typeof getPublicUserProfile>>, TError = ErrorResponse>(
- id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicUserProfile>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getPublicUserProfile>>,
-          TError,
-          Awaited<ReturnType<typeof getPublicUserProfile>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetPublicUserProfile<TData = Awaited<ReturnType<typeof getPublicUserProfile>>, TError = ErrorResponse>(
- id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicUserProfile>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetPublicUserProfile<TData = Awaited<ReturnType<typeof getPublicUserProfile>>, TError = ErrorResponse>(
- id: UserId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicUserProfile>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetPublicUserProfileQueryOptions(id,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

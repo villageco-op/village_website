@@ -92,6 +92,7 @@ export function ListingImageUpload({
               />
               <Button
                 type="button"
+                aria-label="Remove Image"
                 variant="destructive"
                 onClick={() => onRemoveImage(index)}
                 className="absolute top-2 right-2"

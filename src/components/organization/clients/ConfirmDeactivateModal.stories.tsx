@@ -3,25 +3,7 @@ import { fn, userEvent, within, expect } from '@storybook/test';
 
 import { ConfirmDeactivateModal } from './ConfirmDeactivateModal';
 
-import type { ClientResponse } from '@/lib/api/generated/models';
-
-const mockClient: ClientResponse = {
-  id: 'cli_123',
-  name: 'Acme Corporation',
-  email: 'contact@acme.com',
-  phone: null,
-  address: null,
-  city: null,
-  state: null,
-  country: null,
-  zip: null,
-  organizationId: 'org-1',
-  createdById: 'user-1',
-  referredBy: null as any,
-  active: true,
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-01T00:00:00Z',
-};
+import { BASE_MOCK_CLIENT } from '@/lib/storybook/mocks/client.mock';
 
 const meta: Meta<typeof ConfirmDeactivateModal> = {
   title: 'Org/Clients/ConfirmDeactivateModal',
@@ -31,7 +13,7 @@ const meta: Meta<typeof ConfirmDeactivateModal> = {
   },
   tags: ['autodocs'],
   args: {
-    client: mockClient,
+    client: BASE_MOCK_CLIENT,
     isSubmitting: false,
     onClose: fn(),
     onConfirm: fn().mockImplementation(() => Promise.resolve()),
@@ -52,17 +34,9 @@ export const Default: Story = {};
 export const UnnamedClient: Story = {
   args: {
     client: {
-      id: 'cli_999',
-      email: null,
-      phone: null,
-      address: null,
-      organizationId: 'org-1',
-      createdById: 'user-1',
-      referredBy: null as any,
-      active: true,
-      createdAt: '2024-01-01T00:00:00Z',
-      updatedAt: '2024-01-01T00:00:00Z',
-    } as ClientResponse,
+      ...BASE_MOCK_CLIENT,
+      name: null as any,
+    },
   },
 };
 

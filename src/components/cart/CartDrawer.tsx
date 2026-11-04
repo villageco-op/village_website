@@ -3,14 +3,14 @@
 import { X, Leaf, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Checkbox } from '../ui/checkbox';
-import { Label } from '../ui/label';
-
 import { CartGroupTimer } from './CartGroupTimer';
 import { CartLineItem } from './CartLineItem';
 
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/ui/sheet';
+import { env } from '@/config/env';
 import { useCartData, useCartUI } from '@/hooks/useCartUI';
 import {
   useRemoveFromCart,
@@ -117,10 +117,10 @@ export function CartDrawer() {
         <div className="flex shrink-0 items-center justify-between bg-deep-forest p-5 sm:px-6">
           <div>
             <SheetTitle className="font-heading text-[1.1rem] font-extrabold text-cream">
-              🛒 Your Cart
+              Your Cart
             </SheetTitle>
-            <SheetDescription className="mt-0.5 font-sans text-[0.74rem] text-cream/55">
-              Items are checked out by farm and subscription schedule
+            <SheetDescription className="mt-0.5 font-sans text-[0.74rem] text-cream/70">
+              Items are checked out by seller and subscription schedule
             </SheetDescription>
           </div>
           <Button
@@ -142,7 +142,7 @@ export function CartDrawer() {
                 Your cart is empty
               </div>
               <div className="font-sans text-[0.78rem]">
-                Browse produce and add items to get started
+                Browse listings and add items to get started
               </div>
             </div>
           ) : (
@@ -171,6 +171,13 @@ export function CartDrawer() {
 
                     const deliveryFeeNum = Number(group.deliveryFee || 0);
 
+                    const subtotal = Number(calculateGroupTotal(group.items));
+                    const effectiveDeliveryFee =
+                      group.fulfillmentType === 'delivery' ? deliveryFeeNum : 0;
+                    const groupTotal = subtotal + effectiveDeliveryFee;
+
+                    const isBelowMinimum = groupTotal < env.NEXT_PUBLIC_MIN_ORDER_PRICE;
+
                     return (
                       <div
                         key={group.groupId}
@@ -191,7 +198,7 @@ export function CartDrawer() {
                             className={cn(
                               'rounded-full px-2.5 py-0.5 text-[0.68rem] font-bold uppercase tracking-[0.06em]',
                               group.isSubscription
-                                ? 'bg-lime/20 text-click-green'
+                                ? 'bg-lime/10 text-deep-forest'
                                 : 'bg-deep-forest/10 text-deep-forest',
                             )}
                           >
@@ -251,28 +258,37 @@ export function CartDrawer() {
                           </Label>
                         </div>
 
-                        <div className="flex items-center justify-between border-t border-cream-dark bg-white p-3 sm:px-4.5">
-                          <div>
-                            <div className="font-heading text-[0.85rem] font-extrabold text-ink">
-                              Subtotal: ${calculateGroupTotal(group.items)}
-                            </div>
-                            {group.fulfillmentType === 'delivery' &&
-                              Number(group.deliveryFee) > 0 && (
+                        <div className="flex flex-col gap-2 border-t border-cream-dark bg-white p-3 sm:px-4.5">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <div className="font-heading text-[0.85rem] font-extrabold text-ink">
+                                Subtotal: ${subtotal.toFixed(2)}
+                              </div>
+                              {group.fulfillmentType === 'delivery' && deliveryFeeNum > 0 && (
                                 <div className="mt-0.5 font-sans text-[0.7rem] text-ink-3">
-                                  + ${group.deliveryFee} estimated delivery
+                                  + ${deliveryFeeNum.toFixed(2)} estimated delivery
                                 </div>
                               )}
+                            </div>
+                            <Button
+                              variant="lime"
+                              size="sm"
+                              className="font-heading font-bold"
+                              onClick={() => void handleCheckout(group.groupId)}
+                              disabled={checkoutMutation.isPending || isBelowMinimum}
+                            >
+                              {isCheckingOut && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
+                              Checkout
+                            </Button>
                           </div>
-                          <Button
-                            variant="lime"
-                            size="sm"
-                            className="font-heading font-bold"
-                            onClick={() => void handleCheckout(group.groupId)}
-                            disabled={checkoutMutation.isPending}
-                          >
-                            {isCheckingOut && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
-                            Checkout →
-                          </Button>
+
+                          {isBelowMinimum && (
+                            <p className="text-right font-sans text-[0.72rem] font-medium text-destructive">
+                              Minimum checkout total is $
+                              {env.NEXT_PUBLIC_MIN_ORDER_PRICE.toFixed(2)} (current total: $
+                              {groupTotal.toFixed(2)})
+                            </p>
+                          )}
                         </div>
                       </div>
                     );

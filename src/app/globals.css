@@ -23,7 +23,7 @@
   --color-black: #1a1a1a;
   --color-ink: #1a2018;
   --color-ink-2: #3d4d38;
-  --color-ink-3: #6a8060;
+  --color-ink-3: #506348;
 
   --font-serif: var(--font-serif);
   --font-heading: var(--font-heading);
@@ -50,7 +50,7 @@
   --color-accent: var(--color-lime-pale);
   --color-accent-foreground: var(--color-forest-dark);
 
-  --color-destructive: #c0392b;
+  --color-destructive: #9c2b20;
   --color-destructive-foreground: var(--color-off-white);
 
   --color-required: var(--color-red-500);
@@ -67,7 +67,7 @@
   --radius-xl: calc(var(--radius) * 1.4);
 
   --color-muted: oklch(0.97 0.001 106.424);
-  --color-muted-foreground: oklch(0.553 0.013 58.071);
+  --color-muted-foreground: oklch(0.44 0.013 58.071);
 
   --color-table-border: var(--color-forest-muted);
   --color-table-row-hover: var(--color-cream);

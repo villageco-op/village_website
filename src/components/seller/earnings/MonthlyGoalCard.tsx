@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent } from '@/components/ui/card';
-import type { ProduceSales } from '@/lib/api/generated/models';
+import type { ProduceAmount } from '@/lib/api/generated/models';
 import { formatAppDate } from '@/lib/date-utils';
 
 /**
@@ -10,7 +10,7 @@ import { formatAppDate } from '@/lib/date-utils';
 interface MonthlyGoalCardProps {
   earnedThisMonth: number;
   monthlyGoal: number;
-  produceBreakdown: ProduceSales[];
+  produceBreakdown: ProduceAmount[];
 }
 
 /**
@@ -20,8 +20,8 @@ interface MonthlyGoalCardProps {
  */
 const getPillClasses = (index: number) => {
   const styles = [
-    'bg-lime/20 text-click-green', // lime
-    'bg-sun/30 text-[#8a6000]', // sun
+    'bg-lime/10 text-click-green', // lime
+    'bg-sun/10 text-[#8a6000]', // sun
     'bg-clay/10 text-clay', // clay
     'bg-forest-dark/10 text-forest-dark', // forest
   ];
