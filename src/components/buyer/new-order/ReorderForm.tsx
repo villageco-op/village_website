@@ -92,7 +92,7 @@ function ReorderFormContent({
     items.forEach((item) => {
       const { isOrderable } = getItemAvailability(item);
       initialStore[item.productId] = {
-        quantityOz: Math.max(0, parseFloat(item.quantityOz) / 16),
+        quantityOz: Math.max(0, parseFloat(item.quantityOz)),
         selected: isOrderable,
       };
     });
@@ -102,9 +102,9 @@ function ReorderFormContent({
   const selectedItems = items.filter((item) => itemsState[item.productId]?.selected);
 
   const totalPrice = selectedItems.reduce((acc, item) => {
-    const pricePerLb = Number(item.pricePerOz) * 16;
+    const pricePerOz = Number(item.pricePerOz);
     const qty = itemsState[item.productId]?.quantityOz || 0;
-    return acc + pricePerLb * qty;
+    return acc + pricePerOz * qty;
   }, 0);
 
   const handleToggleItem = (productId: string, isOrderable: boolean) => {
@@ -142,7 +142,7 @@ function ReorderFormContent({
           addToCartMutation.mutateAsync({
             data: {
               productId: item.productId,
-              quantityOz: Math.round(itemsState[item.productId].quantityOz * 16),
+              quantityOz: Math.round(itemsState[item.productId].quantityOz),
               isSubscription: false,
             },
           }),
@@ -175,12 +175,12 @@ function ReorderFormContent({
           {items.map((item) => {
             const { isInSeason, isOrderable, availableDateStr, isFutureAvailability } =
               getItemAvailability(item);
-            const pricePerLb = Number(item.pricePerOz) * 16;
+            const pricePerOz = Number(item.pricePerOz);
             const inventoryOz = parseFloat(item.produceTotalOzInventory);
             const limitOz = item.maxOrderQuantityOz
               ? parseFloat(item.maxOrderQuantityOz)
               : inventoryOz;
-            const maxOz = Math.min(inventoryOz, limitOz) / 16;
+            const maxOz = Math.min(inventoryOz, limitOz);
 
             return (
               <div
@@ -204,7 +204,7 @@ function ReorderFormContent({
                         {item.productName}
                       </Label>
                       <div className="text-xs text-ink-2 font-medium">
-                        ${pricePerLb.toFixed(2)} / lb
+                        ${pricePerOz.toFixed(2)} / oz
                       </div>
                       {!isInSeason && (
                         <Badge variant="destructive" className="mt-1 text-[10px] uppercase">

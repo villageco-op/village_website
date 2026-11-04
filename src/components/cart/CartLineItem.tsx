@@ -5,11 +5,10 @@ import Image from 'next/image';
 import router from 'next/router';
 import { useState, useRef, useEffect } from 'react';
 
-import { Button } from '../ui/button';
-import { Checkbox } from '../ui/checkbox';
-import { Label } from '../ui/label';
-import { ProduceIcon } from '../ui/produce-icon';
-
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { ProduceIcon } from '@/components/ui/produce-icon';
 import type { CartItem } from '@/lib/api/generated/models/cartItem';
 import type { UpdateCartPayload } from '@/lib/api/generated/models/updateCartPayload';
 import { cn } from '@/lib/utils';
@@ -129,7 +128,7 @@ export function CartLineItem({
               className="rounded-full border-cream-dark bg-white text-ink-2 hover:border-deep-forest hover:bg-cream disabled:opacity-50"
               onClick={handleDecrement}
               title="Decrease quantity"
-              disabled={localQtyOz <= 0.5} // Disable if at 0.5oz minimum
+              disabled={localQtyOz <= 0.5}
             >
               <Minus className="size-3" />
             </Button>
