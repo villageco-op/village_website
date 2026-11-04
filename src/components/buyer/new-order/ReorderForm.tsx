@@ -223,7 +223,7 @@ function ReorderFormContent({
                     className={`w-full sm:w-32 ${itemsState[item.productId]?.selected ? 'opacity-100' : 'opacity-100 pointer-events-none'}`}
                   >
                     <OrderQuantityInput
-                      quantityOz={itemsState[item.productId]?.quantityOz || 0}
+                      quantityOz={itemsState[item.productId]?.quantityOz || 8}
                       onChange={(val) => handleQuantityChange(item.productId, val)}
                       maxOz={maxOz}
                     />
