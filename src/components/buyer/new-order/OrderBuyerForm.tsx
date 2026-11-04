@@ -42,7 +42,7 @@ export function BuyerOrderForm({
   const addToCartMutation = useAddToCart();
   const queryClient = useQueryClient();
 
-  const [quantityOz, setQuantityOz] = useState<number>(initialQuantityOz || 1);
+  const [quantityOz, setQuantityOz] = useState<number>(initialQuantityOz || 8);
   const [isSubscription, setIsSubscription] = useState<boolean>(initialIsSubscription || false);
 
   const hasError = !!error || (!isLoading && (!produceQuery?.data || produceQuery.status !== 200));
