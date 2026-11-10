@@ -150,6 +150,7 @@ export * from './registerFcmTokenPayloadPlatform';
 export * from './removeUserFromOrgPayload';
 export * from './rescheduleOrderPayload';
 export * from './resourceId';
+export * from './review';
 export * from './reviewBreakdown';
 export * from './reviewBuyer';
 export * from './searchReferrerParams';

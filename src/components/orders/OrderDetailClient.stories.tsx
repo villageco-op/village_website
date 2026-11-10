@@ -3,10 +3,10 @@ import { userEvent, within, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
-import { Toaster } from '../ui/sonner';
-
 import OrderDetailClient from './OrderDetailClient';
 
+import { Toaster } from '@/components/ui/sonner';
+import { OrderStatusProperty } from '@/lib/api/generated/models/orderStatusProperty';
 import { createMockOrderDetail } from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
@@ -29,6 +29,7 @@ const meta: Meta<typeof OrderDetailClient> = {
   },
   args: {
     order: MOCK_ORDER_DATA,
+    isSeller: false,
   },
   decorators: [
     (Story) => {
@@ -93,22 +94,78 @@ export const NotFound: Story = {
 };
 
 /**
- * Completed state (Action buttons hidden)
+ * Completed order state displaying "Order Again" and "Leave Review" actions.
  */
 export const CompletedOrder: Story = {
+  args: {
+    order: createMockOrderDetail({
+      id: MOCK_ORDER_ID,
+      status: OrderStatusProperty.completed,
+    }),
+    isSeller: false,
+  },
+};
+
+/**
+ * Completed order state where the buyer has already submitted a review.
+ */
+export const CompletedOrderWithReview: Story = {
+  args: {
+    order: createMockOrderDetail({
+      id: MOCK_ORDER_ID,
+      status: OrderStatusProperty.completed,
+      review: {
+        id: 'rev_123',
+        rating: 5,
+        comment: 'Fantastic experience, will definitely order again!',
+        createdAt: '2026-05-15T16:00:00Z',
+      },
+    }),
+    isSeller: false,
+  },
+};
+
+/**
+ * Tests the full leave review flow on a completed order.
+ */
+export const LeaveReviewFlow: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get(`*/api/orders/${MOCK_ORDER_ID}`, () => {
-          return HttpResponse.json(
-            createMockOrderDetail({
-              id: MOCK_ORDER_ID,
-              status: 'completed',
-            }),
-          );
+        http.post('*/api/reviews', async () => {
+          await delay(600);
+          return HttpResponse.json({ id: 'review_123' }, { status: 201 });
         }),
       ],
     },
+  },
+  args: {
+    order: createMockOrderDetail({
+      id: MOCK_ORDER_ID,
+      status: OrderStatusProperty.completed,
+    }),
+    isSeller: false,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const reviewBtn = await canvas.findByRole('button', { name: /Review/i });
+    await userEvent.click(reviewBtn);
+
+    const body = within(canvasElement.ownerDocument.body);
+
+    const starBtn = await body.findByRole('button', { name: /Rate 5 stars/i });
+    await userEvent.click(starBtn);
+
+    const textarea = body.getByPlaceholderText(/Tell others about the quality/i);
+    await userEvent.type(textarea, 'Amazing quality microgreens! Super quick pickup.');
+
+    const submitBtn = body.getByRole('button', { name: /Submit/i });
+    await userEvent.click(submitBtn);
+
+    await expect(
+      await body.findByText(/Review submitted successfully/i, {}, { timeout: 5000 }),
+    ).toBeInTheDocument();
   },
 };
 

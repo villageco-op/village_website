@@ -1,14 +1,15 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { CancellationReasonBanner } from './CancellationReasonBanner';
 import { CancelOrderDialog } from './CancelOrderDialog';
+import { CreateReviewForm } from './CreateReviewForm';
 import { OrderItemsCard } from './OrderItemsCard';
 import { OrderLocationCard } from './OrderLocationCard';
+import { OrderReviewCard } from './OrderReviewCard';
 import { OrderSummaryCard } from './OrderSummaryCard';
 import { RescheduleOrderDialog } from './RescheduleOrderDialog';
 
@@ -49,6 +50,7 @@ export default function OrderDetailClient({
   const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
   const [isReorderOpen, setIsReorderOpen] = useState(false);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -128,6 +130,7 @@ export default function OrderDetailClient({
 
   const isPending = order.status === 'pending';
   const isReorderable = order.status === 'completed' || order.status === 'canceled';
+  const isReviewable = order.status === 'completed' && !order.review;
 
   return (
     <div>
@@ -147,9 +150,13 @@ export default function OrderDetailClient({
                   </Button>
                 </div>
               )}
+              {isReviewable && (
+                <Button variant="outline" onClick={() => setIsReviewOpen(true)}>
+                  Review
+                </Button>
+              )}
               {isReorderable && (
                 <Button variant="lime" onClick={() => setIsReorderOpen(true)}>
-                  <RotateCcw className="mr-2 h-4 w-4" />
                   Order Again
                 </Button>
               )}
@@ -165,6 +172,7 @@ export default function OrderDetailClient({
           <div className="flex flex-col gap-6 md:col-span-2">
             <OrderSummaryCard order={order} fromUser={isSeller ? order.buyer : order.seller} />
             <OrderItemsCard items={order.items || []} />
+            {order.review && <OrderReviewCard review={order.review} />}
             <OrderLocationCard
               fulfillmentType={order.fulfillmentType}
               buyer={order.buyer}
@@ -191,6 +199,23 @@ export default function OrderDetailClient({
       <Dialog open={isReorderOpen} onOpenChange={setIsReorderOpen}>
         <DialogContent className="max-w-md p-0 border-none bg-transparent shadow-none">
           <ReorderForm orderId={id} onClose={() => setIsReorderOpen(false)} />
+        </DialogContent>
+      </Dialog>
+      <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
+        <DialogContent
+          className="max-w-md p-0 border-none bg-transparent shadow-none"
+          aria-describedby="Review Form"
+        >
+          <CreateReviewForm
+            sellerId={order.seller.id}
+            orderId={order.id}
+            sellerName={order.seller.name}
+            sellerImage={order.seller.image}
+            itemNames={order.items.map((item) => item.productName)}
+            fulfillmentType={order.fulfillmentType}
+            scheduledTime={order.scheduledTime}
+            onClose={() => setIsReviewOpen(false)}
+          />
         </DialogContent>
       </Dialog>
     </div>
