@@ -204,7 +204,7 @@ export default function OrderDetailClient({
       <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
         <DialogContent
           className="max-w-md p-0 border-none bg-transparent shadow-none"
-          aria-describedby="Review Form"
+          aria-label="Leave a Review"
         >
           <CreateReviewForm
             sellerId={order.seller.id}
