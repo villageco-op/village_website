@@ -7,10 +7,12 @@
  */
 import type { Order } from './order';
 import type { OrderItemDetails } from './orderItemDetails';
+import type { Review } from './review';
 import type { UserBasicInfo } from './userBasicInfo';
 
 export type OrderDetailResponse = Order & ({
   buyer: UserBasicInfo & (unknown | null);
   seller: UserBasicInfo & (unknown | null);
   items: OrderItemDetails[];
+  review: Review & (unknown | null);
 });
