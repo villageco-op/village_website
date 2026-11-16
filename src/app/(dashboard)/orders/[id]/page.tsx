@@ -43,5 +43,8 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
     );
   }
 
-  return <OrderDetailClient order={order} isSeller={isSeller} />;
+  // eslint-disable-next-line react-hooks/purity
+  const nowMs = Date.now();
+
+  return <OrderDetailClient order={order} isSeller={isSeller} nowMs={nowMs} />;
 }

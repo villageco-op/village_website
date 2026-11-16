@@ -75,6 +75,11 @@ export const BASE_MOCK_ORDER: OrderSummary = {
     name: 'Alpha Farm Co.',
     email: 'contact@alphafarm.com',
   },
+  buyerReport: null,
+  buyerReportedAt: null,
+  sellerReport: null,
+  sellerReportedAt: null,
+  statusUpdatedAt: null,
   items: [BASE_MOCK_ORDER_LIST_ITEM],
 };
 

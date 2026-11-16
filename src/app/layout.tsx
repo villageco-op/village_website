@@ -5,6 +5,7 @@ import './globals.css';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { CartFab } from '@/components/cart/CartFab';
 import { Header } from '@/components/layout/Header';
+import { OrderCompletionManager } from '@/components/orders/resolution/OrderCompletionManager';
 import Providers from '@/components/providers';
 import { TutorialOverlay } from '@/components/tutorial/TutorialOverlay';
 import { Toaster } from '@/components/ui/sonner';
@@ -61,6 +62,7 @@ export default function RootLayout({
             <CartFab />
             <CartDrawer />
             <TutorialOverlay />
+            <OrderCompletionManager />
           </CartProvider>
         </Providers>
         <Toaster />
