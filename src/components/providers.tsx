@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { NotificationProvider } from './providers/NotificationProvider';
+import { OrderCompletionProvider } from './providers/OrderCompletionProvider';
 import { TutorialProvider } from './providers/TutorialProvider';
 
 /**
@@ -27,7 +28,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <NotificationProvider>
-        <TutorialProvider>{children}</TutorialProvider>
+        <OrderCompletionProvider>
+          <TutorialProvider>{children}</TutorialProvider>
+        </OrderCompletionProvider>
       </NotificationProvider>
     </QueryClientProvider>
   );

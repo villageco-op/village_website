@@ -1,3 +1,6 @@
+import type { OrderFulfillmentType } from './api/generated/models';
+import { formatAppDate } from './date-utils';
+
 /**
  * Formats a UUID or long ID into a readable short format (e.g., #AB12CD34).
  * @param id - The unique identifier string to be formatted.
@@ -24,4 +27,20 @@ export const formatOrderDate = (
 ) => {
   if (!dateString) return 'Pending';
   return new Date(dateString).toLocaleDateString('en-US', options);
+};
+
+/**
+ * Formats text explaining the fulfillment type and scheduled time for an order.
+ * @param fulfillmentType - The order fulfillment type
+ * @param scheduledTime - The order scheduled time
+ * @returns Text containing fulfillment type and scheduled time
+ */
+export const getFulfillmentText = (
+  fulfillmentType: OrderFulfillmentType,
+  scheduledTime: Date | string,
+) => {
+  const formattedDate = formatAppDate(scheduledTime, 'weekdayDayMonth');
+  const actionWord =
+    fulfillmentType === 'delivery' ? 'Scheduled for delivery on' : 'Scheduled for pickup on';
+  return `${actionWord} ${formattedDate}`;
 };

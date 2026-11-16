@@ -13,16 +13,17 @@ import { Textarea } from '@/components/ui/textarea';
 import type { OrderFulfillmentType } from '@/lib/api/generated/models';
 import { getGetOrderByIdQueryKey } from '@/lib/api/generated/orders/orders';
 import { useCreateReview } from '@/lib/api/generated/reviews/reviews';
-import { formatAppDate } from '@/lib/date-utils';
+import { getFulfillmentText } from '@/lib/order-utils';
+import { getInitials } from '@/lib/user-utils';
 
 interface CreateReviewFormProps {
   sellerId: string;
   orderId: string;
   sellerName?: string | null;
   sellerImage?: string | null;
-  itemNames?: string[];
-  fulfillmentType?: OrderFulfillmentType;
-  scheduledTime?: string;
+  itemNames: string[];
+  fulfillmentType: OrderFulfillmentType;
+  scheduledTime: string;
   onClose?: () => void;
 }
 
@@ -87,15 +88,6 @@ export function CreateReviewForm({
     }
   };
 
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .substring(0, 2)
-      .toUpperCase();
-  };
-
   const renderStars = (
     currentRating: number,
     interactive: boolean = false,
@@ -133,14 +125,7 @@ export function CreateReviewForm({
     });
   };
 
-  const getFulfillmentText = () => {
-    if (!scheduledTime) return null;
-    const formattedDate = formatAppDate(scheduledTime, 'weekdayDayMonth');
-    const actionWord = fulfillmentType === 'delivery' ? 'Delivered on' : 'Picked up on';
-    return `${actionWord} ${formattedDate}`;
-  };
-
-  const fulfillmentDetails = getFulfillmentText();
+  const fulfillmentDetails = getFulfillmentText(fulfillmentType, scheduledTime);
 
   return (
     <Card className="z-50 overflow-auto max-h-screen relative max-w-[calc(100vw-2rem)] mx-auto w-full sm:max-w-md shadow-lg border-lime/20 bg-white">

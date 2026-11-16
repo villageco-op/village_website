@@ -30,6 +30,7 @@ import type {
   GetOrdersParams,
   OrderDetailResponse,
   OrdersListResponse,
+  ReportOrderStatusPayload,
   RescheduleOrderPayload,
   ResourceId,
   SuccessResponse
@@ -470,5 +471,207 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
         TContext
       > => {
       return useMutation(getCancelOrderMutationOptions(options), queryClient);
+    }
+    /**
+ * Report order completion or non-receipt status as buyer or seller.
+ */
+export type reportOrderStatusResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type reportOrderStatusResponse400 = {
+  data: ErrorResponse
+  status: 400
+}
+
+export type reportOrderStatusResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type reportOrderStatusResponse403 = {
+  data: ErrorResponse
+  status: 403
+}
+
+export type reportOrderStatusResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type reportOrderStatusResponseSuccess = (reportOrderStatusResponse200) & {
+  headers: Headers;
+};
+export type reportOrderStatusResponseError = (reportOrderStatusResponse400 | reportOrderStatusResponse401 | reportOrderStatusResponse403 | reportOrderStatusResponse404) & {
+  headers: Headers;
+};
+
+export type reportOrderStatusResponse = (reportOrderStatusResponseSuccess | reportOrderStatusResponseError)
+
+export const getReportOrderStatusUrl = (id: ResourceId,) => {
+
+
+  
+
+  return `/api/orders/${id}/report`
+}
+
+export const reportOrderStatus = async (id: ResourceId,
+    reportOrderStatusPayload: ReportOrderStatusPayload, options?: RequestInit): Promise<reportOrderStatusResponse> => {
+  
+  return apiClient<reportOrderStatusResponse>(getReportOrderStatusUrl(id),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      reportOrderStatusPayload,)
+  }
+);}
+  
+
+
+
+export const getReportOrderStatusMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportOrderStatus>>, TError,{id: ResourceId;data: ReportOrderStatusPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof reportOrderStatus>>, TError,{id: ResourceId;data: ReportOrderStatusPayload}, TContext> => {
+
+const mutationKey = ['reportOrderStatus'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportOrderStatus>>, {id: ResourceId;data: ReportOrderStatusPayload}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  reportOrderStatus(id,data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportOrderStatusMutationResult = NonNullable<Awaited<ReturnType<typeof reportOrderStatus>>>
+    export type ReportOrderStatusMutationBody = ReportOrderStatusPayload
+    export type ReportOrderStatusMutationError = ErrorResponse
+
+    export const useReportOrderStatus = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportOrderStatus>>, TError,{id: ResourceId;data: ReportOrderStatusPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportOrderStatus>>,
+        TError,
+        {id: ResourceId;data: ReportOrderStatusPayload},
+        TContext
+      > => {
+      return useMutation(getReportOrderStatusMutationOptions(options), queryClient);
+    }
+    /**
+ * Dispute an order within the 48-hour window as buyer or seller.
+ */
+export type disputeOrderResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type disputeOrderResponse400 = {
+  data: ErrorResponse
+  status: 400
+}
+
+export type disputeOrderResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type disputeOrderResponse403 = {
+  data: ErrorResponse
+  status: 403
+}
+
+export type disputeOrderResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type disputeOrderResponseSuccess = (disputeOrderResponse200) & {
+  headers: Headers;
+};
+export type disputeOrderResponseError = (disputeOrderResponse400 | disputeOrderResponse401 | disputeOrderResponse403 | disputeOrderResponse404) & {
+  headers: Headers;
+};
+
+export type disputeOrderResponse = (disputeOrderResponseSuccess | disputeOrderResponseError)
+
+export const getDisputeOrderUrl = (id: ResourceId,) => {
+
+
+  
+
+  return `/api/orders/${id}/dispute`
+}
+
+export const disputeOrder = async (id: ResourceId, options?: RequestInit): Promise<disputeOrderResponse> => {
+  
+  return apiClient<disputeOrderResponse>(getDisputeOrderUrl(id),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+);}
+  
+
+
+
+export const getDisputeOrderMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof disputeOrder>>, TError,{id: ResourceId}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof disputeOrder>>, TError,{id: ResourceId}, TContext> => {
+
+const mutationKey = ['disputeOrder'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof disputeOrder>>, {id: ResourceId}> = (props) => {
+          const {id} = props ?? {};
+
+          return  disputeOrder(id,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DisputeOrderMutationResult = NonNullable<Awaited<ReturnType<typeof disputeOrder>>>
+    
+    export type DisputeOrderMutationError = ErrorResponse
+
+    export const useDisputeOrder = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof disputeOrder>>, TError,{id: ResourceId}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof disputeOrder>>,
+        TError,
+        {id: ResourceId},
+        TContext
+      > => {
+      return useMutation(getDisputeOrderMutationOptions(options), queryClient);
     }
     
