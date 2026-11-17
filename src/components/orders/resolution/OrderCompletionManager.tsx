@@ -1,26 +1,28 @@
 'use client';
 
-import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { OrderCompletionDialog } from './OrderCompletionDialog';
 
-import { CreateReviewForm } from '@/components/orders/CreateReviewForm';
 import { useOrderCompletion } from '@/components/providers/OrderCompletionProvider';
 import { Button } from '@/components/ui/button';
 import { OrderBuyerReport, OrderSellerReport } from '@/lib/api/generated/models';
 import { useReportOrderStatus } from '@/lib/api/generated/orders/orders';
 
 /**
- * Persistant component that handles displying the order completion dialog queue.
+ * Persistent component that handles displaying the order completion dialog queue.
  * @returns An order completion dialog component for the current order or null
  */
 export function OrderCompletionManager() {
-  const { currentOrder, role, queueLength, currentIndex, dismissCurrentOrder, refetchOrders } =
-    useOrderCompletion();
-
-  const [showReviewModal, setShowReviewModal] = useState(false);
-  const [reviewOrder, setReviewOrder] = useState<typeof currentOrder | null>(null);
+  const {
+    currentOrder,
+    role,
+    queueLength,
+    currentIndex,
+    dismissCurrentOrder,
+    refetchOrders,
+    openReview,
+  } = useOrderCompletion();
 
   const { mutateAsync: reportOrderStatus, isPending: isSubmitting } = useReportOrderStatus();
 
@@ -39,8 +41,7 @@ export function OrderCompletionManager() {
       refetchOrders();
 
       if (role === 'buyer' && reportType === OrderBuyerReport.received) {
-        setReviewOrder(targetOrder);
-        setShowReviewModal(true);
+        openReview(targetOrder!);
       } else {
         dismissCurrentOrder();
       }
@@ -48,25 +49,6 @@ export function OrderCompletionManager() {
       toast.error('Failed to submit status update. Please try again.', { id: toastId });
     }
   };
-
-  if (showReviewModal && reviewOrder) {
-    return (
-      <CreateReviewForm
-        sellerId={reviewOrder.sellerId}
-        orderId={reviewOrder.id}
-        sellerName={reviewOrder.seller.name}
-        sellerImage={reviewOrder.seller.image}
-        itemNames={reviewOrder.items.map((item) => item.product.title)}
-        fulfillmentType={reviewOrder.fulfillmentType}
-        scheduledTime={reviewOrder.scheduledTime}
-        onClose={() => {
-          setShowReviewModal(false);
-          setReviewOrder(null);
-          dismissCurrentOrder();
-        }}
-      />
-    );
-  }
 
   if (!currentOrder) return null;
 
