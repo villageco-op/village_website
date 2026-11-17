@@ -240,26 +240,36 @@ export const MultipleBuyerPendingCompletion: Story = {
 };
 
 /**
- * Interaction test verifying that a buyer confirming delivery triggers the API call and opens the review workflow.
+ * Simulates the real-world backend behavior where refetching orders after a 'received'
+ * report returns an empty queue, verifying the review modal still mounts and persists.
  */
-export const BuyerConfirmDeliveryFlow: Story = {
+export const BuyerReviewModalAfterRefetch: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get('*/api/auth/session', () => {
-          return HttpResponse.json({
-            user: MOCK_BUYER_USER,
-            expires: '9999-12-31T23:59:59.999Z',
-          });
-        }),
-        http.get('*/api/orders*', () =>
-          HttpResponse.json(createPaginatedResponse(MOCK_BUYER_ORDERS)),
-        ),
-        http.post('*/api/orders/ord_buyer_1/report', async () => {
-          await delay(500);
-          return HttpResponse.json({ success: true }, { status: 200 });
-        }),
-      ],
+      handlers: (() => {
+        let hasReported = false;
+
+        return [
+          http.get('*/api/auth/session', () => {
+            return HttpResponse.json({
+              user: MOCK_BUYER_USER,
+              expires: '9999-12-31T23:59:59.999Z',
+            });
+          }),
+          http.get('*/api/orders*', () => {
+            const orders = hasReported ? [] : MOCK_BUYER_ORDERS;
+            return HttpResponse.json(createPaginatedResponse(orders));
+          }),
+          http.post('*/api/orders/:id/report', async ({ request }) => {
+            const body = (await request.json()) as { report?: string };
+            if (body?.report) {
+              hasReported = true;
+            }
+            await delay(300);
+            return HttpResponse.json({ success: true }, { status: 200 });
+          }),
+        ];
+      })(),
     },
   },
   render: () => (
@@ -270,18 +280,17 @@ export const BuyerConfirmDeliveryFlow: Story = {
   play: async ({ canvasElement }) => {
     const body = within(canvasElement.ownerDocument.body);
 
-    // Wait for dialog title to appear
     const dialogTitle = await body.findByText(/Did you receive your order?/i);
     await expect(dialogTitle).toBeInTheDocument();
 
-    // Click "Yes, Order Delivered"
     const confirmButton = body.getByRole('button', { name: /Yes, Order Delivered/i });
-    await expect(confirmButton).toBeEnabled();
     await userEvent.click(confirmButton);
 
-    // Verify success toast or subsequent review view renders
     await expect(
       await body.findByText(/Order status updated successfully!/i, {}, { timeout: 4000 }),
     ).toBeInTheDocument();
+
+    await expect(await body.findByText(/Leave a Review/i)).toBeInTheDocument();
+    await expect(body.queryByText(/Did you receive your order?/i)).not.toBeInTheDocument();
   },
 };

@@ -3,7 +3,7 @@ import { userEvent, within, expect, fn } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
-import { CreateReviewForm } from './CreateReviewForm';
+import { CreateReviewDialog } from './CreateReviewDialog';
 
 import { Toaster } from '@/components/ui/sonner';
 import { MOCK_SELLER_USER } from '@/lib/storybook/mocks/user.mock';
@@ -14,9 +14,9 @@ const mockedQueryClient = new QueryClient({
   },
 });
 
-const meta: Meta<typeof CreateReviewForm> = {
-  title: 'Orders/OrderDetails/CreateReviewForm',
-  component: CreateReviewForm,
+const meta: Meta<typeof CreateReviewDialog> = {
+  title: 'Orders/OrderDetails/CreateReviewDialog',
+  component: CreateReviewDialog,
   parameters: {
     layout: 'centered',
   },
@@ -30,6 +30,7 @@ const meta: Meta<typeof CreateReviewForm> = {
     fulfillmentType: 'pickup',
     scheduledTime: '2026-05-15T14:00:00Z',
     onClose: fn(),
+    isOpen: true,
   },
   decorators: [
     (Story) => {
@@ -47,7 +48,7 @@ const meta: Meta<typeof CreateReviewForm> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof CreateReviewForm>;
+type Story = StoryObj<typeof CreateReviewDialog>;
 
 /**
  * Default view with pre-filled seller, items, and pickup details.
@@ -79,22 +80,21 @@ export const SubmitReviewInteraction: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
 
     // Select 4 stars
-    const starBtn = canvas.getByRole('button', { name: /Rate 4 stars/i });
+    const starBtn = body.getByRole('button', { name: /Rate 4 stars/i });
     await userEvent.click(starBtn);
 
     // Type comment
-    const commentInput = canvas.getByPlaceholderText(/Tell others about the quality/i);
+    const commentInput = body.getByPlaceholderText(/Tell others about the quality/i);
     await userEvent.type(commentInput, 'The produce was vibrant and incredibly fresh!');
 
     // Submit form
-    const submitBtn = canvas.getByRole('button', { name: /Submit/i });
+    const submitBtn = body.getByRole('button', { name: /Submit/i });
     await userEvent.click(submitBtn);
 
     // Assert toast appears
-    const body = within(canvasElement.ownerDocument.body);
     await expect(
       await body.findByText(/Review submitted successfully/i, {}, { timeout: 5000 }),
     ).toBeInTheDocument();

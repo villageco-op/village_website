@@ -54,15 +54,15 @@ export function OrderCompletionDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md bg-white border-lime/20 shadow-xl">
+      <DialogContent>
         <DialogHeader>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-medium text-ink-3">
               {totalCount} pending confirmation{totalCount > 1 && 's'}
             </span>
           </div>
-          <DialogTitle className="font-heading text-xl text-deep-forest">{title}</DialogTitle>
-          <DialogDescription className="text-sm text-ink-2">{description}</DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
         {order && (

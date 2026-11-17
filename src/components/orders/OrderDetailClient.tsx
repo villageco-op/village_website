@@ -1,13 +1,12 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { VisuallyHidden } from 'radix-ui';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { CancellationReasonBanner } from './CancellationReasonBanner';
 import { CancelOrderDialog } from './CancelOrderDialog';
-import { CreateReviewForm } from './CreateReviewForm';
+import { CreateReviewDialog } from './CreateReviewDialog';
 import { OrderItemsCard } from './OrderItemsCard';
 import { OrderLocationCard } from './OrderLocationCard';
 import { OrderReviewCard } from './OrderReviewCard';
@@ -17,7 +16,7 @@ import { RescheduleOrderDialog } from './RescheduleOrderDialog';
 
 import { ReorderForm } from '@/components/buyer/new-order/ReorderForm';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { NotFoundState } from '@/components/ui/state-displays';
@@ -143,7 +142,7 @@ export default function OrderDetailClient({
       await disputeMutation.mutateAsync({ id });
       await queryClient.invalidateQueries({ queryKey: [getGetOrderByIdQueryKey(id)] });
       await refetch();
-      toast.success('Dispute opened successfully.', { id: toastId });
+      toast.success('Dispute opened successfully. We will contact you via email.', { id: toastId });
     } catch (error) {
       toast.error('Failed to open dispute. Please try again.', { id: toastId });
     }
@@ -167,6 +166,7 @@ export default function OrderDetailClient({
   const isPending = order.status === 'pending';
   const isReorderable = order.status === 'completed' || order.status === 'canceled';
   const isReviewable = order.status === 'completed' && !order.review;
+  const isDisputed = order.status === 'disputed';
 
   const scheduledTimeMs = order.scheduledTime ? new Date(order.scheduledTime).getTime() : 0;
 
@@ -178,6 +178,9 @@ export default function OrderDetailClient({
 
   const counterpartyReport = isSeller ? order.buyerReport : order.sellerReport;
   const hasCounterpartyReported = counterpartyReport !== null;
+
+  const currentUserReport = isSeller ? order.sellerReport : order.buyerReport;
+  const hasCurrentUserReported = currentUserReport !== null;
 
   return (
     <div>
@@ -197,27 +200,33 @@ export default function OrderDetailClient({
                   </Button>
                 </div>
               )}
-              {!isSeller && isWithin24Hours && !hasCounterpartyReported && (
-                <>
-                  <Button variant="lime" onClick={() => void handleReportStatus('received')}>
-                    Report Received
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    onClick={() => void handleReportStatus('not_received')}
-                  >
-                    Report Not Received
-                  </Button>
-                </>
-              )}
+              {!isSeller &&
+                isWithin24Hours &&
+                !hasCounterpartyReported &&
+                !hasCurrentUserReported && (
+                  <>
+                    <Button variant="lime" onClick={() => void handleReportStatus('received')}>
+                      Report Received
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => void handleReportStatus('not_received')}
+                    >
+                      Report Not Received
+                    </Button>
+                  </>
+                )}
 
-              {isSeller && isBetween24And48Hours && !hasCounterpartyReported && (
-                <Button variant="lime" onClick={() => void handleReportStatus('fulfilled')}>
-                  Report Fulfilled
-                </Button>
-              )}
+              {isSeller &&
+                isBetween24And48Hours &&
+                !hasCounterpartyReported &&
+                !hasCurrentUserReported && (
+                  <Button variant="lime" onClick={() => void handleReportStatus('fulfilled')}>
+                    Report Fulfilled
+                  </Button>
+                )}
 
-              {isWithin48Hours && hasCounterpartyReported && (
+              {isWithin48Hours && hasCounterpartyReported && !isDisputed && (
                 <Button variant="destructive" onClick={() => void handleDisputeOrder()}>
                   Dispute Order
                 </Button>
@@ -281,27 +290,17 @@ export default function OrderDetailClient({
           <ReorderForm orderId={id} onClose={() => setIsReorderOpen(false)} />
         </DialogContent>
       </Dialog>
-      <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
-        <VisuallyHidden.Root>
-          <DialogTitle>Leave a Review</DialogTitle>
-          <DialogDescription>Share your experience with {order.seller.name}</DialogDescription>
-        </VisuallyHidden.Root>
-        <DialogContent
-          className="max-w-md p-0 border-none bg-transparent shadow-none"
-          aria-label="Leave a Review"
-        >
-          <CreateReviewForm
-            sellerId={order.seller.id}
-            orderId={order.id}
-            sellerName={order.seller.name}
-            sellerImage={order.seller.image}
-            itemNames={order.items.map((item) => item.productName)}
-            fulfillmentType={order.fulfillmentType}
-            scheduledTime={order.scheduledTime}
-            onClose={() => setIsReviewOpen(false)}
-          />
-        </DialogContent>
-      </Dialog>
+      <CreateReviewDialog
+        isOpen={isReviewOpen}
+        onClose={() => setIsReviewOpen(false)}
+        sellerId={order.seller.id}
+        orderId={order.id}
+        sellerName={order.seller.name}
+        sellerImage={order.seller.image}
+        itemNames={order.items.map((item) => item.productName)}
+        fulfillmentType={order.fulfillmentType}
+        scheduledTime={order.scheduledTime}
+      />
     </div>
   );
 }
