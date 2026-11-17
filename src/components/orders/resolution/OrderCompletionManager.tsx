@@ -18,23 +18,28 @@ import { useReportOrderStatus } from '@/lib/api/generated/orders/orders';
 export function OrderCompletionManager() {
   const { currentOrder, role, queueLength, currentIndex, dismissCurrentOrder, refetchOrders } =
     useOrderCompletion();
-  const [showReviewModal, setShowReviewModal] = useState(false);
-  const { mutateAsync: reportOrderStatus, isPending: isSubmitting } = useReportOrderStatus();
 
-  if (!currentOrder) return null;
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewOrder, setReviewOrder] = useState<typeof currentOrder | null>(null);
+
+  const { mutateAsync: reportOrderStatus, isPending: isSubmitting } = useReportOrderStatus();
 
   const handleReport = async (reportType: OrderBuyerReport | OrderSellerReport) => {
     const toastId = toast.loading('Updating order status...');
     try {
+      const targetOrder = currentOrder;
+
       await reportOrderStatus({
-        id: currentOrder.id,
+        id: targetOrder!.id,
         data: { report: reportType! },
       });
 
       toast.success('Order status updated successfully!', { id: toastId });
+
       refetchOrders();
 
       if (role === 'buyer' && reportType === OrderBuyerReport.received) {
+        setReviewOrder(targetOrder);
         setShowReviewModal(true);
       } else {
         dismissCurrentOrder();
@@ -44,23 +49,26 @@ export function OrderCompletionManager() {
     }
   };
 
-  if (showReviewModal) {
+  if (showReviewModal && reviewOrder) {
     return (
       <CreateReviewForm
-        sellerId={currentOrder.sellerId}
-        orderId={currentOrder.id}
-        sellerName={currentOrder.seller.name}
-        sellerImage={currentOrder.seller.image}
-        itemNames={currentOrder.items.map((item) => item.product.title)}
-        fulfillmentType={currentOrder.fulfillmentType}
-        scheduledTime={currentOrder.scheduledTime}
+        sellerId={reviewOrder.sellerId}
+        orderId={reviewOrder.id}
+        sellerName={reviewOrder.seller.name}
+        sellerImage={reviewOrder.seller.image}
+        itemNames={reviewOrder.items.map((item) => item.product.title)}
+        fulfillmentType={reviewOrder.fulfillmentType}
+        scheduledTime={reviewOrder.scheduledTime}
         onClose={() => {
           setShowReviewModal(false);
+          setReviewOrder(null);
           dismissCurrentOrder();
         }}
       />
     );
   }
+
+  if (!currentOrder) return null;
 
   const isBuyer = role === 'buyer';
   const isDelivery = currentOrder.fulfillmentType === 'delivery';
