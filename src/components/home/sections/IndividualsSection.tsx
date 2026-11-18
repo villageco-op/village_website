@@ -36,7 +36,7 @@ const ROLES: RoleCard[] = [
       'Turn your harvest into revenue with online orders, subscriptions, and mobile tap-to-pay (coming soon).',
     isAvailable: true,
     actionText: 'Start Selling',
-    actionHref: '/login',
+    actionHref: '/become-seller',
   },
   {
     id: 'grower',

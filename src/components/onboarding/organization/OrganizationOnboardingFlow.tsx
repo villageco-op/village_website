@@ -11,6 +11,7 @@ import OrgInviteStep from './OrgInviteStep';
 import OrgTypeStep from './OrgTypeStep';
 
 import { useTutorial } from '@/components/providers/TutorialProvider';
+import { useAuth } from '@/hooks/useAuth';
 import { type BasicInfoData, useSubmitBasicProfile } from '@/hooks/useOnboardingActions';
 import { useInviteToOrg } from '@/lib/api/generated/invites/invites';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
@@ -40,6 +41,7 @@ export default function OrganizationOnboardingFlow({
 }: OrganizationOnboardingFlowProps) {
   const router = useRouter();
   const { completeOnboarding } = useTutorial();
+  const { refetch } = useAuth();
 
   const [step, setStep] = useState<OrgStep>(isUpgradingToOrg ? 'org-type' : 'basic-info');
   const [isUploading, setIsUploading] = useState(false);
@@ -150,6 +152,7 @@ export default function OrganizationOnboardingFlow({
 
   const handleFinishOrgOnboarding = () => {
     completeOnboarding();
+    refetch();
     router.push('/org/clients');
   };
 

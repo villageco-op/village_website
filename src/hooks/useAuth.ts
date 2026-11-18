@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect, useCallback } from 'react';
 
 import type { User } from '@/lib/api/generated/models/user';
@@ -21,6 +22,8 @@ export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
   const [status, setStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
   const [trigger, setTrigger] = useState(0);
+
+  const queryClient = useQueryClient();
 
   const refetch = useCallback(() => {
     setStatus('loading');
@@ -57,6 +60,8 @@ export function useAuth() {
 
   const logout = async () => {
     try {
+      queryClient.clear();
+
       const csrfRes = await fetch('/api/auth/csrf');
       if (!csrfRes.ok) throw new Error('Failed to fetch CSRF token');
 
@@ -72,9 +77,13 @@ export function useAuth() {
         }),
       });
 
+      setSession(null);
+      setStatus('unauthenticated');
+
       window.location.href = '/';
     } catch (error) {
       logger.error('Failed to logout', error);
+      window.location.href = '/';
     }
   };
 

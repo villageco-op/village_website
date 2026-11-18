@@ -113,7 +113,7 @@ export default function SellerInfoStep({
             </div>
 
             {willDeliver && (
-              <div className="pl-6 animate-in fade-in slide-in-from-top-2">
+              <div className="pl-6 pt-2 animate-in fade-in slide-in-from-top-2">
                 <Label htmlFor="range" className="text-xs uppercase tracking-wide">
                   Delivery Range (Miles)
                 </Label>
