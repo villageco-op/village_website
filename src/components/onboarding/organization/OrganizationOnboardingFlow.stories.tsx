@@ -7,6 +7,7 @@ import OrganizationOnboardingFlow from './OrganizationOnboardingFlow';
 
 import { TutorialProvider } from '@/components/providers/TutorialProvider';
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/hooks/useAuth';
 import { type Invite, OrgInviteStatus, OrgRole } from '@/lib/api/generated/models';
 
 const mockedQueryClient = new QueryClient({
@@ -113,10 +114,12 @@ const meta: Meta<typeof OrganizationOnboardingFlow> = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={mockedQueryClient}>
-        <TutorialProvider>
-          <Story />
-          <Toaster />
-        </TutorialProvider>
+        <AuthProvider>
+          <TutorialProvider>
+            <Story />
+            <Toaster />
+          </TutorialProvider>
+        </AuthProvider>
       </QueryClientProvider>
     ),
   ],

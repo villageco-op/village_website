@@ -88,7 +88,7 @@ export default function OrganizationOnboardingFlow({
 
       const { lat, lng } = geocodeRes.data;
 
-      toast.loading('Creating organization hub...', { id: toastId });
+      toast.loading('Creating organization...', { id: toastId });
 
       const createRes = await createOrgMutation.mutateAsync({
         data: {
@@ -150,9 +150,9 @@ export default function OrganizationOnboardingFlow({
     }
   };
 
-  const handleFinishOrgOnboarding = () => {
-    completeOnboarding();
-    refetch();
+  const handleFinishOrgOnboarding = async () => {
+    completeOnboarding('add_client');
+    await refetch();
     router.push('/org/clients');
   };
 
@@ -215,7 +215,7 @@ export default function OrganizationOnboardingFlow({
           {step === 'org-invite' && (
             <OrgInviteStep
               onInvite={handleOrgInviteSubmit}
-              onFinish={handleFinishOrgOnboarding}
+              onFinish={() => void handleFinishOrgOnboarding()}
               onBack={() => setStep('org-details')}
               isPending={inviteToOrgMutation.isPending}
             />

@@ -4,6 +4,7 @@ import { http, HttpResponse } from 'msw';
 
 import { CartFab } from './CartFab';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import { CartProvider } from '@/hooks/useCartUI';
 import { MOCK_BUYER_USER } from '@/lib/storybook/mocks/user.mock';
 
@@ -31,11 +32,13 @@ const meta: Meta<typeof CartFab> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <CartProvider>
-            <div className="relative h-75 w-full bg-slate-50">
-              <Story />
-            </div>
-          </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              <div className="relative h-75 w-full bg-slate-50">
+                <Story />
+              </div>
+            </CartProvider>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

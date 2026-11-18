@@ -8,6 +8,7 @@ import { http, HttpResponse, delay } from 'msw';
 import { ContactFormFields } from './ContactFormFields';
 
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/hooks/useAuth';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -26,10 +27,12 @@ const meta: Meta<typeof ContactFormFields> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-sm">
-            <Story />
-            <Toaster />
-          </div>
+          <AuthProvider>
+            <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-sm">
+              <Story />
+              <Toaster />
+            </div>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

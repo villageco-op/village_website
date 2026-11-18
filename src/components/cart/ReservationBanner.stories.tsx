@@ -4,6 +4,7 @@ import { http, HttpResponse } from 'msw';
 
 import { ReservationBanner } from './ReservationBanner';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import { CartProvider } from '@/hooks/useCartUI';
 import { MOCK_BUYER_USER } from '@/lib/storybook/mocks/user.mock';
 
@@ -31,11 +32,13 @@ const meta: Meta<typeof ReservationBanner> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <CartProvider>
-            <div className="relative min-h-75 w-full bg-slate-50 pt-24">
-              <Story />
-            </div>
-          </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              <div className="relative min-h-75 w-full bg-slate-50 pt-24">
+                <Story />
+              </div>
+            </CartProvider>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

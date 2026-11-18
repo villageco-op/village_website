@@ -46,17 +46,18 @@ export function Header() {
   const isHome = pathname === '/';
 
   const orgId = user?.organizationId;
-  const orgUser = !!orgId;
+  const orgUser = Boolean(orgId);
   const adminUser = user?.orgRole === 'admin';
 
   const { data: orgResult } = useGetOrganization(orgId ?? '', {
     query: {
       enabled: !!orgId,
+      retry: false,
     },
   });
 
   const orgError = !orgResult || orgResult?.status !== 200 || !orgResult.data;
-  const org = !orgError ? orgResult.data : undefined;
+  const org = !orgError && orgId ? orgResult.data : undefined;
 
   const getNavGroups = (): NavGroup[] => {
     if (pathname.startsWith('/buyer')) {

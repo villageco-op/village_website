@@ -7,6 +7,8 @@ import { NotificationProvider } from './providers/NotificationProvider';
 import { OrderCompletionProvider } from './providers/OrderCompletionProvider';
 import { TutorialProvider } from './providers/TutorialProvider';
 
+import { AuthProvider } from '@/hooks/useAuth';
+
 /**
  * Global providers including the react query provider.
  * @param props - Props for the providers
@@ -27,11 +29,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NotificationProvider>
-        <OrderCompletionProvider>
-          <TutorialProvider>{children}</TutorialProvider>
-        </OrderCompletionProvider>
-      </NotificationProvider>
+      <AuthProvider>
+        <NotificationProvider>
+          <OrderCompletionProvider>
+            <TutorialProvider>{children}</TutorialProvider>
+          </OrderCompletionProvider>
+        </NotificationProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

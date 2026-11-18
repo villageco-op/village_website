@@ -6,6 +6,7 @@ import { http, HttpResponse, delay } from 'msw';
 import OrgMembersClient from './OrgMembersClient';
 
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/hooks/useAuth';
 import { OrgRole } from '@/lib/api/generated/models';
 import type { OrgMember } from '@/lib/api/generated/models';
 import { MOCK_ORG_ADMIN_USER, MOCK_ORG_MEMBER_USER } from '@/lib/storybook/mocks/user.mock';
@@ -141,8 +142,10 @@ const meta: Meta<typeof OrgMembersClient> = {
       const queryClient = createQueryClient();
       return (
         <QueryClientProvider client={queryClient}>
-          <Story />
-          <Toaster />
+          <AuthProvider>
+            <Story />
+            <Toaster />
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

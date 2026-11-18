@@ -7,6 +7,7 @@ import { http, HttpResponse } from 'msw';
 
 import { Header } from './Header';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import { CartProvider } from '@/hooks/useCartUI';
 import { BASE_MOCK_ORGANIZATION } from '@/lib/storybook/mocks/organization.mock';
 
@@ -31,9 +32,11 @@ const meta: Meta<typeof Header> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <CartProvider>
-            <Story />
-          </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              <Story />
+            </CartProvider>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },
