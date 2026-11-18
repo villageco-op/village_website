@@ -23,7 +23,7 @@ export const BUYER_TUTORIALS: Record<string, Tutorial> = {
       {
         title: 'Configure Order & Quantity',
         content:
-          'Click "Order Now" on the listing page to select your desired quantity in pounds and choose whether to make it a recurring subscription.',
+          'Click "Order Now" on the listing page to select your desired quantity in ounces and choose whether to make it a recurring subscription.',
       },
       {
         title: 'Add to Cart',

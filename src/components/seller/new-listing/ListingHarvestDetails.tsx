@@ -47,7 +47,7 @@ export function ListingHarvestDetails({ data, updateData }: StepComponentProps) 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="seasonStart">
-              Season Start <span className="text-required">*</span>
+              Season Start<span className="text-required">*</span>
             </Label>
             <Input
               id="seasonStart"

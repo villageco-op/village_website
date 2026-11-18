@@ -20,7 +20,7 @@ const QUICK_LINKS = [
   },
   {
     title: 'Billing',
-    href: '/buyer/saved-growers',
+    href: '/buyer/billing',
   },
   {
     title: 'Tutorials',

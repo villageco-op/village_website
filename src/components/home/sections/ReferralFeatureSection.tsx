@@ -45,7 +45,7 @@ export function ReferralFeatureSection({
           </p>
           <div className="pt-2">
             <Button variant="forest" size="lg" className="px-16 h-12" asChild>
-              <Link href="/login">Get Started</Link>
+              <Link href="/join-org">Get Started</Link>
             </Button>
           </div>
         </div>

@@ -15,7 +15,6 @@ const FOOTER_LINKS = [
     title: 'Organizations',
     links: [
       { label: 'Food pantries', href: '/#referral-management' },
-      { label: 'Restaurants & markets', href: '/#demand-prediction-research' },
       { label: 'Join an organization', href: '/join-org' },
       { label: 'Register your organization', href: '/onboarding?upgrade=org' },
     ],

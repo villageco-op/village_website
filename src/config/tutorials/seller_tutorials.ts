@@ -30,7 +30,7 @@ export const SELLER_TUTORIALS: Record<string, Tutorial> = {
       {
         title: 'Pricing & Inventory',
         content:
-          'Specify your price per pound, total available pounds, and optional max order limits per customer.',
+          'Specify your price per ounce, total available ounces, and optional max order limits per customer.',
         targetRoute: '/seller/new-listing',
       },
       {

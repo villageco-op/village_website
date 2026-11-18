@@ -1,4 +1,5 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import { useAuth } from '../../../hooks/useAuth';
@@ -14,6 +15,23 @@ vi.mock('@/lib/logger', () => ({
   },
 }));
 
+const createWrapper = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
+  function TestQueryWrapper({ children }: { children: React.ReactNode }) {
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  }
+  TestQueryWrapper.displayName = 'TestQueryWrapper';
+
+  return TestQueryWrapper;
+};
+
 describe('useAuth', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn());
@@ -21,10 +39,9 @@ describe('useAuth', () => {
   });
 
   it('should initialize with loading status', () => {
-    // We mock fetch to stay pending for this test
     vi.mocked(fetch).mockReturnValue(new Promise(() => {}));
 
-    const { result } = renderHook(() => useAuth());
+    const { result } = renderHook(() => useAuth(), { wrapper: createWrapper() });
 
     expect(result.current.status).toBe('loading');
     expect(result.current.session).toBeNull();
@@ -42,7 +59,7 @@ describe('useAuth', () => {
       json: () => Promise.resolve(mockSession),
     } as Response);
 
-    const { result } = renderHook(() => useAuth());
+    const { result } = renderHook(() => useAuth(), { wrapper: createWrapper() });
 
     await waitFor(() => {
       expect(result.current.status).toBe('authenticated');
@@ -56,10 +73,10 @@ describe('useAuth', () => {
   it('should set unauthenticated status when response is an empty object', async () => {
     vi.mocked(fetch).mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve({}), // Auth.js empty session
+      json: () => Promise.resolve({}),
     } as Response);
 
-    const { result } = renderHook(() => useAuth());
+    const { result } = renderHook(() => useAuth(), { wrapper: createWrapper() });
 
     await waitFor(() => {
       expect(result.current.status).toBe('unauthenticated');
@@ -72,7 +89,7 @@ describe('useAuth', () => {
   it('should handle fetch errors gracefully', async () => {
     vi.mocked(fetch).mockRejectedValue(new Error('Network failure'));
 
-    const { result } = renderHook(() => useAuth());
+    const { result } = renderHook(() => useAuth(), { wrapper: createWrapper() });
 
     await waitFor(() => {
       expect(result.current.status).toBe('unauthenticated');
@@ -87,7 +104,7 @@ describe('useAuth', () => {
       json: () => Promise.resolve({ error: 'Internal Server Error' }),
     } as Response);
 
-    const { result } = renderHook(() => useAuth());
+    const { result } = renderHook(() => useAuth(), { wrapper: createWrapper() });
 
     await waitFor(() => {
       expect(result.current.status).toBe('unauthenticated');
@@ -100,7 +117,10 @@ describe('useAuth', () => {
     beforeEach(() => {
       // @ts-expect-error - overriding window.location for testing purposes
       delete window.location;
-      window.location = { ...originalLocation, href: '' } as Location & string;
+      window.location = {
+        ...originalLocation,
+        href: 'http://localhost:3000/dashboard',
+      } as Location & string;
     });
 
     afterEach(() => {
@@ -123,13 +143,15 @@ describe('useAuth', () => {
           ok: true,
         } as Response);
 
-      const { result } = renderHook(() => useAuth());
+      const { result } = renderHook(() => useAuth(), { wrapper: createWrapper() });
 
       await waitFor(() => {
         expect(result.current.status).toBe('unauthenticated');
       });
 
-      await result.current.logout();
+      await act(async () => {
+        await result.current.logout();
+      });
 
       expect(fetch).toHaveBeenCalledWith('/api/auth/csrf');
 
@@ -148,24 +170,24 @@ describe('useAuth', () => {
       expect(window.location.href).toBe('/');
     });
 
-    it('should catch errors and log them if fetching CSRF fails', async () => {
-      // 1st fetch: useAuth init, 2nd fetch: CSRF failure
+    it('should catch errors, log them, and still redirect to home if fetching CSRF fails', async () => {
       vi.mocked(fetch)
         .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({}) } as Response)
         .mockResolvedValueOnce({ ok: false } as Response);
 
-      const { result } = renderHook(() => useAuth());
+      const { result } = renderHook(() => useAuth(), { wrapper: createWrapper() });
       await waitFor(() => expect(result.current.status).toBe('unauthenticated'));
 
-      await result.current.logout();
+      await act(async () => {
+        await result.current.logout();
+      });
 
       expect(logger.error).toHaveBeenCalledWith('Failed to logout', expect.any(Error));
       expect(fetch).not.toHaveBeenCalledWith('/api/auth/signout', expect.any(Object));
-      expect(window.location.href).not.toBe('/');
+      expect(window.location.href).toBe('/');
     });
 
-    it('should catch errors and log them if the signout call fails', async () => {
-      // 1st fetch: init, 2nd fetch: CSRF success, 3rd fetch: Signout network failure
+    it('should catch errors, log them, and still redirect to home if the signout call fails', async () => {
       vi.mocked(fetch)
         .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({}) } as Response)
         .mockResolvedValueOnce({
@@ -174,13 +196,15 @@ describe('useAuth', () => {
         } as Response)
         .mockRejectedValueOnce(new Error('Network error on signout'));
 
-      const { result } = renderHook(() => useAuth());
+      const { result } = renderHook(() => useAuth(), { wrapper: createWrapper() });
       await waitFor(() => expect(result.current.status).toBe('unauthenticated'));
 
-      await result.current.logout();
+      await act(async () => {
+        await result.current.logout();
+      });
 
       expect(logger.error).toHaveBeenCalledWith('Failed to logout', expect.any(Error));
-      expect(window.location.href).not.toBe('/');
+      expect(window.location.href).toBe('/');
     });
   });
 });

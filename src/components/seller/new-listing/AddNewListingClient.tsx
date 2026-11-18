@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2, ImageIcon } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -162,13 +162,9 @@ export default function AddNewListingClient() {
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-35">
-            {isSubmitting ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <ImageIcon className="w-4 h-4 mr-2" />
-            )}
-            Publish Listing
+          <Button type="submit" disabled={isSubmitting || isUploading}>
+            {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+            Publish
           </Button>
         </div>
       </form>

@@ -150,7 +150,7 @@ export function BrowseProduceMapFilters({
         </Button>
 
         {hasActiveFilters && (
-          <Button variant="destructive" size="sm" onClick={clearAllFilters} className="ml-auto">
+          <Button variant="destructive" size="sm" onClick={clearAllFilters}>
             <X className="mr-1 h-3 w-3" /> Clear
           </Button>
         )}
@@ -211,68 +211,59 @@ export function BrowseProduceMapFilters({
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="min-price">Min Price ($/lb)</Label>
+              <Label htmlFor="min-price">Min Price ($/oz)</Label>
               <Input
                 id="min-price"
                 type="number"
                 step="0.01"
                 placeholder="0.00"
-                value={filters.minPrice ? (filters.minPrice * 16).toFixed(2) : ''}
+                value={filters.minPrice ? filters.minPrice.toFixed(2) : ''}
                 onChange={(e) => {
-                  const pricePerLb = e.target.value ? Number(e.target.value) : undefined;
-                  handleFilterChange(
-                    'minPrice',
-                    pricePerLb !== undefined ? pricePerLb / 16 : undefined,
-                  );
+                  const pricePerOz = e.target.value ? Number(e.target.value) : undefined;
+                  handleFilterChange('minPrice', pricePerOz);
                 }}
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="max-price">Max Price ($/lb)</Label>
+              <Label htmlFor="max-price">Max Price ($/oz)</Label>
               <Input
                 id="max-price"
                 type="number"
                 step="0.01"
                 placeholder="Any"
-                value={filters.maxPrice ? (filters.maxPrice * 16).toFixed(2) : ''}
+                value={filters.maxPrice ? filters.maxPrice.toFixed(2) : ''}
                 onChange={(e) => {
-                  const pricePerLb = e.target.value ? Number(e.target.value) : undefined;
-                  handleFilterChange(
-                    'maxPrice',
-                    pricePerLb !== undefined ? pricePerLb / 16 : undefined,
-                  );
+                  const pricePerOz = e.target.value ? Number(e.target.value) : undefined;
+                  handleFilterChange('maxPrice', pricePerOz);
                 }}
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="min-quantity-lb">Min. Available (lbs)</Label>
+              <Label htmlFor="min-quantity-oz">Min. Available (oz)</Label>
               <Input
-                id="min-quantity-lb"
+                id="min-quantity-oz"
                 type="number"
                 placeholder="0"
-                value={filters.availableInventory ? filters.availableInventory / 16 : ''}
+                value={filters.availableInventory ? filters.availableInventory : ''}
                 onChange={(e) => {
-                  const lbs = e.target.value ? Number(e.target.value) : undefined;
-                  handleFilterChange(
-                    'availableInventory',
-                    lbs !== undefined ? lbs * 16 : undefined,
-                  );
+                  const oz = e.target.value ? Number(e.target.value) : undefined;
+                  handleFilterChange('availableInventory', oz);
                 }}
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="max-order-lb">Max Order Qt. (lbs)</Label>
+              <Label htmlFor="max-order-oz">Max Order Qt. (oz)</Label>
               <Input
-                id="max-order-lb"
+                id="max-order-oz"
                 type="number"
                 placeholder="Any"
-                value={filters.maxOrderQuantity ? filters.maxOrderQuantity / 16 : ''}
+                value={filters.maxOrderQuantity ? filters.maxOrderQuantity : ''}
                 onChange={(e) => {
-                  const lbs = e.target.value ? Number(e.target.value) : undefined;
-                  handleFilterChange('maxOrderQuantity', lbs !== undefined ? lbs * 16 : undefined);
+                  const oz = e.target.value ? Number(e.target.value) : undefined;
+                  handleFilterChange('maxOrderQuantity', oz);
                 }}
               />
             </div>
