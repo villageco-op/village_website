@@ -88,7 +88,7 @@ export const FullFormSubmission: Story = {
     await userEvent.click(checkbox);
 
     // 5. Submit
-    const submitBtn = canvas.getByRole('button', { name: /Publish Listing/i });
+    const submitBtn = canvas.getByRole('button', { name: /Publish/i });
     await userEvent.click(submitBtn);
 
     // Verify loading state appears
@@ -123,7 +123,7 @@ export const SubmissionError: Story = {
     await userEvent.type(canvas.getByLabelText(/Season Start/i), '2026-01-01');
     await userEvent.type(canvas.getByLabelText(/Season End/i), '2026-12-31');
 
-    await userEvent.click(canvas.getByRole('button', { name: /Publish Listing/i }));
+    await userEvent.click(canvas.getByRole('button', { name: /Publish/i }));
 
     const body = within(canvasElement.ownerDocument.body);
     await expect(await body.findByText(/Could not create listing/i)).toBeInTheDocument();
@@ -149,6 +149,6 @@ export const SubmittingState: Story = {
     await userEvent.type(canvas.getByLabelText(/Title/i), 'Infinite Loading Test');
     await userEvent.type(canvas.getByLabelText(/Season Start/i), '2026-01-01');
     await userEvent.type(canvas.getByLabelText(/Season End/i), '2026-12-31');
-    await userEvent.click(canvas.getByRole('button', { name: /Publish Listing/i }));
+    await userEvent.click(canvas.getByRole('button', { name: /Publish/i }));
   },
 };

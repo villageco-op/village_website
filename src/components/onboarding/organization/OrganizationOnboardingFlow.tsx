@@ -11,6 +11,7 @@ import OrgInviteStep from './OrgInviteStep';
 import OrgTypeStep from './OrgTypeStep';
 
 import { useTutorial } from '@/components/providers/TutorialProvider';
+import { useAuth } from '@/hooks/useAuth';
 import { type BasicInfoData, useSubmitBasicProfile } from '@/hooks/useOnboardingActions';
 import { useInviteToOrg } from '@/lib/api/generated/invites/invites';
 import { useGeocodeAddress } from '@/lib/api/generated/location/location';
@@ -40,6 +41,7 @@ export default function OrganizationOnboardingFlow({
 }: OrganizationOnboardingFlowProps) {
   const router = useRouter();
   const { completeOnboarding } = useTutorial();
+  const { refetch } = useAuth();
 
   const [step, setStep] = useState<OrgStep>(isUpgradingToOrg ? 'org-type' : 'basic-info');
   const [isUploading, setIsUploading] = useState(false);
@@ -86,7 +88,7 @@ export default function OrganizationOnboardingFlow({
 
       const { lat, lng } = geocodeRes.data;
 
-      toast.loading('Creating organization hub...', { id: toastId });
+      toast.loading('Creating organization...', { id: toastId });
 
       const createRes = await createOrgMutation.mutateAsync({
         data: {
@@ -148,8 +150,9 @@ export default function OrganizationOnboardingFlow({
     }
   };
 
-  const handleFinishOrgOnboarding = () => {
-    completeOnboarding();
+  const handleFinishOrgOnboarding = async () => {
+    completeOnboarding('add_client');
+    await refetch();
     router.push('/org/clients');
   };
 
@@ -212,7 +215,7 @@ export default function OrganizationOnboardingFlow({
           {step === 'org-invite' && (
             <OrgInviteStep
               onInvite={handleOrgInviteSubmit}
-              onFinish={handleFinishOrgOnboarding}
+              onFinish={() => void handleFinishOrgOnboarding()}
               onBack={() => setStep('org-details')}
               isPending={inviteToOrgMutation.isPending}
             />

@@ -8,6 +8,7 @@ import { TutorialProvider } from '../providers/TutorialProvider';
 import OnboardingFlow from './OnboardingClient';
 
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/hooks/useAuth';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -68,10 +69,12 @@ const meta: Meta<typeof OnboardingFlow> = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={mockedQueryClient}>
-        <TutorialProvider>
-          <Story />
-          <Toaster />
-        </TutorialProvider>
+        <AuthProvider>
+          <TutorialProvider>
+            <Story />
+            <Toaster />
+          </TutorialProvider>
+        </AuthProvider>
       </QueryClientProvider>
     ),
   ],

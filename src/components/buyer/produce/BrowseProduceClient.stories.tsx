@@ -5,6 +5,8 @@ import { http, HttpResponse } from 'msw';
 
 import BrowseProduceClient from './BrowseProduceClient';
 
+import { AuthProvider } from '@/hooks/useAuth';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -53,9 +55,11 @@ const meta: Meta<typeof BrowseProduceClient> = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={mockedQueryClient}>
-        <div className="bg-slate-50 flex flex-col h-screen w-full">
-          <Story />
-        </div>
+        <AuthProvider>
+          <div className="bg-slate-50 flex flex-col h-screen w-full">
+            <Story />
+          </div>
+        </AuthProvider>
       </QueryClientProvider>
     ),
   ],

@@ -4,6 +4,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import { SupplyMapCard } from './SupplyMapCard';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import { MOCK_GROWERS_LIST } from '@/lib/storybook/mocks/grower.mock';
 import { generateMockGrowers } from '@/lib/storybook/utils/mockGenerators';
 
@@ -26,9 +27,11 @@ const meta: Meta<typeof SupplyMapCard> = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={mockedQueryClient}>
-        <div className="max-w-2xl mx-auto">
-          <Story />
-        </div>
+        <AuthProvider>
+          <div className="max-w-2xl mx-auto">
+            <Story />
+          </div>
+        </AuthProvider>
       </QueryClientProvider>
     ),
   ],

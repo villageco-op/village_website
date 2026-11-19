@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { ListingCard } from './ListingCard';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import { MOCK_PRODUCE_LISTING } from '@/lib/storybook/mocks/produce.mock';
 
 const mockedQueryClient = new QueryClient({
@@ -23,9 +24,11 @@ const meta: Meta<typeof ListingCard> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <div className="min-h-screen bg-background p-8">
-            <Story />
-          </div>
+          <AuthProvider>
+            <div className="min-h-screen bg-background p-8">
+              <Story />
+            </div>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

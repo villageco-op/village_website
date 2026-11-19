@@ -7,6 +7,7 @@ import React, { useEffect } from 'react';
 import { CartDrawer } from './CartDrawer';
 
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/hooks/useAuth';
 import { CartProvider, useCartUI } from '@/hooks/useCartUI';
 import { MOCK_BUYER_USER } from '@/lib/storybook/mocks/user.mock';
 
@@ -140,12 +141,14 @@ const meta: Meta<typeof CartDrawer> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <CartProvider>
-            <Toaster />
-            <AutoOpenCartWrapper>
-              <Story />
-            </AutoOpenCartWrapper>
-          </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              <Toaster />
+              <AutoOpenCartWrapper>
+                <Story />
+              </AutoOpenCartWrapper>
+            </CartProvider>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

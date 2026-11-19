@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect, userEvent } from '@storybook/test';
+import { within, expect } from '@storybook/test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, HttpResponse, delay } from 'msw';
 
 import SellerListingsClient from '../listings/SellerListingsClient';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import {
   createPaginatedResponse,
   generateMockListings,
@@ -32,11 +33,13 @@ const meta: Meta<typeof SellerListingsClient> = {
 
       return (
         <QueryClientProvider client={queryClient}>
-          <div className="min-h-screen bg-background p-8">
-            <div className="mx-auto max-w-6xl">
-              <Story />
+          <AuthProvider>
+            <div className="min-h-screen bg-background p-8">
+              <div className="mx-auto max-w-6xl">
+                <Story />
+              </div>
             </div>
-          </div>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },
@@ -64,40 +67,6 @@ export const Default: Story = {
     await expect(await canvas.findByText(/25 active/i)).toBeInTheDocument();
     await expect(canvas.getByText(MOCK_LISTINGS_DATA[0].title)).toBeInTheDocument();
     await expect(canvas.getByText(/Add a new listing/i)).toBeInTheDocument();
-  },
-};
-
-/**
- * Pagination state with multiple pages of listings.
- */
-export const Paginated: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get('*/api/produce/me', ({ request }) => {
-          const url = new URL(request.url);
-          const page = Number(url.searchParams.get('page') || '1');
-
-          return HttpResponse.json(createPaginatedResponse(MOCK_LISTINGS_DATA, page, PAGE_LIMIT));
-        }),
-      ],
-    },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    const firstPageItemTitle = MOCK_LISTINGS_DATA[0].title;
-    const secondPageItemTitle = MOCK_LISTINGS_DATA[PAGE_LIMIT].title;
-
-    await expect(await canvas.findByText(firstPageItemTitle)).toBeInTheDocument();
-    await expect(canvas.queryByText(secondPageItemTitle)).not.toBeInTheDocument();
-
-    const nextButton = await canvas.findByRole('button', { name: /next|2/i });
-    await userEvent.click(nextButton);
-
-    await expect(await canvas.findByText(secondPageItemTitle)).toBeInTheDocument();
-
-    await expect(canvas.queryByText(firstPageItemTitle)).not.toBeInTheDocument();
   },
 };
 

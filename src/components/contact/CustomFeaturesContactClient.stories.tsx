@@ -7,6 +7,7 @@ import { http, HttpResponse } from 'msw';
 import CustomFeaturesContactClient from './CustomFeaturesContactClient';
 
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/hooks/useAuth';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -31,10 +32,12 @@ const meta: Meta<typeof CustomFeaturesContactClient> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <div className="min-h-screen bg-slate-50">
-            <Story />
-            <Toaster />
-          </div>
+          <AuthProvider>
+            <div className="min-h-screen bg-slate-50">
+              <Story />
+              <Toaster />
+            </div>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

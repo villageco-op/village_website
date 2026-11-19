@@ -5,6 +5,8 @@ import { http, HttpResponse } from 'msw';
 
 import BecomeSellerClient from './BecomeSellerClient';
 
+import { AuthProvider } from '@/hooks/useAuth';
+
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -25,7 +27,9 @@ const meta: Meta<typeof BecomeSellerClient> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <Story />
+          <AuthProvider>
+            <Story />
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

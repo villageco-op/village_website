@@ -5,6 +5,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import AcceptInviteClient from '@/app/(login)/verify-invite/page';
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/hooks/useAuth';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -62,7 +63,9 @@ const meta: Meta<typeof AcceptInviteClient> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <Story />
+          <AuthProvider>
+            <Story />
+          </AuthProvider>
           <Toaster />
         </QueryClientProvider>
       );

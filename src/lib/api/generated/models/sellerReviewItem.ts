@@ -5,15 +5,9 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
-import type { IsoDateTime } from './isoDateTime';
-import type { ResourceId } from './resourceId';
+import type { Review } from './review';
 import type { ReviewBuyer } from './reviewBuyer';
 
-export interface SellerReviewItem {
-  id: ResourceId;
-  rating: number;
-  /** @nullable */
-  comment: string | null;
-  createdAt: IsoDateTime;
+export type SellerReviewItem = Review & ({
   buyer: ReviewBuyer & (unknown | null);
-}
+});

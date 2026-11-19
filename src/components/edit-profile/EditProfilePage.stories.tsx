@@ -5,6 +5,7 @@ import { HttpResponse, delay, http } from 'msw';
 
 import EditProfilePage from './EditProfilePage';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import { BASE_MOCK_ORGANIZATION } from '@/lib/storybook/mocks/organization.mock';
 import {
   MOCK_BUYER_USER,
@@ -68,7 +69,9 @@ const meta: Meta<typeof EditProfilePage> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <Story />
+          <AuthProvider>
+            <Story />
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

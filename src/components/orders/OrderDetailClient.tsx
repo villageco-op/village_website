@@ -1,14 +1,16 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { CancellationReasonBanner } from './CancellationReasonBanner';
 import { CancelOrderDialog } from './CancelOrderDialog';
+import { CreateReviewDialog } from './CreateReviewDialog';
 import { OrderItemsCard } from './OrderItemsCard';
 import { OrderLocationCard } from './OrderLocationCard';
+import { OrderReviewCard } from './OrderReviewCard';
+import { OrderStatusReportCard } from './OrderStatusReportCard';
 import { OrderSummaryCard } from './OrderSummaryCard';
 import { RescheduleOrderDialog } from './RescheduleOrderDialog';
 
@@ -18,12 +20,17 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { NotFoundState } from '@/components/ui/state-displays';
-import type { OrderDetailResponse } from '@/lib/api/generated/models';
+import type {
+  OrderDetailResponse,
+  ReportOrderStatusPayloadReport,
+} from '@/lib/api/generated/models';
 import {
   getGetOrderByIdQueryKey,
   getGetOrdersQueryKey,
   useCancelOrder,
+  useDisputeOrder,
   useGetOrderById,
+  useReportOrderStatus,
   useRescheduleOrder,
 } from '@/lib/api/generated/orders/orders';
 import { formatAppDate } from '@/lib/date-utils';
@@ -31,6 +38,7 @@ import { formatAppDate } from '@/lib/date-utils';
 interface OrderDetailClientProps {
   order: OrderDetailResponse;
   isSeller: boolean;
+  nowMs: number;
 }
 
 /**
@@ -39,21 +47,26 @@ interface OrderDetailClientProps {
  * @param props - Component props
  * @param props.order - The order
  * @param props.isSeller - Is the current user the seller
+ * @param props.nowMs - The current time in milliseconds
  * @returns A page for viewing order details with a cancel button and reschedule button
  */
 export default function OrderDetailClient({
   order: initialOrder,
   isSeller,
+  nowMs,
 }: OrderDetailClientProps) {
   const id = initialOrder.id;
   const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
   const [isReorderOpen, setIsReorderOpen] = useState(false);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
   const cancelMutation = useCancelOrder();
   const rescheduleMutation = useRescheduleOrder();
+  const reportMutation = useReportOrderStatus();
+  const disputeMutation = useDisputeOrder();
 
   const { data, isLoading, isError, refetch } = useGetOrderById(id, {
     query: {
@@ -111,6 +124,30 @@ export default function OrderDetailClient({
     }
   };
 
+  const handleReportStatus = async (reportStatus: ReportOrderStatusPayloadReport) => {
+    const toastId = toast.loading('Submitting report...');
+    try {
+      await reportMutation.mutateAsync({ id, data: { report: reportStatus } });
+      await queryClient.invalidateQueries({ queryKey: [getGetOrderByIdQueryKey(id)] });
+      await refetch();
+      toast.success('Status report submitted successfully.', { id: toastId });
+    } catch (error) {
+      toast.error('Failed to submit status report. Please try again.', { id: toastId });
+    }
+  };
+
+  const handleDisputeOrder = async () => {
+    const toastId = toast.loading('Opening dispute...');
+    try {
+      await disputeMutation.mutateAsync({ id });
+      await queryClient.invalidateQueries({ queryKey: [getGetOrderByIdQueryKey(id)] });
+      await refetch();
+      toast.success('Dispute opened successfully. We will contact you via email.', { id: toastId });
+    } catch (error) {
+      toast.error('Failed to open dispute. Please try again.', { id: toastId });
+    }
+  };
+
   if (isLoading) {
     return <LoadingSkeleton heights={['h-8', 'h-125', 'h-64']} />;
   }
@@ -128,6 +165,22 @@ export default function OrderDetailClient({
 
   const isPending = order.status === 'pending';
   const isReorderable = order.status === 'completed' || order.status === 'canceled';
+  const isReviewable = order.status === 'completed' && !order.review;
+  const isDisputed = order.status === 'disputed';
+
+  const scheduledTimeMs = order.scheduledTime ? new Date(order.scheduledTime).getTime() : 0;
+
+  const hoursSinceScheduled = nowMs !== null ? (nowMs - scheduledTimeMs) / (1000 * 60 * 60) : 0;
+  const isWithin24Hours = nowMs !== null && hoursSinceScheduled >= 0 && hoursSinceScheduled <= 24;
+  const isBetween24And48Hours =
+    nowMs !== null && hoursSinceScheduled > 24 && hoursSinceScheduled <= 48;
+  const isWithin48Hours = nowMs !== null && hoursSinceScheduled >= 0 && hoursSinceScheduled <= 48;
+
+  const counterpartyReport = isSeller ? order.buyerReport : order.sellerReport;
+  const hasCounterpartyReported = counterpartyReport !== null;
+
+  const currentUserReport = isSeller ? order.sellerReport : order.buyerReport;
+  const hasCurrentUserReported = currentUserReport !== null;
 
   return (
     <div>
@@ -147,9 +200,44 @@ export default function OrderDetailClient({
                   </Button>
                 </div>
               )}
+              {!isSeller &&
+                isWithin24Hours &&
+                !hasCounterpartyReported &&
+                !hasCurrentUserReported && (
+                  <>
+                    <Button variant="lime" onClick={() => void handleReportStatus('received')}>
+                      Report Received
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => void handleReportStatus('not_received')}
+                    >
+                      Report Not Received
+                    </Button>
+                  </>
+                )}
+
+              {isSeller &&
+                isBetween24And48Hours &&
+                !hasCounterpartyReported &&
+                !hasCurrentUserReported && (
+                  <Button variant="lime" onClick={() => void handleReportStatus('fulfilled')}>
+                    Report Fulfilled
+                  </Button>
+                )}
+
+              {isWithin48Hours && hasCounterpartyReported && !isDisputed && (
+                <Button variant="destructive" onClick={() => void handleDisputeOrder()}>
+                  Dispute Order
+                </Button>
+              )}
+              {isReviewable && (
+                <Button variant="outline" onClick={() => setIsReviewOpen(true)}>
+                  Review
+                </Button>
+              )}
               {isReorderable && (
                 <Button variant="lime" onClick={() => setIsReorderOpen(true)}>
-                  <RotateCcw className="mr-2 h-4 w-4" />
                   Order Again
                 </Button>
               )}
@@ -164,7 +252,16 @@ export default function OrderDetailClient({
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div className="flex flex-col gap-6 md:col-span-2">
             <OrderSummaryCard order={order} fromUser={isSeller ? order.buyer : order.seller} />
+            {order.status !== 'pending' &&
+              order.status !== 'canceled' &&
+              hoursSinceScheduled >= 0 && (
+                <OrderStatusReportCard
+                  report={order.buyerReport || order.sellerReport}
+                  reportedAt={order.buyerReportedAt || order.sellerReportedAt}
+                />
+              )}
             <OrderItemsCard items={order.items || []} />
+            {order.review && <OrderReviewCard review={order.review} />}
             <OrderLocationCard
               fulfillmentType={order.fulfillmentType}
               buyer={order.buyer}
@@ -193,6 +290,17 @@ export default function OrderDetailClient({
           <ReorderForm orderId={id} onClose={() => setIsReorderOpen(false)} />
         </DialogContent>
       </Dialog>
+      <CreateReviewDialog
+        isOpen={isReviewOpen}
+        onClose={() => setIsReviewOpen(false)}
+        sellerId={order.seller.id}
+        orderId={order.id}
+        sellerName={order.seller.name}
+        sellerImage={order.seller.image}
+        itemNames={order.items.map((item) => item.productName)}
+        fulfillmentType={order.fulfillmentType}
+        scheduledTime={order.scheduledTime}
+      />
     </div>
   );
 }

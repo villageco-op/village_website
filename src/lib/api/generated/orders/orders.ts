@@ -30,6 +30,7 @@ import type {
   GetOrdersParams,
   OrderDetailResponse,
   OrdersListResponse,
+  ReportOrderStatusPayload,
   RescheduleOrderPayload,
   ResourceId,
   SuccessResponse
@@ -39,6 +40,125 @@ import { apiClient } from '../../client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+/**
+ * Get detailed information for a specific order by ID. Accessible only by the buyer or seller associated with the order.
+ */
+export type getOrderByIdResponse200 = {
+  data: OrderDetailResponse
+  status: 200
+}
+
+export type getOrderByIdResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type getOrderByIdResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type getOrderByIdResponseSuccess = (getOrderByIdResponse200) & {
+  headers: Headers;
+};
+export type getOrderByIdResponseError = (getOrderByIdResponse401 | getOrderByIdResponse404) & {
+  headers: Headers;
+};
+
+export type getOrderByIdResponse = (getOrderByIdResponseSuccess | getOrderByIdResponseError)
+
+export const getGetOrderByIdUrl = (id: ResourceId,) => {
+
+
+  
+
+  return `/api/orders/${id}`
+}
+
+export const getOrderById = async (id: ResourceId, options?: RequestInit): Promise<getOrderByIdResponse> => {
+  
+  return apiClient<getOrderByIdResponse>(getGetOrderByIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetOrderByIdQueryKey = (id: ResourceId,) => {
+    return [
+    `/api/orders/${id}`
+    ] as const;
+    }
+
+    
+export const getGetOrderByIdQueryOptions = <TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetOrderByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderById>>> = ({ signal }) => getOrderById(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetOrderByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getOrderById>>>
+export type GetOrderByIdQueryError = ErrorResponse
+
+
+export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
+ id: ResourceId, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrderById>>,
+          TError,
+          Awaited<ReturnType<typeof getOrderById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
+ id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOrderById>>,
+          TError,
+          Awaited<ReturnType<typeof getOrderById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
+ id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
+ id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetOrderByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
 
 
 
@@ -353,46 +473,158 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getCancelOrderMutationOptions(options), queryClient);
     }
     /**
- * Get detailed information for a specific order by ID. Accessible only by the buyer or seller associated with the order.
+ * Report order completion or non-receipt status as buyer or seller.
  */
-export type getOrderByIdResponse200 = {
-  data: OrderDetailResponse
+export type reportOrderStatusResponse200 = {
+  data: SuccessResponse
   status: 200
 }
 
-export type getOrderByIdResponse401 = {
+export type reportOrderStatusResponse400 = {
+  data: ErrorResponse
+  status: 400
+}
+
+export type reportOrderStatusResponse401 = {
   data: ErrorResponse
   status: 401
 }
 
-export type getOrderByIdResponse404 = {
+export type reportOrderStatusResponse403 = {
+  data: ErrorResponse
+  status: 403
+}
+
+export type reportOrderStatusResponse404 = {
   data: ErrorResponse
   status: 404
 }
 
-export type getOrderByIdResponseSuccess = (getOrderByIdResponse200) & {
+export type reportOrderStatusResponseSuccess = (reportOrderStatusResponse200) & {
   headers: Headers;
 };
-export type getOrderByIdResponseError = (getOrderByIdResponse401 | getOrderByIdResponse404) & {
+export type reportOrderStatusResponseError = (reportOrderStatusResponse400 | reportOrderStatusResponse401 | reportOrderStatusResponse403 | reportOrderStatusResponse404) & {
   headers: Headers;
 };
 
-export type getOrderByIdResponse = (getOrderByIdResponseSuccess | getOrderByIdResponseError)
+export type reportOrderStatusResponse = (reportOrderStatusResponseSuccess | reportOrderStatusResponseError)
 
-export const getGetOrderByIdUrl = (id: ResourceId,) => {
+export const getReportOrderStatusUrl = (id: ResourceId,) => {
 
 
   
 
-  return `/api/orders/${id}`
+  return `/api/orders/${id}/report`
 }
 
-export const getOrderById = async (id: ResourceId, options?: RequestInit): Promise<getOrderByIdResponse> => {
+export const reportOrderStatus = async (id: ResourceId,
+    reportOrderStatusPayload: ReportOrderStatusPayload, options?: RequestInit): Promise<reportOrderStatusResponse> => {
   
-  return apiClient<getOrderByIdResponse>(getGetOrderByIdUrl(id),
+  return apiClient<reportOrderStatusResponse>(getReportOrderStatusUrl(id),
   {      
     ...options,
-    method: 'GET'
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      reportOrderStatusPayload,)
+  }
+);}
+  
+
+
+
+export const getReportOrderStatusMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportOrderStatus>>, TError,{id: ResourceId;data: ReportOrderStatusPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof reportOrderStatus>>, TError,{id: ResourceId;data: ReportOrderStatusPayload}, TContext> => {
+
+const mutationKey = ['reportOrderStatus'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportOrderStatus>>, {id: ResourceId;data: ReportOrderStatusPayload}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  reportOrderStatus(id,data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportOrderStatusMutationResult = NonNullable<Awaited<ReturnType<typeof reportOrderStatus>>>
+    export type ReportOrderStatusMutationBody = ReportOrderStatusPayload
+    export type ReportOrderStatusMutationError = ErrorResponse
+
+    export const useReportOrderStatus = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportOrderStatus>>, TError,{id: ResourceId;data: ReportOrderStatusPayload}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportOrderStatus>>,
+        TError,
+        {id: ResourceId;data: ReportOrderStatusPayload},
+        TContext
+      > => {
+      return useMutation(getReportOrderStatusMutationOptions(options), queryClient);
+    }
+    /**
+ * Dispute an order within the 48-hour window as buyer or seller.
+ */
+export type disputeOrderResponse200 = {
+  data: SuccessResponse
+  status: 200
+}
+
+export type disputeOrderResponse400 = {
+  data: ErrorResponse
+  status: 400
+}
+
+export type disputeOrderResponse401 = {
+  data: ErrorResponse
+  status: 401
+}
+
+export type disputeOrderResponse403 = {
+  data: ErrorResponse
+  status: 403
+}
+
+export type disputeOrderResponse404 = {
+  data: ErrorResponse
+  status: 404
+}
+
+export type disputeOrderResponseSuccess = (disputeOrderResponse200) & {
+  headers: Headers;
+};
+export type disputeOrderResponseError = (disputeOrderResponse400 | disputeOrderResponse401 | disputeOrderResponse403 | disputeOrderResponse404) & {
+  headers: Headers;
+};
+
+export type disputeOrderResponse = (disputeOrderResponseSuccess | disputeOrderResponseError)
+
+export const getDisputeOrderUrl = (id: ResourceId,) => {
+
+
+  
+
+  return `/api/orders/${id}/dispute`
+}
+
+export const disputeOrder = async (id: ResourceId, options?: RequestInit): Promise<disputeOrderResponse> => {
+  
+  return apiClient<disputeOrderResponse>(getDisputeOrderUrl(id),
+  {      
+    ...options,
+    method: 'POST'
     
     
   }
@@ -401,73 +633,45 @@ export const getOrderById = async (id: ResourceId, options?: RequestInit): Promi
 
 
 
+export const getDisputeOrderMutationOptions = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof disputeOrder>>, TError,{id: ResourceId}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof disputeOrder>>, TError,{id: ResourceId}, TContext> => {
 
-export const getGetOrderByIdQueryKey = (id: ResourceId,) => {
-    return [
-    `/api/orders/${id}`
-    ] as const;
-    }
+const mutationKey = ['disputeOrder'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof disputeOrder>>, {id: ResourceId}> = (props) => {
+          const {id} = props ?? {};
+
+          return  disputeOrder(id,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DisputeOrderMutationResult = NonNullable<Awaited<ReturnType<typeof disputeOrder>>>
     
-export const getGetOrderByIdQueryOptions = <TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
-) => {
+    export type DisputeOrderMutationError = ErrorResponse
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetOrderByIdQueryKey(id);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderById>>> = ({ signal }) => getOrderById(id, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetOrderByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getOrderById>>>
-export type GetOrderByIdQueryError = ErrorResponse
-
-
-export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
- id: ResourceId, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getOrderById>>,
-          TError,
-          Awaited<ReturnType<typeof getOrderById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
- id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getOrderById>>,
-          TError,
-          Awaited<ReturnType<typeof getOrderById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
- id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetOrderById<TData = Awaited<ReturnType<typeof getOrderById>>, TError = ErrorResponse>(
- id: ResourceId, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrderById>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetOrderByIdQueryOptions(id,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return { ...query, queryKey: queryOptions.queryKey };
-}
-
-
-
-
+    export const useDisputeOrder = <TError = ErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof disputeOrder>>, TError,{id: ResourceId}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof disputeOrder>>,
+        TError,
+        {id: ResourceId},
+        TContext
+      > => {
+      return useMutation(getDisputeOrderMutationOptions(options), queryClient);
+    }
+    

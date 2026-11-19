@@ -5,8 +5,10 @@
  * API for Village Website & Marketplace
  * OpenAPI spec version: 1.0.0
  */
+import type { OrderBuyerReport } from './orderBuyerReport';
 import type { OrderFulfillmentType } from './orderFulfillmentType';
 import type { OrderPaymentMethod } from './orderPaymentMethod';
+import type { OrderSellerReport } from './orderSellerReport';
 import type { OrderStatusProperty } from './orderStatusProperty';
 
 export interface Order {
@@ -24,6 +26,16 @@ export interface Order {
   /** @nullable */
   cancelReason: string | null;
   totalAmount: string;
+  /** @nullable */
+  buyerReport: OrderBuyerReport;
+  /** @nullable */
+  buyerReportedAt: string | null;
+  /** @nullable */
+  sellerReport: OrderSellerReport;
+  /** @nullable */
+  sellerReportedAt: string | null;
+  /** @nullable */
+  statusUpdatedAt: string | null;
   /** @nullable */
   createdAt: string | null;
   /** @nullable */
