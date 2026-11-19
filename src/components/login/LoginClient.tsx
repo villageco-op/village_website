@@ -62,53 +62,51 @@ export default function LoginClient() {
     e.preventDefault();
     setIsLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const entries = Object.fromEntries(formData.entries()) as Record<string, string>;
-
     const signInPromise = (async () => {
       const csrfRes = await fetch('/api/auth/csrf');
-      const { csrfToken } = await csrfRes.json();
+      if (!csrfRes.ok) {
+        throw new Error('Failed to fetch CSRF token');
+      }
 
-      const bodyParams = new URLSearchParams({
-        ...entries,
-        csrfToken,
-      });
+      const { csrfToken: freshCsrfToken } = (await csrfRes.json()) as {
+        csrfToken?: string;
+      };
+      const tokenToUse = freshCsrfToken || csrfToken;
 
       const res = await fetch('/api/auth/signin/nodemailer', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
+          'X-Auth-Return-Redirect': '1',
         },
-        body: bodyParams,
+        body: JSON.stringify({
+          email,
+          csrfToken: tokenToUse,
+          callbackUrl,
+        }),
       });
 
-      if (!res.ok) throw new Error('Network response was not ok');
-
-      if (res.url) {
-        const finalUrl = new URL(res.url);
-
-        if (finalUrl.searchParams.has('error')) {
-          throw new Error('Authentication failed');
-        }
-
-        if (finalUrl.pathname.includes('verify-request')) {
-          return res;
-        }
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
       }
 
-      try {
-        const textData = await res.text();
-        if (textData) {
-          const data = JSON.parse(textData);
-          if (data?.url && new URL(data.url, window.location.href).searchParams.has('error')) {
-            throw new Error('Authentication failed');
-          }
-        }
-      } catch (e) {
-        logger.warn('Response was not JSON, continuing execution path.', e);
+      const contentType = res.headers.get('content-type') ?? '';
+      if (!contentType.includes('application/json')) {
+        const bodyText = await res.text();
+        throw new Error(`Expected JSON response, got ${contentType}: ${bodyText.slice(0, 120)}`);
       }
 
-      return res;
+      const data = (await res.json()) as { url?: string };
+      if (!data.url) {
+        throw new Error('Missing verification redirect URL');
+      }
+
+      const targetUrl = new URL(data.url, window.location.origin);
+      if (targetUrl.searchParams.has('error')) {
+        throw new Error('Authentication failed');
+      }
+
+      return data;
     })();
 
     toast.promise(signInPromise, {
@@ -118,7 +116,8 @@ export default function LoginClient() {
         setIsEmailSent(true);
         return 'Check your email for the login link!';
       },
-      error: () => {
+      error: (err) => {
+        logger.error('Magic link sign-in failed:', err);
         setIsLoading(false);
         return 'Failed to send email. Please try again.';
       },
@@ -208,10 +207,6 @@ export default function LoginClient() {
                   method="POST"
                   className="space-y-4"
                 >
-                  <input type="hidden" name="csrfToken" value={csrfToken} />
-                  <input type="hidden" name="callbackUrl" value={callbackUrl} />
-                  <input type="hidden" name="redirect" value="false" />
-
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
                     <Input
