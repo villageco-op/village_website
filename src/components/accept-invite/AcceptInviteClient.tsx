@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { Building2, Loader2, Mail, UserPlus, LogIn } from 'lucide-react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -15,6 +16,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { useAcceptInvite } from '@/lib/api/generated/invites/invites';
 import { useGetOrganization } from '@/lib/api/generated/organizations/organizations';
+import { getGetCurrentUserOrganizationQueryKey } from '@/lib/api/generated/users/users';
 import { getInitials } from '@/lib/user-utils';
 
 /**
@@ -24,7 +26,8 @@ import { getInitials } from '@/lib/user-utils';
 export default function AcceptInviteClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { status } = useAuth();
+  const queryClient = useQueryClient();
+  const { status, refetch } = useAuth();
 
   const orgId = searchParams.get('org') || '';
   const initialCode = searchParams.get('code') || '';
@@ -72,6 +75,10 @@ export default function AcceptInviteClient() {
 
       if (response.status === 200) {
         toast.success('Invitation accepted successfully.');
+        await refetch();
+        await queryClient.invalidateQueries({
+          queryKey: [getGetCurrentUserOrganizationQueryKey()],
+        });
         router.push('/org/clients');
       } else {
         toast.error('Failed to accept the invitation. Please verify the code.');
