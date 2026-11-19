@@ -8,6 +8,7 @@ import { http, HttpResponse, delay } from 'msw';
 import OrgHelpClient from './OrgHelpClient';
 
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/hooks/useAuth';
 
 const mockedQueryClient = new QueryClient({
   defaultOptions: {
@@ -30,10 +31,12 @@ const meta: Meta<typeof OrgHelpClient> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <div className="min-h-screen bg-off-white">
-            <Story />
-            <Toaster />
-          </div>
+          <AuthProvider>
+            <div className="min-h-screen bg-off-white">
+              <Story />
+              <Toaster />
+            </div>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

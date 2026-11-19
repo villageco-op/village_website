@@ -6,6 +6,7 @@ import { http, HttpResponse, delay } from 'msw';
 import OrgInviteClient from './OrgInviteClient';
 
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/hooks/useAuth';
 import { OrgRole } from '@/lib/api/generated/models';
 import type { Invite } from '@/lib/api/generated/models';
 import { BASE_MOCK_INVITE } from '@/lib/storybook/mocks/invite.mock';
@@ -103,8 +104,10 @@ const meta: Meta<typeof OrgInviteClient> = {
       const queryClient = createQueryClient();
       return (
         <QueryClientProvider client={queryClient}>
-          <Story />
-          <Toaster />
+          <AuthProvider>
+            <Story />
+            <Toaster />
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

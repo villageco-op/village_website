@@ -5,6 +5,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import SellerListingsClient from '../listings/SellerListingsClient';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import {
   createPaginatedResponse,
   generateMockListings,
@@ -32,11 +33,13 @@ const meta: Meta<typeof SellerListingsClient> = {
 
       return (
         <QueryClientProvider client={queryClient}>
-          <div className="min-h-screen bg-background p-8">
-            <div className="mx-auto max-w-6xl">
-              <Story />
+          <AuthProvider>
+            <div className="min-h-screen bg-background p-8">
+              <div className="mx-auto max-w-6xl">
+                <Story />
+              </div>
             </div>
-          </div>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { useAuth } from '../../../hooks/useAuth';
+import { AuthProvider, useAuth } from '../../../hooks/useAuth';
 
 import { logger } from '@/lib/logger';
 
@@ -25,7 +25,11 @@ const createWrapper = () => {
   });
 
   function TestQueryWrapper({ children }: { children: React.ReactNode }) {
-    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+    return (
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>{children}</AuthProvider>
+      </QueryClientProvider>
+    );
   }
   TestQueryWrapper.displayName = 'TestQueryWrapper';
 

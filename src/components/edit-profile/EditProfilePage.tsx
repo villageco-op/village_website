@@ -1,6 +1,5 @@
 'use client';
 
-import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -43,18 +42,14 @@ export default function EditProfilePage() {
   const isSeller = user.stripeOnboardingComplete === true;
   const hasOrg = !!user.organizationId;
 
-  const handleLeaveOrDeleteOrganization = () => {
-    refetch();
+  const handleLeaveOrDeleteOrganization = async () => {
+    await refetch();
     setActiveTab('profile');
   };
 
   return (
     <div className="flex flex-col items-center bg-off-white">
       <div className="w-full">
-        <Button variant="ghost" className="-ml-3 mb-2 text-ink-3" onClick={() => router.back()}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
         <PageHeader title="Edit Profile" />
 
         {/* Tabs Switcher */}
@@ -103,8 +98,8 @@ export default function EditProfilePage() {
           {activeTab === 'org' && hasOrg && (
             <OrgTab
               user={user}
-              onDeleteOrganization={handleLeaveOrDeleteOrganization}
-              onLeaveOrganization={handleLeaveOrDeleteOrganization}
+              onDeleteOrganization={() => void handleLeaveOrDeleteOrganization()}
+              onLeaveOrganization={() => void handleLeaveOrDeleteOrganization()}
             />
           )}
 

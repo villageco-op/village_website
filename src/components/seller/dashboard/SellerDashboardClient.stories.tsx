@@ -5,6 +5,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import SellerDashboardClient from './SellerDashboardClient';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import { MOCK_SELLER_USER } from '@/lib/storybook/mocks/user.mock';
 import {
   generateMockOrders,
@@ -56,9 +57,11 @@ const meta: Meta<typeof SellerDashboardClient> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <div className="min-h-screen bg-background p-8">
-            <Story />
-          </div>
+          <AuthProvider>
+            <div className="min-h-screen bg-background p-8">
+              <Story />
+            </div>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

@@ -20,7 +20,7 @@ interface TutorialContextType {
   prevStep: () => void;
   endTutorial: () => void;
   isOnboardingCompleted: boolean;
-  completeOnboarding: () => void;
+  completeOnboarding: (tutorialId?: string) => void;
   disallowedRoutes: string[];
   tutorials: Record<string, Tutorial>;
 }
@@ -143,13 +143,13 @@ export function TutorialProvider({
     saveTutorialState(null, 0);
   };
 
-  const completeOnboarding = () => {
+  const completeOnboarding = (tutorialId?: string) => {
     setIsOnboardingCompleted(true);
     if (typeof window !== 'undefined') {
       localStorage.setItem('onboarding_completed', 'true');
     }
-    if (tutorials[defaultTutorialId]) {
-      startTutorial(defaultTutorialId);
+    if (tutorials[tutorialId || defaultTutorialId]) {
+      startTutorial(tutorialId || defaultTutorialId);
     }
   };
 

@@ -1,20 +1,18 @@
 'use client';
 
-import { useTutorial } from '../providers/TutorialProvider';
-
 import TutorialList from './TutorialList';
+
+import { ORG_TUTORIALS } from '@/config/tutorials/org_tutorials';
 
 /**
  * The tutorial page with cards for starting the organization tutorials.
  * @returns The client page component
  */
 export default function OrgTutorialClient() {
-  const { tutorials } = useTutorial();
-
   return (
     <TutorialList
       title="Tutorials"
-      tutorials={tutorials}
+      tutorials={ORG_TUTORIALS}
       descriptionText=""
       helpPath="/org/help/"
     />

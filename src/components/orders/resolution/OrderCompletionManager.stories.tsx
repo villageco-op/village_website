@@ -8,6 +8,7 @@ import { OrderCompletionManager } from './OrderCompletionManager';
 
 import { OrderCompletionProvider } from '@/components/providers/OrderCompletionProvider';
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/hooks/useAuth';
 import { BASE_MOCK_ORDER } from '@/lib/storybook/mocks/order.mock';
 import { createPaginatedResponse } from '@/lib/storybook/utils/mockGenerators';
 
@@ -122,10 +123,12 @@ const meta: Meta<typeof OrderCompletionManager> = {
       }
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <Toaster />
-          <div className="w-150 h-100 flex items-center justify-center bg-stone-50 border rounded-lg p-6">
-            <Story />
-          </div>
+          <AuthProvider>
+            <Toaster />
+            <div className="w-150 h-100 flex items-center justify-center bg-stone-50 border rounded-lg p-6">
+              <Story />
+            </div>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },
