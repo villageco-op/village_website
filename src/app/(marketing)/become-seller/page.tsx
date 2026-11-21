@@ -1,4 +1,4 @@
-import BecomeSellerClient from '@/components/seller/become-seller/BecomeSellerClient';
+import BecomeSellerClient from '@/components/seller/start-selling/BecomeSellerClient';
 
 /**
  * The become seller page linking to login or onboarding.

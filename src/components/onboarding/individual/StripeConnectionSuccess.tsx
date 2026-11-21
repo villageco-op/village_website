@@ -32,14 +32,14 @@ export default function StripeReturnSuccessPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
             <Button asChild variant="forest" className="w-full sm:w-auto transition-all">
-              <Link href="/seller/new-listing">
+              <Link href="/sell/new-listing">
                 <PlusCircle className="w-4 h-4 mr-2" />
                 Create Your First Listing
               </Link>
             </Button>
 
             <Button asChild variant="outline" className="w-full sm:w-auto transition-all">
-              <Link href="/seller">
+              <Link href="/sell">
                 <LayoutDashboard className="w-4 h-4 mr-2" />
                 Go to Dashboard
               </Link>

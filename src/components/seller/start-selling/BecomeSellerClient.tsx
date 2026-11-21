@@ -30,7 +30,7 @@ export default function BecomeSellerClient() {
           <Sprout className="w-10 h-10" />
         </div>
         <h1 className="font-heading text-[clamp(2.4rem,4.2vw,3.6rem)] font-extrabold text-deep-forest tracking-[-0.035em] leading-[1.1] mb-6">
-          Become a Seller & Grower
+          Start Selling to Your Community
         </h1>
         <p className="text-lg text-forest-dark/80 max-w-2xl mx-auto">
           Join our community marketplace to list your fresh produce, artisanal goods, and farm
@@ -123,14 +123,14 @@ export default function BecomeSellerClient() {
           ) : (
             <>
               <h2 className="font-heading text-2xl font-bold text-deep-forest mb-3">
-                You&apos;re already a seller!
+                You&apos;re already set up to sell!
               </h2>
               <p className="text-forest-dark/80 mb-8">
                 Your farm profile is active and ready to go. Head over to your dashboard to manage
                 your listings and orders.
               </p>
               <Button asChild variant="forest">
-                <Link href="/seller">
+                <Link href="/sell">
                   Go to Dashboard <LayoutDashboard className="w-5 h-5 ml-2" />
                 </Link>
               </Button>

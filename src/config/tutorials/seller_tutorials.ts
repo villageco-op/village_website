@@ -13,37 +13,37 @@ export const SELLER_TUTORIALS: Record<string, Tutorial> = {
       {
         title: 'Navigate to Create Listing Page',
         content: 'Start by accessing the seller dashboard and clicking on "Create New Listing".',
-        targetRoute: '/seller/new-listing',
+        targetRoute: '/sell/new-listing',
       },
       {
         title: 'Upload Listing Images',
         content:
           'Upload high-quality images of your produce item to help buyers see what they are ordering.',
-        targetRoute: '/seller/new-listing',
+        targetRoute: '/sell/new-listing',
       },
       {
         title: 'Basic Information & Description',
         content:
           'Set a descriptive title, select the produce type, and optionally write details about flavor profiles or growing practices.',
-        targetRoute: '/seller/new-listing',
+        targetRoute: '/sell/new-listing',
       },
       {
         title: 'Pricing & Inventory',
         content:
           'Specify your price per ounce, total available ounces, and optional max order limits per customer.',
-        targetRoute: '/seller/new-listing',
+        targetRoute: '/sell/new-listing',
       },
       {
         title: 'Harvest & Availability',
         content:
           'Configure your harvest frequency, season date range, available date, and allow recurring subscription orders.',
-        targetRoute: '/seller/new-listing',
+        targetRoute: '/sell/new-listing',
       },
       {
         title: 'Publish Listing',
         content:
           'Once all required fields are filled, click "Publish Listing" to make it live for marketplace buyers.',
-        targetRoute: '/seller/new-listing',
+        targetRoute: '/sell/new-listing',
       },
     ],
   },

@@ -122,7 +122,7 @@ export default function AddNewListingClient() {
       const res = await createProduceMutation.mutateAsync({ data: payload });
       if (res.status === 201) {
         toast.success('Listing created successfully!', { id: toastId });
-        router.push('/seller/listings');
+        router.push('/sell/listings');
       } else {
         throw new Error('Failed to create listing');
       }

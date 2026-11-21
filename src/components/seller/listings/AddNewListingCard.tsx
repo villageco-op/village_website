@@ -14,7 +14,7 @@ export function AddNewListingCard() {
     <Card className="mb-5 cursor-pointer border-2 border-dashed border-forest-dark/20 transition-colors duration-200 hover:bg-lime-pale/20 overflow-visible">
       <CardContent>
         <Link
-          href="/seller/new-listing"
+          href="/sell/new-listing"
           className="flex h-full flex-col items-center justify-center p-12 text-center"
         >
           <Plus className="mb-2.5 h-10 w-10" />

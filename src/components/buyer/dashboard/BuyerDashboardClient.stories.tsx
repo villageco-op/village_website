@@ -4,6 +4,7 @@ import { http, HttpResponse, delay } from 'msw';
 
 import BuyerDashboardClient from './BuyerDashboardClient';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import { MOCK_GROWERS_LIST } from '@/lib/storybook/mocks/grower.mock';
 import { MOCK_BUYER_USER } from '@/lib/storybook/mocks/user.mock';
 import {
@@ -44,9 +45,11 @@ const meta: Meta<typeof BuyerDashboardClient> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <div className="min-h-screen bg-slate-50/30 p-8">
-            <Story />
-          </div>
+          <AuthProvider>
+            <div className="min-h-screen bg-slate-50/30 p-8">
+              <Story />
+            </div>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },

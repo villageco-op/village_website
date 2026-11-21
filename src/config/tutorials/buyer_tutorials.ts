@@ -13,7 +13,7 @@ export const BUYER_TUTORIALS: Record<string, Tutorial> = {
       {
         title: 'Browse Available Listings',
         content: 'Start by exploring listings in your area using either the map or list view.',
-        targetRoute: '/buyer/browse',
+        targetRoute: '/shop/browse',
       },
       {
         title: 'View Listing Details',

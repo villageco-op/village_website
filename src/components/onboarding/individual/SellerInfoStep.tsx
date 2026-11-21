@@ -62,7 +62,7 @@ export default function SellerInfoStep({
           Tell us about your farm
         </h2>
         <p className="font-sans text-sm text-ink-3 mt-1">
-          This helps buyers get to know you. You can skip this and fill it out later.
+          This helps your neighbors get to know you. You can skip this and fill it out later.
         </p>
       </div>
 

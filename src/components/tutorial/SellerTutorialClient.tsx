@@ -14,7 +14,7 @@ export default function SellerTutorialClient() {
       title="Seller Tutorials"
       tutorials={SELLER_TUTORIALS}
       descriptionText=""
-      helpPath="/seller/help"
+      helpPath="/sell/help"
     />
   );
 }

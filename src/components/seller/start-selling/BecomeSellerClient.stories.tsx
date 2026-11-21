@@ -124,10 +124,10 @@ export const AuthenticatedSeller: Story = {
     const canvas = within(canvasElement);
 
     // Verify it detects them as a seller
-    await expect(await canvas.findByText(/You're already a seller!/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/You're already set up to sell!/i)).toBeInTheDocument();
 
     // Verify the dashboard link
     const dashboardButton = await canvas.findByRole('link', { name: /Go to Dashboard/i });
-    await expect(dashboardButton).toHaveAttribute('href', '/seller');
+    await expect(dashboardButton).toHaveAttribute('href', '/sell');
   },
 };

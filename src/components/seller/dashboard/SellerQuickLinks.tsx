@@ -8,27 +8,27 @@ import { Card, CardContent } from '@/components/ui/card';
 const QUICK_LINKS = [
   {
     title: 'Orders',
-    href: '/seller/orders',
+    href: '/sell/orders',
   },
   {
     title: 'Subscriptions',
-    href: '/seller/subscriptions',
+    href: '/sell/subscriptions',
   },
   {
     title: 'Listings',
-    href: '/seller/listings',
+    href: '/sell/listings',
   },
   {
     title: 'New Listing',
-    href: '/seller/new-listing',
+    href: '/sell/new-listing',
   },
   {
     title: 'Tutorials',
-    href: '/seller/tutorials',
+    href: '/sell/tutorials',
   },
   {
     title: 'Get Help',
-    href: '/seller/help',
+    href: '/sell/help',
   },
   {
     title: 'Settings',
@@ -37,7 +37,7 @@ const QUICK_LINKS = [
 ];
 
 /**
- * List of quick links to seller pages and actions
+ * List of quick links to sell pages and actions
  * @returns A card containing the links
  */
 export function SellerQuickLinksCard() {
