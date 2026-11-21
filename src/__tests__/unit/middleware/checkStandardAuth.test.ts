@@ -13,27 +13,27 @@ describe('checkStandardAuth', () => {
   });
 
   it('allows access to unprotected buyer routes without auth', async () => {
-    const redirect = await checkStandardAuth('/buyer/browse', '', false, null);
+    const redirect = await checkStandardAuth('/shop/browse', '', false, null);
     expect(redirect).toBeNull();
   });
 
   it('redirects unauthenticated users on protected buyer routes', async () => {
-    const redirect = await checkStandardAuth('/buyer', '', false, null);
-    expect(redirect).toBe('/buyer/browse');
+    const redirect = await checkStandardAuth('/shop', '', false, null);
+    expect(redirect).toBe('/shop/browse');
   });
 
   it('allows access to protected buyer routes if authenticated', async () => {
-    const redirect = await checkStandardAuth('/buyer', '', true, null);
+    const redirect = await checkStandardAuth('/shop', '', true, null);
     expect(redirect).toBeNull();
   });
 
   it('redirects unauthenticated users on seller routes', async () => {
-    const redirect = await checkStandardAuth('/seller/inventory', '', false, null);
-    expect(redirect).toBe('/become-seller');
+    const redirect = await checkStandardAuth('/sell/inventory', '', false, null);
+    expect(redirect).toBe('/start-selling');
   });
 
   it('allows access to seller routes if authenticated', async () => {
-    const redirect = await checkStandardAuth('/seller/inventory', '', true, null);
+    const redirect = await checkStandardAuth('/sell/inventory', '', true, null);
     expect(redirect).toBeNull();
   });
 
@@ -113,7 +113,7 @@ describe('checkStandardAuth', () => {
       } as any);
 
       const redirect = await checkStandardAuth('/login/success', '', true, null);
-      expect(redirect).toBe('/seller');
+      expect(redirect).toBe('/sell');
     });
 
     it('redirects to buyer dashboard if onboarding is complete but stripe onboarding is incomplete', async () => {
@@ -124,7 +124,7 @@ describe('checkStandardAuth', () => {
       } as any);
 
       const redirect = await checkStandardAuth('/login/success', '', true, null);
-      expect(redirect).toBe('/buyer');
+      expect(redirect).toBe('/shop');
     });
   });
 });

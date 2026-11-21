@@ -37,7 +37,7 @@ export function AuthGuard({
     if (status === 'loading') return;
 
     if (status === 'unauthenticated') {
-      router.replace('/buyer/browse');
+      router.replace('/shop/browse');
       return;
     }
 
@@ -52,7 +52,7 @@ export function AuthGuard({
     }
 
     if (requireStripeOnboarding && !user?.stripeOnboardingComplete) {
-      router.replace('/become-seller');
+      router.replace('/start-selling');
     }
 
     if (requireOrganization && !user?.organizationId) {

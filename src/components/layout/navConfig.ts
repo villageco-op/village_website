@@ -22,22 +22,22 @@ export interface NavGroup {
 export const BUYER_NAV_GROUPS: NavGroup[] = [
   {
     label: 'Dashboard',
-    items: [{ name: 'Dashboard', href: '/buyer', protected: true }],
+    items: [{ name: 'Dashboard', href: '/shop', protected: true }],
   },
   {
     label: 'Orders',
     items: [
-      { name: 'Browse', href: '/buyer/browse', protected: false },
-      { name: 'Orders', href: '/buyer/orders', protected: true },
-      { name: 'Subscriptions', href: '/buyer/subscriptions', protected: true },
-      { name: 'Billing', href: '/buyer/billing', protected: true },
+      { name: 'Browse', href: '/shop/browse', protected: false },
+      { name: 'Orders', href: '/shop/orders', protected: true },
+      { name: 'Subscriptions', href: '/shop/subscriptions', protected: true },
+      { name: 'Billing', href: '/shop/billing', protected: true },
     ],
   },
   {
     label: 'Support',
     items: [
-      { name: 'Help', href: '/buyer/help', protected: false },
-      { name: 'Tutorials', href: '/buyer/tutorials', protected: true },
+      { name: 'Help', href: '/shop/help', protected: false },
+      { name: 'Tutorials', href: '/shop/tutorials', protected: true },
     ],
   },
 ];
@@ -48,22 +48,22 @@ export const BUYER_NAV_GROUPS: NavGroup[] = [
 export const SELLER_NAV_GROUPS: NavGroup[] = [
   {
     label: 'Dashboard',
-    items: [{ name: 'Dashboard', href: '/seller', protected: true }],
+    items: [{ name: 'Dashboard', href: '/sell', protected: true }],
   },
   {
     label: 'Sales',
     items: [
-      { name: 'Listings', href: '/seller/listings', protected: true },
-      { name: 'Earnings', href: '/seller/earnings', protected: true },
-      { name: 'Orders', href: '/seller/orders', protected: true },
-      { name: 'Subscriptions', href: '/seller/subscriptions', protected: true },
+      { name: 'Listings', href: '/sell/listings', protected: true },
+      { name: 'Earnings', href: '/sell/earnings', protected: true },
+      { name: 'Orders', href: '/sell/orders', protected: true },
+      { name: 'Subscriptions', href: '/sell/subscriptions', protected: true },
     ],
   },
   {
     label: 'Support',
     items: [
-      { name: 'Help', href: '/seller/help', protected: true },
-      { name: 'Tutorials', href: '/seller/tutorials', protected: true },
+      { name: 'Help', href: '/sell/help', protected: true },
+      { name: 'Tutorials', href: '/sell/tutorials', protected: true },
     ],
   },
 ];
@@ -117,7 +117,7 @@ export interface NavItem {
  */
 export const navItems: NavItem[] = [
   { name: 'Home', href: '/', unAuthOnly: true },
-  { name: 'Shop', href: '/buyer/browse' },
+  { name: 'Shop', href: '/shop/browse' },
   { name: 'Sell', href: '/seller' },
   { name: 'Org', href: '/org/clients', orgOnly: true },
 ];

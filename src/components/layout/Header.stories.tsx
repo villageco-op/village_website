@@ -97,7 +97,7 @@ export const GuestHome: Story = {
  */
 export const GuestBuyerBrowse: Story = {
   parameters: {
-    nextjs: { navigation: { pathname: '/buyer/browse' } },
+    nextjs: { navigation: { pathname: '/shop/browse' } },
     msw: { handlers: mockSession(null) },
   },
   play: async ({ canvasElement }) => {
@@ -147,7 +147,7 @@ export const AuthenticatedHome: Story = {
  */
 export const AuthenticatedBuyerDashboard: Story = {
   parameters: {
-    nextjs: { navigation: { pathname: '/buyer' } },
+    nextjs: { navigation: { pathname: '/shop' } },
     msw: {
       handlers: mockSession({
         id: '1',
@@ -175,7 +175,7 @@ export const AuthenticatedBuyerDashboard: Story = {
  */
 export const AuthenticatedSellerDashboard: Story = {
   parameters: {
-    nextjs: { navigation: { pathname: '/seller' } },
+    nextjs: { navigation: { pathname: '/sell' } },
     msw: {
       handlers: mockSession({
         id: '1',

@@ -28,7 +28,7 @@ export default function RoleStep({ onSelectRole, onBack }: RoleStepProps) {
           How do you want to get involved?
         </h2>
         <p className="font-sans text-ink-3 mt-2">
-          You can always change this later. Sellers and Logistics can buy produce too!
+          You can always change this later. All selections can buy produce!
         </p>
       </div>
 
@@ -42,7 +42,7 @@ export default function RoleStep({ onSelectRole, onBack }: RoleStepProps) {
           <div className="w-12 h-12 bg-lime-pale text-click-green rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <ShoppingBasket className="w-6 h-6" />
           </div>
-          <h3 className="font-heading font-bold text-lg text-ink">Buyer</h3>
+          <h3 className="font-heading font-bold text-lg text-ink">Shop</h3>
           <p className="text-sm text-ink-3 mt-1 text-center">I want to buy fresh, local produce.</p>
         </button>
 
@@ -55,7 +55,7 @@ export default function RoleStep({ onSelectRole, onBack }: RoleStepProps) {
           <div className="w-12 h-12 bg-lime-pale text-click-green rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <Sprout className="w-6 h-6" />
           </div>
-          <h3 className="font-heading font-bold text-lg text-ink">Seller / Grower</h3>
+          <h3 className="font-heading font-bold text-lg text-ink">Sell</h3>
           <p className="text-sm text-ink-3 mt-1 text-center">I want to list and sell my harvest.</p>
         </button>
       </div>

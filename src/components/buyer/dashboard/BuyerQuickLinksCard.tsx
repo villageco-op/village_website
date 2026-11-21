@@ -8,27 +8,27 @@ import { Card, CardContent } from '@/components/ui/card';
 const QUICK_LINKS = [
   {
     title: 'Browse Marketplace',
-    href: '/buyer/browse',
+    href: '/shop/browse',
   },
   {
     title: 'My Orders',
-    href: '/buyer/orders',
+    href: '/shop/orders',
   },
   {
     title: 'Subscriptions',
-    href: '/buyer/subscriptions',
+    href: '/shop/subscriptions',
   },
   {
     title: 'Billing',
-    href: '/buyer/billing',
+    href: '/shop/billing',
   },
   {
     title: 'Tutorials',
-    href: '/buyer/tutorials',
+    href: '/shop/tutorials',
   },
   {
     title: 'Get Help',
-    href: '/buyer/help',
+    href: '/shop/help',
   },
   {
     title: 'Manage Account',

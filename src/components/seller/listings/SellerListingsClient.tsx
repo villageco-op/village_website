@@ -45,7 +45,7 @@ export default function SellerListingsClient() {
         subtitle={`${activeCount} active`}
         actions={
           <Button asChild variant="lime" size="sm" className="text-xs font-semibold">
-            <Link href="/seller/new-listing">+ New listing</Link>
+            <Link href="/sell/new-listing">+ New listing</Link>
           </Button>
         }
       />

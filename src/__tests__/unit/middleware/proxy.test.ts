@@ -40,29 +40,29 @@ describe('proxy main function', () => {
       vi.mocked(hasSessionToken).mockReturnValue(true);
       vi.mocked(checkStandardAuth).mockResolvedValue(null);
 
-      const req = new NextRequest('http://localhost:3000/buyer/browse');
+      const req = new NextRequest('http://localhost:3000/shop/browse');
       req.headers.set('host', 'localhost:3000');
 
       await proxy(req);
 
-      expect(checkStandardAuth).toHaveBeenCalledWith('/buyer/browse', '', true, null);
+      expect(checkStandardAuth).toHaveBeenCalledWith('/shop/browse', '', true, null);
       expect(NextResponse.next).toHaveBeenCalled();
     });
 
     it('should redirect if checkStandardAuth returns a redirect path', async () => {
       vi.mocked(hasSessionToken).mockReturnValue(false);
-      vi.mocked(checkStandardAuth).mockResolvedValue('/buyer/browse');
+      vi.mocked(checkStandardAuth).mockResolvedValue('/shop/browse');
 
-      const req = new NextRequest('http://localhost:3000/buyer/dashboard');
+      const req = new NextRequest('http://localhost:3000/shop/dashboard');
       req.headers.set('host', 'localhost:3000');
       req.headers.set('cookie', 'session=123'); // Set directly via header utility
 
       const res = await proxy(req);
 
-      expect(checkStandardAuth).toHaveBeenCalledWith('/buyer/dashboard', '', false, 'session=123');
+      expect(checkStandardAuth).toHaveBeenCalledWith('/shop/dashboard', '', false, 'session=123');
       expect(NextResponse.redirect).toHaveBeenCalled();
       expect(res.status).toBe(307);
-      expect(res.headers.get('location')).toBe('http://localhost:3000/buyer/browse');
+      expect(res.headers.get('location')).toBe('http://localhost:3000/shop/browse');
     });
   });
 

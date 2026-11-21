@@ -17,19 +17,19 @@ export async function checkStandardAuth(
   const fullPathWithParams = `${pathname}${search}`;
   const encodedCallback = encodeURIComponent(fullPathWithParams);
 
-  const unprotectedRoutes = ['/buyer/browse', '/buyer/help'];
+  const unprotectedRoutes = ['/shop/browse', '/shop/help'];
   const otherProtectedRoutes = ['/orders', '/onboarding'];
   const isProtectedBuyerRoute =
-    pathname.startsWith('/buyer') && !unprotectedRoutes.includes(pathname);
-  const isSellerRoute = pathname.startsWith('/seller');
+    pathname.startsWith('/shop') && !unprotectedRoutes.includes(pathname);
+  const isSellerRoute = pathname.startsWith('/sell');
   const isGeneralProtectedRoute = otherProtectedRoutes.includes(pathname);
 
   if (isProtectedBuyerRoute && !isAuthenticated) {
-    return '/buyer/browse';
+    return '/shop/browse';
   }
 
   if (isSellerRoute && !isAuthenticated) {
-    return '/become-seller';
+    return '/start-selling';
   }
 
   if (isGeneralProtectedRoute && !isAuthenticated) {
@@ -60,9 +60,9 @@ export async function checkStandardAuth(
       if (!!user.organizationId) {
         return '/org/clients';
       } else if (user.stripeOnboardingComplete) {
-        return '/seller';
+        return '/sell';
       } else {
-        return '/buyer';
+        return '/shop';
       }
     }
 

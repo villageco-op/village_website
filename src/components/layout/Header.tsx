@@ -60,10 +60,10 @@ export function Header() {
   const org = !orgError && orgId ? orgResult.data : undefined;
 
   const getNavGroups = (): NavGroup[] => {
-    if (pathname.startsWith('/buyer')) {
+    if (pathname.startsWith('/shop')) {
       return BUYER_NAV_GROUPS;
     }
-    if (pathname.startsWith('/seller')) {
+    if (pathname.startsWith('/sell')) {
       return SELLER_NAV_GROUPS;
     }
     if (pathname.startsWith('/org')) {

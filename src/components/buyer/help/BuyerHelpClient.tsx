@@ -63,7 +63,7 @@ export default function BuyerHelpClient() {
             <ShoppingBasket className="w-8 h-8" />
           </div>
           <h1 className="font-heading text-[clamp(2.4rem,4.2vw,3.6rem)] font-extrabold text-deep-forest tracking-[-0.035em] leading-[1.1] mb-4">
-            Buyer Support
+            Shopping Support
           </h1>
           <p className="text-lg text-forest-dark/80 max-w-lg mx-auto">
             Need help with your orders, finding local farms, or connecting with your neighbors? Send

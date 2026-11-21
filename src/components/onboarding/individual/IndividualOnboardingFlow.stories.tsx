@@ -101,7 +101,7 @@ export const CompleteSellerJourney: Story = {
     await userEvent.click(canvas.getByRole('button', { name: /Continue/i }));
 
     // 2. Role Selection
-    const sellerBtn = await canvas.findByRole('button', { name: /Seller/i });
+    const sellerBtn = await canvas.findByRole('button', { name: /Sell/i });
     await userEvent.click(sellerBtn);
 
     // 3. Seller Info
@@ -152,7 +152,7 @@ export const CompleteBuyerJourney: Story = {
     await userEvent.click(canvas.getByRole('button', { name: /Continue/i }));
 
     // 2. Role Selection
-    const buyerBtn = await canvas.findByRole('button', { name: /Buyer/i });
+    const buyerBtn = await canvas.findByRole('button', { name: /Shop/i });
     await userEvent.click(buyerBtn);
 
     // 3. Notifications (Skipped Seller Info automatically)

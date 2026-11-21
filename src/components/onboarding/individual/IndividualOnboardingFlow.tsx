@@ -123,7 +123,7 @@ export default function IndividualOnboardingFlow({
 
   const finalizeOnboarding = () => {
     if (selectedRole === 'buyer') {
-      router.push('/buyer');
+      router.push('/shop');
     } else {
       setStep('stripe-onboarding');
     }
