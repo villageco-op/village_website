@@ -128,6 +128,6 @@ export const AuthenticatedSeller: Story = {
 
     // Verify the dashboard link
     const dashboardButton = await canvas.findByRole('link', { name: /Go to Dashboard/i });
-    await expect(dashboardButton).toHaveAttribute('href', '/seller');
+    await expect(dashboardButton).toHaveAttribute('href', '/sell');
   },
 };
