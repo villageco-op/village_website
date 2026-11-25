@@ -118,7 +118,7 @@ export interface NavItem {
 export const navItems: NavItem[] = [
   { name: 'Home', href: '/', unAuthOnly: true },
   { name: 'Shop', href: '/shop/browse' },
-  { name: 'Sell', href: '/seller' },
+  { name: 'Sell', href: '/sell' },
   { name: 'Org', href: '/org/clients', orgOnly: true },
 ];
 

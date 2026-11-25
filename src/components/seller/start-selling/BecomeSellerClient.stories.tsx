@@ -91,7 +91,7 @@ export const AuthenticatedBuyer: Story = {
     const canvas = within(canvasElement);
 
     // Verify the instructions for a logged-in buyer to become a seller
-    await expect(await canvas.findByText(/Steps to Become a Seller/i)).toBeInTheDocument();
+    await expect(await canvas.findByText(/Steps to Complete Your Account/i)).toBeInTheDocument();
 
     // Ensure the CTA links directly to the onboarding upgrade path
     const upgradeButton = await canvas.findByRole('link', { name: /Complete Seller Onboarding/i });

@@ -89,7 +89,7 @@ export default function BecomeSellerClient() {
           ) : !isSeller ? (
             <div className="text-left max-w-md mx-auto">
               <h2 className="font-heading text-2xl font-bold text-deep-forest mb-6 text-center">
-                Steps to Become a Seller
+                Steps to Complete Your Account
               </h2>
               <ul className="space-y-4 mb-8">
                 <li className="flex items-start">
