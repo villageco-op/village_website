@@ -122,7 +122,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
       await deleteProduceMutation.mutateAsync({ id });
       toast.success('Listing deleted successfully', { id: toastId });
       setIsDeleteDialogOpen(false);
-      router.push('/seller/listings');
+      router.push('/sell/listings');
     } catch (error) {
       toast.error('Failed to delete listing', { id: toastId });
       setIsDeleteDialogOpen(false);
@@ -169,7 +169,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
 
       if (res.status === 200) {
         toast.success('Listing updated successfully!', { id: toastId });
-        router.push('/seller/listings');
+        router.push('/sell/listings');
       } else {
         throw new Error('Failed to update listing');
       }
@@ -190,7 +190,7 @@ export default function EditListingClient({ id }: EditListingClientProps) {
       <NotFoundState
         title="Listing not found"
         description="We couldn't load the details for this listing."
-        action={<Button onClick={() => router.push('/seller/listings')}>Back to Listings</Button>}
+        action={<Button onClick={() => router.push('/sell/listings')}>Back to Listings</Button>}
       />
     );
   }
