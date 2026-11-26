@@ -5,9 +5,11 @@ import { http, HttpResponse, delay } from 'msw';
 
 import ProduceListingClient from './ProduceListingClient';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import { BASE_MOCK_ORDER, BASE_MOCK_ORDER_LIST_ITEM } from '@/lib/storybook/mocks/order.mock';
 import { MOCK_PRODUCE_DETAILS } from '@/lib/storybook/mocks/produce.mock';
 import { BASE_MOCK_SUBSCRIPTION } from '@/lib/storybook/mocks/subscription.mock';
+import { MOCK_BUYER_USER } from '@/lib/storybook/mocks/user.mock';
 import { createPaginatedResponse } from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
@@ -66,7 +68,9 @@ const meta: Meta<typeof ProduceListingClient> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <Story />
+          <AuthProvider>
+            <Story />
+          </AuthProvider>
         </QueryClientProvider>
       );
     },
@@ -81,6 +85,12 @@ export const Default: Story = {
   parameters: {
     msw: {
       handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_BUYER_USER,
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
         http.get(`*/api/produce/${MOCK_ID}`, () => {
           return HttpResponse.json(MOCK_PRODUCE_DETAILS);
         }),

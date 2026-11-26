@@ -5,8 +5,10 @@ import { http, HttpResponse, delay } from 'msw';
 
 import BuyerActivityDashboard from './BuyerActivityDashboard';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import { BASE_MOCK_ORDER } from '@/lib/storybook/mocks/order.mock';
 import { BASE_MOCK_SUBSCRIPTION } from '@/lib/storybook/mocks/subscription.mock';
+import { MOCK_BUYER_USER } from '@/lib/storybook/mocks/user.mock';
 import { createPaginatedResponse } from '@/lib/storybook/utils/mockGenerators';
 
 const mockedQueryClient = new QueryClient({
@@ -16,7 +18,6 @@ const mockedQueryClient = new QueryClient({
 });
 
 const PRODUCE_ID = 'prod_123';
-const SELLER_ID = 'seller_456';
 
 const MOCK_ORDERS = [
   {
@@ -68,9 +69,11 @@ const meta: Meta<typeof BuyerActivityDashboard> = {
       mockedQueryClient.clear();
       return (
         <QueryClientProvider client={mockedQueryClient}>
-          <div className="max-w-md mx-auto">
-            <Story />
-          </div>
+          <AuthProvider>
+            <div className="max-w-md mx-auto">
+              <Story />
+            </div>
+          </AuthProvider>
         </QueryClientProvider>
       );
     },
@@ -86,11 +89,16 @@ type Story = StoryObj<typeof BuyerActivityDashboard>;
 export const FullActivity: Story = {
   args: {
     produceId: PRODUCE_ID,
-    sellerId: SELLER_ID,
   },
   parameters: {
     msw: {
       handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_BUYER_USER,
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
         http.get('*/api/orders', () => {
           return HttpResponse.json(createPaginatedResponse(MOCK_ORDERS));
         }),
@@ -116,6 +124,12 @@ export const ActiveSubscriptionOnly: Story = {
   parameters: {
     msw: {
       handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_BUYER_USER,
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
         http.get('*/api/orders', () => {
           return HttpResponse.json(createPaginatedResponse([]));
         }),
@@ -135,6 +149,12 @@ export const HistoryOnly: Story = {
   parameters: {
     msw: {
       handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_BUYER_USER,
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
         http.get('*/api/orders', () => {
           return HttpResponse.json(createPaginatedResponse([MOCK_ORDERS[1]]));
         }),
@@ -154,6 +174,12 @@ export const EmptyState: Story = {
   parameters: {
     msw: {
       handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_BUYER_USER,
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
         http.get('*/api/orders', () => {
           return HttpResponse.json(createPaginatedResponse([]));
         }),
@@ -173,6 +199,12 @@ export const Loading: Story = {
   parameters: {
     msw: {
       handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_BUYER_USER,
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
         http.get('*/api/orders', async () => {
           await delay('infinite');
           return HttpResponse.json({});
@@ -194,6 +226,12 @@ export const Error: Story = {
   parameters: {
     msw: {
       handlers: [
+        http.get('*/api/auth/session', () => {
+          return HttpResponse.json({
+            user: MOCK_BUYER_USER,
+            expires: '9999-12-31T23:59:59.999Z',
+          });
+        }),
         http.get('*/api/orders', () => {
           return new HttpResponse(null, { status: 500 });
         }),

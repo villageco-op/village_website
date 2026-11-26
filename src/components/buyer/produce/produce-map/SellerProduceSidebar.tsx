@@ -2,7 +2,7 @@
 
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -30,6 +30,8 @@ export function SellerProduceSidebar({
   onOrderItem,
   onGrowerClick,
 }: SellerProduceSidebarProps) {
+  const router = useRouter();
+
   return (
     <div className="absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-off-white shadow-2xl border-l border-forest-dark/10 z-40 flex flex-col animate-in slide-in-from-right-8 duration-300">
       <div className="flex items-center justify-between border-b border-border/50 p-4">

@@ -90,8 +90,8 @@ export function Header() {
   const userName = user?.name || 'User';
 
   return (
-    <>
-      <header className="sticky top-0 z-50 w-full h-16 bg-primary border-b border-border/10">
+    <div className="sticky top-0 z-40 w-full">
+      <header className="w-full h-16 bg-primary border-b border-border/10">
         <div className="w-full px-4 sm:px-6 lg:px-8 flex h-16 items-center">
           {isHome ? (
             <div className="mr-6 flex items-center shrink-0" aria-label="Village Home">
@@ -334,6 +334,6 @@ export function Header() {
         </div>
       </header>
       <ReservationBanner />
-    </>
+    </div>
   );
 }

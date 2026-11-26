@@ -6,6 +6,7 @@ import BrowseProduceListClient from './produce-list/BrowseProduceListClient';
 import BrowseProduceMapClient from './produce-map/BrowseProduceMapClient';
 
 import { useAuth } from '@/hooks/useAuth';
+import { cn } from '@/lib/utils';
 
 /**
  * The browse produce page. Handles switching between list and map view.
@@ -17,11 +18,12 @@ export default function BrowseProduceClient() {
 
   return (
     <div
-      className={
+      className={cn(
+        'flex w-full max-w-max-width mx-auto',
         view === 'map'
-          ? 'flex flex-1 flex-col w-full max-w-max-width mx-auto overflow-hidden h-[calc(90dvh-64px)] '
-          : 'flex flex-col w-full max-w-max-width mx-auto space-y-6'
-      }
+          ? 'flex-1 flex-col overflow-hidden h-[calc(90dvh-64px)] in-[.has-reservation]:h-[calc(90dvh-64px-var(--reservation-banner-height,3rem))]'
+          : 'flex-col space-y-6',
+      )}
     >
       {view === 'list' ? (
         <BrowseProduceListClient onViewChange={setView} />

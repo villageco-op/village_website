@@ -56,9 +56,11 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
           title={produce.title}
           subtitle={
             <p className="flex items-center gap-2 mb-2">
-              <Badge variant="outline" className="capitalize">
-                {produce.produceType?.replace('_', ' ')}
-              </Badge>
+              {produce.produceType && (
+                <Badge variant="outline" className="capitalize">
+                  {produce.produceType.replace('_', ' ')}
+                </Badge>
+              )}
               {produce.isSubscribable && (
                 <Badge className="bg-lime text-forest-dark">Subscribable</Badge>
               )}
@@ -85,7 +87,7 @@ export default function ProduceListingClient({ id }: ProduceListingClientProps) 
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <SellerInfoMapCard seller={produce.seller} />
-            <BuyerActivityDashboard produceId={id} sellerId={produce.sellerId} />
+            <BuyerActivityDashboard produceId={id} />
           </div>
 
           <ProduceReviews produceId={id} sellerId={produce.seller.id} />
