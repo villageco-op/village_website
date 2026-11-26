@@ -7,27 +7,24 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { InlineErrorState } from '@/components/ui/state-displays';
 import { StatusPill } from '@/components/ui/status-pill';
+import { useAuth } from '@/hooks/useAuth';
 import { useGetOrders } from '@/lib/api/generated/orders/orders';
 import { useGetSubscriptions } from '@/lib/api/generated/subscriptions/subscriptions';
 import { formatAppDate } from '@/lib/date-utils';
 
 interface BuyerActivityDashboardProps {
   produceId: string;
-  sellerId: string;
 }
 
 /**
  * Dashboard to prominently show buyer's active and past orders/subscriptions for this listing.
  * @param props - Dashboard props
  * @param props.produceId - The produce Id
- * @param props.sellerId - The seller Id
  * @returns A card component
  */
-export default function BuyerActivityDashboard({
-  produceId,
-  sellerId,
-}: BuyerActivityDashboardProps) {
+export default function BuyerActivityDashboard({ produceId }: BuyerActivityDashboardProps) {
   const router = useRouter();
+  const { user, status: authStatus } = useAuth();
 
   const {
     data: ordersRes,
@@ -46,10 +43,10 @@ export default function BuyerActivityDashboard({
     refetch: refetchSubs,
   } = useGetSubscriptions({
     productId: produceId,
-    sellerId,
+    buyerId: user?.id,
   });
 
-  if (ordersLoading || subsLoading) {
+  if (ordersLoading || subsLoading || authStatus === 'loading') {
     return <LoadingSkeleton />;
   }
 

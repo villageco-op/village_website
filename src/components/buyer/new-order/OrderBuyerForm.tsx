@@ -2,7 +2,7 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import { Loader2, CalendarDays, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { OrderQuantityInput } from './OrderQuantityInput';
@@ -13,7 +13,6 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { FormErrorState } from '@/components/ui/state-displays';
 import { getGetCartQueryKey, useAddToCart } from '@/lib/api/generated/cart/cart';
-import type { ProduceDetails } from '@/lib/api/generated/models';
 import { useGetProduce } from '@/lib/api/generated/produce/produce';
 
 interface BuyerOrderFormProps {
@@ -45,14 +44,7 @@ export function BuyerOrderForm({
   const [quantityOz, setQuantityOz] = useState<number>(initialQuantityOz || 8);
   const [isSubscription, setIsSubscription] = useState<boolean>(initialIsSubscription || false);
 
-  const hasError = !!error || (!isLoading && (!produceQuery?.data || produceQuery.status !== 200));
-
-  useEffect(() => {
-    if (hasError) {
-      toast.error('Failed to load produce details. Please try again later.');
-    }
-  }, [hasError]);
-
+  const hasError = !!error || !produceQuery?.data || produceQuery.status !== 200;
   if (isLoading) {
     return (
       <Card>
@@ -75,7 +67,7 @@ export function BuyerOrderForm({
 
   // Safe defaults if data is missing
   const produce = !hasError
-    ? (produceQuery?.data as ProduceDetails)
+    ? produceQuery.data
     : {
         title: 'Produce',
         totalOzInventory: 0,
@@ -85,7 +77,8 @@ export function BuyerOrderForm({
         isSubscribable: false,
       };
   const maxOzInventory = Number(produce.totalOzInventory);
-  const maxOrderOz = Number(produce.maxOrderQuantityOz);
+  const maxOrderOz =
+    produce.maxOrderQuantityOz === null ? maxOzInventory : Number(produce.maxOrderQuantityOz);
   const pricePerOz = Number(produce.pricePerOz);
   const totalPrice = pricePerOz * quantityOz;
   const isOutOfStock = maxOzInventory <= 0;
