@@ -29,11 +29,11 @@ export default function OrderConfirmationClient() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
             <Button asChild variant="forest" className="w-full sm:w-auto h-12 px-8 transition-all">
-              <Link href="/buyer/orders">View Orders</Link>
+              <Link href="/shop/orders">View Orders</Link>
             </Button>
 
             <Button asChild variant="outline" className="w-full sm:w-auto h-12 px-8 transition-all">
-              <Link href="/buyer/browse">Continue Shopping</Link>
+              <Link href="/shop/browse">Continue Shopping</Link>
             </Button>
           </div>
         </CardContent>
